@@ -34,7 +34,7 @@ namespace HartreeFock {
 		}
 
 		
-		// preventing setting too much electrons
+		// preventing setting too many electrons
 		if (nrLevelsMinus + nrLevelsPlus > (unsigned int)(2 * numberOfOrbitals))
 		{
 			nrLevelsMinus = numberOfOrbitals;
