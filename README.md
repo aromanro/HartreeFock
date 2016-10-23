@@ -30,7 +30,7 @@ Using the classes should be easy. Here is how to grab some atoms from the 'basis
 Here is how to set the H2O molecule with the coordinates from the 'Mathematica Journal' (referenced in the code):
 
 ```c++
-  H1.position.X = H2.position.X = O.position.X = 0;
+	H1.position.X = H2.position.X = O.position.X = 0;
 
 	H1.position.Y = 1.43233673;
 	H1.position.Z = -0.96104039;
