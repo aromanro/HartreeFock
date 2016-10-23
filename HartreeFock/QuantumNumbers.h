@@ -1,0 +1,242 @@
+#pragma once
+
+#include <cassert>
+
+namespace Orbitals {
+
+	namespace QuantumNumbers {
+
+		class QuantumNumbers
+		{
+		public:
+			unsigned int l, m, n;
+
+			QuantumNumbers(unsigned int L, unsigned int M, unsigned int N);
+
+			char AtomicOrbital() const;
+			
+			inline unsigned int AngularMomentum() const
+			{
+				return l + m + n;
+			}
+
+			inline unsigned int N(unsigned int ind)
+			{
+				if (0 == ind) return l;
+				else if (1 == ind) return m;
+
+				assert(2 == ind);
+
+				return n;
+			}
+
+			inline unsigned int MaxComponentVal() const { return max(max(l, m), n); }
+
+			inline unsigned int MinComponentVal() const { return min(min(l, m), n); }
+
+			inline unsigned int NumOrbitals() const
+			{
+				return NumOrbitals(AngularMomentum());
+			}
+
+			inline unsigned int GetCanonicalIndex() const
+			{
+				return (m + n + 1) * (m + n + 2) / 2 - m - 1;
+			}
+
+			inline unsigned int GetTotalCanonicalIndex() const
+			{
+				unsigned int L = AngularMomentum();
+				
+				unsigned int val = L * (L * (L + 3) + 2) / 6;
+
+				return val + GetCanonicalIndex();
+			}
+
+			inline void CanonicalIncrement()
+			{
+				unsigned int L = AngularMomentum();
+
+				if (n == L)
+				{
+					l = L + 1;
+					m = n = 0;
+				}
+				else if (m > 0)
+				{
+					--m;
+					++n;
+				}
+				else if (l > 0)
+				{
+					--l;
+					m = L - l;
+					n = 0;
+				}
+			}
+
+			static inline unsigned int NumOrbitals(unsigned int L)
+			{
+				return (L + 1) * (L + 2) / 2;
+			}
+			
+			inline operator unsigned int() const { return AngularMomentum(); }
+
+			inline QuantumNumbers& operator++()
+			{
+				CanonicalIncrement();
+
+				return *this;
+			}
+
+			inline QuantumNumbers operator++(int)
+			{
+				QuantumNumbers temp(*this);
+				
+				operator++(); 
+				
+				return temp;
+			}
+
+		};
+
+		inline bool operator<(const QuantumNumbers& lhs, const QuantumNumbers& rhs) { return lhs.AngularMomentum() < rhs.AngularMomentum(); }
+		inline bool operator<(const QuantumNumbers& lhs, unsigned int rhs) { return lhs.AngularMomentum() < rhs; }
+		inline bool operator<(const QuantumNumbers& lhs, int rhs) { return lhs.AngularMomentum() < (unsigned int)rhs; }
+		inline bool operator<(unsigned int lhs, const QuantumNumbers& rhs) { return lhs < rhs.AngularMomentum(); }
+
+
+		inline bool operator>(const QuantumNumbers& lhs, const QuantumNumbers& rhs) { return lhs.AngularMomentum() > rhs.AngularMomentum(); }
+		inline bool operator>(const QuantumNumbers& lhs, unsigned int rhs) { return lhs.AngularMomentum() > rhs; }
+		inline bool operator>(const QuantumNumbers& lhs, int rhs) { return lhs.AngularMomentum() > (unsigned int)rhs; }
+		inline bool operator>(unsigned int lhs, const QuantumNumbers& rhs) { return lhs > rhs.AngularMomentum(); }
+
+
+		inline bool operator<=(const QuantumNumbers& lhs, const QuantumNumbers& rhs) { return lhs.AngularMomentum() <= rhs.AngularMomentum(); }
+		inline bool operator<=(const QuantumNumbers& lhs, unsigned int rhs) { return lhs.AngularMomentum() <= rhs; }
+		inline bool operator<=(const QuantumNumbers& lhs, int rhs) { return lhs.AngularMomentum() <= (unsigned int)rhs; }
+		inline bool operator<=(unsigned int lhs, const QuantumNumbers& rhs) { return lhs <= rhs.AngularMomentum(); }
+
+
+
+		inline bool operator>=(const QuantumNumbers& lhs, const QuantumNumbers& rhs) { return lhs.AngularMomentum() >= rhs.AngularMomentum(); }
+		inline bool operator>=(const QuantumNumbers& lhs, unsigned int rhs) { return lhs.AngularMomentum() >= rhs; }
+		inline bool operator>=(const QuantumNumbers& lhs, int rhs) { return lhs.AngularMomentum() >= (unsigned int)rhs; }
+		inline bool operator>=(unsigned int lhs, const QuantumNumbers& rhs) { return lhs >= rhs.AngularMomentum(); }
+
+
+
+
+
+
+		class SQuantumNumbers : public QuantumNumbers {
+		public:
+			SQuantumNumbers() : QuantumNumbers(0, 0, 0) {};
+		};
+
+		
+		
+		class PxQuantumNumbers : public QuantumNumbers {
+		public:
+			PxQuantumNumbers() : QuantumNumbers(1, 0, 0) {};
+		};
+
+		class PyQuantumNumbers : public QuantumNumbers {
+		public:
+			PyQuantumNumbers() : QuantumNumbers(0, 1, 0) {};
+		};
+
+		class PzQuantumNumbers : public QuantumNumbers {
+		public:
+			PzQuantumNumbers() : QuantumNumbers(0, 0, 1) {};
+		};
+		
+		
+
+
+
+		class Dx2QuantumNumbers : public QuantumNumbers {
+		public:
+			Dx2QuantumNumbers() : QuantumNumbers(2, 0, 0) {};
+		};
+
+		class Dy2QuantumNumbers : public QuantumNumbers {
+		public:
+			Dy2QuantumNumbers() : QuantumNumbers(0, 2, 0) {};
+		};
+
+		class Dz2QuantumNumbers : public QuantumNumbers {
+		public:
+			Dz2QuantumNumbers() : QuantumNumbers(0, 0, 2) {};
+		};
+
+		class DxyQuantumNumbers : public QuantumNumbers {
+		public:
+			DxyQuantumNumbers() : QuantumNumbers(1, 1, 0) {};
+		};
+
+		class DxzQuantumNumbers : public QuantumNumbers {
+		public:
+			DxzQuantumNumbers() : QuantumNumbers(1, 0, 1) {};
+		};
+
+		class DyzQuantumNumbers : public QuantumNumbers {
+		public:
+			DyzQuantumNumbers() : QuantumNumbers(0, 1, 1) {};
+		};
+		
+
+
+		
+		class Fx3QuantumNumbers : public QuantumNumbers {
+		public:
+			Fx3QuantumNumbers() : QuantumNumbers(3, 0, 0) {};
+		};
+
+		class Fy3QuantumNumbers : public QuantumNumbers {
+		public:
+			Fy3QuantumNumbers() : QuantumNumbers(0, 3, 0) {};
+		};
+
+		class Fz3QuantumNumbers : public QuantumNumbers {
+		public:
+			Fz3QuantumNumbers() : QuantumNumbers(0, 0, 3) {};
+		};
+		
+		class FxyzQuantumNumbers : public QuantumNumbers {
+		public:
+			FxyzQuantumNumbers() : QuantumNumbers(1, 1, 1) {};
+		};
+
+		class Fx2yQuantumNumbers : public QuantumNumbers {
+		public:
+			Fx2yQuantumNumbers() : QuantumNumbers(2, 1, 0) {};
+		};
+
+		class Fx2zQuantumNumbers : public QuantumNumbers {
+		public:
+			Fx2zQuantumNumbers() : QuantumNumbers(2, 0, 1) {};
+		};
+
+		class Fxy2QuantumNumbers : public QuantumNumbers {
+		public:
+			Fxy2QuantumNumbers() : QuantumNumbers(1, 2, 0) {};
+		};
+
+		class Fy2zQuantumNumbers : public QuantumNumbers {
+		public:
+			Fy2zQuantumNumbers() : QuantumNumbers(0, 2, 1) {};
+		};
+
+		class Fxz2QuantumNumbers : public QuantumNumbers {
+		public:
+			Fxz2QuantumNumbers() : QuantumNumbers(1, 0, 2) {};
+		};
+
+		class Fyz2QuantumNumbers : public QuantumNumbers {
+		public:
+			Fyz2QuantumNumbers() : QuantumNumbers(0, 1, 2) {};
+		};
+	}
+}
+
