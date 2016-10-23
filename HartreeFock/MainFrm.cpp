@@ -322,9 +322,9 @@ void CMainFrame::OnSettingChange(UINT uFlags, LPCTSTR lpszSection)
 
 void CMainFrame::OnComputationOptions()
 {
-	COptionsPropertySheet sheet(L"Options", this);
-
-	sheet.DoModal();
+	COptionsPropertySheet *sheet = new COptionsPropertySheet(L"Options", this);
+	sheet->DoModal();
+	delete sheet;
 }
 
 
