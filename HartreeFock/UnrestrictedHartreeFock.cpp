@@ -148,22 +148,8 @@ namespace HartreeFock {
 							double coulomb = integralsRepository.getElectronElectron(i, j, k, l);
 							double exchange = integralsRepository.getElectronElectron(i, l, k, j);
 
-							for (int level = 0; level < numberOfOrbitals; ++level)
-							{
-								double factor = Pplus(k, level) * Pplus(l, level);
-							
-								Gplus(i, j) += factor * (coulomb - exchange);
-								Gminus(i, j) += factor * coulomb; // the alpha electrons interact with the beta ones with coulomb interaction, too
-							}
-
-							for (int level = 0; level < numberOfOrbitals; ++level)
-							{
-								double factor = Pminus(k, level) * Pminus(l, level);
-								
-								Gminus(i, j) += factor * (coulomb - exchange);
-								Gplus(i, j) += factor * coulomb; // the beta electrons interact with the alpha ones with coulomb interaction, too
-							}
-
+							Gplus(i, j) += Pplus(k, l) * (coulomb - exchange) + Pminus(k, l) * coulomb; // the beta electrons interact with the alpha ones with coulomb interaction, too
+							Gminus(i, j) += Pminus(k, l) * (coulomb - exchange) + Pplus(k, l) * coulomb; // the alpha electrons interact with the beta ones with coulomb interaction, too
 						}
 
 			Fplus = h + Gplus;
