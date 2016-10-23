@@ -294,8 +294,6 @@
     <Image Include="UserImages.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram.cd" />
-    <None Include="HartreeFock.ruleset" />
     <None Include="res\HartreeFock.rc2" />
     <None Include="Vector3D.inl" />
   </ItemGroup>

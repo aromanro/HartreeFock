@@ -296,7 +296,5 @@
     <None Include="Vector3D.inl">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="HartreeFock.ruleset" />
-    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>
