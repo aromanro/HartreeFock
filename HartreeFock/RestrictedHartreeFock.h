@@ -12,11 +12,11 @@ namespace HartreeFock {
 
 		unsigned int nrOccupiedLevels;
 
-		Eigen::MatrixXd P;	
-
 		void CalculateEnergy(const Eigen::VectorXd& eigenvals, const Eigen::MatrixXd& calcP/*, Eigen::MatrixXd& F*/);
 		void InitFockMatrix(int iter, Eigen::MatrixXd& F) const;
 	public:
+		Eigen::MatrixXd P;
+
 		RestrictedHartreeFock(int iterations = 3000);
 		virtual ~RestrictedHartreeFock();
 		

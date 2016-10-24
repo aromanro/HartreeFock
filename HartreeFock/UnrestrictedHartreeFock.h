@@ -9,15 +9,15 @@ namespace HartreeFock {
 	protected:
 		double totalEnergy;
 
-		Eigen::MatrixXd Pplus;
-		Eigen::MatrixXd Pminus;
 
 		void CalculateEnergy(const Eigen::VectorXd& eigenvalsplus, const Eigen::VectorXd& eigenvalsminus, const Eigen::MatrixXd& calcPplus, const Eigen::MatrixXd& calcPminus/*, const Eigen::MatrixXd& Fplus, const Eigen::MatrixXd& Fminus*/);
 		void InitFockMatrices(int iter, Eigen::MatrixXd& Fplus, Eigen::MatrixXd& Fminus) const;
 	public:
+		Eigen::MatrixXd Pplus;
+		Eigen::MatrixXd Pminus;
+
 		unsigned int nrOccupiedLevelsPlus;
 		unsigned int nrOccupiedLevelsMinus;
-
 
 		UnrestrictedHartreeFock(int iterations = 3000);
 		virtual ~UnrestrictedHartreeFock();
