@@ -131,7 +131,7 @@ namespace HartreeFock {
 
 				for (int i = 0; i < h.rows(); ++i)
 					for (int j = 0; j < h.rows(); ++j)
-						Fplus(i, j) = Fminus(i, j) = initGuess / 2. * overlapMatrix.matrix(i, j) * (h(i, i) + h(j, j)) / 2.;
+						Fplus(i, j) = Fminus(i, j) = initGuess * overlapMatrix.matrix(i, j) * (h(i, i) + h(j, j)) / 2.;
 			}
 			else
 			{
