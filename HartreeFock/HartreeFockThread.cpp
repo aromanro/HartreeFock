@@ -14,7 +14,10 @@ HartreeFockThread::HartreeFockThread(const Options& options, CHartreeFockDoc* do
 		algorithm = new HartreeFock::RestrictedHartreeFock(options.iterations);		
 	}
 	else {
-		algorithm = new HartreeFock::UnrestrictedHartreeFock(options.iterations);
+		HartreeFock::UnrestrictedHartreeFock *alg = new HartreeFock::UnrestrictedHartreeFock(options.iterations);
+		alg->addAsymmetry = options.addAsymmetry;
+		alg->asymmetry = options.asymmetry;
+		algorithm = alg;
 	}
 
 	algorithm->alpha = options.alpha;

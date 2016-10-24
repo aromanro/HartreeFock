@@ -22,6 +22,9 @@ Options::Options()
 	alpha(0.5),
 	initialGuess(0.),
 	iterations(3000),
+	addAsymmetry(false),
+	asymmetry(0.1),
+
 
 	// Computation
 	nrThreads(4),
@@ -64,6 +67,8 @@ void Options::Load()
 	alpha = GetDouble(L"Alpha", 0.3);
 	initialGuess = GetDouble(L"InitialGuess", 1.75);
 	iterations = theApp.GetProfileInt(L"options", L"MaxIterations", 3000);
+	asymmetry = GetDouble(L"Asymmetry", 0.1);
+	addAsymmetry = (1 == theApp.GetProfileInt(L"options", L"AddAsymmetry", 0) ? true : false);
 
 	// computations
 	nrThreads = theApp.GetProfileInt(L"options", L"NrThreads", 4);
@@ -100,6 +105,8 @@ void Options::Save()
 	theApp.WriteProfileBinary(L"options", L"Alpha", (LPBYTE)&alpha, sizeof(double));
 	theApp.WriteProfileBinary(L"options", L"InitialGuess", (LPBYTE)&initialGuess, sizeof(double));
 	theApp.WriteProfileInt(L"options", L"MaxIterations", iterations);
+	theApp.WriteProfileBinary(L"options", L"Asymmetry", (LPBYTE)&asymmetry, sizeof(double));
+	theApp.WriteProfileInt(L"options", L"AddAsymmetry", addAsymmetry ? 1 : 0);
 
 	// computations
 	theApp.WriteProfileInt(L"options", L"NrThreads", nrThreads);

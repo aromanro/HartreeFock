@@ -28,15 +28,21 @@ protected:
 	afx_msg void OnEnChangeEdit1();
 	afx_msg void OnEnChangeEdit2();
 	afx_msg void OnEnChangeEdit3();
+	afx_msg void OnBnClickedCheck2();
+	afx_msg void OnEnChangeEdit4();
 
 	virtual void DoDataExchange(CDataExchange* pDX);
 
-	int m_Method;
 	CNumberEdit m_AlphaEdit;
 	CNumberEdit m_GuessEdit;
+	CNumberEdit m_AsymmetryEdit;
+
+	int m_Method;
 	double m_Alpha;
 	double m_Guess;
 	int iterations;
+	double asymmetry;
+	int addAsymmetry;
 };
 
 

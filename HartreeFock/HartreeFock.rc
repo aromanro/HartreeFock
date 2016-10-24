@@ -248,7 +248,7 @@ BEGIN
     CONTROL         "Use splines",IDC_CHECK2,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,124,51,10
 END
 
-IDD_HARTREEFOCKPROPERTYPAGE DIALOGEX 0, 0, 377, 150
+IDD_HARTREEFOCKPROPERTYPAGE DIALOGEX 0, 0, 377, 183
 STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_CAPTION
 CAPTION "Hartree-Fock"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
@@ -266,6 +266,10 @@ BEGIN
     LTEXT           "First step guess for the Fock matrix - 0 means a 'core' guess, that is, no electron-electron interactions, non zero is for a Huckel guess (generalized Wolfsberg-Helmholtz)",IDC_STATIC,153,98,209,28
     RTEXT           "Max Iterations:",IDC_STATIC,18,132,50,8
     EDITTEXT        IDC_EDIT3,71,129,74,14,ES_AUTOHSCROLL | ES_NUMBER
+    CONTROL         "Add asymmetry to initial Fock matrices for the unrestricted method",IDC_CHECK2,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,19,156,229,10
+    RTEXT           "Asymmetry:",IDC_STATIC,275,156,40,8
+    EDITTEXT        IDC_EDIT4,319,154,40,14,ES_AUTOHSCROLL
 END
 
 IDD_COMPUTATIONPROPERTYPAGE DIALOGEX 0, 0, 173, 72
@@ -355,7 +359,7 @@ BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 370
         TOPMARGIN, 7
-        BOTTOMMARGIN, 143
+        BOTTOMMARGIN, 176
     END
 
     IDD_COMPUTATIONPROPERTYPAGE, DIALOG

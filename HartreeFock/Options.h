@@ -32,6 +32,8 @@ public:
 	double alpha;
 	double initialGuess;
 	int iterations;
+	bool addAsymmetry;
+	double asymmetry;
 
 	// Computation
 

@@ -18,6 +18,8 @@ HartreeFockPropertyPage::HartreeFockPropertyPage()
 	m_Alpha = theApp.options.alpha;
 	m_Guess = theApp.options.initialGuess;
 	iterations = theApp.options.iterations;
+	asymmetry = theApp.options.asymmetry;
+	addAsymmetry = (theApp.options.addAsymmetry ? BST_CHECKED : BST_UNCHECKED);
 }
 
 HartreeFockPropertyPage::~HartreeFockPropertyPage()
@@ -31,6 +33,8 @@ BEGIN_MESSAGE_MAP(HartreeFockPropertyPage, CMFCPropertyPage)
 	ON_EN_CHANGE(IDC_EDIT1, &HartreeFockPropertyPage::OnEnChangeEdit1)
 	ON_EN_CHANGE(IDC_EDIT2, &HartreeFockPropertyPage::OnEnChangeEdit2)
 	ON_EN_CHANGE(IDC_EDIT3, &HartreeFockPropertyPage::OnEnChangeEdit3)
+	ON_BN_CLICKED(IDC_CHECK2, &HartreeFockPropertyPage::OnBnClickedCheck2)
+	ON_EN_CHANGE(IDC_EDIT4, &HartreeFockPropertyPage::OnEnChangeEdit4)
 END_MESSAGE_MAP()
 
 
@@ -56,6 +60,8 @@ void HartreeFockPropertyPage::ApplyValues()
 	theApp.options.alpha = m_Alpha;
 	theApp.options.initialGuess = m_Guess;
 	theApp.options.iterations = iterations;
+	theApp.options.asymmetry = asymmetry;
+	theApp.options.addAsymmetry = (addAsymmetry == BST_CHECKED ? true : false);
 
 	theApp.options.Save();
 }
@@ -68,6 +74,7 @@ BOOL HartreeFockPropertyPage::OnInitDialog()
 	// TODO:  Add extra initialization here
 	m_AlphaEdit.allowNegative = false;
 	m_GuessEdit.allowNegative = false;
+	m_AsymmetryEdit.allowNegative = false;
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // EXCEPTION: OCX Property Pages should return FALSE
@@ -106,19 +113,35 @@ void HartreeFockPropertyPage::DoDataExchange(CDataExchange* pDX)
 	
 	DDX_Control(pDX, IDC_EDIT1, m_AlphaEdit);
 	DDX_Control(pDX, IDC_EDIT2, m_GuessEdit);
+	DDX_Control(pDX, IDC_EDIT4, m_AsymmetryEdit);
 
 	DDX_Radio(pDX, IDC_RADIO1, m_Method);
 	DDX_Text(pDX, IDC_EDIT1, m_Alpha);
 	DDX_Text(pDX, IDC_EDIT2, m_Guess);
 	DDX_Text(pDX, IDC_EDIT3, iterations);
+	DDX_Text(pDX, IDC_EDIT4, asymmetry);
+	DDX_Check(pDX, IDC_CHECK2, addAsymmetry);
 
 	DDV_MinMaxDouble(pDX, m_Alpha, 0.01, 1.);
 	DDV_MinMaxDouble(pDX, m_Guess, 0., 10.);
 	DDV_MinMaxUInt(pDX, iterations, 50, 50000);
+	DDV_MinMaxDouble(pDX, asymmetry, 0.0, 1.);
 }
 
 
 void HartreeFockPropertyPage::OnEnChangeEdit3()
+{
+	SetModified();
+}
+
+
+void HartreeFockPropertyPage::OnBnClickedCheck2()
+{
+	SetModified();
+}
+
+
+void HartreeFockPropertyPage::OnEnChangeEdit4()
 {
 	SetModified();
 }

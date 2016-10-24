@@ -19,6 +19,9 @@ namespace HartreeFock {
 		unsigned int nrOccupiedLevelsPlus;
 		unsigned int nrOccupiedLevelsMinus;
 
+		double asymmetry;
+		bool addAsymmetry;
+
 		UnrestrictedHartreeFock(int iterations = 3000);
 		virtual ~UnrestrictedHartreeFock();
 

@@ -6,7 +6,7 @@ namespace HartreeFock {
 
 
 	UnrestrictedHartreeFock::UnrestrictedHartreeFock(int iterations)
-		: HartreeFockAlgorithm(iterations), totalEnergy(0), nrOccupiedLevelsPlus(0), nrOccupiedLevelsMinus(0)
+		: HartreeFockAlgorithm(iterations), totalEnergy(0), nrOccupiedLevelsPlus(0), nrOccupiedLevelsMinus(0), addAsymmetry(true), asymmetry(0.1)
 	{
 	}
 
@@ -137,6 +137,12 @@ namespace HartreeFock {
 			{
 				Fplus = h;
 				Fminus = h;
+			}			
+
+			if (addAsymmetry)
+			{
+				Fplus(0, 1) += asymmetry;
+				Fplus(1, 0) = Fplus(0, 1);
 			}
 		}
 		else
