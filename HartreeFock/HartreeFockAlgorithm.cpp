@@ -99,12 +99,12 @@ namespace HartreeFock {
 	}
 
 
-	void HartreeFockAlgorithm::NormalizeC(Eigen::MatrixXd& C, int nrLevels)
+	void HartreeFockAlgorithm::NormalizeC(Eigen::MatrixXd& C, int nrOccupiedLevels)
 	{
-		assert(nrLevels <= C.cols());
+		assert(nrOccupiedLevels <= C.cols());
 		assert(C.rows() == overlapMatrix.matrix.rows());
 
-		for(int vec = 0; vec < nrLevels; ++vec) 
+		for(int vec = 0; vec < nrOccupiedLevels; ++vec) 
 		{
 			double factor = 0.0;
 

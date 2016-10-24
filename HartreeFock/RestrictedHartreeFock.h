@@ -10,7 +10,7 @@ namespace HartreeFock {
 	protected:
 		double totalEnergy;
 
-		unsigned int nrLevels;
+		unsigned int nrOccupiedLevels;
 
 		Eigen::MatrixXd P;	
 

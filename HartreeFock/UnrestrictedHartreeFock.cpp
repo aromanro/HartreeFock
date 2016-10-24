@@ -6,7 +6,7 @@ namespace HartreeFock {
 
 
 	UnrestrictedHartreeFock::UnrestrictedHartreeFock(int iterations)
-		: HartreeFockAlgorithm(iterations), totalEnergy(0), nrLevelsPlus(0), nrLevelsMinus(0)
+		: HartreeFockAlgorithm(iterations), totalEnergy(0), nrOccupiedLevelsPlus(0), nrOccupiedLevelsMinus(0)
 	{
 	}
 
@@ -24,32 +24,32 @@ namespace HartreeFock {
 		Pminus = Eigen::MatrixXd::Zero(h.rows(), h.cols());
 		
 		unsigned int electronsNumber = molecule->ElectronsNumber();
-		nrLevelsMinus = (unsigned int)floor(electronsNumber / 2.);
-		nrLevelsPlus = (electronsNumber % 2 ? nrLevelsMinus + 1 : nrLevelsMinus);
+		nrOccupiedLevelsMinus = (unsigned int)floor(electronsNumber / 2.);
+		nrOccupiedLevelsPlus = (electronsNumber % 2 ? nrOccupiedLevelsMinus + 1 : nrOccupiedLevelsMinus);
 
 		if (molecule->alphaElectrons > 0 || molecule->betaElectrons > 0)
 		{
-			nrLevelsPlus = molecule->alphaElectrons;
-			nrLevelsMinus = molecule->betaElectrons;
+			nrOccupiedLevelsPlus = molecule->alphaElectrons;
+			nrOccupiedLevelsMinus = molecule->betaElectrons;
 		}
 
 		
 		// preventing setting too many electrons
-		if (nrLevelsMinus + nrLevelsPlus > (unsigned int)(2 * numberOfOrbitals))
+		if (nrOccupiedLevelsMinus + nrOccupiedLevelsPlus > (unsigned int)(2 * numberOfOrbitals))
 		{
-			nrLevelsMinus = numberOfOrbitals;
-			nrLevelsPlus = numberOfOrbitals;			
+			nrOccupiedLevelsMinus = numberOfOrbitals;
+			nrOccupiedLevelsPlus = numberOfOrbitals;			
 		}
 		
-		if (nrLevelsPlus > (unsigned int)numberOfOrbitals)
+		if (nrOccupiedLevelsPlus > (unsigned int)numberOfOrbitals)
 		{
-			int dif = nrLevelsPlus - numberOfOrbitals;
-			nrLevelsPlus = numberOfOrbitals;
-			nrLevelsMinus += dif;
+			int dif = nrOccupiedLevelsPlus - numberOfOrbitals;
+			nrOccupiedLevelsPlus = numberOfOrbitals;
+			nrOccupiedLevelsMinus += dif;
 		}
 
-		if (nrLevelsMinus > (unsigned int)numberOfOrbitals)
-			nrLevelsMinus = numberOfOrbitals;
+		if (nrOccupiedLevelsMinus > (unsigned int)numberOfOrbitals)
+			nrOccupiedLevelsMinus = numberOfOrbitals;
 	}
 
 	void UnrestrictedHartreeFock::Step(int iter)
@@ -80,8 +80,8 @@ namespace HartreeFock {
 		Eigen::MatrixXd Cminus = V * Cminusprime;
 
 		// normalize them
-		NormalizeC(Cplus, nrLevelsPlus);
-		NormalizeC(Cminus, nrLevelsMinus);
+		NormalizeC(Cplus, nrOccupiedLevelsPlus);
+		NormalizeC(Cminus, nrOccupiedLevelsMinus);
 
 		//***************************************************************************************************************
 
@@ -93,10 +93,10 @@ namespace HartreeFock {
 		for (int i = 0; i < h.rows(); ++i)
 			for (int j = 0; j < h.cols(); ++j)
 			{
-				for (unsigned int vec = 0; vec < nrLevelsPlus; ++vec) // only eigenstates that are occupied 
+				for (unsigned int vec = 0; vec < nrOccupiedLevelsPlus; ++vec) // only eigenstates that are occupied 
 					newPplus(i, j) += Cplus(i, vec) * Cplus(j, vec);
 
-				for (unsigned int vec = 0; vec < nrLevelsMinus; ++vec) // only eigenstates that are occupied 
+				for (unsigned int vec = 0; vec < nrOccupiedLevelsMinus; ++vec) // only eigenstates that are occupied 
 					newPminus(i, j) += Cminus(i, vec) * Cminus(j, vec);
 			}
 
@@ -172,10 +172,10 @@ namespace HartreeFock {
 		// this is simpler but gives the same results as the one below!!!!!!!!
 
 		
-		for (unsigned int level = 0; level < nrLevelsPlus; ++level)
+		for (unsigned int level = 0; level < nrOccupiedLevelsPlus; ++level)
 			totalEnergy += eigenvalsplus(level);
 
-		for (unsigned int level = 0; level < nrLevelsMinus; ++level)
+		for (unsigned int level = 0; level < nrOccupiedLevelsMinus; ++level)
 			totalEnergy += eigenvalsminus(level);
 
 		for (int i = 0; i < h.rows(); ++i)

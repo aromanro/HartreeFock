@@ -5,7 +5,7 @@ namespace HartreeFock {
 
 
 	RestrictedHartreeFock::RestrictedHartreeFock(int iterations)
-		: HartreeFockAlgorithm(iterations), totalEnergy(std::numeric_limits<double>::infinity()), nrLevels(0)
+		: HartreeFockAlgorithm(iterations), totalEnergy(std::numeric_limits<double>::infinity()), nrOccupiedLevels(0)
 	{
 	}
 
@@ -21,9 +21,9 @@ namespace HartreeFock {
 
 		P = Eigen::MatrixXd::Zero(h.rows(), h.cols());
 
-		nrLevels = molecule->ElectronsNumber() / 2;
+		nrOccupiedLevels = molecule->ElectronsNumber() / 2;
 
-		if (nrLevels > (unsigned int)numberOfOrbitals) nrLevels = numberOfOrbitals;
+		if (nrOccupiedLevels > (unsigned int)numberOfOrbitals) nrOccupiedLevels = numberOfOrbitals;
 	}
 
 	void RestrictedHartreeFock::Step(int iter)
@@ -53,7 +53,7 @@ namespace HartreeFock {
 		Eigen::MatrixXd C = V * Cprime;
 
 		// normalize it
-		NormalizeC(C, nrLevels);
+		NormalizeC(C, nrOccupiedLevels);
 		
 		//***************************************************************************************************************
 
@@ -63,7 +63,7 @@ namespace HartreeFock {
 
 		for (int i = 0; i < h.rows(); ++i)
 			for (int j = 0; j < h.cols(); ++j)
-				for (unsigned int vec = 0; vec < nrLevels; ++vec) // only eigenstates that are occupied 
+				for (unsigned int vec = 0; vec < nrOccupiedLevels; ++vec) // only eigenstates that are occupied 
 					newP(i, j) += 2. * C(i, vec) * C(j, vec); // 2 is for the number of electrons in the eigenstate, it's the restricted Hartree-Fock
 															  
 		
@@ -130,7 +130,7 @@ namespace HartreeFock {
 
 		totalEnergy /= 2.;
 
-		for (unsigned int level = 0; level < nrLevels; ++level)
+		for (unsigned int level = 0; level < nrOccupiedLevels; ++level)
 			totalEnergy += eigenvals(level);
 
 		// the above is equivalent with this commented code, but since we already have eigenvalues for F calculated, we can get rid of the matrix addition to obtain H
