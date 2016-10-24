@@ -111,7 +111,7 @@ namespace HartreeFock {
 				for(int j = 0; j < overlapMatrix.matrix.cols(); ++j)
 					factor += C(i, vec) * overlapMatrix.matrix(i, j) * C(j, vec);
 
-			C.col(vec) = C.col(vec).eval() / sqrt(factor);
+			C.col(vec) /= sqrt(factor);
 		}
 	}
 
