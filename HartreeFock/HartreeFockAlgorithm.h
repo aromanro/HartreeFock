@@ -58,6 +58,7 @@ namespace HartreeFock {
 		virtual double GetTotalEnergy() const = 0;
 	protected:
 		static double DiffDensityMatrices(const Eigen::MatrixXd& oldP, const Eigen::MatrixXd& newP);
+		void NormalizeC(Eigen::MatrixXd& C, int nrLevels);
 	};
 
 

@@ -14,88 +14,113 @@ namespace HartreeFock {
 	{
 	}
 
-}
 
-void HartreeFock::HartreeFockAlgorithm::Init(Systems::Molecule* molecule)
-{
-	converged = false;
-	integralsRepository.Reset(molecule);
-
-	overlapMatrix.SetRepository(&integralsRepository);
-	kineticMatrix.SetRepository(&integralsRepository);
-	nuclearMatrix.SetRepository(&integralsRepository);
-
-	overlapMatrix.Calculate();
-	kineticMatrix.Calculate();
-	nuclearMatrix.Calculate();
-
-	integralsRepository.ClearMatricesMaps();
-
-	h = kineticMatrix.matrix + nuclearMatrix.matrix;
-
-	nuclearRepulsionEnergy = molecule->NuclearRepulsionEnergy();
-
-	numberOfOrbitals = molecule->CountNumberOfContractedGaussians();
-
-	integralsRepository.CalculateElectronElectronIntegrals();
-	integralsRepository.ClearAllMaps();
-
-	Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> solver(overlapMatrix.matrix);
-
-	U = solver.eigenvectors();
-	s = solver.eigenvalues().cwiseInverse().cwiseSqrt().asDiagonal();
-
-	V = U * s;
-
-	Vt = V.adjoint();
-
-	inited = true;
-}
-
-double HartreeFock::HartreeFockAlgorithm::Calculate()
-{
-	double curEnergy = 0;
-	double prevEnergy = std::numeric_limits<double>::infinity();
-
-	if (!inited) return prevEnergy;
-
-	// some big number before bail out
-	for (int iter = 0; iter < maxIterations; ++iter)
+	void HartreeFockAlgorithm::Init(Systems::Molecule* molecule)
 	{
-		Step(iter);
+		converged = false;
+		integralsRepository.Reset(molecule);
 
-		curEnergy = GetTotalEnergy();
+		overlapMatrix.SetRepository(&integralsRepository);
+		kineticMatrix.SetRepository(&integralsRepository);
+		nuclearMatrix.SetRepository(&integralsRepository);
 
-		if (abs(prevEnergy - curEnergy) <= 1E-13) {
-			converged = true;
-			break;
-		}
+		overlapMatrix.Calculate();
+		kineticMatrix.Calculate();
+		nuclearMatrix.Calculate();
 
-		if (terminate) break;
+		integralsRepository.ClearMatricesMaps();
 
-		prevEnergy = curEnergy;
+		h = kineticMatrix.matrix + nuclearMatrix.matrix;
+
+		nuclearRepulsionEnergy = molecule->NuclearRepulsionEnergy();
+
+		numberOfOrbitals = molecule->CountNumberOfContractedGaussians();
+
+		integralsRepository.CalculateElectronElectronIntegrals();
+		integralsRepository.ClearAllMaps();
+
+		Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> solver(overlapMatrix.matrix);
+
+		U = solver.eigenvectors();
+		s = solver.eigenvalues().cwiseInverse().cwiseSqrt().asDiagonal();
+
+		V = U * s;
+
+		Vt = V.adjoint();
+
+		inited = true;
 	}
 
-	return curEnergy;
-}
 
 
+	double HartreeFockAlgorithm::Calculate()
+	{
+		double curEnergy = 0;
+		double prevEnergy = std::numeric_limits<double>::infinity();
 
+		if (!inited) return prevEnergy;
 
-double HartreeFock::HartreeFockAlgorithm::DiffDensityMatrices(const Eigen::MatrixXd& oldP, const Eigen::MatrixXd& newP)
-{
-	double res = 0.0;
-
-	assert(oldP.cols() == newP.cols());
-	assert(oldP.rows() == newP.rows());
-
-	for (int i = 0; i < oldP.rows(); ++i)
-		for (int j = 0; j < oldP.cols(); ++j)
+		// some big number before bail out
+		for (int iter = 0; iter < maxIterations; ++iter)
 		{
-			double val = oldP(i, j) - newP(i, j);
-			
-			res += val * val;
+			Step(iter);
+
+			curEnergy = GetTotalEnergy();
+
+			if (abs(prevEnergy - curEnergy) <= 1E-13) {
+				converged = true;
+				break;
+			}
+
+			if (terminate) break;
+
+			prevEnergy = curEnergy;
 		}
 
-	return sqrt(res);
+		return curEnergy;
+	}
+
+	double HartreeFockAlgorithm::DiffDensityMatrices(const Eigen::MatrixXd& oldP, const Eigen::MatrixXd& newP)
+	{
+		double res = 0.0;
+
+		assert(oldP.cols() == newP.cols());
+		assert(oldP.rows() == newP.rows());
+
+		for (int i = 0; i < oldP.rows(); ++i)
+			for (int j = 0; j < oldP.cols(); ++j)
+			{
+				double val = oldP(i, j) - newP(i, j);
+			
+				res += val * val;
+			}
+
+		return sqrt(res);
+	}
+
+
+	void HartreeFockAlgorithm::NormalizeC(Eigen::MatrixXd& C, int nrLevels)
+	{
+		assert(nrLevels <= C.cols());
+
+		for(int vec = 0; vec < nrLevels; ++vec) 
+		{
+			double factor = 0.0;
+
+			for(int i = 0; i < overlapMatrix.matrix.rows(); ++i)
+				for(int j = 0; j < overlapMatrix.matrix.cols(); ++j)
+					factor += C(i, vec) * overlapMatrix.matrix(i, j) * C(j, vec);
+
+			C.col(vec) = C.col(vec).eval() / sqrt(factor);
+		}
+	}
+
 }
+
+
+
+
+
+
+
+

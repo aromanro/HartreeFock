@@ -51,6 +51,9 @@ namespace HartreeFock {
 		Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> es(Fprime);
 		const Eigen::MatrixXd& Cprime = es.eigenvectors();
 		Eigen::MatrixXd C = V * Cprime;
+
+		// normalize it
+		NormalizeC(C, nrLevels);
 		
 		//***************************************************************************************************************
 

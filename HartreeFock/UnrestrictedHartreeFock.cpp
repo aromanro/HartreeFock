@@ -79,6 +79,10 @@ namespace HartreeFock {
 		Eigen::MatrixXd Cplus = V * Cplusprime;
 		Eigen::MatrixXd Cminus = V * Cminusprime;
 
+		// normalize them
+		NormalizeC(Cplus, nrLevelsPlus);
+		NormalizeC(Cminus, nrLevelsMinus);
+
 		//***************************************************************************************************************
 
 		// calculate the density matrices
