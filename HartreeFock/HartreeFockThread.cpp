@@ -11,10 +11,10 @@ HartreeFockThread::HartreeFockThread(const Options& options, CHartreeFockDoc* do
 	: m_Doc(doc), m_start(start), m_end(end), m_step(step), terminate(false), converged(true)
 {
 	if (options.restricted && options.alphaElectrons == options.betaElectrons) {
-		algorithm = new HartreeFock::RestrictedHartreeFock();		
+		algorithm = new HartreeFock::RestrictedHartreeFock(options.iterations);		
 	}
 	else {
-		algorithm = new HartreeFock::UnrestrictedHartreeFock();
+		algorithm = new HartreeFock::UnrestrictedHartreeFock(options.iterations);
 	}
 
 	algorithm->alpha = options.alpha;
