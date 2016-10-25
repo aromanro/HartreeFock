@@ -119,8 +119,10 @@ namespace HartreeFock {
 
 	void UnrestrictedHartreeFock::InitFockMatrices(int iter, Eigen::MatrixXd& Fplus, Eigen::MatrixXd& Fminus) const
 	{
-		// this could be made twice as fast knowing that the matrices should be symmetric
+		// this could be made faster knowing that the matrix should be symmetric
 		// but it would be less expressive so I'll let it as it is
+		// maybe I'll improve it later
+		// anyway, the slower part is dealing with electron-electron integrals
 
 		if (0 == iter)
 		{
@@ -177,16 +179,28 @@ namespace HartreeFock {
 		// ************************************************************************************
 		// this is simpler but gives the same results as the one below!!!!!!!!
 
-		
-		for (unsigned int level = 0; level < nrOccupiedLevelsPlus; ++level)
-			totalEnergy += eigenvalsplus(level);
-
-		for (unsigned int level = 0; level < nrOccupiedLevelsMinus; ++level)
-			totalEnergy += eigenvalsminus(level);
-
+		/*
 		for (int i = 0; i < h.rows(); ++i)
 			for (int j = 0; j < h.cols(); ++j)
 				totalEnergy += (calcPplus(i, j) + calcPminus(i, j)) * h(j, i);
+		*/
+
+		// this is the improved variant of the above
+
+		for (int i = 1; i < h.rows(); ++i)
+			for (int j = 0; j < i; ++j)
+				totalEnergy += (calcPplus(i, j) + calcPminus(i, j)) * h(j, i);
+
+		// only the values below the diagonal were added
+		// *2 to have the sum of all elements except those on diagonal
+		totalEnergy *= 2.; 
+		
+		// now add the diagonal elements, too
+		for (int i = 0; i < h.rows(); ++i) totalEnergy += (calcPplus(i, i) + calcPminus(i, i)) * h(i, i);
+
+
+		for (unsigned int level = 0; level < nrOccupiedLevelsPlus; ++level)	totalEnergy += eigenvalsplus(level);
+		for (unsigned int level = 0; level < nrOccupiedLevelsMinus; ++level) totalEnergy += eigenvalsminus(level);
 
 
 		// ***************************************************************************************
