@@ -1,3 +1,31 @@
+# HartreeFock
+A program implementing the Hartree–Fock/self-consistent field method
+
+Description comming soon on http://compphys.go.ro
+
+I'll add here some things, too, when I'll have things ready on the blog.
+
+Until then, here are some things about usage:
+
+Using the classes should be easy. Here is how to grab some atoms from the 'basis':
+
+```c++
+	Systems::AtomWithShells H1, H2, O, N, C, He, Li, Ne, Ar;
+
+	for (auto &atom : basis.atoms)
+	{
+		if (atom.Z == 1) H1 = H2 = atom;
+		else if (atom.Z == 2) He = atom;
+		else if (atom.Z == 3) Li = atom;
+		else if (atom.Z == 8) O = atom;
+		else if (atom.Z == 6) C = atom;
+		else if (atom.Z == 7) N = atom;
+		else if (atom.Z == 10) Ne = atom;
+		else if (atom.Z == 18) Ar = atom;
+	}
+```
+
+Here is how to set the H2O molecule with the coordinates from the 'Mathematica Journal' (referenced in the code):
 
 ```c++
 	H1.position.X = H2.position.X = O.position.X = 0;
