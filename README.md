@@ -9,8 +9,8 @@ I'll add here some things, too, when I'll write the description there.
 Using the classes should be easy. Here is how to grab some atoms from the 'basis':
 
 ```c++
-  Systems::AtomWithShells H1, H2, O, N, C, He, Li, Ne, Ar;
-  // Titanium has Z = 22, could be used to test up to d orbitals
+	Systems::AtomWithShells H1, H2, O, N, C, He, Li, Ne, Ar;
+	// Titanium has Z = 22, could be used to test up to d orbitals
 
 	for (auto &atom : basis.atoms)
 	{
