@@ -1,12 +1,10 @@
 # HartreeFock
 A program implementing the Hartree–Fock/self-consistent field method
 
-Description comming soon on http://compphys.go.ro
+Description coming soon on http://compphys.go.ro
 
-I'll add here some things, too.
+I'll add here some things, too, when I'll write the description there.
 
-For now I suspect an issue with unrestricted Hartree-Fock, but I committed it anyway, I'll fix it if I'll find the cause.
-The restricted method seems to work fine.
 
 Using the classes should be easy. Here is how to grab some atoms from the 'basis':
 
