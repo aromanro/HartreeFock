@@ -165,7 +165,7 @@ namespace GaussianIntegrals {
 			assert(curL1 <= maxL - curL1);
 			assert(maxL - curL1 > 0);
 
-			for (auto currentQN1 = Orbitals::QuantumNumbers::QuantumNumbers(curL1 - 1, 0, 0)/*Orbitals::QuantumNumbers::QuantumNumbers(0, 0, 0)*/; currentQN1 <= maxL - curL1 /*1*/; ++currentQN1)
+			for (auto currentQN1 = Orbitals::QuantumNumbers::QuantumNumbers(curL1 - 1, 0, 0); currentQN1 <= maxL - curL1; ++currentQN1)
 			{
 				unsigned int curIndexQN1 = currentQN1.GetTotalCanonicalIndex();
 

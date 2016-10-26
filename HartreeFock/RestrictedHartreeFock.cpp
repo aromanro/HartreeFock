@@ -127,14 +127,6 @@ namespace HartreeFock {
 
 		// simply adding energy levels does not work, because of over counting interaction energy
 
-		/*
-		for (int i = 0; i < h.rows(); ++i)
-			for (int j = 0; j < h.cols(); ++j)
-				totalEnergy += calcP(i, j) * h(j, i);
-		*/
-
-		// this is the improved variant of the above
-
 		for (int i = 1; i < h.rows(); ++i)
 			for (int j = 0; j < i; ++j)
 				totalEnergy += calcP(i, j) * h(j, i);

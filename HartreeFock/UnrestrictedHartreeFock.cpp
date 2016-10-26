@@ -179,14 +179,6 @@ namespace HartreeFock {
 		// ************************************************************************************
 		// this is simpler but gives the same results as the one below!!!!!!!!
 
-		/*
-		for (int i = 0; i < h.rows(); ++i)
-			for (int j = 0; j < h.cols(); ++j)
-				totalEnergy += (calcPplus(i, j) + calcPminus(i, j)) * h(j, i);
-		*/
-
-		// this is the improved variant of the above
-
 		for (int i = 1; i < h.rows(); ++i)
 			for (int j = 0; j < i; ++j)
 				totalEnergy += (calcPplus(i, j) + calcPminus(i, j)) * h(j, i);
