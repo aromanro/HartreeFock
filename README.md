@@ -1,3 +1,4 @@
+
 ```c++
 	H1.position.X = H2.position.X = O.position.X = 0;
 
