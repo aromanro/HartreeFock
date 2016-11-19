@@ -2,8 +2,10 @@
 A program implementing the Hartree–Fock/self-consistent field method
 
 Description is available here: http://compphys.go.ro/the-hartree-fock-program/
+
 Some Hartree-Fock theory here: http://compphys.go.ro/the-hartree-fock-method/
-Some things more general (Schrodinger equation, Born-Oppenheimer approximation, variational principle), here: http://compphys.go.ro/how-to-solve-a-quantum-many-body-problem/
+
+Some things more general (Schrödinger equation, Born-Oppenheimer approximation, variational principle), here: http://compphys.go.ro/how-to-solve-a-quantum-many-body-problem/
 
 Here are some things about usage:
 
