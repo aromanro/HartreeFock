@@ -1,11 +1,11 @@
 # HartreeFock
 A program implementing the Hartree–Fock/self-consistent field method
 
-Description comming soon on http://compphys.go.ro
+Description is available here: http://compphys.go.ro/the-hartree-fock-program/
+Some Hartree-Fock theory here: http://compphys.go.ro/the-hartree-fock-method/
+Some things more general (Schrodinger equation, Born-Oppenheimer approximation, variational principle), here: http://compphys.go.ro/how-to-solve-a-quantum-many-body-problem/
 
-I'll add here some things, too, when I'll have things ready on the blog.
-
-Until then, here are some things about usage:
+Here are some things about usage:
 
 Using the classes should be easy. Here is how to grab some atoms from the 'basis':
 
