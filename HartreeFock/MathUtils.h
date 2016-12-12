@@ -2,6 +2,14 @@
 
 #include <Eigen\eigen>
 
+
+#define _USE_MATH_DEFINES // for C++  
+#include <cmath>  
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif // !M_PI
+
 #include "QuantumNumbers.h"
 #include "Vector3D.h"
 

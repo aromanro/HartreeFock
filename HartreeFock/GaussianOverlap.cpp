@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "GaussianOverlap.h"
 
-#include <cmath>
+#include "MathUtils.h"
 
 
 namespace GaussianIntegrals {
