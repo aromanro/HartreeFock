@@ -40,17 +40,13 @@ Here is how to set the H2O molecule with the coordinates from the 'Mathematica J
 	O.position.Y = 0;
 	O.position.Z = 0.24026010;
 
-	H1.SetCenterForShells();
-	H2.SetCenterForShells();
-	O.SetCenterForShells();
-
 	Systems::Molecule H2O;
 
 	H2O.atoms.push_back(H1);
 	H2O.atoms.push_back(H2);
 	H2O.atoms.push_back(O);
 
-	H2O.SetIDs();
+	H2O.Init();
   ```
   
   And here is how you calculate:
@@ -70,5 +66,5 @@ You can do computation for a single atom, too, for now by putting it into a dumm
 ```c++
   Systems::Molecule Heatom;
   Heatom.atoms.push_back(He);
-  Heatom.SetIDs();
+  Heatom.Init();
 ```
