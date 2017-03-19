@@ -78,7 +78,7 @@ namespace HartreeFock {
 		// ***************************************************************************************************
 		// go to the next density matrix
 
-		P = alpha * newP + (1. - alpha) * P;  // use mixing is alpha is set less than 1
+		P = alpha * newP + (1. - alpha) * P;  // use mixing if alpha is set less than 1
 	}
 
 	void RestrictedHartreeFock::InitFockMatrix(int iter, Eigen::MatrixXd& F) const
