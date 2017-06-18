@@ -79,8 +79,8 @@ double Systems::Molecule::NuclearRepulsionEnergy() const
 {
 	double energy = 0;
 
-	for (int atom1 = 0; atom1 < atoms.size(); ++atom1)
-		for (int atom2 = atom1 + 1; atom2 < atoms.size(); ++atom2)
+	for (unsigned int atom1 = 0; atom1 < atoms.size(); ++atom1)
+		for (unsigned int atom2 = atom1 + 1; atom2 < atoms.size(); ++atom2)
 			energy += atoms[atom1].Z * atoms[atom2].Z / (atoms[atom1].position - atoms[atom2].position).Length();
 
 	return energy;

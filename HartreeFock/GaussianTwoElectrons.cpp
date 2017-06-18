@@ -213,7 +213,7 @@ namespace GaussianIntegrals {
 		unsigned int L12 = L1 + L2;
 
 		// assertions to check the correctness of some bounds
-		assert(matrixCalc.rows() == Orbitals::QuantumNumbers::QuantumNumbers(0, 0, L12).GetTotalCanonicalIndex() - Orbitals::QuantumNumbers::QuantumNumbers(L1, 0, 0).GetTotalCanonicalIndex() + 1);
+		assert(matrixCalc.rows() == (int)(Orbitals::QuantumNumbers::QuantumNumbers(0, 0, L12).GetTotalCanonicalIndex() - Orbitals::QuantumNumbers::QuantumNumbers(L1, 0, 0).GetTotalCanonicalIndex() + 1));
 		assert(ind3Limit == Orbitals::QuantumNumbers::QuantumNumbers(0, 0, L3 + L4).GetTotalCanonicalIndex() - Orbitals::QuantumNumbers::QuantumNumbers(L3, 0, 0).GetTotalCanonicalIndex() + 1);
 
 		// copy the results from the vertical recurrence and electron transfer into a work tensor
@@ -228,8 +228,8 @@ namespace GaussianIntegrals {
 		Tensors::TensorOrder3<double> workTensor((unsigned int)matrixCalc.rows(), ind2Limit, ind3Limit);
 
 		// copy the values from matrixCalc
-		for (unsigned int i = 0; i < matrixCalc.rows(); ++i)
-			for (unsigned int j = 0; j < matrixCalc.cols(); ++j)
+		for (int i = 0; i < matrixCalc.rows(); ++i)
+			for (int j = 0; j < matrixCalc.cols(); ++j)
 				workTensor(i, 0, j) = matrixCalc(i, j);
 
 		// clean up the matrixCalc since it's not needed anymore

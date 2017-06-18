@@ -342,14 +342,14 @@ namespace GaussianIntegrals {
 
 						if (swapped)
 						{
-							for (unsigned int i = 0; i < result.first->second.matrixCalc.rows(); ++i)
-								for (unsigned int j = 0; j < result.first->second.matrixCalc.cols(); ++j)
+							for (int i = 0; i < result.first->second.matrixCalc.rows(); ++i)
+								for (int j = 0; j < result.first->second.matrixCalc.cols(); ++j)
 									result.first->second.matrixCalc(i, j) += factor * electronsVertical.matrixCalc(j, i);
 						}
 						else
 						{
-							for (unsigned int i = 0; i < result.first->second.matrixCalc.rows(); ++i)
-								for (unsigned int j = 0; j < result.first->second.matrixCalc.cols(); ++j)
+							for (int i = 0; i < result.first->second.matrixCalc.rows(); ++i)
+								for (int j = 0; j < result.first->second.matrixCalc.cols(); ++j)
 									result.first->second.matrixCalc(i, j) += factor * electronsVertical.matrixCalc(i, j);
 						}
 					}
