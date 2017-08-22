@@ -1,5 +1,7 @@
 #include "stdafx.h"
 
+
+
 #include "RestrictedHartreeFock.h"
 #include "UnrestrictedHartreeFock.h"
 

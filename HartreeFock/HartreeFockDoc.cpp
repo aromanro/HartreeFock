@@ -3,6 +3,22 @@
 //
 
 #include "stdafx.h"
+
+#include "MathUtils.h"
+
+#include "GaussianOrbital.h"
+#include "Molecule.h"
+#include "IntegralsRepository.h"
+#include "QuantumMatrix.h"
+
+#include "BoysFunction.h"
+
+#include "RestrictedHartreeFock.h"
+#include "UnrestrictedHartreeFock.h"
+
+
+
+
 // SHARED_HANDLERS can be defined in an ATL project implementing preview, thumbnail
 // and search filter handlers and allows sharing of document code with that project.
 #ifndef SHARED_HANDLERS
@@ -11,6 +27,8 @@
 
 #include "HartreeFockDoc.h"
 #include "HartreeFockView.h"
+
+
 
 
 #include <algorithm>
@@ -71,6 +89,37 @@ BOOL CHartreeFockDoc::OnNewDocument()
 //	Tests tests;
 //	tests.Test(basisSTO3G);
 #endif
+
+	// Example for He:
+
+	/*
+	Systems::AtomWithShells H1, H2, O, N, C, He, Li, Ne, Ar;
+
+	for (auto &atom : basisSTO6G.atoms)
+	{
+		if (atom.Z == 1) H1 = H2 = atom;
+		else if (atom.Z == 2) He = atom;
+		else if (atom.Z == 3) Li = atom;
+		else if (atom.Z == 8) O = atom;
+		else if (atom.Z == 6) C = atom;
+		else if (atom.Z == 7) N = atom;
+		else if (atom.Z == 10) Ne = atom;
+		else if (atom.Z == 18) Ar = atom;
+	}
+
+	Systems::Molecule Heatom;
+	Heatom.atoms.push_back(He);
+	Heatom.Init();
+	
+	HartreeFock::RestrictedHartreeFock HartreeFockAlgorithm;
+	HartreeFockAlgorithm.alpha = 0.5;
+	HartreeFockAlgorithm.initGuess = 0;
+
+	HartreeFockAlgorithm.Init(&Heatom);
+	double result = HartreeFockAlgorithm.Calculate();
+
+	TRACE("Result: %f\n", result);
+	*/
 
 	return TRUE;
 }
