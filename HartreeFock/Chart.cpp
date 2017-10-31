@@ -553,7 +553,7 @@ void Chart::AddDataSet(const double *dataX, const double *dataY, unsigned int le
 {
 	if (0 == len) return;
 
-	dataSets.dataSets.push_back(DataSets::DataSet());
+	dataSets.dataSets.emplace_back();
 	DataSets::DataSet &data = dataSets.dataSets.back();
 	data.points.reserve(len);
 	data.color = color;
@@ -572,7 +572,7 @@ void Chart::AddDataSet(const std::vector<std::pair<double, double>> *data, float
 {
 	if (!data || !data->size()) return;
 
-	dataSets.dataSets.push_back(DataSets::DataSet());
+	dataSets.dataSets.emplace_back();
 	DataSets::DataSet &dataset = dataSets.dataSets.back();
 	unsigned int len = (unsigned int)data->size();
 	dataset.points.reserve(len);
@@ -593,7 +593,7 @@ void Chart::AddDataSet(double start, double step, const double *dataY, unsigned 
 {
 	if (0 == len) return;
 
-	dataSets.dataSets.push_back(DataSets::DataSet());
+	dataSets.dataSets.emplace_back();
 	DataSets::DataSet &data = dataSets.dataSets.back();
 	data.points.reserve(len);
 	data.color = color;
@@ -629,7 +629,7 @@ void Chart::AddDataSlice(double Xval, const double *slice, unsigned int len)
 	{
 		point.X = (float)Xval;
 		point.Y = (float)slice[i];
-		dataSets.dataSets.push_back(DataSets::DataSet());
+		dataSets.dataSets.emplace_back();
 		dataSets.dataSets.back().points.push_back(point);
 	}
 }

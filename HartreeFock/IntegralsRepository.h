@@ -9,6 +9,7 @@
 
 #include <map>
 #include <tuple>
+#include <valarray>
 
 #include "Molecule.h"
 #include "ContractedGaussianOrbital.h"
@@ -31,7 +32,7 @@ namespace GaussianIntegrals {
 		
 		std::map < std::tuple<unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, double, double, double, double>, GaussianTwoElectrons> electronElectronIntegralsVerticalAndTransferMap;
 		std::map < std::tuple<unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int>, GaussianTwoElectrons> electronElectronIntegralsContractedMap;
-		std::vector<double> electronElectronIntegrals;
+		std::valarray<double> electronElectronIntegrals;
 
 	public:
 		bool useLotsOfMemory;

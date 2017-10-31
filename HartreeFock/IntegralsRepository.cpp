@@ -22,7 +22,9 @@ namespace GaussianIntegrals {
 	void IntegralsRepository::Reset(Systems::Molecule* molecule)
 	{
 		ClearAllMaps();
-		electronElectronIntegrals.clear();
+
+		std::valarray<double> emptyV;
+		electronElectronIntegrals.swap(emptyV);
 
 		m_Molecule = molecule;
 	}
