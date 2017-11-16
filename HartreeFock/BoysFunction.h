@@ -20,7 +20,7 @@ namespace GaussianIntegrals {
 
 			virtual double operator()(double t) const 
 			{ 
-				double res = pow(t, 2. * m_m) * exp(-m_x * t * t);
+				const double res = pow(t, 2. * m_m) * exp(-m_x * t * t);
 
 				return res;  
 			}

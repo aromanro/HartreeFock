@@ -4,7 +4,7 @@
 namespace Matrices {
 
 	QuantumMatrix::QuantumMatrix(GaussianIntegrals::IntegralsRepository* repository)
-		: integralsRepository(repository)
+		: integralsRepository(repository), nrBasis(0)
 	{
 		Setup();
 	}

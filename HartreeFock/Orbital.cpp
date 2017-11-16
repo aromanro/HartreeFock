@@ -4,7 +4,7 @@
 namespace Orbitals {
 
 	Orbital::Orbital()
-		: ID(0), angularMomentum(0, 0, 0)
+		: ID(0), centerID(0), shellID(0), angularMomentum(0, 0, 0)
 	{
 	}
 

@@ -126,7 +126,7 @@ void CHartreeFockView::Dump(CDumpContext& dc) const
 CHartreeFockDoc* CHartreeFockView::GetDocument() const // non-debug version is inline
 {
 	ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CHartreeFockDoc)));
-	return (CHartreeFockDoc*)m_pDocument;
+	return dynamic_cast<CHartreeFockDoc*>(m_pDocument);
 }
 #endif //_DEBUG
 

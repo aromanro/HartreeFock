@@ -86,7 +86,7 @@ void MoleculePropertyPage::ApplyValues()
 
 	theApp.options.Save();
 
-	((CMainFrame*)theApp.m_pMainWnd)->GetDocument()->ApplyChartOptions();
+	dynamic_cast<CMainFrame*>(theApp.m_pMainWnd)->GetDocument()->ApplyChartOptions();
 }
 
 
@@ -216,7 +216,7 @@ void MoleculePropertyPage::FillCombos()
 	comboBox1.ResetContent();
 	comboBox2.ResetContent();
 
-	CHartreeFockDoc* doc = ((CMainFrame*)theApp.m_pMainWnd)->GetDocument();
+	CHartreeFockDoc* doc = dynamic_cast<CMainFrame*>(theApp.m_pMainWnd)->GetDocument();
 	Chemistry::Basis *basisPtr = nullptr;
 
 	if (0 == theApp.options.basis)
@@ -254,13 +254,13 @@ void MoleculePropertyPage::AdjustElectrons()
 
 	CT2CA psz1(m_atom1);
 	std::string str1(psz1);
-	unsigned int Z1 = Chemistry::ChemUtils::GetZForAtom(str1);
+	const unsigned int Z1 = Chemistry::ChemUtils::GetZForAtom(str1);
 
 	CT2CA psz2(m_atom2);
 	std::string str2(psz2);
-	unsigned int Z2 = Chemistry::ChemUtils::GetZForAtom(str2);
+	const unsigned int Z2 = Chemistry::ChemUtils::GetZForAtom(str2);
 
-	int totalElectrons = (twoAtom1 ? 2 : 1) * Z1 + Z2;
+	const int totalElectrons = (twoAtom1 ? 2 : 1) * Z1 + Z2;
 
 	alphaElectrons = totalElectrons / 2;
 	betaElectrons = alphaElectrons;

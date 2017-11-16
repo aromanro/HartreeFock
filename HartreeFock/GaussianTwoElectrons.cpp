@@ -117,10 +117,10 @@ namespace GaussianIntegrals {
 			Orbitals::QuantumNumbers::QuantumNumbers prevQN = currentQN;
 			Orbitals::QuantumNumbers::QuantumNumbers prevPrevQN = prevQN;
 
-			bool addPrevPrev = GetPrevAndPrevPrevAndScalarsForVerticalRecursion(currentQN, Rpa, Rwp, prevQN, prevPrevQN, RpaScalar, RwpScalar, N);
+			const bool addPrevPrev = GetPrevAndPrevPrevAndScalarsForVerticalRecursion(currentQN, Rpa, Rwp, prevQN, prevPrevQN, RpaScalar, RwpScalar, N);
 
-			unsigned int curIndex = currentQN.GetTotalCanonicalIndex();
-			unsigned int prevIndex = prevQN.GetTotalCanonicalIndex();
+			const unsigned int curIndex = currentQN.GetTotalCanonicalIndex();
+			const unsigned int prevIndex = prevQN.GetTotalCanonicalIndex();
 
 			for (unsigned int m = 0; m < size - currentQN; ++m)
 			{
@@ -131,7 +131,7 @@ namespace GaussianIntegrals {
 
 				if (addPrevPrev)
 				{
-					unsigned int prevPrevIndex = prevPrevQN.GetTotalCanonicalIndex();
+					const unsigned int prevPrevIndex = prevPrevQN.GetTotalCanonicalIndex();
 					matrixCalc(curIndex, m) += N / (2. * alpha12) * (matrixCalc(prevPrevIndex, m) - alpha / alpha12 * matrixCalc(prevPrevIndex, m + 1));
 				}
 
@@ -151,16 +151,16 @@ namespace GaussianIntegrals {
 
 		for (auto currentQN2 = Orbitals::QuantumNumbers::QuantumNumbers(1, 0, 0); currentQN2 <= maxL34; ++currentQN2) // for each 'column' starting from 1
 		{
-			unsigned int curL1 = currentQN2;
-			unsigned int curIndexQN2 = currentQN2.GetTotalCanonicalIndex();
+			const unsigned int curL1 = currentQN2;
+			const unsigned int curIndexQN2 = currentQN2.GetTotalCanonicalIndex();
 
 			auto prevQN2 = currentQN2;
 			auto prevPrevQN2 = prevQN2;
 
-			bool addPrevPrev = GetPrevAndPrevPrevAndScalarForElectronTransfer(currentQN2, delta, prevQN2, prevPrevQN2, deltaScalar, Ny, maxIndex);
+			const bool addPrevPrev = GetPrevAndPrevPrevAndScalarForElectronTransfer(currentQN2, delta, prevQN2, prevPrevQN2, deltaScalar, Ny, maxIndex);
 
-			unsigned int prevIndexQN2 = prevQN2.GetTotalCanonicalIndex();
-			unsigned int prevPrevIndexQN2 = (addPrevPrev ? prevPrevQN2.GetTotalCanonicalIndex() : 0);
+			const unsigned int prevIndexQN2 = prevQN2.GetTotalCanonicalIndex();
+			const unsigned int prevPrevIndexQN2 = (addPrevPrev ? prevPrevQN2.GetTotalCanonicalIndex() : 0);
 
 			assert(curL1 <= maxL - curL1);
 			assert(maxL - curL1 > 0);
@@ -205,7 +205,7 @@ namespace GaussianIntegrals {
 	{
 		// some values needed later
 		const unsigned int ind2Limit = Orbitals::QuantumNumbers::QuantumNumbers(0, 0, L2).GetTotalCanonicalIndex() + 1;
-		const unsigned int ind3Limit = (unsigned int)matrixCalc.cols();
+		const unsigned int ind3Limit = static_cast<unsigned int>(matrixCalc.cols());
 
 		const Orbitals::QuantumNumbers::QuantumNumbers QN1Start(L1, 0, 0);
 		const unsigned int QN1Base = QN1Start.GetTotalCanonicalIndex();
@@ -225,7 +225,7 @@ namespace GaussianIntegrals {
 
 		// the formula does this: (L1 + L2, s | L3 + L4, s) -> (L1, L2 | L3 + L4, s)
 
-		Tensors::TensorOrder3<double> workTensor((unsigned int)matrixCalc.rows(), ind2Limit, ind3Limit);
+		Tensors::TensorOrder3<double> workTensor(static_cast<unsigned int>(matrixCalc.rows()), ind2Limit, ind3Limit);
 
 		// copy the values from matrixCalc
 		for (int i = 0; i < matrixCalc.rows(); ++i)
@@ -291,7 +291,7 @@ namespace GaussianIntegrals {
 
 		const unsigned int limit1 = QN1lim.NumOrbitals();
 		const unsigned int limit2 = QN2lim.NumOrbitals();
-		const unsigned int limit3 = (unsigned int)tensor3Calc.GetDim(2);
+		const unsigned int limit3 = static_cast<unsigned int>(tensor3Calc.GetDim(2));
 		const unsigned int limit4 = QN4lim.GetTotalCanonicalIndex() + 1;
 
 		unsigned int L34 = L3 + L4;

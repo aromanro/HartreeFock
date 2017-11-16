@@ -46,16 +46,16 @@ namespace Orbitals {
 
 			inline unsigned int GetTotalCanonicalIndex() const
 			{
-				unsigned int L = AngularMomentum();
+				const unsigned int L = AngularMomentum();
 				
-				unsigned int val = L * (L * (L + 3) + 2) / 6;
+				const unsigned int val = L * (L * (L + 3) + 2) / 6;
 
 				return val + GetCanonicalIndex();
 			}
 
 			inline void CanonicalIncrement()
 			{
-				unsigned int L = AngularMomentum();
+				const unsigned int L = AngularMomentum();
 
 				if (n == L)
 				{
@@ -102,26 +102,26 @@ namespace Orbitals {
 
 		inline bool operator<(const QuantumNumbers& lhs, const QuantumNumbers& rhs) { return lhs.AngularMomentum() < rhs.AngularMomentum(); }
 		inline bool operator<(const QuantumNumbers& lhs, unsigned int rhs) { return lhs.AngularMomentum() < rhs; }
-		inline bool operator<(const QuantumNumbers& lhs, int rhs) { return lhs.AngularMomentum() < (unsigned int)rhs; }
+		inline bool operator<(const QuantumNumbers& lhs, int rhs) { return lhs.AngularMomentum() < static_cast<unsigned int>(rhs); }
 		inline bool operator<(unsigned int lhs, const QuantumNumbers& rhs) { return lhs < rhs.AngularMomentum(); }
 
 
 		inline bool operator>(const QuantumNumbers& lhs, const QuantumNumbers& rhs) { return lhs.AngularMomentum() > rhs.AngularMomentum(); }
 		inline bool operator>(const QuantumNumbers& lhs, unsigned int rhs) { return lhs.AngularMomentum() > rhs; }
-		inline bool operator>(const QuantumNumbers& lhs, int rhs) { return lhs.AngularMomentum() > (unsigned int)rhs; }
+		inline bool operator>(const QuantumNumbers& lhs, int rhs) { return lhs.AngularMomentum() > static_cast<unsigned int>(rhs); }
 		inline bool operator>(unsigned int lhs, const QuantumNumbers& rhs) { return lhs > rhs.AngularMomentum(); }
 
 
 		inline bool operator<=(const QuantumNumbers& lhs, const QuantumNumbers& rhs) { return lhs.AngularMomentum() <= rhs.AngularMomentum(); }
 		inline bool operator<=(const QuantumNumbers& lhs, unsigned int rhs) { return lhs.AngularMomentum() <= rhs; }
-		inline bool operator<=(const QuantumNumbers& lhs, int rhs) { return lhs.AngularMomentum() <= (unsigned int)rhs; }
+		inline bool operator<=(const QuantumNumbers& lhs, int rhs) { return lhs.AngularMomentum() <= static_cast<unsigned int>(rhs); }
 		inline bool operator<=(unsigned int lhs, const QuantumNumbers& rhs) { return lhs <= rhs.AngularMomentum(); }
 
 
 
 		inline bool operator>=(const QuantumNumbers& lhs, const QuantumNumbers& rhs) { return lhs.AngularMomentum() >= rhs.AngularMomentum(); }
 		inline bool operator>=(const QuantumNumbers& lhs, unsigned int rhs) { return lhs.AngularMomentum() >= rhs; }
-		inline bool operator>=(const QuantumNumbers& lhs, int rhs) { return lhs.AngularMomentum() >= (unsigned int)rhs; }
+		inline bool operator>=(const QuantumNumbers& lhs, int rhs) { return lhs.AngularMomentum() >= static_cast<unsigned int>(rhs); }
 		inline bool operator>=(unsigned int lhs, const QuantumNumbers& rhs) { return lhs >= rhs.AngularMomentum(); }
 
 

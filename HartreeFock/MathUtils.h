@@ -108,7 +108,7 @@ namespace GaussianIntegrals {
 			c1 = s0;
 			s1 = c0;
 
-			double res = Abscissa(2, 1);
+			const double res = Abscissa(2, 1);
 			
 			q = (F(res) + F(-res)) * Omega(2, 1);
 			p = F(0);
@@ -133,7 +133,7 @@ namespace GaussianIntegrals {
 				{
 					x = 1. + 2. / (3. * M_PI) * s * c * (3. + 2. * s * s) - ((double)i) / n;
 					
-					int div = (int)((i + j + j) / 3.);
+					const int div = (int)((i + j + j) / 3.);
 					if (3 * div >= i + j)
 						chp += (F(-x) + F(x)) * s * s * s * s;
 

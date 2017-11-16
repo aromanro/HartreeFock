@@ -54,7 +54,7 @@ void CNumberEdit::OnEnUpdate()
 	}
 
 	wchar_t *end;
-	double val = wcstod(str, &end);
+	const double val = wcstod(str, &end);
 	if (*end || (val < 0 && !allowNegative))
 	{
 		m_Cancelling = true;

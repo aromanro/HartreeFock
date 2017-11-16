@@ -12,6 +12,7 @@ namespace GaussianIntegrals {
 	}
 
 	GaussianOverlap::GaussianOverlap(double alpha1, double alpha2, const Vector3D<double>& center1, const Vector3D<double>& center2, const Orbitals::QuantumNumbers::QuantumNumbers& maxQN1, const Orbitals::QuantumNumbers::QuantumNumbers& maxQN2)
+		: factor(0)
 	{
 		Reset(alpha1, alpha2, center1, center2, maxQN1, maxQN2);
 	}
@@ -27,7 +28,7 @@ namespace GaussianIntegrals {
 		CalculateOverlap(matrixY, alpha1, alpha2, center1.Y, center2.Y, maxQN1.m, maxQN2.m);
 		CalculateOverlap(matrixZ, alpha1, alpha2, center1.Z, center2.Z, maxQN1.n, maxQN2.n);
 
-		Vector3D<double> dif = center1 - center2;
+		const Vector3D<double> dif = center1 - center2;
 		factor = exp(-alpha1 * alpha2 / (alpha1 + alpha2) * dif * dif) * pow(M_PI / (alpha1 + alpha2), 3. / 2.);
 	}
 
@@ -38,10 +39,10 @@ namespace GaussianIntegrals {
 
 	void GaussianOverlap::CalculateOverlap(Eigen::MatrixXd& matrix, double alpha1, double alpha2, double center1, double center2, unsigned int maxQN1, unsigned int maxQN2)
 	{
-		double alpha = alpha1 + alpha2;
-		double productCenter = (alpha1 * center1 + alpha2 * center2) / alpha;
-		double dif = center1 - center2;
-		double difCenter = productCenter - center1;
+		const double alpha = alpha1 + alpha2;
+		const double productCenter = (alpha1 * center1 + alpha2 * center2) / alpha;
+		const double dif = center1 - center2;
+		const double difCenter = productCenter - center1;
 
 		matrix(0, 0) = 1;
 		matrix(1, 0) = difCenter;

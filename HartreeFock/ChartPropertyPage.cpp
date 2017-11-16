@@ -71,7 +71,7 @@ void ChartPropertyPage::ApplyValues()
 
 	theApp.options.Save();
 
-	((CMainFrame*)theApp.m_pMainWnd)->GetDocument()->ApplyChartOptions();
+	dynamic_cast<CMainFrame*>(theApp.m_pMainWnd)->GetDocument()->ApplyChartOptions();
 }
 
 

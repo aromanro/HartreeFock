@@ -91,7 +91,7 @@ unsigned int Systems::Molecule::ElectronsNumber()
 {
 	if (alphaElectrons > 0 || betaElectrons > 0) return alphaElectrons + betaElectrons;
 
-	return (unsigned int)std::accumulate(atoms.begin(), atoms.end(), 0, [](unsigned int result, const AtomWithShells& atom) { return result + atom.electronsNumber; });
+	return static_cast<unsigned int>(std::accumulate(atoms.begin(), atoms.end(), 0, [](unsigned int result, const AtomWithShells& atom) { return result + atom.electronsNumber; }));
 }
 
 

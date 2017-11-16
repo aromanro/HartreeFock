@@ -4,7 +4,7 @@
 namespace Systems {
 
 	Atom::Atom(unsigned int nrZ, int nrElectrons)
-		: Z(nrZ)
+		: Z(nrZ), ID(0)
 	{
 		if (-1 == nrElectrons) electronsNumber = Z;
 		else electronsNumber = nrElectrons;

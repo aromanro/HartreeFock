@@ -49,9 +49,9 @@ protected:
 	float GetLabelHeight(bool XAxis = true) const;
 	float GetLabelWidth(bool XAxis = true) const;
 
-	int GetNeededFontSize(CString& str, Gdiplus::Graphics& g, Gdiplus::RectF& boundRect);
+	int GetNeededFontSize(CString& str, const Gdiplus::Graphics& g, const Gdiplus::RectF& boundRect);
 
-	void DrawText(CString &str, Gdiplus::Graphics& g, Gdiplus::RectF& boundRect, Gdiplus::StringAlignment align = Gdiplus::StringAlignmentCenter, float fontSize = 0);
+	void DrawText(CString &str, Gdiplus::Graphics& g, const Gdiplus::RectF& boundRect, Gdiplus::StringAlignment align = Gdiplus::StringAlignmentCenter, float fontSize = 0);
 public:
 	Chart();
 	~Chart();
@@ -71,7 +71,7 @@ public:
 			double getXMax() const;
 			double getYMax() const;
 
-			void Draw(Gdiplus::Graphics& g, Gdiplus::RectF& boundRect, Gdiplus::RectF& dataRect, bool spline = true) const;
+			void Draw(Gdiplus::Graphics& g, const Gdiplus::RectF& boundRect, const Gdiplus::RectF& dataRect, bool spline = true) const;
 		protected:
 			static double ConvertValue(double val, double valMin, double valMax, double chartMin, double chartMax);
 		};
@@ -83,12 +83,12 @@ public:
 		double getXMax() const;
 		double getYMax() const;
 
-		void Draw(Gdiplus::Graphics& g, Gdiplus::RectF& boundRect, Gdiplus::RectF& dataRect, bool spline = true) const;
+		void Draw(Gdiplus::Graphics& g, const Gdiplus::RectF& boundRect, const Gdiplus::RectF& dataRect, bool spline = true) const;
 	};
 
 	DataSets dataSets;
 
-	void Draw(CDC* pDC, CRect& rect);
+	void Draw(const CDC* pDC, CRect& rect);
 
 	void SetNumTicksX(int ticks) { X.SetNumTicks(ticks); }
 	void SetNumTicksY(int ticks) { Y.SetNumTicks(ticks); }

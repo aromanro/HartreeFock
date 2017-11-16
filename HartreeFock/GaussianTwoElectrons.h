@@ -171,7 +171,7 @@ namespace GaussianIntegrals {
 
 		inline static void IncrementQNandDecrementLimitIfNeeded(Orbitals::QuantumNumbers::QuantumNumbers& QN, unsigned int& limit)
 		{
-			unsigned int oldL = QN;
+			const unsigned int oldL = QN;
 
 			++QN;
 			if (QN != oldL) {

@@ -42,7 +42,7 @@ namespace Orbitals {
 
 	double GaussianOrbital::operator()(const Vector3D<double>& r) const
 	{
-		Vector3D<double> R = r - center;
+		const Vector3D<double> R = r - center;
 
 		return coefficient * normalizationFactor * pow(R.X, angularMomentum.l) * pow(R.Y, angularMomentum.m) *  pow(R.Z, angularMomentum.n) * exp(-alpha * R * R);
 	}

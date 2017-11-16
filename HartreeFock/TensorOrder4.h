@@ -17,13 +17,13 @@ namespace Tensors {
 		}
 
 		T& operator()(unsigned int index1, unsigned int index2, unsigned int index3, unsigned int index4) { 
-			std::array<unsigned int, 4> indices{ {index1, index2, index3, index4} };
+			const std::array<unsigned int, 4> indices{ {index1, index2, index3, index4} };
 
 			return m_values[GetOffset(indices)];
 		}
 		
 		constexpr const T& operator()(unsigned int index1, unsigned int index2, unsigned int index3) const {
-			std::array<unsigned int, 4> indices{ { index1, index2, index3, index4 } };
+			const std::array<unsigned int, 4> indices{ { index1, index2, index3, index4 } };
 
 			return m_values[GetOffset(indices)];
 		}

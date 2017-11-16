@@ -184,8 +184,8 @@ namespace GaussianIntegrals {
 		auto it = nuclearIntegralsContractedMap.find(params);
 		if (nuclearIntegralsContractedMap.end() != it) return it->second.getNuclear(orbital1->angularMomentum, orbital2->angularMomentum);
 		
-		auto center1 = orbital1->getCenter();
-		auto center2 = orbital2->getCenter();
+		const auto center1 = orbital1->getCenter();
+		const auto center2 = orbital2->getCenter();
 
 		Orbitals::QuantumNumbers::QuantumNumbers maxQN(0, 0, orbital1->angularMomentum + orbital2->angularMomentum);
 	
@@ -424,7 +424,7 @@ namespace GaussianIntegrals {
 			{
 				for (const auto& orb4 : shell4.basisFunctions)
 				{
-					int kl = k * (k + 1) / 2 + l;
+					const int kl = k * (k + 1) / 2 + l;
 					
 					if (ij <= kl) electronElectronIntegrals[GetElectronElectronIndex(i, j, k, l)] = getElectronElectron(&orb1, &orb2, &orb3, &orb4);
 
@@ -498,8 +498,8 @@ namespace GaussianIntegrals {
 
 	void IntegralsRepository::CalculateElectronElectronIntegrals()
 	{
-		int maxNr = m_Molecule->CountNumberOfContractedGaussians();
-		int maxIndex = GetElectronElectronIndex(maxNr, maxNr, maxNr, maxNr);
+		const int maxNr = m_Molecule->CountNumberOfContractedGaussians();
+		const int maxIndex = GetElectronElectronIndex(maxNr, maxNr, maxNr, maxNr);
 
 		electronElectronIntegrals.resize(maxIndex + 1);
 

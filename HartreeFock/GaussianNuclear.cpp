@@ -55,15 +55,15 @@ namespace GaussianIntegrals {
 		double difScalar, difNScalar;
 		double N;
 
-		unsigned int size = maxL + 1;
-		auto difRp = Rp - center1;
+		const unsigned int size = maxL + 1;
+		const auto difRp = Rp - center1;
 		
 		for (auto currentQN = Orbitals::QuantumNumbers::QuantumNumbers(1, 0, 0); currentQN < size; ++currentQN) // for each column
 		{
 			Orbitals::QuantumNumbers::QuantumNumbers prevQN = currentQN;
 			Orbitals::QuantumNumbers::QuantumNumbers prevPrevQN = prevQN;
 
-			bool addPrevPrev = GaussianTwoElectrons::GetPrevAndPrevPrevAndScalarsForVerticalRecursion(currentQN, difRp, difN, prevQN, prevPrevQN, difScalar, difNScalar, N);
+			const bool addPrevPrev = GaussianTwoElectrons::GetPrevAndPrevPrevAndScalarsForVerticalRecursion(currentQN, difRp, difN, prevQN, prevPrevQN, difScalar, difNScalar, N);
 
 			unsigned int curIndex = currentQN.GetTotalCanonicalIndex();
 			unsigned int prevIndex = prevQN.GetTotalCanonicalIndex();

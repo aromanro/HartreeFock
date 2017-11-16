@@ -42,14 +42,14 @@ namespace GaussianIntegrals {
 		double alphaProd = alpha1 * alpha2;
 		matrix(0, 0) = 2 * alphaProd * overlap_matrix(1, 1);
 
-		for (int i = 1; i <= (int)maxQN1; ++i)
+		for (int i = 1; i <= static_cast<int>(maxQN1); ++i)
 			matrix(i, 0) = -i * alpha2 * overlap_matrix(i - 1, 1) + 2. * alphaProd * overlap_matrix(i + 1, 1);
 
-		for (int i = 1; i <= (int)maxQN2; ++i)
+		for (int i = 1; i <= static_cast<int>(maxQN2); ++i)
 			matrix(0, i) = -i * alpha1 * overlap_matrix(1, i - 1) + 2. * alphaProd * overlap_matrix(1, i + 1);
 
-		for (int i = 1; i <= (int)maxQN1; ++i)
-			for (int j = 1; j <= (int)maxQN2; ++j)
+		for (int i = 1; i <= static_cast<int>(maxQN1); ++i)
+			for (int j = 1; j <= static_cast<int>(maxQN2); ++j)
 				matrix(i, j) = i * j * overlap_matrix(i - 1, j - 1) / 2.
 					- j * alpha1 * overlap_matrix(i + 1, j - 1) 
 					- i * alpha2 * overlap_matrix(i - 1, j + 1) 

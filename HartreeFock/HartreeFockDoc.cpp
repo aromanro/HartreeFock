@@ -246,8 +246,8 @@ void CHartreeFockDoc::StartThreads()
 
 	runningThreads = nrThreads;
 
-	double step = (options.XMaxBondLength - options.XMinBondLength) / options.numberOfPoints;
-	double interval = (options.XMaxBondLength - options.XMinBondLength) / nrThreads;
+	const double step = (options.XMaxBondLength - options.XMinBondLength) / options.numberOfPoints;
+	const double interval = (options.XMaxBondLength - options.XMinBondLength) / nrThreads;
 
 
 	for (unsigned int i = 0; i < nrThreads; ++i)
@@ -337,7 +337,7 @@ CHartreeFockView* CHartreeFockDoc::GetView()
 	{
 		CView* pView = GetNextView(pos);
 		if (pView->IsKindOf(RUNTIME_CLASS(CHartreeFockView)))
-			return (CHartreeFockView*)pView;
+			return dynamic_cast<CHartreeFockView*>(pView);
 	}
 
 	return nullptr;

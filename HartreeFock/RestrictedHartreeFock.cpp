@@ -23,7 +23,7 @@ namespace HartreeFock {
 
 		nrOccupiedLevels = molecule->ElectronsNumber() / 2;
 
-		if (nrOccupiedLevels > (unsigned int)numberOfOrbitals) nrOccupiedLevels = numberOfOrbitals;
+		if (nrOccupiedLevels > static_cast<unsigned int>(numberOfOrbitals)) nrOccupiedLevels = numberOfOrbitals;
 	}
 
 	void RestrictedHartreeFock::Step(int iter)

@@ -30,10 +30,10 @@ HartreeFockThread::HartreeFockThread(const Options& options, CHartreeFockDoc* do
 	
 	CT2CA psz1(options.m_atom1);
 	std::string str1(psz1);
-	unsigned int Z1 = Chemistry::ChemUtils::GetZForAtom(str1);
+	const unsigned int Z1 = Chemistry::ChemUtils::GetZForAtom(str1);
 	CT2CA psz2(options.m_atom2);
 	std::string str2(psz2);
-	unsigned int Z2 = Chemistry::ChemUtils::GetZForAtom(str2);
+	const unsigned int Z2 = Chemistry::ChemUtils::GetZForAtom(str2);
 
 
 	angle = options.bondAngle * M_PI / 180.;

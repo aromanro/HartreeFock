@@ -57,7 +57,7 @@ namespace Orbitals {
 
 		for (auto &orbital : basisFunctions)
 		{
-			char c = (char)toupper(orbital.AtomicOrbital());
+			char c = static_cast<char>(toupper(orbital.AtomicOrbital()));
 
 			if (std::string::npos == res.find(c))
 			{
@@ -124,7 +124,7 @@ namespace Orbitals {
 
 	unsigned int ContractedGaussianShell::CountNumberOfContractedGaussians() const
 	{		
-		return (unsigned int)basisFunctions.size();
+		return static_cast<unsigned int>(basisFunctions.size());
 	}
 
 	unsigned int ContractedGaussianShell::CountNumberOfGaussians() const
@@ -132,7 +132,7 @@ namespace Orbitals {
 		unsigned int res = 0;
 
 		for (auto const &orbital : basisFunctions)
-			res += (unsigned int)orbital.gaussianOrbitals.size();
+			res += static_cast<unsigned int>(orbital.gaussianOrbitals.size());
 
 		return res;
 	}

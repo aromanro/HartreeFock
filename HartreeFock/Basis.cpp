@@ -94,7 +94,7 @@ namespace Chemistry {
 					{
 						// the next values in the line are the coefficients
 
-						auto c = shellName.at(orbital);
+						const auto c = shellName.at(orbital);
 
 						int numberOfGaussiansInOrbital = 1;
 						switch (tolower(c))
@@ -250,10 +250,10 @@ namespace Chemistry {
 				file << ChemUtils::GetAtomNameForZ(atom.Z) << "    " << shell.GetShellString() << std::endl;
 
 
-				for (int i = 0; i < (int)shell.basisFunctions.front().gaussianOrbitals.size(); ++i)
+				for (int i = 0; i < static_cast<int>(shell.basisFunctions.front().gaussianOrbitals.size()); ++i)
 				{
 					bool first = true;
-					for (int j = 0; j < (int)shell.basisFunctions.size();)
+					for (int j = 0; j < static_cast<int>(shell.basisFunctions.size());)
 					{
 						auto &orbital = shell.basisFunctions[j];
 

@@ -23,8 +23,8 @@ namespace HartreeFock {
 		Pplus = Eigen::MatrixXd::Zero(h.rows(), h.cols());
 		Pminus = Eigen::MatrixXd::Zero(h.rows(), h.cols());
 		
-		unsigned int electronsNumber = molecule->ElectronsNumber();
-		nrOccupiedLevelsMinus = (unsigned int)floor(electronsNumber / 2.);
+		const unsigned int electronsNumber = molecule->ElectronsNumber();
+		nrOccupiedLevelsMinus = static_cast<unsigned int>(floor(electronsNumber / 2.));
 		nrOccupiedLevelsPlus = (electronsNumber % 2 ? nrOccupiedLevelsMinus + 1 : nrOccupiedLevelsMinus);
 
 		if (molecule->alphaElectrons > 0 || molecule->betaElectrons > 0)
@@ -35,20 +35,20 @@ namespace HartreeFock {
 
 		
 		// preventing setting too many electrons
-		if (nrOccupiedLevelsMinus + nrOccupiedLevelsPlus > (unsigned int)(2 * numberOfOrbitals))
+		if (nrOccupiedLevelsMinus + nrOccupiedLevelsPlus > static_cast<unsigned int>(2 * numberOfOrbitals))
 		{
 			nrOccupiedLevelsMinus = numberOfOrbitals;
 			nrOccupiedLevelsPlus = numberOfOrbitals;			
 		}
 		
-		if (nrOccupiedLevelsPlus > (unsigned int)numberOfOrbitals)
+		if (nrOccupiedLevelsPlus > static_cast<unsigned int>(numberOfOrbitals))
 		{
-			int dif = nrOccupiedLevelsPlus - numberOfOrbitals;
+			const int dif = nrOccupiedLevelsPlus - numberOfOrbitals;
 			nrOccupiedLevelsPlus = numberOfOrbitals;
 			nrOccupiedLevelsMinus += dif;
 		}
 
-		if (nrOccupiedLevelsMinus > (unsigned int)numberOfOrbitals)
+		if (nrOccupiedLevelsMinus > static_cast<unsigned int>(numberOfOrbitals))
 			nrOccupiedLevelsMinus = numberOfOrbitals;
 	}
 

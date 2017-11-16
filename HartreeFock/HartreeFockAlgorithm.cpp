@@ -90,7 +90,7 @@ namespace HartreeFock {
 		for (int i = 0; i < oldP.rows(); ++i)
 			for (int j = 0; j < oldP.cols(); ++j)
 			{
-				double val = oldP(i, j) - newP(i, j);
+				const double val = oldP(i, j) - newP(i, j);
 			
 				res += val * val;
 			}
