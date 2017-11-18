@@ -184,7 +184,7 @@ double Chart::DataSets::DataSet::getYMin() const
 {
 	double result = DBL_MAX;
 
-	for (auto &&p : points)
+	for (const auto &p : points)
 		if (p.Y < result) result = p.Y;
 
 	return result;
@@ -194,7 +194,7 @@ double Chart::DataSets::DataSet::getXMax() const
 {
 	double result = DBL_MIN;
 
-	for (auto &&p : points)
+	for (const auto &p : points)
 		if (p.X > result) result = p.X;
 
 	return result;
@@ -204,7 +204,7 @@ double Chart::DataSets::DataSet::getYMax() const
 {
 	double result = DBL_MIN;
 
-	for (auto &&p : points)
+	for (const auto &p : points)
 		if (p.Y > result) result = p.Y;
 
 	return result;
