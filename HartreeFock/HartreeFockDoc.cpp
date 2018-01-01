@@ -90,12 +90,12 @@ BOOL CHartreeFockDoc::OnNewDocument()
 //	tests.Test(basisSTO3G);
 #endif
 
-	// Example for He:
+	// Example for H2O and He:
 
-	/*
+	/*	
 	Systems::AtomWithShells H1, H2, O, N, C, He, Li, Ne, Ar;
 
-	for (auto &atom : basisSTO6G.atoms)
+	for (auto &atom : basisSTO3G.atoms)
 	{
 		if (atom.Z == 1) H1 = H2 = atom;
 		else if (atom.Z == 2) He = atom;
@@ -106,6 +106,35 @@ BOOL CHartreeFockDoc::OnNewDocument()
 		else if (atom.Z == 10) Ne = atom;
 		else if (atom.Z == 18) Ar = atom;
 	}
+
+	
+	H1.position.X = H2.position.X = O.position.X = 0;
+
+	H1.position.Y = 1.43233673;
+	H1.position.Z = -0.96104039;
+	H2.position.Y = -1.43233673;
+	H2.position.Z = -0.96104039;
+
+	O.position.Y = 0;
+	O.position.Z = 0.24026010;
+
+	Systems::Molecule H2O;
+
+	H2O.atoms.push_back(H1);
+	H2O.atoms.push_back(H2);
+	H2O.atoms.push_back(O);
+
+	H2O.Init();
+
+
+	HartreeFock::RestrictedHartreeFock HartreeFockAlgorithm;
+	HartreeFockAlgorithm.alpha = 0.5;
+	HartreeFockAlgorithm.initGuess = 0;
+
+	HartreeFockAlgorithm.Init(&H2O);
+	double result = HartreeFockAlgorithm.Calculate();
+
+	TRACE("H2O result: %f Hartree\n", result);
 
 	Systems::Molecule Heatom;
 	Heatom.atoms.push_back(He);
@@ -118,7 +147,7 @@ BOOL CHartreeFockDoc::OnNewDocument()
 	HartreeFockAlgorithm.Init(&Heatom);
 	double result = HartreeFockAlgorithm.Calculate();
 
-	TRACE("Result: %f\n", result);
+	TRACE("He result: %f Hartree\n", result);
 	*/
 
 	return TRUE;

@@ -174,7 +174,7 @@ double Chart::DataSets::DataSet::getXMin() const
 {
 	double result = DBL_MAX;
 
-	for (auto &&p : points)
+	for (const auto &p : points)
 		if (p.X < result) result = p.X;
 
 	return result;
@@ -267,7 +267,7 @@ double Chart::DataSets::getYMin() const
 {
 	double result = DBL_MAX;
 
-	for (auto &p : dataSets)
+	for (const auto &p : dataSets)
 	{
 		const double val = p.getYMin();
 		if (val < result) result = val;
@@ -293,7 +293,7 @@ double Chart::DataSets::getYMax() const
 {
 	double result = DBL_MIN;
 
-	for (auto &p : dataSets)
+	for (const auto &p : dataSets)
 	{
 		const double val = p.getYMax();
 		if (val > result) result = val;
@@ -580,7 +580,7 @@ void Chart::AddDataSet(const std::vector<std::pair<double, double>> *data, float
 	dataset.lineWidth = lineWidth;
 
 	Gdiplus::PointF point;
-	for (auto &&p : *data)
+	for (const auto &p : *data)
 	{
 		point.X = static_cast<float>(p.first);
 		point.Y = static_cast<float>(p.second);
