@@ -13,15 +13,6 @@ namespace Chemistry {
 		"Rb", "Sr", "Y", "Zr", "Nb", "Mo", "Tc", "Ru", "Rh", "Pd", "Ag", "Cd", "In", "Sn", "Sb", "Te", "I", "Xe"
 	};
 
-	ChemUtils::ChemUtils()
-	{
-	}
-
-
-	ChemUtils::~ChemUtils()
-	{
-	}
-
 
 	unsigned int ChemUtils::GetZForAtom(const std::string& name)
 	{
