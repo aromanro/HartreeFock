@@ -23,7 +23,7 @@ namespace Chemistry {
 	}
 
 
-	void Basis::Load(std::string fileName)
+	void Basis::Load(const std::string& fileName)
 	{
 		std::ifstream file(fileName);
 

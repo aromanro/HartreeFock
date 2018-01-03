@@ -15,7 +15,7 @@ namespace Chemistry {
 		Basis();
 		~Basis();
 
-		void Load(std::string fileName);
+		void Load(const std::string& fileName);
 		void Save(const std::string& name);
 		void Normalize();
 	};
