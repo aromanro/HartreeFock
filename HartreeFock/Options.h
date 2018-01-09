@@ -54,6 +54,7 @@ public:
 	bool useSplines;
 
 
+	int DisplayHOMOEnergy; // 0 - groundstate energy, 1 - HOMO energy
 protected:
 	static double GetDouble(LPCTSTR param, double defval);
 };

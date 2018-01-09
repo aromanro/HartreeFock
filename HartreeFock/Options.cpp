@@ -38,7 +38,8 @@ Options::Options()
 	YSmallTicksEnergy(2),
 	XBigTicksBondLength(10),
 	XSmallTicksBondLength(2),
-	useSplines(false)
+	useSplines(false),
+	DisplayHOMOEnergy(0)
 {
 }
 
@@ -83,6 +84,8 @@ void Options::Load()
 	XBigTicksBondLength = theApp.GetProfileInt(L"options", L"XBigTicksBondLengths", 6);
 	XSmallTicksBondLength = theApp.GetProfileInt(L"options", L"XSmallTicksBondLength", 2);
 	useSplines = (1 == theApp.GetProfileInt(L"options", L"UseSplines", 1) ? true : false);
+
+	DisplayHOMOEnergy = theApp.GetProfileInt(L"options", L"DisplayHOMOEnergy", 0);
 }
 
 
@@ -121,6 +124,8 @@ void Options::Save()
 	theApp.WriteProfileInt(L"options", L"XBigTicksBondLengths", XBigTicksBondLength);
 	theApp.WriteProfileInt(L"options", L"XSmallTicksBondLength", XSmallTicksBondLength);
 	theApp.WriteProfileInt(L"options", L"UseSplines", useSplines ? 1 : 0);
+
+	theApp.WriteProfileInt(L"options", L"DisplayHOMOEnergy", DisplayHOMOEnergy);
 }
 
 double Options::GetDouble(LPCTSTR param, double defval)

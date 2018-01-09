@@ -39,6 +39,9 @@ public:
 
 	std::list<std::unique_ptr<HartreeFockThread>> threadsList;
 
+	std::vector<std::tuple<double, double, double>> results;
+	bool convergenceProblem;
+
 // Operations
 public:
 
@@ -78,4 +81,5 @@ public:
 	afx_msg void OnUpdateComputationStart(CCmdUI *pCmdUI);
 	void SetChartBoundsAndTicks();
 	void ApplyChartOptions();
+	void SetChartData();
 };

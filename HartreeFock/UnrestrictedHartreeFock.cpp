@@ -80,8 +80,8 @@ namespace HartreeFock {
 		Eigen::MatrixXd Cminus = V * Cminusprime;
 
 		// normalize them
-		NormalizeC(Cplus, nrOccupiedLevelsPlus);
-		NormalizeC(Cminus, nrOccupiedLevelsMinus);
+		//NormalizeC(Cplus, nrOccupiedLevelsPlus);
+		//NormalizeC(Cminus, nrOccupiedLevelsMinus);
 
 		//***************************************************************************************************************
 
@@ -194,6 +194,8 @@ namespace HartreeFock {
 		for (unsigned int level = 0; level < nrOccupiedLevelsPlus; ++level)	totalEnergy += eigenvalsplus(level);
 		for (unsigned int level = 0; level < nrOccupiedLevelsMinus; ++level) totalEnergy += eigenvalsminus(level);
 
+
+		HOMOEnergy = max(eigenvalsplus(nrOccupiedLevelsPlus - 1), eigenvalsminus(nrOccupiedLevelsMinus - 1));
 
 		// ***************************************************************************************
 		

@@ -36,8 +36,10 @@ namespace HartreeFock {
 		int maxIterations;
 
 		bool inited;
+
 	public:
 		GaussianIntegrals::IntegralsRepository integralsRepository;
+
 
 		double alpha;
 
@@ -46,6 +48,8 @@ namespace HartreeFock {
 		std::atomic_bool terminate;
 
 		bool converged;
+
+		double HOMOEnergy;
 
 		HartreeFockAlgorithm(int iterations = 3000);
 		virtual ~HartreeFockAlgorithm();

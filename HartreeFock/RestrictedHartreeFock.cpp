@@ -53,7 +53,7 @@ namespace HartreeFock {
 		Eigen::MatrixXd C = V * Cprime;
 
 		// normalize it
-		NormalizeC(C, nrOccupiedLevels);
+		//NormalizeC(C, nrOccupiedLevels);
 		
 		//***************************************************************************************************************
 
@@ -140,8 +140,12 @@ namespace HartreeFock {
 
 		totalEnergy /= 2.;
 	
+		for (unsigned int level = 0; level < nrOccupiedLevels; ++level)
+			totalEnergy += eigenvals(level);
 
-		for (unsigned int level = 0; level < nrOccupiedLevels; ++level)	totalEnergy += eigenvals(level);
+		HOMOEnergy = eigenvals(nrOccupiedLevels - 1);
+
+		
 
 		// the above is equivalent with this commented code, but since we already have eigenvalues for F calculated, we can get rid of the matrix addition to obtain H
 /*

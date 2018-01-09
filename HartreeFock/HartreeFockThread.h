@@ -36,7 +36,7 @@ public:
 	HartreeFockThread(const Options& options, CHartreeFockDoc* doc, double start, double end, double step);
 	virtual ~HartreeFockThread();
 
-	std::vector<std::pair<double, double>> results;
+	std::vector<std::tuple<double, double, double>> results;
 
 	virtual void Calculate();
 	void Terminate();

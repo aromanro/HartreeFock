@@ -23,6 +23,8 @@ ChartPropertyPage::ChartPropertyPage()
 	XSmallTicksBondLength = theApp.options.XSmallTicksBondLength;
 
 	useSplines = (theApp.options.useSplines ? BST_CHECKED : BST_UNCHECKED);
+
+	DisplayHOMOEnergy = theApp.options.DisplayHOMOEnergy;
 }
 
 ChartPropertyPage::~ChartPropertyPage()
@@ -38,6 +40,8 @@ BEGIN_MESSAGE_MAP(ChartPropertyPage, CMFCPropertyPage)
 	ON_EN_CHANGE(IDC_EDIT5, &ChartPropertyPage::OnEnChangeEdit5)
 	ON_EN_CHANGE(IDC_EDIT6, &ChartPropertyPage::OnEnChangeEdit6)
 	ON_BN_CLICKED(IDC_CHECK2, &ChartPropertyPage::OnBnClickedCheck2)
+	ON_BN_CLICKED(IDC_RADIO1, &ChartPropertyPage::OnBnClickedRadio1)
+	ON_BN_CLICKED(IDC_RADIO2, &ChartPropertyPage::OnBnClickedRadio2)
 END_MESSAGE_MAP()
 
 
@@ -68,6 +72,8 @@ void ChartPropertyPage::ApplyValues()
 	theApp.options.XSmallTicksBondLength = XSmallTicksBondLength;
 
 	theApp.options.useSplines = (useSplines == BST_CHECKED ? true : false);
+
+	theApp.options.DisplayHOMOEnergy = DisplayHOMOEnergy;
 
 	theApp.options.Save();
 
@@ -103,6 +109,8 @@ void ChartPropertyPage::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT6, YSmallTicksEnergy);
 
 	DDX_Check(pDX, IDC_CHECK2, useSplines);
+
+	DDX_Radio(pDX, IDC_RADIO1, DisplayHOMOEnergy);
 }
 
 
@@ -143,6 +151,18 @@ void ChartPropertyPage::OnEnChangeEdit6()
 
 
 void ChartPropertyPage::OnBnClickedCheck2()
+{
+	SetModified();
+}
+
+
+void ChartPropertyPage::OnBnClickedRadio1()
+{
+	SetModified();
+}
+
+
+void ChartPropertyPage::OnBnClickedRadio2()
 {
 	SetModified();
 }

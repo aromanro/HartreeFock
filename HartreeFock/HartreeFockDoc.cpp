@@ -54,7 +54,7 @@ END_MESSAGE_MAP()
 // CHartreeFockDoc construction/destruction
 
 CHartreeFockDoc::CHartreeFockDoc()
-	: runningThreads(0)
+	: convergenceProblem(false), runningThreads(0)
 {
 	m_Chart.title = L"Molecule Energy";
 	m_Chart.XAxisLabel = L"Bond Length (Ångströms)";
@@ -257,8 +257,6 @@ bool CHartreeFockDoc::isFinished()
 {
 	if (runningThreads) return false;
 	
-	StopThreads(); // this also retrieves data from them
-
 	return true;
 }
 
@@ -294,10 +292,11 @@ void CHartreeFockDoc::StartThreads()
 void CHartreeFockDoc::StopThreads(bool cancel)
 {
 	for (auto &thrd : threadsList) thrd->Terminate();
+	
 
-	std::vector<std::pair<double, double>> results;
-
-	bool convergenceProblem = false;
+	results.clear();
+	
+	convergenceProblem = false;
 
 	// now join them then get the data out of them
 	for (auto &thrd : threadsList)
@@ -310,44 +309,7 @@ void CHartreeFockDoc::StopThreads(bool cancel)
 
 	threadsList.clear();
 
-	if (results.size())
-	{
-		m_Chart.clear();
-
-		SetChartBoundsAndTicks();
-		
-		m_Chart.AddDataSet(&results, 2, RGB(255,0,0));
-
-		CString title;
-		if (options.twoAtom1)
-		{
-			if (options.m_atom1 == options.m_atom2)
-			{
-				title = options.m_atom1 + L"3";
-			}
-			else if (options.m_atom1 == L"O")
-			{
-				title = options.m_atom2 + options.m_atom1 + L"2";
-			}
-			else
-			{
-				title = options.m_atom1 + L"2" + options.m_atom2;
-			}
-		}
-		else
-		{
-			if (options.m_atom1 == options.m_atom2)
-				title = options.m_atom1 + L"2";
-			else 
-				title = options.m_atom1 + options.m_atom2;
-		}
-
-		title += L" Molecule Energy";
-
-		if (convergenceProblem) title += L" (convergence issues)";
-
-		m_Chart.title = title;
-	}
+	SetChartData();
 
 	if (cancel) SetTitle(L"Canceled");
 	else SetTitle(L"Finished");
@@ -407,8 +369,61 @@ void CHartreeFockDoc::ApplyChartOptions()
 	options.YBigTicksEnergy = theApp.options.YBigTicksEnergy;
 	options.YSmallTicksEnergy = theApp.options.YSmallTicksEnergy;
 
-	SetChartBoundsAndTicks();
+	options.DisplayHOMOEnergy = theApp.options.DisplayHOMOEnergy;
+
+	SetChartData();
 
 	CHartreeFockView* view = GetView();
 	if (view) view->Invalidate();
+}
+
+
+void CHartreeFockDoc::SetChartData()
+{
+	if (results.size())
+	{
+		m_Chart.clear();
+
+		SetChartBoundsAndTicks();
+		
+	    std::vector<std::pair<double, double>> chartData;
+
+		for (const auto& val : results)
+			chartData.push_back(std::make_pair(std::get<0>(val), 0 == options.DisplayHOMOEnergy ? std::get<1>(val) : std::get<2>(val)));
+
+		m_Chart.AddDataSet(&chartData, 2, RGB(255,0,0));
+
+		CString title;
+		if (options.twoAtom1)
+		{
+			if (options.m_atom1 == options.m_atom2)
+			{
+				title = options.m_atom1 + L"3";
+			}
+			else if (options.m_atom1 == L"O")
+			{
+				title = options.m_atom2 + options.m_atom1 + L"2";
+			}
+			else
+			{
+				title = options.m_atom1 + L"2" + options.m_atom2;
+			}
+		}
+		else
+		{
+			if (options.m_atom1 == options.m_atom2)
+				title = options.m_atom1 + L"2";
+			else 
+				title = options.m_atom1 + options.m_atom2;
+		}
+
+		if (0 == options.DisplayHOMOEnergy)
+			title += L" Molecule Energy";
+		else 
+			title += L" HOMO Energy";
+
+		if (convergenceProblem) title += L" (convergence issues)";
+
+		m_Chart.title = title;
+	}
 }

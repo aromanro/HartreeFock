@@ -146,7 +146,9 @@ void CHartreeFockView::OnTimer(UINT_PTR nIDEvent)
 	{
 		KillTimer(timer);
 		timer = 0;
-
+		
+		pDoc->StopThreads(); // this also retrieves data from them
+		
 		EndWaitCursor();
 		Invalidate();
 	}

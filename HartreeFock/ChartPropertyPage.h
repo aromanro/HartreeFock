@@ -44,6 +44,11 @@ protected:
 	unsigned int XBigTicksBondLength;
 	unsigned int XSmallTicksBondLength;
 	int useSplines;
+
+	int DisplayHOMOEnergy;
+public:
+	afx_msg void OnBnClickedRadio1();
+	afx_msg void OnBnClickedRadio2();
 };
 
 
