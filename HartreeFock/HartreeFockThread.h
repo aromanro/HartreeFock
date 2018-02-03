@@ -36,7 +36,7 @@ protected:
 	Systems::AtomWithShells atom1, atom2;
 	Options opt;
 public:
-	HartreeFockThread(const Options& options, CHartreeFockDoc* doc, double start, double end, double step);
+	HartreeFockThread(const Options& options, CHartreeFockDoc* doc, const double start, const double end, const double step);
 	virtual ~HartreeFockThread();
 
 	std::vector<std::tuple<double, double, double>> results;
@@ -50,5 +50,8 @@ public:
 
 	double firstAtomEnergy;
 	double secondAtomEnergy;
+private:
+	void ComputeAtoms();
+	double ComputeAtom(const Systems::AtomWithShells& atom);
 };
 
