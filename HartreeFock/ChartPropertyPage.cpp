@@ -42,6 +42,7 @@ BEGIN_MESSAGE_MAP(ChartPropertyPage, CMFCPropertyPage)
 	ON_BN_CLICKED(IDC_CHECK2, &ChartPropertyPage::OnBnClickedCheck2)
 	ON_BN_CLICKED(IDC_RADIO1, &ChartPropertyPage::OnBnClickedRadio1)
 	ON_BN_CLICKED(IDC_RADIO2, &ChartPropertyPage::OnBnClickedRadio2)
+	ON_BN_CLICKED(IDC_RADIO3, &ChartPropertyPage::OnBnClickedRadio3)
 END_MESSAGE_MAP()
 
 
@@ -163,6 +164,12 @@ void ChartPropertyPage::OnBnClickedRadio1()
 
 
 void ChartPropertyPage::OnBnClickedRadio2()
+{
+	SetModified();
+}
+
+
+void ChartPropertyPage::OnBnClickedRadio3()
 {
 	SetModified();
 }

@@ -54,7 +54,7 @@ END_MESSAGE_MAP()
 // CHartreeFockDoc construction/destruction
 
 CHartreeFockDoc::CHartreeFockDoc()
-	: convergenceProblem(false), runningThreads(0)
+	: convergenceProblem(false), runningThreads(0), atomsEnergy(0)
 {
 	m_Chart.title = L"Molecule Energy";
 	m_Chart.XAxisLabel = L"Bond Length (Ångströms)";
@@ -92,10 +92,10 @@ BOOL CHartreeFockDoc::OnNewDocument()
 
 	// Example for H2O and He:
 
-	/*	
+		
 	Systems::AtomWithShells H1, H2, O, N, C, He, Li, Ne, Ar;
 
-	for (auto &atom : basisSTO3G.atoms)
+	for (auto &atom : basisSTO6G.atoms)
 	{
 		if (atom.Z == 1) H1 = H2 = atom;
 		else if (atom.Z == 2) He = atom;
@@ -107,7 +107,8 @@ BOOL CHartreeFockDoc::OnNewDocument()
 		else if (atom.Z == 18) Ar = atom;
 	}
 
-	
+
+	/*
 	H1.position.X = H2.position.X = O.position.X = 0;
 
 	H1.position.Y = 1.43233673;
@@ -148,6 +149,21 @@ BOOL CHartreeFockDoc::OnNewDocument()
 	double result = HartreeFockAlgorithm.Calculate();
 
 	TRACE("He result: %f Hartree\n", result);
+	
+	Systems::Molecule Hatom;
+	Hatom.atoms.push_back(H1);
+	Hatom.Init();
+	
+	HartreeFock::UnrestrictedHartreeFock HartreeFockAlgorithm;
+	HartreeFockAlgorithm.alpha = 0.5;
+	HartreeFockAlgorithm.initGuess = 0;
+
+	HartreeFockAlgorithm.Init(&Hatom);
+	double result = HartreeFockAlgorithm.Calculate();
+
+	CString str;
+	str.Format(L"H energy: %f", result);
+	AfxMessageBox(str);
 	*/
 
 	return TRUE;
@@ -282,6 +298,12 @@ void CHartreeFockDoc::StartThreads()
 		double start = options.XMinBondLength + interval * i;
 		threadsList.push_back(std::make_unique<HartreeFockThread>(options, this, start, start + interval + (i == nrThreads - 1 ? step : 0), step));
 
+		if (0 == i)
+			threadsList.back()->computeFirstAtom = true;
+
+		if (nrThreads - 1 == i)
+			threadsList.back()->computeSecondAtom = true;
+
 		threadsList.back()->Start();
 	}
 
@@ -298,12 +320,29 @@ void CHartreeFockDoc::StopThreads(bool cancel)
 	
 	convergenceProblem = false;
 
+
+	atomsEnergy = 0;
+
 	// now join them then get the data out of them
 	for (auto &thrd : threadsList)
 	{
 		thrd->join();
 
-		if (!cancel) results.insert(results.end(), thrd->results.begin(), thrd->results.end());
+		if (!cancel)
+		{
+			if (thrd->computeFirstAtom)
+			{
+
+				if (options.twoAtom1) atomsEnergy += thrd->firstAtomEnergy * 2;
+				else atomsEnergy += thrd->firstAtomEnergy;
+			}
+
+			if (thrd->computeSecondAtom)
+				atomsEnergy += thrd->secondAtomEnergy;
+
+			results.insert(results.end(), thrd->results.begin(), thrd->results.end());
+		}
+		
 		if (!thrd->Converged()) convergenceProblem = true;
 	}
 
@@ -389,7 +428,10 @@ void CHartreeFockDoc::SetChartData()
 	    std::vector<std::pair<double, double>> chartData;
 
 		for (const auto& val : results)
-			chartData.push_back(std::make_pair(std::get<0>(val), 0 == options.DisplayHOMOEnergy ? std::get<1>(val) : std::get<2>(val)));
+		{
+			if (2 == options.DisplayHOMOEnergy)	chartData.push_back(std::make_pair(std::get<0>(val), atomsEnergy - std::get<1>(val)));
+			else chartData.push_back(std::make_pair(std::get<0>(val), 0 == options.DisplayHOMOEnergy ? std::get<1>(val) : std::get<2>(val)));
+		}
 
 		m_Chart.AddDataSet(&chartData, 2, RGB(255,0,0));
 
@@ -419,8 +461,10 @@ void CHartreeFockDoc::SetChartData()
 
 		if (0 == options.DisplayHOMOEnergy)
 			title += L" Molecule Energy";
-		else 
+		else if (1 == options.DisplayHOMOEnergy)
 			title += L" HOMO Energy";
+		else 
+			title += L" Binding Energy";
 
 		if (convergenceProblem) title += L" (convergence issues)";
 

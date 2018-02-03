@@ -23,6 +23,10 @@ namespace HartreeFock {
 
 		nrOccupiedLevels = molecule->ElectronsNumber() / 2;
 
+		// this should not happen for a well behaving molecule for the restricted method, but someone might try calculate the Hydrogen atom with it
+		// prevent a crash with this
+		if (!nrOccupiedLevels) nrOccupiedLevels = 1;
+
 		if (nrOccupiedLevels > static_cast<unsigned int>(numberOfOrbitals)) nrOccupiedLevels = numberOfOrbitals;
 	}
 

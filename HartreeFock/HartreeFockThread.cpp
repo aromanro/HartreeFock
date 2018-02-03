@@ -10,7 +10,8 @@
 #include "ChemUtils.h"
 
 HartreeFockThread::HartreeFockThread(const Options& options, CHartreeFockDoc* doc, double start, double end, double step)
-	: m_Doc(doc), m_start(start), m_end(end), m_step(step), terminate(false), converged(true)
+	: m_Doc(doc), m_start(start), m_end(end), m_step(step), terminate(false), converged(true),
+	computeFirstAtom(false), computeSecondAtom(false), firstAtomEnergy(0), secondAtomEnergy(0)
 {
 	if (options.restricted && options.alphaElectrons == options.betaElectrons) {
 		algorithm = new HartreeFock::RestrictedHartreeFock(options.iterations);		
@@ -39,7 +40,7 @@ HartreeFockThread::HartreeFockThread(const Options& options, CHartreeFockDoc* do
 	angle = options.bondAngle * M_PI / 180.;
 
 	// construct the molecule
-	Systems::AtomWithShells atom1, atom2;
+	
 
 	if (options.basis)
 	{
@@ -67,6 +68,7 @@ HartreeFockThread::HartreeFockThread(const Options& options, CHartreeFockDoc* do
 	molecule.betaElectrons = options.betaElectrons;
 
 	molecule.SetIDs();
+	opt = options;
 }
 
 
@@ -116,6 +118,66 @@ void HartreeFockThread::Calculate()
 
 		results.push_back(std::make_tuple(pos, result * 27.211385056, algorithm->HOMOEnergy * 27.211385056));
 		if (terminate) break;
+	}
+
+	if (!terminate && computeFirstAtom)
+	{
+		delete algorithm;
+
+		Systems::Molecule atom;
+		atom.atoms.push_back(atom1);
+		atom.alphaElectrons = static_cast<int>(atom1.Z / 2);
+		atom.betaElectrons = atom1.Z - atom.alphaElectrons;
+		atom.Init();
+
+		if (opt.restricted && atom1.Z % 2 == 0) {		
+			algorithm = new HartreeFock::RestrictedHartreeFock(opt.iterations);		
+		}
+		else {
+			HartreeFock::UnrestrictedHartreeFock *alg = new HartreeFock::UnrestrictedHartreeFock(opt.iterations);
+			alg->addAsymmetry = opt.addAsymmetry;
+			alg->asymmetry = opt.asymmetry;
+			algorithm = alg;
+		}
+
+		algorithm->alpha = opt.alpha;
+		algorithm->initGuess = opt.initialGuess;
+
+		algorithm->integralsRepository.useLotsOfMemory = opt.useLotsOfMemory;
+
+		algorithm->Init(&atom);
+
+		firstAtomEnergy = algorithm->Calculate() * 27.211385056;
+	}
+
+	if (!terminate && computeSecondAtom)
+	{
+		delete algorithm;
+
+		Systems::Molecule atom;
+		atom.atoms.push_back(atom2);
+		atom.alphaElectrons = static_cast<int>(atom2.Z / 2);
+		atom.betaElectrons = atom2.Z - atom.alphaElectrons;
+		atom.Init();
+
+		if (opt.restricted && atom2.Z % 2 == 0) {		
+			algorithm = new HartreeFock::RestrictedHartreeFock(opt.iterations);		
+		}
+		else {
+			HartreeFock::UnrestrictedHartreeFock *alg = new HartreeFock::UnrestrictedHartreeFock(opt.iterations);
+			alg->addAsymmetry = opt.addAsymmetry;
+			alg->asymmetry = opt.asymmetry;
+			algorithm = alg;
+		}
+
+		algorithm->alpha = opt.alpha;
+		algorithm->initGuess = opt.initialGuess;
+
+		algorithm->integralsRepository.useLotsOfMemory = opt.useLotsOfMemory;
+
+		algorithm->Init(&atom);
+
+		secondAtomEnergy = algorithm->Calculate() * 27.211385056;
 	}
 
 	--m_Doc->runningThreads;

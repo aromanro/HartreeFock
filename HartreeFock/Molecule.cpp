@@ -122,4 +122,13 @@ void Systems::Molecule::Init()
 {
 	SetCenterForShells();
 	SetIDs();
+
+	const unsigned int elNum = ElectronsNumber();
+
+	// not set yet, set them
+	if (0 == alphaElectrons && 0 == betaElectrons)
+	{
+		alphaElectrons = static_cast<unsigned int>(elNum / 2);
+		betaElectrons = elNum - alphaElectrons;
+	}
 }

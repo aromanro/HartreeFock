@@ -32,6 +32,9 @@ protected:
 	double angle;
 
 	bool converged;
+
+	Systems::AtomWithShells atom1, atom2;
+	Options opt;
 public:
 	HartreeFockThread(const Options& options, CHartreeFockDoc* doc, double start, double end, double step);
 	virtual ~HartreeFockThread();
@@ -41,5 +44,11 @@ public:
 	virtual void Calculate();
 	void Terminate();
 	bool Converged() const;
+
+	bool computeFirstAtom;
+	bool computeSecondAtom;
+
+	double firstAtomEnergy;
+	double secondAtomEnergy;
 };
 

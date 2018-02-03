@@ -42,6 +42,8 @@ public:
 	std::vector<std::tuple<double, double, double>> results;
 	bool convergenceProblem;
 
+	double atomsEnergy;
+
 // Operations
 public:
 

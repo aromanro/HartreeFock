@@ -25,7 +25,7 @@ namespace HartreeFock {
 		
 		const unsigned int electronsNumber = molecule->ElectronsNumber();
 		nrOccupiedLevelsMinus = static_cast<unsigned int>(floor(electronsNumber / 2.));
-		nrOccupiedLevelsPlus = (electronsNumber % 2 ? nrOccupiedLevelsMinus + 1 : nrOccupiedLevelsMinus);
+		nrOccupiedLevelsPlus = electronsNumber - nrOccupiedLevelsMinus;
 
 		if (molecule->alphaElectrons > 0 || molecule->betaElectrons > 0)
 		{
@@ -69,15 +69,38 @@ namespace HartreeFock {
 		Eigen::MatrixXd Fplusprime = Vt * Fplus * V;
 		Eigen::MatrixXd Fminusprime = Vt * Fminus * V;
 
-		Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> esplus(Fplusprime);
-		Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> esminus(Fminusprime);
+		Eigen::MatrixXd Cplus;
+		Eigen::VectorXd eigenvalsplus;
 
-		const Eigen::MatrixXd& Cplusprime = esplus.eigenvectors();
-		const Eigen::MatrixXd& Cminusprime = esminus.eigenvectors();
+		if (Fplusprime.rows() > 1)
+		{
+			Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> esplus(Fplusprime);
+			const Eigen::MatrixXd& Cplusprime = esplus.eigenvectors();
+			Cplus = V * Cplusprime;
+			eigenvalsplus = esplus.eigenvalues();
+		}
+		else
+		{
+			Cplus = V * Eigen::MatrixXd::Ones(1, 1);
+			eigenvalsplus = Fplusprime(0, 0) * Eigen::VectorXd::Ones(1);
+		}
 
+		
+		Eigen::MatrixXd Cminus;
+		Eigen::VectorXd eigenvalsminus;
 
-		Eigen::MatrixXd Cplus = V * Cplusprime;
-		Eigen::MatrixXd Cminus = V * Cminusprime;
+		if (Fminusprime.rows() > 1)
+		{
+			Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> esminus(Fminusprime);
+			const Eigen::MatrixXd& Cminusprime = esminus.eigenvectors();
+			Cminus = V * Cminusprime;
+			eigenvalsminus = esminus.eigenvalues();
+		}
+		else
+		{
+			Cminus = V * Eigen::MatrixXd::Ones(1, 1);
+			eigenvalsminus = Fminusprime(0, 0) * Eigen::VectorXd::Ones(1);
+		}
 
 		// normalize them
 		//NormalizeC(Cplus, nrOccupiedLevelsPlus);
@@ -101,9 +124,6 @@ namespace HartreeFock {
 			}
 
 		//**************************************************************************************************************
-
-		const Eigen::VectorXd& eigenvalsplus = esplus.eigenvalues();
-		const Eigen::VectorXd& eigenvalsminus = esminus.eigenvalues();
 
 		CalculateEnergy(eigenvalsplus, eigenvalsminus, newPplus, newPminus/*, Fplus, Fminus*/);
 
@@ -141,7 +161,7 @@ namespace HartreeFock {
 				Fminus = h;
 			}			
 
-			if (addAsymmetry)
+			if (addAsymmetry && Fplus.cols() > 1)
 			{
 				Fplus(0, 1) += asymmetry;
 				Fplus(1, 0) = Fplus(0, 1);
@@ -195,7 +215,7 @@ namespace HartreeFock {
 		for (unsigned int level = 0; level < nrOccupiedLevelsMinus; ++level) totalEnergy += eigenvalsminus(level);
 
 
-		HOMOEnergy = max(eigenvalsplus(nrOccupiedLevelsPlus - 1), eigenvalsminus(nrOccupiedLevelsMinus - 1));
+		HOMOEnergy = max(nrOccupiedLevelsPlus ? eigenvalsplus(nrOccupiedLevelsPlus - 1) : 0, nrOccupiedLevelsMinus ? eigenvalsminus(nrOccupiedLevelsMinus - 1) : 0);
 
 		// ***************************************************************************************
 		
