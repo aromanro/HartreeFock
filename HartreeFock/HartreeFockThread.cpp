@@ -172,5 +172,9 @@ double HartreeFockThread::ComputeAtom(const Systems::AtomWithShells& atom)
 
 	algorithm->Init(&atomM);
 
-	return algorithm->Calculate() * 27.211385056;
+	const double result = algorithm->Calculate();
+
+	if (converged) converged = algorithm->converged;
+
+	return result * 27.211385056;
 }
