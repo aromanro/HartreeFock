@@ -292,10 +292,9 @@ void CHartreeFockDoc::StartThreads()
 	const double step = (options.XMaxBondLength - options.XMinBondLength) / options.numberOfPoints;
 	const double interval = (options.XMaxBondLength - options.XMinBondLength) / nrThreads;
 
-
+	double start = options.XMinBondLength;
 	for (unsigned int i = 0; i < nrThreads; ++i)
 	{
-		double start = options.XMinBondLength + interval * i;
 		threadsList.push_back(std::make_unique<HartreeFockThread>(options, this, start, start + interval + (i == nrThreads - 1 ? step : 0), step));
 
 		if (0 == i)
@@ -303,6 +302,8 @@ void CHartreeFockDoc::StartThreads()
 
 		if (nrThreads - 1 == i)
 			threadsList.back()->computeSecondAtom = true;
+
+		start += interval;
 
 		threadsList.back()->Start();
 	}
