@@ -33,7 +33,7 @@ public:
 	Vector3D& operator*=(T s);
 	Vector3D& operator/=(T s);
 
-	T Length() const;
+	double Length() const;
 	Vector3D Normalize() const;
 
 	template<typename O, typename A> Vector3D RotateAround(const Vector3D<O>& other, A angle) const;
