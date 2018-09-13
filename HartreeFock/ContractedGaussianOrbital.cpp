@@ -16,7 +16,7 @@ namespace Orbitals {
 	{
 		double res = 0;
 
-		for (auto &&orbital : gaussianOrbitals)
+		for (const auto &orbital : gaussianOrbitals)
 			res += orbital(r);
 
 		return res;
