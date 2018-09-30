@@ -20,8 +20,8 @@ namespace HartreeFock {
 		HartreeFockAlgorithm::Init(molecule);
 
 		
-		Pplus = Eigen::MatrixXd::Zero(h.rows(), h.cols());
-		Pminus = Eigen::MatrixXd::Zero(h.rows(), h.cols());
+		DensityMatrixPlus = Eigen::MatrixXd::Zero(h.rows(), h.cols());
+		DensityMatrixMinus = Eigen::MatrixXd::Zero(h.rows(), h.cols());
 		
 		const unsigned int electronsNumber = molecule->ElectronsNumber();
 		nrOccupiedLevelsMinus = static_cast<unsigned int>(floor(electronsNumber / 2.));
@@ -57,24 +57,24 @@ namespace HartreeFock {
 		// *****************************************************************************************************************
 
 		// the Fock matrices
-		Eigen::MatrixXd Fplus; 
-		Eigen::MatrixXd Fminus;
+		Eigen::MatrixXd FockMatrixPlus; 
+		Eigen::MatrixXd FockMatrixMinus;
 
-		InitFockMatrices(iter, Fplus, Fminus);
+		InitFockMatrices(iter, FockMatrixPlus, FockMatrixMinus);
 
 		// ***************************************************************************************************************************
 
 		// solve the Pople-Nesbet–Berthier equations
 
-		Eigen::MatrixXd Fplusprime = Vt * Fplus * V;
-		Eigen::MatrixXd Fminusprime = Vt * Fminus * V;
+		Eigen::MatrixXd FockMatrixPlusTransformed = Vt * FockMatrixPlus * V;
+		Eigen::MatrixXd FockMatrixMinusTransformed = Vt * FockMatrixMinus * V;
 
 		Eigen::MatrixXd Cplus;
 		Eigen::VectorXd eigenvalsplus;
 
-		if (Fplusprime.rows() > 1)
+		if (FockMatrixPlusTransformed.rows() > 1)
 		{
-			Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> esplus(Fplusprime);
+			Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> esplus(FockMatrixPlusTransformed);
 			const Eigen::MatrixXd& Cplusprime = esplus.eigenvectors();
 			Cplus = V * Cplusprime;
 			eigenvalsplus = esplus.eigenvalues();
@@ -82,16 +82,16 @@ namespace HartreeFock {
 		else
 		{
 			Cplus = V * Eigen::MatrixXd::Ones(1, 1);
-			eigenvalsplus = Fplusprime(0, 0) * Eigen::VectorXd::Ones(1);
+			eigenvalsplus = FockMatrixPlusTransformed(0, 0) * Eigen::VectorXd::Ones(1);
 		}
 
 		
 		Eigen::MatrixXd Cminus;
 		Eigen::VectorXd eigenvalsminus;
 
-		if (Fminusprime.rows() > 1)
+		if (FockMatrixMinusTransformed.rows() > 1)
 		{
-			Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> esminus(Fminusprime);
+			Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> esminus(FockMatrixMinusTransformed);
 			const Eigen::MatrixXd& Cminusprime = esminus.eigenvectors();
 			Cminus = V * Cminusprime;
 			eigenvalsminus = esminus.eigenvalues();
@@ -99,7 +99,7 @@ namespace HartreeFock {
 		else
 		{
 			Cminus = V * Eigen::MatrixXd::Ones(1, 1);
-			eigenvalsminus = Fminusprime(0, 0) * Eigen::VectorXd::Ones(1);
+			eigenvalsminus = FockMatrixMinusTransformed(0, 0) * Eigen::VectorXd::Ones(1);
 		}
 
 		// normalize them
@@ -110,22 +110,22 @@ namespace HartreeFock {
 
 		// calculate the density matrices
 
-		Eigen::MatrixXd newPplus = Eigen::MatrixXd::Zero(h.rows(), h.cols());
-		Eigen::MatrixXd newPminus = Eigen::MatrixXd::Zero(h.rows(), h.cols());
+		Eigen::MatrixXd newDensityMatrixPlus = Eigen::MatrixXd::Zero(h.rows(), h.cols());
+		Eigen::MatrixXd newDensityMatrixMinus = Eigen::MatrixXd::Zero(h.rows(), h.cols());
 
 		for (int i = 0; i < h.rows(); ++i)
 			for (int j = 0; j < h.cols(); ++j)
 			{
 				for (unsigned int vec = 0; vec < nrOccupiedLevelsPlus; ++vec) // only eigenstates that are occupied 
-					newPplus(i, j) += Cplus(i, vec) * Cplus(j, vec);
+					newDensityMatrixPlus(i, j) += Cplus(i, vec) * Cplus(j, vec);
 
 				for (unsigned int vec = 0; vec < nrOccupiedLevelsMinus; ++vec) // only eigenstates that are occupied 
-					newPminus(i, j) += Cminus(i, vec) * Cminus(j, vec);
+					newDensityMatrixMinus(i, j) += Cminus(i, vec) * Cminus(j, vec);
 			}
 
 		//**************************************************************************************************************
 
-		CalculateEnergy(eigenvalsplus, eigenvalsminus, newPplus, newPminus/*, Fplus, Fminus*/);
+		CalculateEnergy(eigenvalsplus, eigenvalsminus, newDensityMatrixPlus, newDensityMatrixMinus/*, Fplus, Fminus*/);
 
 		TRACE("Step: %d Energy: %f\n", iter, totalEnergy);
 
@@ -133,11 +133,11 @@ namespace HartreeFock {
 		// go to the next density matrices
 		// use mixing if alpha is set less then one
 
-		Pplus = alpha * newPplus + (1. - alpha) * Pplus;
-		Pminus = alpha * newPminus + (1. - alpha) * Pminus;
+		DensityMatrixPlus = alpha * newDensityMatrixPlus + (1. - alpha) * DensityMatrixPlus;
+		DensityMatrixMinus = alpha * newDensityMatrixMinus + (1. - alpha) * DensityMatrixMinus;
 	}
 
-	void UnrestrictedHartreeFock::InitFockMatrices(int iter, Eigen::MatrixXd& Fplus, Eigen::MatrixXd& Fminus) const
+	void UnrestrictedHartreeFock::InitFockMatrices(int iter, Eigen::MatrixXd& FockMatrixPlus, Eigen::MatrixXd& FockMatrixMinus) const
 	{
 		// this could be made faster knowing that the matrix should be symmetric
 		// but it would be less expressive so I'll let it as it is
@@ -148,23 +148,23 @@ namespace HartreeFock {
 		{
 			if (initGuess > 0)
 			{
-				Fplus.resize(h.rows(), h.cols());
-				Fminus.resize(h.rows(), h.cols());
+				FockMatrixPlus.resize(h.rows(), h.cols());
+				FockMatrixMinus.resize(h.rows(), h.cols());
 
 				for (int i = 0; i < h.rows(); ++i)
 					for (int j = 0; j < h.rows(); ++j)
-						Fplus(i, j) = Fminus(i, j) = initGuess * overlapMatrix.matrix(i, j) * (h(i, i) + h(j, j)) / 2.;
+						FockMatrixPlus(i, j) = FockMatrixMinus(i, j) = initGuess * overlapMatrix.matrix(i, j) * (h(i, i) + h(j, j)) / 2.;
 			}
 			else
 			{
-				Fplus = h;
-				Fminus = h;
+				FockMatrixPlus = h;
+				FockMatrixMinus = h;
 			}			
 
-			if (addAsymmetry && Fplus.cols() > 1)
+			if (addAsymmetry && FockMatrixPlus.cols() > 1)
 			{
-				Fplus(0, 1) += asymmetry;
-				Fplus(1, 0) = Fplus(0, 1);
+				FockMatrixPlus(0, 1) += asymmetry;
+				FockMatrixPlus(1, 0) = FockMatrixPlus(0, 1);
 			}
 		}
 		else
@@ -180,17 +180,17 @@ namespace HartreeFock {
 							double coulomb = integralsRepository.getElectronElectron(i, j, k, l);
 							double exchange = integralsRepository.getElectronElectron(i, l, k, j);
 
-							Gplus(i, j) += Pplus(k, l) * (coulomb - exchange) + Pminus(k, l) * coulomb; // the beta electrons interact with the alpha ones with coulomb interaction, too
-							Gminus(i, j) += Pminus(k, l) * (coulomb - exchange) + Pplus(k, l) * coulomb; // the alpha electrons interact with the beta ones with coulomb interaction, too
+							Gplus(i, j) += DensityMatrixPlus(k, l) * (coulomb - exchange) + DensityMatrixMinus(k, l) * coulomb; // the beta electrons interact with the alpha ones with coulomb interaction, too
+							Gminus(i, j) += DensityMatrixMinus(k, l) * (coulomb - exchange) + DensityMatrixPlus(k, l) * coulomb; // the alpha electrons interact with the beta ones with coulomb interaction, too
 						}
 
-			Fplus = h + Gplus;
-			Fminus = h + Gminus;
+			FockMatrixPlus = h + Gplus;
+			FockMatrixMinus = h + Gminus;
 		}
 	}
 
 
-	void UnrestrictedHartreeFock::CalculateEnergy(const Eigen::VectorXd& eigenvalsplus, const Eigen::VectorXd& eigenvalsminus, const Eigen::MatrixXd& calcPplus, const Eigen::MatrixXd& calcPminus/*, const Eigen::MatrixXd& Fplus, const Eigen::MatrixXd& Fminus*/)
+	void UnrestrictedHartreeFock::CalculateEnergy(const Eigen::VectorXd& eigenvalsplus, const Eigen::VectorXd& eigenvalsminus, const Eigen::MatrixXd& calcDensityMatrixPlus, const Eigen::MatrixXd& calcDensityMatrixMinus/*, const Eigen::MatrixXd& Fplus, const Eigen::MatrixXd& Fminus*/)
 	{
 		totalEnergy = 0;
 
@@ -201,14 +201,14 @@ namespace HartreeFock {
 
 		for (int i = 1; i < h.rows(); ++i)
 			for (int j = 0; j < i; ++j)
-				totalEnergy += (calcPplus(i, j) + calcPminus(i, j)) * h(j, i);
+				totalEnergy += (calcDensityMatrixPlus(i, j) + calcDensityMatrixMinus(i, j)) * h(j, i);
 
 		// only the values below the diagonal were added
 		// *2 to have the sum of all elements except those on diagonal
 		totalEnergy *= 2.; 
 		
 		// now add the diagonal elements, too
-		for (int i = 0; i < h.rows(); ++i) totalEnergy += (calcPplus(i, i) + calcPminus(i, i)) * h(i, i);
+		for (int i = 0; i < h.rows(); ++i) totalEnergy += (calcDensityMatrixPlus(i, i) + calcDensityMatrixMinus(i, i)) * h(i, i);
 
 
 		for (unsigned int level = 0; level < nrOccupiedLevelsPlus; ++level)	totalEnergy += eigenvalsplus(level);
