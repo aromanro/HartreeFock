@@ -326,12 +326,12 @@ Chart::~Chart()
 
 
 // will calculate from data if called
-int Chart::GetNumTicks()
+int Chart::GetNumTicks() const
 {
 	return 10;
 }
 
-int Chart::GetNumBigTicks()
+int Chart::GetNumBigTicks() const
 {
 	return 5;
 }
@@ -360,7 +360,7 @@ float Chart::GetLabelWidth(bool XAxis) const
 }
 
 
-std::list<CString> Chart::GetXLabels()
+std::list<CString> Chart::GetXLabels() const
 {
 	std::list<CString> l;
 
@@ -384,7 +384,7 @@ std::list<CString> Chart::GetXLabels()
 }
 
 
-std::list<CString> Chart::GetYLabels()
+std::list<CString> Chart::GetYLabels() const
 {
 	std::list<CString> l;
 
@@ -409,7 +409,7 @@ std::list<CString> Chart::GetYLabels()
 }
 
 
-int Chart::GetNeededFontSize(CString& str, const Gdiplus::Graphics& g, const Gdiplus::RectF& boundRect)
+int Chart::GetNeededFontSize(CString& str, const Gdiplus::Graphics& g, const Gdiplus::RectF& boundRect) const
 {
 	double maxSize = 128;
 	double minSize = 4;

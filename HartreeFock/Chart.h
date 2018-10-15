@@ -40,16 +40,16 @@ protected:
 
 	CRect chartRect;
 
-	int GetNumTicks();
-	int GetNumBigTicks();
+	int GetNumTicks() const;
+	int GetNumBigTicks() const;
 
-	std::list<CString> GetXLabels();
-	std::list<CString> GetYLabels();
+	std::list<CString> GetXLabels() const;
+	std::list<CString> GetYLabels() const;
 
 	float GetLabelHeight(bool XAxis = true) const;
 	float GetLabelWidth(bool XAxis = true) const;
 
-	int GetNeededFontSize(CString& str, const Gdiplus::Graphics& g, const Gdiplus::RectF& boundRect);
+	int GetNeededFontSize(CString& str, const Gdiplus::Graphics& g, const Gdiplus::RectF& boundRect) const;
 
 	void DrawText(CString &str, Gdiplus::Graphics& g, const Gdiplus::RectF& boundRect, Gdiplus::StringAlignment align = Gdiplus::StringAlignmentCenter, float fontSize = 0);
 public:
