@@ -39,7 +39,7 @@ namespace GaussianIntegrals {
 
 	void GaussianKinetic::CalculateKinetic(Eigen::MatrixXd& matrix, const Eigen::MatrixXd& overlap_matrix, double alpha1, double alpha2, unsigned int maxQN1, unsigned int maxQN2)
 	{
-		double alphaProd = alpha1 * alpha2;
+		const double alphaProd = alpha1 * alpha2;
 		matrix(0, 0) = 2 * alphaProd * overlap_matrix(1, 1);
 
 		for (int i = 1; i <= static_cast<int>(maxQN1); ++i)

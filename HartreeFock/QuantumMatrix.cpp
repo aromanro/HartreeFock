@@ -38,7 +38,7 @@ namespace Matrices {
 
 	void OverlapMatrix::Calculate()
 	{
-		Systems::Molecule* molecule = integralsRepository->getMolecule();
+		const Systems::Molecule* molecule = integralsRepository->getMolecule();
 
 		int i = 0;
 		for (const auto& atom1 : molecule->atoms)
@@ -65,7 +65,7 @@ namespace Matrices {
 
 	void KineticMatrix::Calculate()
 	{
-		Systems::Molecule* molecule = integralsRepository->getMolecule();
+		const Systems::Molecule* molecule = integralsRepository->getMolecule();
 
 		int i = 0;
 		for (const auto& atom1 : molecule->atoms)
@@ -94,7 +94,7 @@ namespace Matrices {
 
 	void NuclearMatrix::Calculate()
 	{
-		Systems::Molecule* molecule = integralsRepository->getMolecule();
+		const Systems::Molecule* molecule = integralsRepository->getMolecule();
 
 		int i = 0;
 		for (const auto& atom1 : molecule->atoms)

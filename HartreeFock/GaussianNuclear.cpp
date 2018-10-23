@@ -19,20 +19,20 @@ namespace GaussianIntegrals {
 
 	void GaussianNuclear::Reset(IntegralsRepository* repository, double alpha1, double alpha2, const Vector3D<double>& nucleus, const Vector3D<double>& center1, const Vector3D<double>& center2, unsigned int maxL1, unsigned int maxL2, bool calculateHorizontal)
 	{
-		double alpha = alpha1 + alpha2;
-		Vector3D<double> Rp = (alpha1 * center1 + alpha2 * center2) / alpha;
-		Vector3D<double> difN = nucleus - Rp;		
-		Vector3D<double> dif = center1 - center2; 
+		const double alpha = alpha1 + alpha2;
+		const Vector3D<double> Rp = (alpha1 * center1 + alpha2 * center2) / alpha;
+		const Vector3D<double> difN = nucleus - Rp;		
+		const Vector3D<double> dif = center1 - center2; 
 
-		unsigned int maxL = maxL1 + maxL2;
-		unsigned int size = maxL + 1;
+		const unsigned int maxL = maxL1 + maxL2;
+		const unsigned int size = maxL + 1;
 
 		// auxiliary integrals
 		const BoysFunctions& boys = repository->getBoysFunctions(maxL, alpha * (difN * difN));
 		
 		Orbitals::QuantumNumbers::QuantumNumbers maxQN(0, 0 , maxL);
 
-		double factor = 2. * M_PI / alpha * exp(-alpha1 * alpha2 / alpha * dif * dif);
+		const double factor = 2. * M_PI / alpha * exp(-alpha1 * alpha2 / alpha * dif * dif);
 		matrixCalc = Eigen::MatrixXd::Zero(maxQN.GetTotalCanonicalIndex() + 1, size);
 
 		for (unsigned int i = 0; i < size; ++i)	
@@ -88,7 +88,7 @@ namespace GaussianIntegrals {
 		Orbitals::QuantumNumbers::QuantumNumbers maxQN1(0, 0, maxL1);
 		Orbitals::QuantumNumbers::QuantumNumbers maxQN2(0, 0, maxL2);
 
-		unsigned int limit = maxQN2.GetTotalCanonicalIndex() + 1;
+		const unsigned int limit = maxQN2.GetTotalCanonicalIndex() + 1;
 
 		Eigen::MatrixXd matrixHoriz = Eigen::MatrixXd::Zero(matrixCalc.rows(), limit);
 		matrixHoriz.col(0) = matrixCalc.col(0);
