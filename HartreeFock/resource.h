@@ -50,6 +50,8 @@
 #define IDC_CHECK2                      1008
 #define IDC_EDIT8                       1009
 #define IDC_RADIO3                      1009
+#define IDC_MFCLINK1                    1010
+#define IDC_MFCLINK2                    1011
 #define ID_COMPUTATION_OPTIONS          32771
 #define ID_COMPUTATION_START            32772
 
@@ -57,9 +59,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        312
+#define _APS_NEXT_RESOURCE_VALUE        313
 #define _APS_NEXT_COMMAND_VALUE         32773
-#define _APS_NEXT_CONTROL_VALUE         1010
+#define _APS_NEXT_CONTROL_VALUE         1011
 #define _APS_NEXT_SYMED_VALUE           311
 #endif
 #endif
