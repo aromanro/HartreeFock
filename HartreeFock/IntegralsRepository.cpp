@@ -241,8 +241,8 @@ namespace GaussianIntegrals {
 
 		// now find the max quantum numbers
 
-		unsigned int maxL1 = a1->GetMaxAngularMomentum(gaussian1.alpha);
-		unsigned int maxL2 = a2->GetMaxAngularMomentum(gaussian2.alpha);
+		const unsigned int maxL1 = a1->GetMaxAngularMomentum(gaussian1.alpha);
+		const unsigned int maxL2 = a2->GetMaxAngularMomentum(gaussian2.alpha);
 
 		// calculate the integrals and that's about it
 
@@ -392,15 +392,14 @@ namespace GaussianIntegrals {
 		}
 		else swapped = false;
 
-		std::tuple<unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, double, double, double, double> params(orbital1->angularMomentum, orbital2->angularMomentum, orbital3->angularMomentum, orbital4->angularMomentum, 
+		const std::tuple<unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, double, double, double, double> params(orbital1->angularMomentum, orbital2->angularMomentum, orbital3->angularMomentum, orbital4->angularMomentum, 
 																																											orbital1->shellID, orbital2->shellID, orbital3->shellID, orbital4->shellID, 
 																																											orbital1->alpha, orbital2->alpha, orbital3->alpha, orbital4->alpha);
-		auto it = electronElectronIntegralsVerticalAndTransferMap.find(params);
+		const auto it = electronElectronIntegralsVerticalAndTransferMap.find(params);
 		if (electronElectronIntegralsVerticalAndTransferMap.end() != it) return it->second;
 		
 		// unfortunately it's not yet calculated
-		GaussianTwoElectrons electronElectron;
-		auto result = electronElectronIntegralsVerticalAndTransferMap.insert(std::make_pair(params, electronElectron));
+		auto result = electronElectronIntegralsVerticalAndTransferMap.insert(std::make_pair(params, GaussianTwoElectrons()));
 
 		result.first->second.Reset(this, orbital1->alpha, orbital2->alpha, orbital3->alpha, orbital4->alpha, 
 			                             orbital1->center, orbital2->center, orbital3->center, orbital4->center, 

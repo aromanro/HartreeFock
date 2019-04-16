@@ -51,10 +51,10 @@ namespace HartreeFock {
 
 		// this hopefully is faster than the one commented above
 		
-		Eigen::MatrixXd FockTransformed = Vt * FockMatrix * V;
-		Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> es(FockTransformed);
+		const Eigen::MatrixXd FockTransformed = Vt * FockMatrix * V;
+		const Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> es(FockTransformed);
 		const Eigen::MatrixXd& Cprime = es.eigenvectors();
-		Eigen::MatrixXd C = V * Cprime;
+		const Eigen::MatrixXd C = V * Cprime;
 
 		// normalize it
 		//NormalizeC(C, nrOccupiedLevels);
@@ -113,8 +113,8 @@ namespace HartreeFock {
 					for (int k = 0; k < numberOfOrbitals; ++k)
 						for (int l = 0; l < numberOfOrbitals; ++l)
 						{
-							double coulomb = integralsRepository.getElectronElectron(i, j, k, l);
-							double exchange = integralsRepository.getElectronElectron(i, l, k, j);
+							const double coulomb = integralsRepository.getElectronElectron(i, j, k, l);
+							const double exchange = integralsRepository.getElectronElectron(i, l, k, j);
 
 							G(i, j) += DensityMatrix(k, l) * (coulomb - 1. / 2. * exchange);
 						}

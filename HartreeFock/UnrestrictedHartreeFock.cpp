@@ -66,8 +66,8 @@ namespace HartreeFock {
 
 		// solve the Pople-Nesbet–Berthier equations
 
-		Eigen::MatrixXd FockMatrixPlusTransformed = Vt * FockMatrixPlus * V;
-		Eigen::MatrixXd FockMatrixMinusTransformed = Vt * FockMatrixMinus * V;
+		const Eigen::MatrixXd FockMatrixPlusTransformed = Vt * FockMatrixPlus * V;
+		const Eigen::MatrixXd FockMatrixMinusTransformed = Vt * FockMatrixMinus * V;
 
 		Eigen::MatrixXd Cplus;
 		Eigen::VectorXd eigenvalsplus;
