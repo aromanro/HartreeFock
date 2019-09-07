@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 
 #include "Vector3D.h"
 #include "PrimitiveShell.h"

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <string>
 #include <cassert>
 
 #include "GaussianOrbital.h"
