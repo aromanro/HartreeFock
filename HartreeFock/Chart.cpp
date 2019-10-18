@@ -224,13 +224,13 @@ void Chart::DataSets::DataSet::Draw(Gdiplus::Graphics& g, const Gdiplus::RectF& 
 
 	const double valMinX = dataRect.X;
 	const double valMinY = dataRect.Y;
-	const double valMaxX = dataRect.X + dataRect.Width;
-	const double valMaxY = dataRect.Y + dataRect.Height;
+	const double valMaxX = static_cast<double>(dataRect.X) + dataRect.Width;
+	const double valMaxY = static_cast<double>(dataRect.Y) + dataRect.Height;
 
-	const double chartMinX = boundRect.X;
+	const double chartMinX = static_cast<double>(boundRect.X);
 	const double chartMinY = boundRect.Y;
-	const double chartMaxX = boundRect.X + boundRect.Width;
-	const double chartMaxY = boundRect.Y + boundRect.Height;
+	const double chartMaxX = static_cast<double>(boundRect.X) + boundRect.Width;
+	const double chartMaxY = static_cast<double>(boundRect.Y) + boundRect.Height;
 
 
 	Gdiplus::PointF *pnts = new Gdiplus::PointF[points.size()];
@@ -376,7 +376,7 @@ std::list<CString> Chart::GetXLabels() const
 	for (int i = (drawStartTickX ? 0 : 1); i <= ticks; ++i)
 	{
 		CString str;
-		str.Format(L"%.2f", xmin + interval*i);
+		str.Format(L"%.2f", static_cast<double>(xmin) + static_cast<double>(interval)*i);
 		l.push_back(str);
 	}
 
@@ -401,7 +401,7 @@ std::list<CString> Chart::GetYLabels() const
 	for (int i = (drawStartTickY ? 0 : 1); i <= ticks; ++i)
 	{
 		CString str;
-		str.Format(L"%.2f", ymin + interval*i);
+		str.Format(L"%.2f", static_cast<double>(ymin) + static_cast<double>(interval)*i);
 		l.push_back(str);
 	}
 

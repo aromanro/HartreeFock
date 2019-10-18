@@ -33,7 +33,7 @@ namespace GaussianIntegrals {
 		Orbitals::QuantumNumbers::QuantumNumbers maxQN(0, 0 , maxL);
 
 		const double factor = 2. * M_PI / alpha * exp(-alpha1 * alpha2 / alpha * dif * dif);
-		matrixCalc = Eigen::MatrixXd::Zero(maxQN.GetTotalCanonicalIndex() + 1, size);
+		matrixCalc = Eigen::MatrixXd::Zero(maxQN.GetTotalCanonicalIndex() + 1ULL, size);
 
 		for (unsigned int i = 0; i < size; ++i)	
 			matrixCalc(0, i) = factor * boys.functions[i];
@@ -70,12 +70,12 @@ namespace GaussianIntegrals {
 
 			for (unsigned int m = 0; m < size - currentQN; ++m)
 			{
-				matrixCalc(curIndex, m) = difScalar * matrixCalc(prevIndex, m) + difNScalar * matrixCalc(prevIndex, m + 1);
+				matrixCalc(curIndex, m) = difScalar * matrixCalc(prevIndex, m) + difNScalar * matrixCalc(prevIndex, m + 1ULL);
 
 				if (addPrevPrev)
 				{
 					unsigned int prevPrevIndex = prevPrevQN.GetTotalCanonicalIndex();
-					matrixCalc(curIndex, m) += N / (2. * alpha) * (matrixCalc(prevPrevIndex, m) - matrixCalc(prevPrevIndex, m + 1));
+					matrixCalc(curIndex, m) += N / (2. * alpha) * (matrixCalc(prevPrevIndex, m) - matrixCalc(prevPrevIndex, m + 1ULL));
 				}
 			}			
 		}
@@ -112,7 +112,7 @@ namespace GaussianIntegrals {
 			}			
 		}
 
-		matrixCalc = matrixHoriz.block(0, 0, maxQN1.GetTotalCanonicalIndex() + 1, limit);
+		matrixCalc = matrixHoriz.block(0, 0, maxQN1.GetTotalCanonicalIndex() + 1ULL, limit);
 	}
 
 	

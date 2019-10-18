@@ -55,7 +55,7 @@ namespace GaussianIntegrals {
 		const double factor = 2. * pow(M_PI, 5. / 2.) / (alphaProd * sqrt(alphaSum)) * exp(exponent);
 		const double T = alpha * (Rpq * Rpq);
 
-		matrixCalc = Eigen::MatrixXd::Zero(maxIndex + 1, size);
+		matrixCalc = Eigen::MatrixXd::Zero(maxIndex + 1ULL, size);
 
 		const BoysFunctions& boys = repository->getBoysFunctions(maxL, T);
 
@@ -86,7 +86,7 @@ namespace GaussianIntegrals {
 		// transfer from (L1 + L2 + L3 + L4, s | s, s) -> (L1 + L2, s | L3 + L4, s)
 		// so it needs as many lines as before and maxIndex34 columns to be able to hold all results, including the intermediary ones
 
-		Eigen::MatrixXd electronTransfer = Eigen::MatrixXd::Zero(maxIndex + 1, maxIndex34 + 1);
+		Eigen::MatrixXd electronTransfer = Eigen::MatrixXd::Zero(maxIndex + 1ULL, maxIndex34 + 1ULL);
 		electronTransfer.col(0) = matrixCalc.col(0);  // copy the 0 column into the new matrixCalc
 		matrixCalc = electronTransfer;
 
@@ -102,7 +102,7 @@ namespace GaussianIntegrals {
 		// **************************************************************************************************************************
 
 		// need to hold only L1 -> L1 + L2 range of rows and L3 -> L3 + L4 range of columns
-		matrixCalc = matrixCalc.block(indexL1, indexL3, maxIndex12 - indexL1 + 1, maxIndex34 - indexL3 + 1).eval();
+		matrixCalc = matrixCalc.block(indexL1, indexL3, maxIndex12 - indexL1 + 1ULL, maxIndex34 - indexL3 + 1ULL).eval();
 	}
 
 	void GaussianTwoElectrons::VerticalRecursion(double alpha, double alpha12, const Vector3D<double>& Rpa, const Vector3D<double>& Rwp, unsigned int maxL)
@@ -127,12 +127,12 @@ namespace GaussianIntegrals {
 				// ********************************************************************************************************************************
 				// The Vertical Recurrence Relation
 
-				matrixCalc(curIndex, m) = RpaScalar * matrixCalc(prevIndex, m) + RwpScalar * matrixCalc(prevIndex, m + 1);
+				matrixCalc(curIndex, m) = RpaScalar * matrixCalc(prevIndex, m) + RwpScalar * matrixCalc(prevIndex, m + 1ULL);
 
 				if (addPrevPrev)
 				{
 					const unsigned int prevPrevIndex = prevPrevQN.GetTotalCanonicalIndex();
-					matrixCalc(curIndex, m) += N / (2. * alpha12) * (matrixCalc(prevPrevIndex, m) - alpha / alpha12 * matrixCalc(prevPrevIndex, m + 1));
+					matrixCalc(curIndex, m) += N / (2. * alpha12) * (matrixCalc(prevPrevIndex, m) - alpha / alpha12 * matrixCalc(prevPrevIndex, m + 1ULL));
 				}
 
 				// ********************************************************************************************************************************

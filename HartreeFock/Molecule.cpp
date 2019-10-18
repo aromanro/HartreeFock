@@ -81,7 +81,7 @@ double Systems::Molecule::NuclearRepulsionEnergy() const
 
 	for (unsigned int atom1 = 0; atom1 < atoms.size(); ++atom1)
 		for (unsigned int atom2 = atom1 + 1; atom2 < atoms.size(); ++atom2)
-			energy += atoms[atom1].Z * atoms[atom2].Z / (atoms[atom1].position - atoms[atom2].position).Length();
+			energy += static_cast<double>(atoms[atom1].Z) * atoms[atom2].Z / (atoms[atom1].position - atoms[atom2].position).Length();
 
 	return energy;
 }

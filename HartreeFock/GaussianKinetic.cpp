@@ -19,9 +19,9 @@ namespace GaussianIntegrals {
 
 	void GaussianKinetic::Reset(double alpha1, double alpha2, const Orbitals::QuantumNumbers::QuantumNumbers& maxQN1, const Orbitals::QuantumNumbers::QuantumNumbers& maxQN2)
 	{
-		matrixX = Eigen::MatrixXd::Zero(maxQN1.l + 1, maxQN2.l + 1);
-		matrixY = Eigen::MatrixXd::Zero(maxQN1.m + 1, maxQN2.m + 1);
-		matrixZ = Eigen::MatrixXd::Zero(maxQN1.n + 1, maxQN2.n + 1);
+		matrixX = Eigen::MatrixXd::Zero(maxQN1.l + 1ULL, maxQN2.l + 1ULL);
+		matrixY = Eigen::MatrixXd::Zero(maxQN1.m + 1ULL, maxQN2.m + 1ULL);
+		matrixZ = Eigen::MatrixXd::Zero(maxQN1.n + 1ULL, maxQN2.n + 1ULL);
 
 		CalculateKinetic(matrixX, m_overlap->matrixX, alpha1, alpha2, maxQN1.l, maxQN2.l);
 		CalculateKinetic(matrixY, m_overlap->matrixY, alpha1, alpha2, maxQN1.m, maxQN2.m);
@@ -43,17 +43,17 @@ namespace GaussianIntegrals {
 		matrix(0, 0) = twoAlphaProd * overlap_matrix(1, 1);
 
 		for (int i = 1; i <= static_cast<int>(maxQN1); ++i)
-			matrix(i, 0) = -i * alpha2 * overlap_matrix(i - 1, 1) + twoAlphaProd * overlap_matrix(i + 1, 1);
+			matrix(i, 0) = -i * alpha2 * overlap_matrix(i - 1ULL, 1) + twoAlphaProd * overlap_matrix(i + 1ULL, 1);
 
 		for (int i = 1; i <= static_cast<int>(maxQN2); ++i)
-			matrix(0, i) = -i * alpha1 * overlap_matrix(1, i - 1) + twoAlphaProd * overlap_matrix(1, i + 1);
+			matrix(0, i) = -i * alpha1 * overlap_matrix(1, i - 1ULL) + twoAlphaProd * overlap_matrix(1, i + 1ULL);
 
 		for (int i = 1; i <= static_cast<int>(maxQN1); ++i)
 			for (int j = 1; j <= static_cast<int>(maxQN2); ++j)
-				matrix(i, j) = i * j * overlap_matrix(i - 1, j - 1) / 2.
-					- j * alpha1 * overlap_matrix(i + 1, j - 1) 
-					- i * alpha2 * overlap_matrix(i - 1, j + 1) 
-					+ twoAlphaProd * overlap_matrix(i + 1, j + 1);
+				matrix(i, j) = static_cast<double>(i) * j * overlap_matrix(i - 1ULL, j - 1ULL) / 2.
+					- j * alpha1 * overlap_matrix(i + 1ULL, j - 1ULL)
+					- i * alpha2 * overlap_matrix(i - 1ULL, j + 1ULL)
+					+ twoAlphaProd * overlap_matrix(i + 1ULL, j + 1ULL);
 	}
 
 }

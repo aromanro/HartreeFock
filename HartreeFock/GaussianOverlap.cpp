@@ -20,9 +20,9 @@ namespace GaussianIntegrals {
 
 	void GaussianOverlap::Reset(double alpha1, double alpha2, const Vector3D<double>& center1, const Vector3D<double>& center2, const Orbitals::QuantumNumbers::QuantumNumbers& maxQN1, const Orbitals::QuantumNumbers::QuantumNumbers& maxQN2)
 	{
-		matrixX = Eigen::MatrixXd::Zero(maxQN1.l + maxQN2.l + 2, maxQN2.l + 1);
-		matrixY = Eigen::MatrixXd::Zero(maxQN1.m + maxQN2.m + 2, maxQN2.m + 1);
-		matrixZ = Eigen::MatrixXd::Zero(maxQN1.n + maxQN2.n + 2, maxQN2.n + 1);
+		matrixX = Eigen::MatrixXd::Zero(2ULL + maxQN1.l + maxQN2.l, maxQN2.l + 1ULL);
+		matrixY = Eigen::MatrixXd::Zero(2ULL + maxQN1.m + maxQN2.m, maxQN2.m + 1ULL);
+		matrixZ = Eigen::MatrixXd::Zero(2ULL + maxQN1.n + maxQN2.n, maxQN2.n + 1ULL);
 
 		CalculateOverlap(matrixX, alpha1, alpha2, center1.X, center2.X, maxQN1.l, maxQN2.l);
 		CalculateOverlap(matrixY, alpha1, alpha2, center1.Y, center2.Y, maxQN1.m, maxQN2.m);
@@ -58,10 +58,10 @@ namespace GaussianIntegrals {
 		for (unsigned int j = 1; j <= maxQN2; ++j, --limit)
 		{
 			for (unsigned int i = 0; i <= limit; ++i)
-				matrix(i, j) = matrix(i + 1, j - 1) + dif * matrix(i, j - 1);
+				matrix(i, j) = matrix(i + 1ULL, j - 1ULL) + dif * matrix(i, j - 1ULL);
 		}
 
-		matrix = matrix.block(0, 0, maxQN1 + 1, maxQN2 + 1).eval();
+		matrix = matrix.block(0, 0, maxQN1 + 1ULL, maxQN2 + 1ULL).eval();
 	}
 
 }

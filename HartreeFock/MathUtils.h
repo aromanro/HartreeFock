@@ -69,7 +69,7 @@ namespace GaussianIntegrals {
 			const double sinVal = sin(val);
 			const double cosVal = cos(val);
 
-			return (n + 1. - 2. * i) / (n + 1) +
+			return (n + 1. - 2. * i) / (n + 1.) +
 				2. / M_PI * (1. + 2. / 3. * sinVal * sinVal) * cosVal * sinVal;
 		}
 
@@ -133,7 +133,7 @@ namespace GaussianIntegrals {
 				{
 					x = 1. + 2. / (3. * M_PI) * s * c * (3. + 2. * s * s) - ((double)i) / n;
 					
-					const int div = (int)((i + j + j) / 3.);
+					const int div = (int)((i + 2. * j) / 3.);
 					if (3 * div >= i + j)
 						chp += (F(-x) + F(x)) * s * s * s * s;
 

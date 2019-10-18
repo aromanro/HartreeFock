@@ -70,8 +70,8 @@ namespace GaussianIntegrals {
 
 		// now find the max quantum numbers
 
-		a1->GetMaxQN(gaussian1.alpha, maxQN1);
-		a2->GetMaxQN(gaussian2.alpha, maxQN2);
+		if (a1) a1->GetMaxQN(gaussian1.alpha, maxQN1);
+		if (a2) a2->GetMaxQN(gaussian2.alpha, maxQN2);
 
 		if (extendForKinetic)
 		{
@@ -158,8 +158,8 @@ namespace GaussianIntegrals {
 
 		// now find the max quantum numbers
 
-		a1->GetMaxQN(gaussian1.alpha, maxQN1);
-		a2->GetMaxQN(gaussian2.alpha, maxQN2);
+		if (a1) a1->GetMaxQN(gaussian1.alpha, maxQN1);
+		if (a2) a2->GetMaxQN(gaussian2.alpha, maxQN2);
 
 		// calculate the integrals and that's about it
 
@@ -191,7 +191,7 @@ namespace GaussianIntegrals {
 	
 		GaussianNuclear horizNuclear;
 		auto result = nuclearIntegralsContractedMap.insert(std::make_pair(params, horizNuclear));
-		result.first->second.matrixCalc = Eigen::MatrixXd::Zero(maxQN.GetTotalCanonicalIndex() + 1, 1);
+		result.first->second.matrixCalc = Eigen::MatrixXd::Zero(maxQN.GetTotalCanonicalIndex() + 1ULL, 1);
 
 		
 		for (auto &gaussian1 : orbital1->gaussianOrbitals)
@@ -241,8 +241,8 @@ namespace GaussianIntegrals {
 
 		// now find the max quantum numbers
 
-		const unsigned int maxL1 = a1->GetMaxAngularMomentum(gaussian1.alpha);
-		const unsigned int maxL2 = a2->GetMaxAngularMomentum(gaussian2.alpha);
+		const unsigned int maxL1 = a1 ? a1->GetMaxAngularMomentum(gaussian1.alpha) : 0;
+		const unsigned int maxL2 = a2 ? a2->GetMaxAngularMomentum(gaussian2.alpha) : 0;
 
 		// calculate the integrals and that's about it
 
@@ -327,7 +327,7 @@ namespace GaussianIntegrals {
 		auto result = electronElectronIntegralsContractedMap.insert(std::make_pair(params, contractedTwoElectrons));
 
 		// set up a zero filled matrix for the range L1 -> L1 + L2 on columns and L3 -> L3 + L4 on rows, the same range as the result from vertical and electron transfer relations
-		result.first->second.matrixCalc = Eigen::MatrixXd::Zero(Orbitals::QuantumNumbers::QuantumNumbers(0, 0, maxL12).GetTotalCanonicalIndex() - Orbitals::QuantumNumbers::QuantumNumbers(L1, 0, 0).GetTotalCanonicalIndex() + 1, Orbitals::QuantumNumbers::QuantumNumbers(0, 0, maxL34).GetTotalCanonicalIndex() - Orbitals::QuantumNumbers::QuantumNumbers(L3, 0, 0).GetTotalCanonicalIndex() + 1);
+		result.first->second.matrixCalc = Eigen::MatrixXd::Zero(Orbitals::QuantumNumbers::QuantumNumbers(0, 0, maxL12).GetTotalCanonicalIndex() - Orbitals::QuantumNumbers::QuantumNumbers(L1, 0, 0).GetTotalCanonicalIndex() + 1ULL, Orbitals::QuantumNumbers::QuantumNumbers(0, 0, maxL34).GetTotalCanonicalIndex() - Orbitals::QuantumNumbers::QuantumNumbers(L3, 0, 0).GetTotalCanonicalIndex() + 1ULL);
 
 		// now contract the results from the above mentioned two relations, the horizontal relations can be applied on the contracted results
 
@@ -479,9 +479,9 @@ namespace GaussianIntegrals {
 
 		if (GetProcessMemoryInfo(hProcess, &pmc, sizeof(pmc)))
 		{
-			wchar_t buf[2048];
+			wchar_t buf[4096];
 
-			swprintf(buf, sizeof(buf), L"\nProcess ID: %u\n\tPeakWorkingSetSize: %f\n\tWorkingSetSize: %f\n\tPagefileUsage: %f\n\tPeakPagefileUsage: %f\n",
+			swprintf(buf, 4096, L"\nProcess ID: %u\n\tPeakWorkingSetSize: %f\n\tWorkingSetSize: %f\n\tPagefileUsage: %f\n\tPeakPagefileUsage: %f\n",
 				processID, pmc.PeakWorkingSetSize / (1024.*1024.), pmc.WorkingSetSize / (1024.*1024.), pmc.PagefileUsage / (1024.*1024.), pmc.PeakPagefileUsage / (1024.*1024.));
 
 			AfxMessageBox(buf);
@@ -500,7 +500,7 @@ namespace GaussianIntegrals {
 		const int maxNr = m_Molecule->CountNumberOfContractedGaussians();
 		const int maxIndex = GetElectronElectronIndex(maxNr, maxNr, maxNr, maxNr);
 
-		electronElectronIntegrals.resize(maxIndex + 1);
+		electronElectronIntegrals.resize(maxIndex + 1ULL);
 
 		int i = 0;
 		for (const auto& atom1 : m_Molecule->atoms)
