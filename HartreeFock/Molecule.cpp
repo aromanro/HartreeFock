@@ -14,11 +14,6 @@ namespace Systems {
 	}
 
 
-	Molecule::~Molecule()
-	{
-	}
-
-
 	unsigned int Molecule::CountNumberOfContractedGaussians() const
 	{
 		unsigned int res = 0;

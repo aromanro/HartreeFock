@@ -4,15 +4,6 @@
 
 namespace GaussianIntegrals {
 
-	BoysFunction::BoysFunction()
-	{
-	}
-
-
-	BoysFunction::~BoysFunction()
-	{
-	}
-
 	double BoysFunction::operator()(double m, double x) const
 	{
 		if (0. == m && 0. == x) return 1.;

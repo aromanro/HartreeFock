@@ -7,8 +7,6 @@ namespace GaussianIntegrals {
 	class BoysFunction
 	{
 	public:
-		BoysFunction();
-		~BoysFunction();
 
 		class BoysFunctor : public MathUtils::FunctionFunctor
 		{

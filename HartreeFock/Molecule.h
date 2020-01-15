@@ -16,7 +16,6 @@ namespace Systems {
 
 
 		Molecule();
-		~Molecule();
 
 		unsigned int CountNumberOfContractedGaussians() const;
 		unsigned int CountNumberOfGaussians() const;

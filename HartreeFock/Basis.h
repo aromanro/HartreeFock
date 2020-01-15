@@ -12,9 +12,6 @@ namespace Chemistry {
 	public:
 		std::vector<Systems::AtomWithShells> atoms;
 
-		Basis();
-		~Basis();
-
 		void Load(const std::string& fileName);
 		void Save(const std::string& name);
 		void Normalize();

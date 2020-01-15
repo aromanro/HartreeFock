@@ -7,16 +7,6 @@
 namespace GaussianIntegrals {
 
 
-	BoysFunctions::BoysFunctions()
-	{
-	}
-
-
-	BoysFunctions::~BoysFunctions()
-	{
-	}
-
-
 	void BoysFunctions::GenerateBoysFunctions(int maxM, double T)
 	{
 		functions.resize(maxM + 1ULL);

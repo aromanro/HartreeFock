@@ -13,15 +13,6 @@
 namespace Chemistry {
 
 
-	Basis::Basis()
-	{
-	}
-
-
-	Basis::~Basis()
-	{
-	}
-
 
 	void Basis::Load(const std::string& fileName)
 	{
