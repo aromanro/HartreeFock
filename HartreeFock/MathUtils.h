@@ -43,11 +43,10 @@ namespace GaussianIntegrals {
 			else if (n < 21) return static_cast<double>(doubleFactorialsTable[n]);
 
 			double res = 1;
-			int i = n;
-			for (;i > 20; i -= 2)
-				res *= i;
+			for (;n > 20; n -= 2)
+				res *= n;
 
-			return res * static_cast<double>(doubleFactorialsTable[i]);
+			return res * static_cast<double>(doubleFactorialsTable[n]);
 		}
 
 		static unsigned int BinomialCoefficient(unsigned int n, unsigned int k)
