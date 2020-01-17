@@ -22,7 +22,7 @@ namespace Tensors {
 			return m_values[GetOffset(indices)];
 		}
 
-		constexpr const T& operator()(unsigned int index1, unsigned int index2, unsigned int index3) const {
+		const T& operator()(unsigned int index1, unsigned int index2, unsigned int index3) const {
 			std::array<unsigned int, 3> indices{ { index1, index2, index3 } };
 
 			return m_values[GetOffset(indices)];
