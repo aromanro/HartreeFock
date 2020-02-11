@@ -164,7 +164,6 @@ BOOL CHartreeFockDoc::OnNewDocument()
 	str.Format(L"H energy: %f", result);
 	AfxMessageBox(str);
 	*/
-
 	return TRUE;
 }
 
