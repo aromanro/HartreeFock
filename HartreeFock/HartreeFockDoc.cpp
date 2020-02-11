@@ -92,7 +92,8 @@ BOOL CHartreeFockDoc::OnNewDocument()
 
 	// Example for H2O and He:
 
-		
+	/*
+
 	Systems::AtomWithShells H1, H2, O, N, C, He, Li, Ne, Ar;
 
 	for (auto &atom : basisSTO6G.atoms)
@@ -107,8 +108,6 @@ BOOL CHartreeFockDoc::OnNewDocument()
 		else if (atom.Z == 18) Ar = atom;
 	}
 
-
-	/*
 	H1.position.X = H2.position.X = O.position.X = 0;
 
 	H1.position.Y = 1.43233673;
