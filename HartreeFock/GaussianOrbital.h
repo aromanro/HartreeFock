@@ -25,6 +25,8 @@ namespace Orbitals {
 	protected:
 		double getNormalizationFactor() const;
 
+		double coeffProdNorm;
+
 	public:
 		void Normalize();
 	};

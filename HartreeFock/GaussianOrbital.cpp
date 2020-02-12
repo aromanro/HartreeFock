@@ -13,7 +13,7 @@
 namespace Orbitals {
 
 	GaussianOrbital::GaussianOrbital()
-		: coefficient(1), alpha(1), normalizationFactor(1)
+		: coefficient(1), alpha(1), normalizationFactor(1), coeffProdNorm(0)
 	{
 	}
 
@@ -44,7 +44,7 @@ namespace Orbitals {
 	{
 		const Vector3D<double> R = r - center;
 
-		return coefficient * normalizationFactor * pow(R.X, angularMomentum.l) * pow(R.Y, angularMomentum.m) *  pow(R.Z, angularMomentum.n) * exp(-alpha * R * R);
+		return coeffProdNorm * pow(R.X, angularMomentum.l) * pow(R.Y, angularMomentum.m) *  pow(R.Z, angularMomentum.n) * exp(-alpha * R * R);
 	}
 
 	Vector3D<double> GaussianOrbital::ProductCenter(const GaussianOrbital& other) const
@@ -56,6 +56,7 @@ namespace Orbitals {
 	void GaussianOrbital::Normalize()
 	{
 		normalizationFactor = getNormalizationFactor();
+		coeffProdNorm = coefficient * normalizationFactor;
 	}
 }
 

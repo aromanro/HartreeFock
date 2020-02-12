@@ -22,9 +22,9 @@ namespace Orbitals {
 		return res;
 	}
 
+	void ContractedGaussianOrbital::Normalize()
+	{
+		for (auto& orb : gaussianOrbitals) orb.Normalize();
+	}
 }
 
-void Orbitals::ContractedGaussianOrbital::Normalize()
-{
-	for (auto& orb : gaussianOrbitals) orb.Normalize();
-}

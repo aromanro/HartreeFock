@@ -147,90 +147,90 @@ namespace Orbitals {
 		return res;
 	}
 
-}
-
-void Orbitals::ContractedGaussianShell::AddOrbital(char type)
-{
-	unsigned int L = 0;
-
-	switch (tolower(type))
+	void Orbitals::ContractedGaussianShell::AddOrbital(char type)
 	{
-	case 's':
-		L = 0;
-		break;
-	case 'p':
-		L = 1;
-		break;
-	case 'd':
-		L = 2;
-		break;
-	case 'f':
-		L = 3;
-		break;
-	case 'g':
-		L = 4;
-		break;
-	case 'h':
-		L = 5;
-		break;
-	default:
-		AfxMessageBox(L"Unknown orbital type");
-		break;
+		unsigned int L = 0;
+
+		switch (tolower(type))
+		{
+		case 's':
+			L = 0;
+			break;
+		case 'p':
+			L = 1;
+			break;
+		case 'd':
+			L = 2;
+			break;
+		case 'f':
+			L = 3;
+			break;
+		case 'g':
+			L = 4;
+			break;
+		case 'h':
+			L = 5;
+			break;
+		default:
+			AfxMessageBox(L"Unknown orbital type");
+			break;
+		}
+
+		AddOrbitalsInCanonicalOrder(L);
 	}
 
-	AddOrbitalsInCanonicalOrder(L);
-}
 
-
-
-void Orbitals::ContractedGaussianShell::AddGaussians(double exponent)
-{
-	for (auto &orbital : basisFunctions)
+	void ContractedGaussianShell::AddGaussians(double exponent)
 	{
-		GaussianOrbital gaussian;
+		for (auto& orbital : basisFunctions)
+		{
+			GaussianOrbital gaussian;
 
-		gaussian.angularMomentum = orbital.angularMomentum;
-		gaussian.alpha = exponent;
-		
-		orbital.gaussianOrbitals.push_back(std::move(gaussian));
+			gaussian.angularMomentum = orbital.angularMomentum;
+			gaussian.alpha = exponent;
+
+			orbital.gaussianOrbitals.push_back(std::move(gaussian));
+		}
 	}
-}
 
 
-void Orbitals::ContractedGaussianShell::SetCenters(const Vector3D<double>& center)
-{
-	for (auto &orbital : basisFunctions)
+	void ContractedGaussianShell::SetCenters(const Vector3D<double>& center)
 	{
-		orbital.center = center;
+		for (auto& orbital : basisFunctions)
+		{
+			orbital.center = center;
 
-		for (auto& gaussian : orbital.gaussianOrbitals)
-			gaussian.center = center;
+			for (auto& gaussian : orbital.gaussianOrbitals)
+				gaussian.center = center;
+		}
 	}
-}
 
 
-void Orbitals::ContractedGaussianShell::AddOrbitalsInCanonicalOrder(unsigned int L)
-{
-	Orbitals::ContractedGaussianOrbital orbital;
-	
-	orbital.angularMomentum.l = L;
-
-	while (orbital.angularMomentum == L)
+	void ContractedGaussianShell::AddOrbitalsInCanonicalOrder(unsigned int L)
 	{
-		basisFunctions.push_back(orbital);
+		ContractedGaussianOrbital orbital;
 
-		++orbital.angularMomentum;
+		orbital.angularMomentum.l = L;
+
+		while (orbital.angularMomentum == L)
+		{
+			basisFunctions.push_back(orbital);
+
+			++orbital.angularMomentum;
+		}
 	}
+
+
+	void ContractedGaussianShell::Normalize()
+	{
+		for (auto& orb : basisFunctions) orb.Normalize();
+	}
+
+
+	void PrimitiveGaussianShell::Normalize()
+	{
+		for (auto& orb : basisFunctions) orb.Normalize();
+	}
+
 }
 
-
-void Orbitals::ContractedGaussianShell::Normalize()
-{
-	for (auto& orb : basisFunctions) orb.Normalize();
-}
-
-
-void Orbitals::PrimitiveGaussianShell::Normalize()
-{
-	for (auto& orb : basisFunctions) orb.Normalize();
-}
