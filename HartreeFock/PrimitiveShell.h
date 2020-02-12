@@ -31,14 +31,14 @@ namespace Orbitals {
 	public:
 		std::vector<GaussianOrbital> basisFunctions;
 		
-		virtual Vector3D<double> getCenter() const;
+		virtual Vector3D<double> getCenter() const override;
 
 		double getAlpha() const;
 
 		PrimitiveGaussianShell();
 		~PrimitiveGaussianShell();
 
-		virtual double operator()(const Vector3D<double>& r) const;
+		virtual double operator()(const Vector3D<double>& r) const override;
 		void Normalize();
 	};
 
@@ -56,7 +56,7 @@ namespace Orbitals {
 		void AddOrbital(char type);
 		void AddGaussians(double exponent);
 
-		virtual Vector3D<double> getCenter() const;
+		virtual Vector3D<double> getCenter() const override;
 		std::string GetShellString() const;
 
 
@@ -67,7 +67,7 @@ namespace Orbitals {
 		unsigned int CountNumberOfContractedGaussians() const;
 		unsigned int CountNumberOfGaussians() const;
 
-		virtual double operator()(const Vector3D<double>& r) const;
+		virtual double operator()(const Vector3D<double>& r) const override;
 	protected:
 		static unsigned int AdjustOrbitalsCount(char orbital, unsigned int res);
 		void AddOrbitalsInCanonicalOrder(unsigned int L);

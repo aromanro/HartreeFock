@@ -13,7 +13,7 @@ namespace Orbitals {
 	public:
 		std::vector<GaussianOrbital> gaussianOrbitals;
 
-		virtual double operator()(const Vector3D<double>& r) const;
+		virtual double operator()(const Vector3D<double>& r) const override;
 
 		ContractedGaussianOrbital();
 		virtual ~ContractedGaussianOrbital();

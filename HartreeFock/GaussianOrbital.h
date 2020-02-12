@@ -18,7 +18,7 @@ namespace Orbitals {
 		virtual double getCoefficient() const;
 		virtual double getAlpha() const;
 
-		virtual double operator()(const Vector3D<double>& r) const;
+		virtual double operator()(const Vector3D<double>& r) const override;
 
 		Vector3D<double> ProductCenter(const GaussianOrbital& other) const;
 

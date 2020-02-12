@@ -35,6 +35,11 @@ namespace Orbitals {
 		return res;
 	}
 
+	void PrimitiveGaussianShell::Normalize()
+	{
+		for (auto& orb : basisFunctions) orb.Normalize();
+	}
+
 	ContractedGaussianShell::ContractedGaussianShell()
 	{
 	}
@@ -226,11 +231,6 @@ namespace Orbitals {
 		for (auto& orb : basisFunctions) orb.Normalize();
 	}
 
-
-	void PrimitiveGaussianShell::Normalize()
-	{
-		for (auto& orb : basisFunctions) orb.Normalize();
-	}
 
 }
 
