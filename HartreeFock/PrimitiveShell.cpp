@@ -194,7 +194,7 @@ namespace Orbitals {
 			gaussian.angularMomentum = orbital.angularMomentum;
 			gaussian.alpha = exponent;
 
-			orbital.gaussianOrbitals.push_back(std::move(gaussian));
+			orbital.gaussianOrbitals.emplace_back(std::move(gaussian));
 		}
 	}
 
@@ -221,7 +221,7 @@ namespace Orbitals {
 		{
 			basisFunctions.push_back(orbital);
 
-			++orbital.angularMomentum;
+			++orbital.angularMomentum; // this only switches to the next orbital, does not necessarily increase the angular momentum!
 		}
 	}
 
