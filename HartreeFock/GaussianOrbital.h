@@ -19,6 +19,8 @@ namespace Orbitals {
 		virtual double getAlpha() const;
 
 		virtual double operator()(const Vector3D<double>& r) const override;
+		virtual Vector3D<double> getGradient(const Vector3D<double>& r) const override;
+		virtual double getLaplacian(const Vector3D<double>& r) const override;
 
 		Vector3D<double> ProductCenter(const GaussianOrbital& other) const;
 

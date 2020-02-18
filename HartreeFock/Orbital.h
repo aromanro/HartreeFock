@@ -20,6 +20,9 @@ namespace Orbitals {
 		virtual ~Orbital();
 
 		virtual double operator()(const Vector3D<double>& r) const = 0;
+
+		virtual Vector3D<double> getGradient(const Vector3D<double>& r) const = 0;
+		virtual double getLaplacian(const Vector3D<double>& r) const = 0;
 		
 		virtual Vector3D<double> getCenter() const;
 		char AtomicOrbital() const { return angularMomentum.AtomicOrbital(); }

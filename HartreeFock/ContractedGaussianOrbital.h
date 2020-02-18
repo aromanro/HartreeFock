@@ -14,6 +14,8 @@ namespace Orbitals {
 		std::vector<GaussianOrbital> gaussianOrbitals;
 
 		virtual double operator()(const Vector3D<double>& r) const override;
+		virtual Vector3D<double> getGradient(const Vector3D<double>& r) const override;
+		virtual double getLaplacian(const Vector3D<double>& r) const override;
 
 		ContractedGaussianOrbital();
 		virtual ~ContractedGaussianOrbital();

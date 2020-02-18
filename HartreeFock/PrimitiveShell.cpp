@@ -35,6 +35,26 @@ namespace Orbitals {
 		return res;
 	}
 
+	Vector3D<double> PrimitiveGaussianShell::getGradient(const Vector3D<double>& r) const
+	{
+		Vector3D<double> res;
+
+		for (const auto& orbital : basisFunctions)
+			res += orbital.getGradient(r);
+
+		return res;
+	}
+
+	double PrimitiveGaussianShell::getLaplacian(const Vector3D<double>& r) const
+	{
+		double res = 0;
+
+		for (const auto& orbital : basisFunctions)
+			res += orbital.getLaplacian(r);
+
+		return res;
+	}
+
 	void PrimitiveGaussianShell::Normalize()
 	{
 		for (auto& orb : basisFunctions) orb.Normalize();
@@ -148,6 +168,28 @@ namespace Orbitals {
 
 		for (const auto& orbital : basisFunctions)
 			res += orbital(r);
+
+		return res;
+	}
+
+
+	Vector3D<double> ContractedGaussianShell::getGradient(const Vector3D<double>& r) const
+	{
+		Vector3D<double> res;
+
+		for (const auto& orbital : basisFunctions)
+			res += orbital.getGradient(r);
+
+		return res;
+	}
+
+
+	double ContractedGaussianShell::getLaplacian(const Vector3D<double>& r) const
+	{
+		double res = 0;
+
+		for (const auto& orbital : basisFunctions)
+			res += orbital.getLaplacian(r);
 
 		return res;
 	}

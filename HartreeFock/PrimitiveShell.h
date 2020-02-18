@@ -22,6 +22,8 @@ namespace Orbitals {
 
 		virtual Vector3D<double> getCenter() const = 0;
 		virtual double operator()(const Vector3D<double>& r) const = 0;
+		virtual Vector3D<double> getGradient(const Vector3D<double>& r) const = 0;
+		virtual double getLaplacian(const Vector3D<double>& r) const = 0;
 	};
 
 	// the basis functions inside have the same center and exponent
@@ -39,6 +41,9 @@ namespace Orbitals {
 		~PrimitiveGaussianShell();
 
 		virtual double operator()(const Vector3D<double>& r) const override;
+		virtual Vector3D<double> getGradient(const Vector3D<double>& r) const override;
+		virtual double getLaplacian(const Vector3D<double>& r) const override;
+
 		void Normalize();
 	};
 
@@ -68,6 +73,8 @@ namespace Orbitals {
 		unsigned int CountNumberOfGaussians() const;
 
 		virtual double operator()(const Vector3D<double>& r) const override;
+		virtual Vector3D<double> getGradient(const Vector3D<double>& r) const override;
+		virtual double getLaplacian(const Vector3D<double>& r) const override;
 	protected:
 		static unsigned int AdjustOrbitalsCount(char orbital, unsigned int res);
 		void AddOrbitalsInCanonicalOrder(unsigned int L);
