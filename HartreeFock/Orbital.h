@@ -6,7 +6,19 @@
 
 namespace Orbitals {
 
-	class Orbital
+	class OrbitalBase
+	{
+	public:
+		OrbitalBase() {}
+		virtual ~OrbitalBase() {}
+
+		virtual double operator()(const Vector3D<double>& r) const = 0;
+
+		virtual Vector3D<double> getGradient(const Vector3D<double>& r) const = 0;
+		virtual double getLaplacian(const Vector3D<double>& r) const = 0;
+	};
+
+	class Orbital : public OrbitalBase
 	{
 	public:
 		Vector3D<double> center;
@@ -19,11 +31,6 @@ namespace Orbitals {
 		Orbital();
 		virtual ~Orbital();
 
-		virtual double operator()(const Vector3D<double>& r) const = 0;
-
-		virtual Vector3D<double> getGradient(const Vector3D<double>& r) const = 0;
-		virtual double getLaplacian(const Vector3D<double>& r) const = 0;
-		
 		virtual Vector3D<double> getCenter() const;
 		char AtomicOrbital() const { return angularMomentum.AtomicOrbital(); }
 	};
