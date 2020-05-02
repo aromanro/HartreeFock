@@ -93,13 +93,15 @@ BOOL CHartreeFockDoc::OnNewDocument()
 	// Example for H2O and He:
 
 	/*
-	Systems::AtomWithShells H1, H2, O, N, C, He, Li, Ne, Ar;
+	Systems::AtomWithShells H1, H2, O, N, C, He, Li, Li2, Be, B, Ne, Ar;
 
 	for (auto &atom : basisSTO6G.atoms)
 	{
 		if (atom.Z == 1) H1 = H2 = atom;
 		else if (atom.Z == 2) He = atom;
-		else if (atom.Z == 3) Li = atom;
+		else if (atom.Z == 3) Li = Li2 = atom;
+		else if (atom.Z == 4) Be = atom;
+		else if (atom.Z == 5) B = atom;
 		else if (atom.Z == 8) O = atom;
 		else if (atom.Z == 6) C = atom;
 		else if (atom.Z == 7) N = atom;
@@ -109,16 +111,18 @@ BOOL CHartreeFockDoc::OnNewDocument()
 
 	Systems::Molecule atom;
 	atom.atoms.push_back(Li);
+	H1.position.Y = 4.516;
+	atom.atoms.push_back(H1);
 	atom.Init();
 
-	HartreeFock::UnrestrictedHartreeFock HartreeFockAlgorithm;
+	HartreeFock::RestrictedHartreeFock HartreeFockAlgorithm;
 	HartreeFockAlgorithm.alpha = 0.5;
 	HartreeFockAlgorithm.initGuess = 0;
 
 	HartreeFockAlgorithm.Init(&atom);
 	double result = HartreeFockAlgorithm.Calculate();
 
-	TRACE("Li result: %f Hartree\n", result);
+	TRACE("H2 result: %f Hartree\n", result);
 
 	H1.position.X = H2.position.X = O.position.X = 0;
 
