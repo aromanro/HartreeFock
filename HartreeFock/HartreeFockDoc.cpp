@@ -90,12 +90,15 @@ BOOL CHartreeFockDoc::OnNewDocument()
 	//	tests.Test(basisSTO3G);
 #endif
 
-	// Example for H2O and He:
+	// Example for H2O and He (now with some other basis, too):
 
 	/*
+	Chemistry::Basis basisCustom;
+	basisCustom.Load("6-31g_st_.1.nw");
+	
 	Systems::AtomWithShells H1, H2, O, N, C, He, Li, Li2, Be, B, Ne, Ar;
 
-	for (auto &atom : basisSTO6G.atoms)
+	for (auto &atom : basisCustom.atoms)
 	{
 		if (atom.Z == 1) H1 = H2 = atom;
 		else if (atom.Z == 2) He = atom;
@@ -150,7 +153,9 @@ BOOL CHartreeFockDoc::OnNewDocument()
 	HartreeFockAlgorithm.Init(&H2O);
 	double result = HartreeFockAlgorithm.Calculate();
 
-	TRACE("H2O result: %f Hartree\n", result);
+	wchar_t buf[512];
+	_swprintf(buf, L"H2O result: %f Hartree\n", result);
+	MessageBox(0, buf, L"Result", MB_ICONEXCLAMATION | MB_OK);
 
 	Systems::Molecule Heatom;
 	Heatom.atoms.push_back(He);

@@ -25,7 +25,7 @@ namespace Chemistry {
 		std::string line;
 		std::regex ignore("^\\s*(#|BASIS|END).*$|^\\s*$");
 		std::regex shell("^(\\w+)\\s+(\\w+)\\s*$");
-		std::regex number("[+-]?[0-9]*\\.?[0-9]+(E[+-][0-9]+)?");
+		std::regex number("[+-]?[0-9]*\\.?[0-9]+((E|D)[+-][0-9]+)?");
 
 		std::smatch match;
 
@@ -68,6 +68,8 @@ namespace Chemistry {
 				for (; it != end; ++it)
 				{
 					std::string strNr = it->str();
+					std::replace(strNr.begin(), strNr.end(), 'D', 'E');
+
 					//TRACE("%s\n", strNr.c_str());
 
 					double value = atof(strNr.c_str());
