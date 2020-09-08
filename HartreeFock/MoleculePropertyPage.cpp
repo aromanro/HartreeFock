@@ -219,7 +219,7 @@ void MoleculePropertyPage::FillCombos()
 	comboBox2.ResetContent();
 
 	CHartreeFockDoc* doc = dynamic_cast<CMainFrame*>(theApp.m_pMainWnd)->GetDocument();
-	Chemistry::Basis *basisPtr = nullptr;
+	Chemistry::Basis *basisPtr = &doc->basisSTO6G; // some default
 
 	if (0 == theApp.options.basis)
 	{
