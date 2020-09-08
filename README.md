@@ -74,3 +74,7 @@ You can do computation for a single atom, too, for now by putting it into a dumm
   Heatom.atoms.push_back(He);
   Heatom.Init();
 ```
+
+### WORK IN PROGRESS
+
+I added some more basis sets files, for * ones it does not converge everywhere, although I could do a computation for a H2O molecule in a particular configuration (see the commented code in `CHartreeFockDoc::OnNewDocument()`).
