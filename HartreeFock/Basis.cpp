@@ -36,9 +36,15 @@ namespace Chemistry {
 			if (std::regex_match(line, ignore)) continue;
 			else if (std::regex_match(line, match, shell))
 			{
-				unsigned int Z = ChemUtils::GetZForAtom(match[1].str().c_str());
+				const std::string atomName(match[1].str().c_str());
+				unsigned int Z = ChemUtils::GetZForAtom(atomName);
 
-				if (-1 == Z) AfxMessageBox(L"Unknown atom!");
+				if (Z <= 0) 
+				{
+					std::wstring msg;
+					msg = std::wstring(L"Unknown atom: ") + std::wstring(atomName.begin(), atomName.end());
+					AfxMessageBox(msg.c_str());
+				}
 
 				// it's a new atom
 				if (!atoms.size() || atoms.back().Z != Z)

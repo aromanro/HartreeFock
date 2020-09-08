@@ -85,6 +85,13 @@ BOOL CHartreeFockDoc::OnNewDocument()
 
 	basisSTO6G.Load("sto6g.txt");
 
+	basis3_21G.Load("3-21g.1.nw");
+	basis6_21G.Load("6-21g.1.nw");
+	basis6_31G.Load("6-31g.1.nw");
+
+	basis6_31Gstar.Load("6-31g_st_.1.nw");
+	basis6_31plusGstarstar.Load("6-31+g_st__st_.1.nw");
+
 #ifdef _DEBUG
 	//	Tests tests;
 	//	tests.Test(basisSTO3G);
@@ -111,7 +118,7 @@ BOOL CHartreeFockDoc::OnNewDocument()
 		else if (atom.Z == 10) Ne = atom;
 		else if (atom.Z == 18) Ar = atom;
 	}
-
+	
 	Systems::Molecule atom;
 	atom.atoms.push_back(Li);
 	H1.position.Y = 4.516;
@@ -126,6 +133,7 @@ BOOL CHartreeFockDoc::OnNewDocument()
 	double result = HartreeFockAlgorithm.Calculate();
 
 	TRACE("H2 result: %f Hartree\n", result);
+	
 
 	H1.position.X = H2.position.X = O.position.X = 0;
 
@@ -160,7 +168,7 @@ BOOL CHartreeFockDoc::OnNewDocument()
 	Systems::Molecule Heatom;
 	Heatom.atoms.push_back(He);
 	Heatom.Init();
-
+	
 	HartreeFock::RestrictedHartreeFock HartreeFockAlgorithm;
 	HartreeFockAlgorithm.alpha = 0.5;
 	HartreeFockAlgorithm.initGuess = 0;

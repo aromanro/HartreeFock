@@ -22,7 +22,7 @@ MoleculePropertyPage::MoleculePropertyPage()
 	m_atom2 = theApp.options.m_atom2;
 	twoAtom1 = (theApp.options.twoAtom1 ? BST_CHECKED : BST_UNCHECKED);
 
-	basis = theApp.options.basis; // 0 - STO3G, 1 - STO6G
+	basis = theApp.options.basis; // 0 - STO3G, 1 - STO6G, 2 - 3-21G, 3 - 6-21G, 4 - 6-31G, 5 - 6-31G*, 6 - 6-31+G**
 	bondAngle = theApp.options.bondAngle;
 
 	alphaElectrons = theApp.options.alphaElectrons;
@@ -49,6 +49,11 @@ BEGIN_MESSAGE_MAP(MoleculePropertyPage, CMFCPropertyPage)
 	ON_EN_CHANGE(IDC_EDIT6, &MoleculePropertyPage::OnEnChangeEdit6)
 	ON_EN_CHANGE(IDC_EDIT7, &MoleculePropertyPage::OnEnChangeEdit7)
 	ON_EN_CHANGE(IDC_EDIT8, &MoleculePropertyPage::OnEnChangeEdit8)
+	ON_BN_CLICKED(IDC_RADIO4, &MoleculePropertyPage::OnBnClickedRadio4)
+	ON_BN_CLICKED(IDC_RADIO5, &MoleculePropertyPage::OnBnClickedRadio5)
+	ON_BN_CLICKED(IDC_RADIO6, &MoleculePropertyPage::OnBnClickedRadio6)
+	ON_BN_CLICKED(IDC_RADIO7, &MoleculePropertyPage::OnBnClickedRadio7)
+	ON_BN_CLICKED(IDC_RADIO8, &MoleculePropertyPage::OnBnClickedRadio8)
 END_MESSAGE_MAP()
 
 
@@ -74,7 +79,7 @@ void MoleculePropertyPage::ApplyValues()
 	theApp.options.m_atom2 = m_atom2;
 	theApp.options.twoAtom1 = (twoAtom1 == BST_CHECKED ? true : false);
 
-	theApp.options.basis = basis; // 0 - STO3G, 1 - STO6G
+	theApp.options.basis = basis; // 0 - STO3G, 1 - STO6G, 2 - 3-21G, 3 - 6-21G, 4 - 6-31G, 5 - 6-31G*, 6 - 6-31+G**
 	theApp.options.bondAngle = bondAngle;
 
 	theApp.options.alphaElectrons = alphaElectrons;
@@ -170,6 +175,7 @@ void MoleculePropertyPage::OnEnChangeEdit1()
 void MoleculePropertyPage::OnBnClickedRadio1()
 {
 	UpdateData();
+	ApplyValues();
 
 	FillCombos();
 
@@ -179,11 +185,7 @@ void MoleculePropertyPage::OnBnClickedRadio1()
 
 void MoleculePropertyPage::OnBnClickedRadio2()
 {
-	UpdateData();
- 
-	FillCombos();
-
-	SetModified();
+	OnBnClickedRadio1();
 }
 
 
@@ -223,10 +225,32 @@ void MoleculePropertyPage::FillCombos()
 	{
 		basisPtr = &doc->basisSTO3G;
 	}
-	else
+	else if (1 == theApp.options.basis)
 	{
 		basisPtr = &doc->basisSTO6G;
 	}
+	else if (2 == theApp.options.basis)
+	{
+		basisPtr = &doc->basis3_21G;
+	}
+	else if (3 == theApp.options.basis)
+	{
+		basisPtr = &doc->basis6_21G;
+	}
+	else if (4 == theApp.options.basis)
+	{
+		basisPtr = &doc->basis6_31G;
+	}
+	else if (5 == theApp.options.basis)
+	{
+		basisPtr = &doc->basis6_31Gstar;
+	}
+	else if (6 == theApp.options.basis)
+	{
+		basisPtr = &doc->basis6_31plusGstarstar;
+	}
+
+
 	bool atom1Found = false;
 	bool atom2Found = false;
 
@@ -272,6 +296,31 @@ void MoleculePropertyPage::AdjustElectrons()
 	SetModified();
 }
 
+void MoleculePropertyPage::OnBnClickedRadio4()
+{
+	OnBnClickedRadio1();
+}
 
 
+void MoleculePropertyPage::OnBnClickedRadio5()
+{
+	OnBnClickedRadio1();
+}
 
+
+void MoleculePropertyPage::OnBnClickedRadio6()
+{
+	OnBnClickedRadio1();
+}
+
+
+void MoleculePropertyPage::OnBnClickedRadio7()
+{
+	OnBnClickedRadio1();
+}
+
+
+void MoleculePropertyPage::OnBnClickedRadio8()
+{
+	OnBnClickedRadio1();
+}

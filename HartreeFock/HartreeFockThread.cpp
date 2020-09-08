@@ -41,22 +41,41 @@ HartreeFockThread::HartreeFockThread(const Options& options, CHartreeFockDoc* do
 
 	// construct the molecule
 
+	Chemistry::Basis* basisPtr = nullptr;
 
-	if (options.basis)
+	if (0 == options.basis)
 	{
-		for (const auto &atom : doc->basisSTO6G.atoms)
-		{
-			if (Z1 == atom.Z) atom1 = atom;
-			if (Z2 == atom.Z) atom2 = atom;
-		}
+		basisPtr = &doc->basisSTO3G;
 	}
-	else
+	else if (1 == options.basis)
 	{
-		for (const auto &atom : doc->basisSTO3G.atoms)
-		{
-			if (Z1 == atom.Z) atom1 = atom;
-			if (Z2 == atom.Z) atom2 = atom;
-		}
+		basisPtr = &doc->basisSTO6G;
+	}
+	else if (2 == options.basis)
+	{
+		basisPtr = &doc->basis3_21G;
+	}
+	else if (3 == options.basis)
+	{
+		basisPtr = &doc->basis6_21G;
+	}
+	else if (4 == options.basis)
+	{
+		basisPtr = &doc->basis6_31G;
+	}
+	else if (5 == options.basis)
+	{
+		basisPtr = &doc->basis6_31Gstar;
+	}
+	else if (6 == options.basis)
+	{
+		basisPtr = &doc->basis6_31plusGstarstar;
+	}
+
+	for (const auto &atom : basisPtr->atoms)
+	{
+		if (Z1 == atom.Z) atom1 = atom;
+		if (Z2 == atom.Z) atom2 = atom;
 	}
 
 	molecule.atoms.push_back(atom1);

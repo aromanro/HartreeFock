@@ -31,6 +31,13 @@ public:
 	Chemistry::Basis basisSTO3G;
 	Chemistry::Basis basisSTO6G;
 
+	Chemistry::Basis basis3_21G;
+	Chemistry::Basis basis6_21G;
+	Chemistry::Basis basis6_31G;
+
+	Chemistry::Basis basis6_31Gstar;
+	Chemistry::Basis basis6_31plusGstarstar;
+
 	Chart m_Chart;
 
 	std::atomic_int runningThreads;

@@ -31,7 +31,7 @@ protected:
 	CString m_atom2;
 	int twoAtom1;
 
-	int basis; // 0 - STO3G, 1 - STO6G
+	int basis; // 0 - STO3G, 1 - STO6G, 2 - 3-21G, 3 - 6-21G, 4 - 6-31G, 5 - 6-31G*, 6 - 6-31+G**
 	double bondAngle;
 
 	int alphaElectrons;
@@ -58,6 +58,12 @@ protected:
 
 	void FillCombos();
 	void AdjustElectrons();
+public:
+	afx_msg void OnBnClickedRadio4();
+	afx_msg void OnBnClickedRadio5();
+	afx_msg void OnBnClickedRadio6();
+	afx_msg void OnBnClickedRadio7();
+	afx_msg void OnBnClickedRadio8();
 };
 
 

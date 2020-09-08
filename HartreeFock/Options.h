@@ -16,7 +16,7 @@ public:
 	CString m_atom2;
 	bool twoAtom1;
 
-	int basis; // 0 - STO3G, 1 - STO6G
+	int basis; // 0 - STO3G, 1 - STO6G, 2 - 3-21G, 3 - 6-21G, 4 - 6-31G, 5 - 6-31G*, 6 - 6-31+G**
 	double bondAngle;
 
 	int alphaElectrons;
