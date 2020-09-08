@@ -116,7 +116,7 @@ namespace HartreeFock {
 							const double coulomb = integralsRepository.getElectronElectron(i, j, k, l);
 							const double exchange = integralsRepository.getElectronElectron(i, l, k, j);
 
-							G(i, j) += DensityMatrix(k, l) * (coulomb - 1. / 2. * exchange);
+							G(i, j) += DensityMatrix(k, l) * (coulomb - 0.5 * exchange);
 						}
 
 			FockMatrix = h + G;
@@ -142,7 +142,7 @@ namespace HartreeFock {
 		// now add the diagonal elements, too
 		for (int i = 0; i < h.rows(); ++i) totalEnergy += calcDensityMatrix(i, i) * h(i, i);
 
-		totalEnergy /= 2.;
+		totalEnergy *= 0.5;
 	
 		for (unsigned int level = 0; level < nrOccupiedLevels; ++level)
 			totalEnergy += eigenvals(level);

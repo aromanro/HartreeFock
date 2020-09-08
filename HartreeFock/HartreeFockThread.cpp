@@ -63,6 +63,7 @@ HartreeFockThread::HartreeFockThread(const Options& options, CHartreeFockDoc* do
 	{
 		basisPtr = &doc->basis6_31G;
 	}
+	/*
 	else if (5 == options.basis)
 	{
 		basisPtr = &doc->basis6_31Gstar;
@@ -71,6 +72,7 @@ HartreeFockThread::HartreeFockThread(const Options& options, CHartreeFockDoc* do
 	{
 		basisPtr = &doc->basis6_31plusGstarstar;
 	}
+	*/
 
 	for (const auto &atom : basisPtr->atoms)
 	{
