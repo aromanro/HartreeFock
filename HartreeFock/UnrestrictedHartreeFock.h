@@ -19,6 +19,12 @@ namespace HartreeFock {
 		unsigned int nrOccupiedLevelsPlus;
 		unsigned int nrOccupiedLevelsMinus;
 
+		// for now in the program it will be filled up with true up to 'nrOccupiedLevels'
+		// could be used to compute excited levels, just enlarge it after init and set to true the occupied levels and false the ones that are not occupied
+		// adjust the nrOccupied value above then to get the proper homo energy
+		std::vector<bool> occupiedPlus;
+		std::vector<bool> occupiedMinus;
+
 		double asymmetry;
 		bool addAsymmetry;
 

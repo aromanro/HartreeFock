@@ -21,13 +21,15 @@ namespace HartreeFock {
 
 		DensityMatrix = Eigen::MatrixXd::Zero(h.rows(), h.cols());
 
+		occupied.resize(0); // just in case it was resized before
 		nrOccupiedLevels = molecule->ElectronsNumber() / 2;
 
 		// this should not happen for a well behaving molecule for the restricted method, but someone might try calculate the Hydrogen atom with it
 		// prevent a crash with this
 		if (!nrOccupiedLevels) nrOccupiedLevels = 1;
-
 		if (nrOccupiedLevels > static_cast<unsigned int>(numberOfOrbitals)) nrOccupiedLevels = numberOfOrbitals;
+
+		occupied.resize(nrOccupiedLevels, true);
 	}
 
 	void RestrictedHartreeFock::Step(int iter)
@@ -67,8 +69,8 @@ namespace HartreeFock {
 
 		for (int i = 0; i < h.rows(); ++i)
 			for (int j = 0; j < h.cols(); ++j)
-				for (unsigned int vec = 0; vec < nrOccupiedLevels; ++vec) // only eigenstates that are occupied 
-					newDensityMatrix(i, j) += 2. * C(i, vec) * C(j, vec); // 2 is for the number of electrons in the eigenstate, it's the restricted Hartree-Fock
+				for (unsigned int vec = 0; vec < occupied.size(); ++vec) // only eigenstates that are occupied 
+					if (occupied[vec]) newDensityMatrix(i, j) += 2. * C(i, vec) * C(j, vec); // 2 is for the number of electrons in the eigenstate, it's the restricted Hartree-Fock
 															  
 		
 		//**************************************************************************************************************
@@ -100,7 +102,7 @@ namespace HartreeFock {
 
 				for (int i = 0; i < h.rows(); ++i)
 					for (int j = 0; j < h.rows(); ++j)
-						FockMatrix(i, j) = initGuess * overlapMatrix.matrix(i, j) * (h(i, i) + h(j, j)) / 2.;
+						FockMatrix(i, j) = initGuess * overlapMatrix.matrix(i, j) * (h(i, i) + h(j, j)) * 0.5;
 			}
 			else FockMatrix = h;
 		}
@@ -144,8 +146,8 @@ namespace HartreeFock {
 
 		totalEnergy *= 0.5;
 	
-		for (unsigned int level = 0; level < nrOccupiedLevels; ++level)
-			totalEnergy += eigenvals(level);
+		for (unsigned int level = 0; level < occupied.size(); ++level)
+			if (occupied[level]) totalEnergy += eigenvals(level);
 
 		HOMOEnergy = eigenvals(nrOccupiedLevels - 1);
 

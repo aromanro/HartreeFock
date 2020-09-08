@@ -23,6 +23,9 @@ namespace HartreeFock {
 		DensityMatrixPlus = Eigen::MatrixXd::Zero(h.rows(), h.cols());
 		DensityMatrixMinus = Eigen::MatrixXd::Zero(h.rows(), h.cols());
 		
+		occupiedPlus.resize(0);
+		occupiedMinus.resize(0);
+
 		const unsigned int electronsNumber = molecule->ElectronsNumber();
 		nrOccupiedLevelsMinus = static_cast<unsigned int>(floor(electronsNumber / 2.));
 		nrOccupiedLevelsPlus = electronsNumber - nrOccupiedLevelsMinus;
@@ -50,6 +53,9 @@ namespace HartreeFock {
 
 		if (nrOccupiedLevelsMinus > static_cast<unsigned int>(numberOfOrbitals))
 			nrOccupiedLevelsMinus = numberOfOrbitals;
+
+		occupiedPlus.resize(nrOccupiedLevelsPlus, true);
+		occupiedMinus.resize(nrOccupiedLevelsMinus, true);
 	}
 
 	void UnrestrictedHartreeFock::Step(int iter)
@@ -116,11 +122,11 @@ namespace HartreeFock {
 		for (int i = 0; i < h.rows(); ++i)
 			for (int j = 0; j < h.cols(); ++j)
 			{
-				for (unsigned int vec = 0; vec < nrOccupiedLevelsPlus; ++vec) // only eigenstates that are occupied 
-					newDensityMatrixPlus(i, j) += Cplus(i, vec) * Cplus(j, vec);
+				for (unsigned int vec = 0; vec < occupiedPlus.size(); ++vec) // only eigenstates that are occupied 
+					if (occupiedPlus[vec]) newDensityMatrixPlus(i, j) += Cplus(i, vec) * Cplus(j, vec);
 
-				for (unsigned int vec = 0; vec < nrOccupiedLevelsMinus; ++vec) // only eigenstates that are occupied 
-					newDensityMatrixMinus(i, j) += Cminus(i, vec) * Cminus(j, vec);
+				for (unsigned int vec = 0; vec < occupiedMinus.size(); ++vec) // only eigenstates that are occupied 
+					if (occupiedMinus[vec]) newDensityMatrixMinus(i, j) += Cminus(i, vec) * Cminus(j, vec);
 			}
 
 		//**************************************************************************************************************
@@ -211,8 +217,10 @@ namespace HartreeFock {
 		for (int i = 0; i < h.rows(); ++i) totalEnergy += (calcDensityMatrixPlus(i, i) + calcDensityMatrixMinus(i, i)) * h(i, i);
 
 
-		for (unsigned int level = 0; level < nrOccupiedLevelsPlus; ++level)	totalEnergy += eigenvalsplus(level);
-		for (unsigned int level = 0; level < nrOccupiedLevelsMinus; ++level) totalEnergy += eigenvalsminus(level);
+		for (unsigned int level = 0; level < occupiedPlus.size(); ++level)	
+			if (occupiedPlus[level]) totalEnergy += eigenvalsplus(level);
+		for (unsigned int level = 0; level < occupiedMinus.size(); ++level) 
+			if (occupiedMinus[level]) totalEnergy += eigenvalsminus(level);
 
 
 		HOMOEnergy = max(nrOccupiedLevelsPlus ? eigenvalsplus(nrOccupiedLevelsPlus - 1) : 0, nrOccupiedLevelsMinus ? eigenvalsminus(nrOccupiedLevelsMinus - 1) : 0);

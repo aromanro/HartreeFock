@@ -40,7 +40,6 @@ namespace HartreeFock {
 	public:
 		GaussianIntegrals::IntegralsRepository integralsRepository;
 
-
 		double alpha;
 
 		double initGuess;
