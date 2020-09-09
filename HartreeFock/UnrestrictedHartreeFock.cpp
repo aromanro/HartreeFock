@@ -109,8 +109,8 @@ namespace HartreeFock {
 		}
 
 		// normalize them
-		//NormalizeC(Cplus, nrOccupiedLevelsPlus);
-		//NormalizeC(Cminus, nrOccupiedLevelsMinus);
+		//NormalizeC(Cplus, occupiedPlus);
+		//NormalizeC(Cminus, occupiedMinus);
 
 		//***************************************************************************************************************
 

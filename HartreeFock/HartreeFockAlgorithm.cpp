@@ -100,13 +100,15 @@ namespace HartreeFock {
 	}
 
 
-	void HartreeFockAlgorithm::NormalizeC(Eigen::MatrixXd& C, int nrOccupiedLevels)
+	void HartreeFockAlgorithm::NormalizeC(Eigen::MatrixXd& C, const std::vector<bool>& occupied)
 	{
-		assert(nrOccupiedLevels <= C.cols());
+		assert(occupied.size() <= C.cols());
 		assert(C.rows() == overlapMatrix.matrix.rows());
 
-		for(int vec = 0; vec < nrOccupiedLevels; ++vec) 
+		for(int vec = 0; vec < occupied.size(); ++vec) 
 		{
+			if (!occupied[vec]) continue;
+
 			double factor = 0.0;
 
 			for(int i = 0; i < overlapMatrix.matrix.rows(); ++i)

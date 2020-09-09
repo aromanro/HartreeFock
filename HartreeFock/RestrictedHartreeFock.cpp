@@ -59,7 +59,7 @@ namespace HartreeFock {
 		const Eigen::MatrixXd C = V * Cprime;
 
 		// normalize it
-		//NormalizeC(C, nrOccupiedLevels);
+		//NormalizeC(C, occupied);
 		
 		//***************************************************************************************************************
 
