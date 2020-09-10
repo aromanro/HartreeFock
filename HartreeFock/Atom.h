@@ -32,7 +32,7 @@ namespace Systems {
 		{
 			Orbitals::ContractedGaussianShell shell;
 
-			for (auto c : name)	shell.AddOrbital(c);
+			for (auto c : name)	shell.AddOrbitals(c);
 
 			shells.push_back(std::move(shell));
 		}

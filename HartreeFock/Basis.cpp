@@ -58,6 +58,7 @@ namespace Chemistry {
 				//TRACE("Atom: %s\n", match[1].str().c_str());
 				//TRACE("Shell: %s\n", shellName.c_str());
 
+				// this doesn't simply add the shell object, it adds the orbitals in it as well
 				atoms.back().AddShell(shellName);
 			}
 			else
@@ -78,7 +79,7 @@ namespace Chemistry {
 
 					//TRACE("%s\n", strNr.c_str());
 
-					double value = atof(strNr.c_str());
+					double value = std::stod(strNr);
 
 					if (first)
 					{

@@ -58,7 +58,7 @@ namespace Orbitals {
 		ContractedGaussianShell();
 		~ContractedGaussianShell();
 		
-		void AddOrbital(char type);
+		void AddOrbitals(char type);
 		void AddGaussians(double exponent);
 
 		virtual Vector3D<double> getCenter() const override;
