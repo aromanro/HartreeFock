@@ -78,8 +78,9 @@ BOOL CHartreeFockDoc::OnNewDocument()
 
 	SetChartBoundsAndTicks();
 
-	basisSTO3G.Load("sto3g.txt");
+	//basisSTO3G.Load("sto3g.txt");
 	//basisSTO3G.Load("6-31+g_st__st_.1.nw"); // for tests
+	//basisSTO3G.Load("6-31g_st_.1.nw");
 
 	// Save is not used, it's implemented just for tests and maybe for some future usage
 	//basisSTO3G.Save("sto3g_test.txt");

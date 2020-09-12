@@ -75,9 +75,11 @@ namespace Orbitals {
 				}
 			}
 
+			// we're using Cartesian Gaussians, there are (L + 1) * (L + 2) of them in a shell with angular momentum L
+			// don't confuse it with the usual 2L+1 number
 			static inline unsigned int NumOrbitals(unsigned int L)
 			{
-				return (L + 1) * (L + 2) / 2;
+				return (L + 1) * (L + 2) / 2;				
 			}
 			
 			inline operator unsigned int() const { return AngularMomentum(); }
