@@ -77,4 +77,7 @@ You can do computation for a single atom, too, for now by putting it into a dumm
 
 ### WORK IN PROGRESS
 
-I added some more basis sets files, for * ones it does not converge everywhere, although I could do a computation for a H2O molecule in a particular configuration (see the commented code in `CHartreeFockDoc::OnNewDocument()`).
+I added some more basis sets files, while testing I noticed some issues with D orbitals (or higher), because I used some * basis sets where D appears even for molecules I tested (for example, those that involve oxygen, like H2O or CO2).
+It appears that there are still some bugs in computing some integrals that involve high L (by high I mean L > 1).
+As it's a variational method, the results shouldn't be lower than the Hartree Fock limit, which is unfortunately the case if orbitals other than S and P are involved.
+
