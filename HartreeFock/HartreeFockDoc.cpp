@@ -28,9 +28,6 @@
 #include "HartreeFockDoc.h"
 #include "HartreeFockView.h"
 
-
-
-
 #include <algorithm>
 
 #include <propkey.h>
@@ -78,9 +75,19 @@ BOOL CHartreeFockDoc::OnNewDocument()
 
 	SetChartBoundsAndTicks();
 
-	//basisSTO3G.Load("sto3g.txt");
+	basisSTO3G.Load("sto3g.txt");
 	//basisSTO3G.Load("6-31+g_st__st_.1.nw"); // for tests
 	//basisSTO3G.Load("6-31g_st_.1.nw");
+
+	// a check for the canonical order example in HSERIlib paper:
+	/*
+	Orbitals::QuantumNumbers::QuantumNumbers qn(3, 0, 0);
+	do
+	{
+		TRACE("Quantum numbers: %d %d %d\n", qn.l, qn.m, qn.n);
+		++qn;
+	} while (qn.AngularMomentum() == 3);
+	*/
 
 	// Save is not used, it's implemented just for tests and maybe for some future usage
 	//basisSTO3G.Save("sto3g_test.txt");

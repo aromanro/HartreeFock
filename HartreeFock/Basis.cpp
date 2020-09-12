@@ -122,7 +122,8 @@ namespace Chemistry {
 						int i = 0;
 						for (auto &contractedOrbital : contractedShell.basisFunctions)
 						{
-							if (i >= totalGaussians + numberOfGaussiansInOrbital) break;
+							if (i >= totalGaussians + numberOfGaussiansInOrbital) 
+								break;
 							else if (i >= totalGaussians) {
 								contractedOrbital.gaussianOrbitals.back().coefficient = value;
 								contractedOrbital.gaussianOrbitals.back().Normalize();
