@@ -259,12 +259,13 @@ namespace Orbitals {
 
 		orbital.angularMomentum.l = L;
 
-		while (orbital.angularMomentum == L)
+		do
 		{
 			basisFunctions.push_back(orbital);
 
-			++orbital.angularMomentum; // this only switches to the next orbital, does not necessarily increase the angular momentum!
+			++orbital.angularMomentum; // this only switches to the next orbital, does not necessarily increase the angular momentum!		
 		}
+		while (orbital.angularMomentum == L);
 	}
 
 
