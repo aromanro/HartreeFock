@@ -50,7 +50,7 @@ namespace Chemistry {
 				if (!atoms.size() || atoms.back().Z != Z)
 				{
 					Systems::AtomWithShells atom(Z);
-					atoms.push_back(std::move(atom));
+					atoms.emplace_back(std::move(atom));
 				}
 
 				shellName = match[2].str();

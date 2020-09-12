@@ -34,7 +34,7 @@ namespace Systems {
 
 			for (auto c : name)	shell.AddOrbitals(c);
 
-			shells.push_back(std::move(shell));
+			shells.emplace_back(std::move(shell));
 		}
 
 		void SetCenterForShells()

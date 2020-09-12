@@ -137,7 +137,7 @@ void HartreeFockThread::Calculate()
 
 		if (!algorithm->converged) converged = false;
 
-		results.push_back(std::make_tuple(pos, result * 27.211385056, algorithm->HOMOEnergy * 27.211385056));
+		results.emplace_back(std::make_tuple(pos, result * 27.211385056, algorithm->HOMOEnergy * 27.211385056));
 		if (terminate) break;
 	}
 

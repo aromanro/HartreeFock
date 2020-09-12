@@ -323,7 +323,7 @@ void CHartreeFockDoc::StartThreads()
 	double start = options.XMinBondLength;
 	for (unsigned int i = 0; i < nrThreads; ++i)
 	{
-		threadsList.push_back(std::make_unique<HartreeFockThread>(options, this, start, start + interval + (i == nrThreads - 1 ? step : 0), step));
+		threadsList.emplace_back(std::make_unique<HartreeFockThread>(options, this, start, start + interval + (i == nrThreads - 1 ? step : 0), step));
 
 		if (0 == i)
 			threadsList.back()->computeFirstAtom = true;
@@ -458,8 +458,8 @@ void CHartreeFockDoc::SetChartData()
 
 		for (const auto& val : results)
 		{
-			if (2 == options.DisplayHOMOEnergy)	chartData.push_back(std::make_pair(std::get<0>(val), atomsEnergy - std::get<1>(val)));
-			else chartData.push_back(std::make_pair(std::get<0>(val), 0 == options.DisplayHOMOEnergy ? std::get<1>(val) : std::get<2>(val)));
+			if (2 == options.DisplayHOMOEnergy)	chartData.emplace_back(std::make_pair(std::get<0>(val), atomsEnergy - std::get<1>(val)));
+			else chartData.emplace_back(std::make_pair(std::get<0>(val), 0 == options.DisplayHOMOEnergy ? std::get<1>(val) : std::get<2>(val)));
 		}
 
 		m_Chart.AddDataSet(&chartData, 2, RGB(255, 0, 0));
