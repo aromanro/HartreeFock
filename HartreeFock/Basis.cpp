@@ -70,7 +70,7 @@ namespace Chemistry {
 				int orbital = 0;
 				int totalGaussians = 0;
 
-				auto &contractedShell = atoms.back().shells.back();
+				Orbitals::ContractedGaussianShell &contractedShell = atoms.back().shells.back();
 
 				for (; it != end; ++it)
 				{
@@ -79,7 +79,7 @@ namespace Chemistry {
 
 					//TRACE("%s\n", strNr.c_str());
 
-					double value = std::stod(strNr);
+					const double value = std::stod(strNr);
 
 					if (first)
 					{
@@ -88,11 +88,17 @@ namespace Chemistry {
 						// the first value in the line is the exponent
 
 						// add a new gaussian to each contracted gaussian in the shell and set its exponent
+						// for example, for a STOnG basis set there will be n lines with values following the 'atom orbitals' line
+						// here the gaussians are added for a particular line
 						contractedShell.AddGaussians(value);
+						// in the end for each 'shell' such as 'SP' we'll end up with a shell object
+						// containing 4 ContractedGaussianOrbital, 1 for 'S', 3 for 'P'
+						// for a STOnG basis set, each ContractedGaussianOrbital will contain n gaussians
 					}
 					else
 					{
 						// the next values in the line are the coefficients
+						// one for each letter, for example for 'SP', one for S, one for P
 
 						const auto c = shellName.at(orbital);
 
@@ -119,22 +125,17 @@ namespace Chemistry {
 							break;
 						}
 
-						int i = 0;
-						for (auto &contractedOrbital : contractedShell.basisFunctions)
+						for (int i = 0; i < numberOfGaussiansInOrbital; ++i)
 						{
-							if (i >= totalGaussians + numberOfGaussiansInOrbital) 
-								break;
-							else if (i >= totalGaussians) {
-								contractedOrbital.gaussianOrbitals.back().coefficient = value;
-								contractedOrbital.gaussianOrbitals.back().Normalize();
-							}
+							Orbitals::ContractedGaussianOrbital& contractedOrbital = contractedShell.basisFunctions[static_cast<long long int>(totalGaussians) + i];
 
-							++i;
+							contractedOrbital.gaussianOrbitals.back().coefficient = value;
+							contractedOrbital.gaussianOrbitals.back().Normalize();
 						}
 
 						totalGaussians += numberOfGaussiansInOrbital;
 
-						++orbital;
+						++orbital; // each value in the line (except the first, which is the exponent) corresponds to one orbital, for exemple for 'S' and 'P' for "SP"
 					}
 				}
 			}
@@ -271,7 +272,7 @@ namespace Chemistry {
 						{
 						default:
 						case 's':
-							j += 1;
+							++j;
 							break;
 						case 'p':
 							j += Orbitals::QuantumNumbers::QuantumNumbers::NumOrbitals(1);

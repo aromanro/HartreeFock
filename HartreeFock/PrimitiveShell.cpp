@@ -229,21 +229,13 @@ namespace Orbitals {
 
 	void ContractedGaussianShell::AddGaussians(double exponent)
 	{
-		for (auto& orbital : basisFunctions)
-		{
-			GaussianOrbital gaussian;
-
-			gaussian.angularMomentum = orbital.angularMomentum;
-			gaussian.alpha = exponent;
-
-			orbital.gaussianOrbitals.emplace_back(std::move(gaussian));
-		}
+		for (ContractedGaussianOrbital& orbital : basisFunctions)
+			orbital.AddGaussian(exponent);
 	}
-
 
 	void ContractedGaussianShell::SetCenters(const Vector3D<double>& center)
 	{
-		for (auto& orbital : basisFunctions)
+		for (ContractedGaussianOrbital& orbital : basisFunctions)
 		{
 			orbital.center = center;
 
@@ -271,7 +263,7 @@ namespace Orbitals {
 
 	void ContractedGaussianShell::Normalize()
 	{
-		for (auto& orb : basisFunctions) orb.Normalize();
+		for (ContractedGaussianOrbital& orb : basisFunctions) orb.Normalize();
 	}
 
 

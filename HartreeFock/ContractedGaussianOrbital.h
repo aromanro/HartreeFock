@@ -20,6 +20,16 @@ namespace Orbitals {
 		ContractedGaussianOrbital();
 		virtual ~ContractedGaussianOrbital();
 		void Normalize();
+
+		void AddGaussian(double exponent)
+		{
+			GaussianOrbital gaussian;
+
+			gaussian.angularMomentum = angularMomentum;
+			gaussian.alpha = exponent;
+
+			gaussianOrbitals.emplace_back(std::move(gaussian));
+		}
 	};
 
 }
