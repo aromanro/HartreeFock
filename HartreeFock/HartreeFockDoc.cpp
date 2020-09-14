@@ -33,6 +33,8 @@
 #include <propkey.h>
 
 //#include "Tests.h"
+#include "Test.h"
+
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -106,13 +108,15 @@ BOOL CHartreeFockDoc::OnNewDocument()
 	//	tests.Test(basisSTO3G);
 #endif
 
+	//Test::OutputMatricesForAtom("Ti", "sto3g.txt", "c:\\temp\\matrices.txt");
+
 	// Example for H2O and He (now with some other basis, too):
 
 	/*
 	Chemistry::Basis basisCustom;
 	basisCustom.Load("6-31g_st_.1.nw");
 	
-	Systems::AtomWithShells H1, H2, O, N, C, He, Li, Li2, Be, B, Ne, Ar;
+	Systems::AtomWithShells H1, H2, O, N, C, He, Li, Li2, Be, B, Ne, Ar, Ti;
 
 	for (auto &atom : basisCustom.atoms)
 	{
@@ -126,6 +130,7 @@ BOOL CHartreeFockDoc::OnNewDocument()
 		else if (atom.Z == 7) N = atom;
 		else if (atom.Z == 10) Ne = atom;
 		else if (atom.Z == 18) Ar = atom;
+		else if (atom.Z == 22) Ti = atom;
 	}
 	
 	Systems::Molecule atom;

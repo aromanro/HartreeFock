@@ -239,6 +239,7 @@
     <ClInclude Include="Tensor.h" />
     <ClInclude Include="TensorOrder3.h" />
     <ClInclude Include="TensorOrder4.h" />
+    <ClInclude Include="Test.h" />
     <ClInclude Include="UnrestrictedHartreeFock.h" />
     <ClInclude Include="Vector3D.h" />
   </ItemGroup>
@@ -284,6 +285,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Test.cpp" />
     <ClCompile Include="UnrestrictedHartreeFock.cpp" />
   </ItemGroup>
   <ItemGroup>

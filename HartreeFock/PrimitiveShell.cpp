@@ -239,7 +239,7 @@ namespace Orbitals {
 		{
 			orbital.center = center;
 
-			for (auto& gaussian : orbital.gaussianOrbitals)
+			for (GaussianOrbital& gaussian : orbital.gaussianOrbitals)
 				gaussian.center = center;
 		}
 	}

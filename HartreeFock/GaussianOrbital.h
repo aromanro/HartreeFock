@@ -32,5 +32,6 @@ namespace Orbitals {
 	public:
 		void Normalize();
 	};
-
 }
+
+
