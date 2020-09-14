@@ -200,7 +200,7 @@ BEGIN
     CONTROL         "Blog description",IDC_MFCLINK2,"MfcLink",WS_TABSTOP,41,42,114,14
 END
 
-IDD_MOLECULEPROPERTYPAGE DIALOGEX 0, 0, 287, 267
+IDD_MOLECULEPROPERTYPAGE DIALOGEX 0, 0, 287, 256
 STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_CAPTION
 CAPTION "Molecule"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
@@ -216,6 +216,8 @@ BEGIN
     CONTROL         "3-21G",IDC_RADIO4,"Button",BS_AUTORADIOBUTTON,16,94,35,10
     CONTROL         "6-21G",IDC_RADIO5,"Button",BS_AUTORADIOBUTTON,16,111,35,10
     CONTROL         "6-31G",IDC_RADIO6,"Button",BS_AUTORADIOBUTTON,16,128,35,10
+    CONTROL         "6-31G*",IDC_RADIO7,"Button",BS_AUTORADIOBUTTON,16,146,39,10
+    CONTROL         "6-31+G**",IDC_RADIO8,"Button",BS_AUTORADIOBUTTON,16,164,49,10
     LTEXT           "STO stands for 'Slater Type Orbitals'. G stands for Gaussian and the number from STO-nG is the number of gaussians in a Slater Type Orbital",IDC_STATIC,59,53,72,59
     RTEXT           "Bond angle (degrees):",IDC_STATIC,165,34,72,8
     EDITTEXT        IDC_EDIT1,240,30,40,14,ES_AUTOHSCROLL
@@ -224,13 +226,11 @@ BEGIN
     RTEXT           "'Beta' electrons:",IDC_STATIC,185,79,52,8
     EDITTEXT        IDC_EDIT6,240,76,40,14,ES_AUTOHSCROLL | ES_NUMBER
     LTEXT           "'Alpha' and 'Beta' electrons should be equal for the restricted Hartree-Fock method",IDC_STATIC,139,97,141,19
-    RTEXT           "Min bond length (Angstroms):",IDC_STATIC,9,209,96,8
-    EDITTEXT        IDC_EDIT7,108,206,40,14,ES_AUTOHSCROLL
-    RTEXT           "Max bond length (Angstroms):",IDC_STATIC,7,228,98,8
-    EDITTEXT        IDC_EDIT8,108,225,40,14,ES_AUTOHSCROLL
-    LTEXT           "The 'min' value limits only calculations, the chart starts from 0 for the X axis, the 'max' value is both the limit for calculations and the chart",IDC_STATIC,7,243,273,17
-    CONTROL         "6-31G*",IDC_RADIO7,"Button",BS_AUTORADIOBUTTON,16,146,39,10
-    CONTROL         "6-31+G**",IDC_RADIO8,"Button",BS_AUTORADIOBUTTON,16,164,49,10
+    RTEXT           "Min bond length (Angstroms):",IDC_STATIC,9,192,96,8
+    EDITTEXT        IDC_EDIT7,108,189,40,14,ES_AUTOHSCROLL
+    RTEXT           "Max bond length (Angstroms):",IDC_STATIC,7,211,98,8
+    EDITTEXT        IDC_EDIT8,108,208,40,14,ES_AUTOHSCROLL
+    LTEXT           "The 'min' value limits only calculations, the chart starts from 0 for the X axis, the 'max' value is both the limit for calculations and the chart",IDC_STATIC,7,232,273,17
 END
 
 IDD_CHARTPROPERTYPAGE DIALOGEX 0, 0, 309, 196
@@ -354,7 +354,7 @@ BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 280
         TOPMARGIN, 7
-        BOTTOMMARGIN, 260
+        BOTTOMMARGIN, 249
     END
 
     IDD_CHARTPROPERTYPAGE, DIALOG
