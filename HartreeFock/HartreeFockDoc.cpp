@@ -100,8 +100,8 @@ BOOL CHartreeFockDoc::OnNewDocument()
 	basis6_21G.Load("6-21g.1.nw");
 	basis6_31G.Load("6-31g.1.nw");
 
-	//basis6_31Gstar.Load("6-31g_st_.1.nw");
-	//basis6_31plusGstarstar.Load("6-31+g_st__st_.1.nw");
+	basis6_31Gstar.Load("6-31g_st_.1.nw");
+	basis6_31plusGstarstar.Load("6-31+g_st__st_.1.nw");
 
 #ifdef _DEBUG
 	//	Tests tests;

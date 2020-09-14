@@ -35,8 +35,8 @@ public:
 	Chemistry::Basis basis6_21G;
 	Chemistry::Basis basis6_31G;
 
-	//Chemistry::Basis basis6_31Gstar;
-	//Chemistry::Basis basis6_31plusGstarstar;
+	Chemistry::Basis basis6_31Gstar;
+	Chemistry::Basis basis6_31plusGstarstar;
 
 	Chart m_Chart;
 

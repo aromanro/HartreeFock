@@ -52,8 +52,8 @@ BEGIN_MESSAGE_MAP(MoleculePropertyPage, CMFCPropertyPage)
 	ON_BN_CLICKED(IDC_RADIO4, &MoleculePropertyPage::OnBnClickedRadio4)
 	ON_BN_CLICKED(IDC_RADIO5, &MoleculePropertyPage::OnBnClickedRadio5)
 	ON_BN_CLICKED(IDC_RADIO6, &MoleculePropertyPage::OnBnClickedRadio6)
-	//ON_BN_CLICKED(IDC_RADIO7, &MoleculePropertyPage::OnBnClickedRadio7)
-	//ON_BN_CLICKED(IDC_RADIO8, &MoleculePropertyPage::OnBnClickedRadio8)
+	ON_BN_CLICKED(IDC_RADIO7, &MoleculePropertyPage::OnBnClickedRadio7)
+	ON_BN_CLICKED(IDC_RADIO8, &MoleculePropertyPage::OnBnClickedRadio8)
 END_MESSAGE_MAP()
 
 
@@ -240,8 +240,7 @@ void MoleculePropertyPage::FillCombos()
 	else if (4 == theApp.options.basis)
 	{
 		basisPtr = &doc->basis6_31G;
-	}
-	/*
+	}	
 	else if (5 == theApp.options.basis)
 	{
 		basisPtr = &doc->basis6_31Gstar;
@@ -249,8 +248,7 @@ void MoleculePropertyPage::FillCombos()
 	else if (6 == theApp.options.basis)
 	{
 		basisPtr = &doc->basis6_31plusGstarstar;
-	}
-	*/
+	}	
 
 	bool atom1Found = false;
 	bool atom2Found = false;
@@ -314,7 +312,6 @@ void MoleculePropertyPage::OnBnClickedRadio6()
 	OnBnClickedRadio1();
 }
 
-/*
 void MoleculePropertyPage::OnBnClickedRadio7()
 {
 	OnBnClickedRadio1();
@@ -325,4 +322,4 @@ void MoleculePropertyPage::OnBnClickedRadio8()
 {
 	OnBnClickedRadio1();
 }
-*/
+

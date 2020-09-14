@@ -49,8 +49,8 @@ protected:
 	afx_msg void OnBnClickedRadio4();
 	afx_msg void OnBnClickedRadio5();
 	afx_msg void OnBnClickedRadio6();
-	//afx_msg void OnBnClickedRadio7();
-	//afx_msg void OnBnClickedRadio8();
+	afx_msg void OnBnClickedRadio7();
+	afx_msg void OnBnClickedRadio8();
 	afx_msg void OnEnChangeEdit5();
 	afx_msg void OnEnChangeEdit6();
 	afx_msg void OnEnChangeEdit7();

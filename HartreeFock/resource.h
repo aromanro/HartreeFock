@@ -55,6 +55,7 @@
 #define IDC_MFCLINK2                    1011
 #define IDC_RADIO5                      1011
 #define IDC_RADIO6                      1012
+#define IDC_RADIO7                      1013
 #define IDC_RADIO8                      1014
 #define ID_COMPUTATION_OPTIONS          32771
 #define ID_COMPUTATION_START            32772
