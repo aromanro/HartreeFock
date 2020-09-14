@@ -31,7 +31,7 @@ namespace GaussianIntegrals {
 		std::map < std::tuple<unsigned int, unsigned int, unsigned int>, GaussianNuclear> nuclearIntegralsContractedMap;
 		
 		std::map < std::tuple<unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, double, double, double, double>, GaussianTwoElectrons> electronElectronIntegralsVerticalAndTransferMap;
-		std::map < std::tuple<unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int>, GaussianTwoElectrons> electronElectronIntegralsContractedMap;
+		std::map < std::tuple<unsigned int, unsigned int, unsigned int, unsigned int>, GaussianTwoElectrons> electronElectronIntegralsContractedMap;
 		std::valarray<double> electronElectronIntegrals;
 
 	public:
