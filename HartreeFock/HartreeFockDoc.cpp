@@ -134,6 +134,21 @@ BOOL CHartreeFockDoc::OnNewDocument()
 	}
 	
 	Systems::Molecule atom;
+	atom.atoms.push_back(Ti);
+	atom.Init();
+
+	HartreeFock::RestrictedHartreeFock HartreeFockAlgorithm;
+	HartreeFockAlgorithm.alpha = 0.5;
+	HartreeFockAlgorithm.initGuess = 0;
+
+	HartreeFockAlgorithm.Init(&atom);
+	double result = HartreeFockAlgorithm.Calculate();
+
+	CString str;
+	str.Format(L"Ti energy: %f", result);
+	AfxMessageBox(str);
+
+	atom.atoms.clear();
 	atom.atoms.push_back(Li);
 	H1.position.Y = 4.516;
 	atom.atoms.push_back(H1);

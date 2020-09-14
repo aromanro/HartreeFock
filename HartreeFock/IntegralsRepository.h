@@ -97,13 +97,13 @@ namespace GaussianIntegrals {
 		inline void CalculateElectronElectronIntegrals4(int i, int j, int k, int ij, const Orbitals::ContractedGaussianOrbital& orb1, const Orbitals::ContractedGaussianOrbital& orb2, const Orbitals::ContractedGaussianOrbital& orb3);
 	
 	
-		inline static int GetElectronElectronIndex(int ind1, int ind2, int ind3, int ind4)
+		inline static long long int GetElectronElectronIndex(int ind1, int ind2, int ind3, int ind4)
 		{
 			if (ind1 < ind2) std::swap(ind1, ind2);
 			if (ind3 < ind4) std::swap(ind3, ind4);
 
-			int ind12 = ind1 * (ind1 + 1) / 2 + ind2;
-			int ind34 = ind3 * (ind3 + 1) / 2 + ind4;
+			long long int ind12 = ind1 * (ind1 + 1) / 2 + ind2;
+			long long int ind34 = ind3 * (ind3 + 1) / 2 + ind4;
 
 			if (ind12 < ind34) std::swap(ind12, ind34);
 

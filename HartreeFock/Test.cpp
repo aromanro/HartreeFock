@@ -56,6 +56,8 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file)
 	// now we have the molecule
 	GaussianIntegrals::IntegralsRepository integralsRepository(&molecule);
 
+	//integralsRepository.useLotsOfMemory = false;
+
 	// now check the overlap matrix
 	Matrices::OverlapMatrix overlapMatrix(&integralsRepository);
 
@@ -163,6 +165,8 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file)
 	file.precision(5);
 	file << std::setprecision(5);
 	integralsRepository.CalculateElectronElectronIntegrals();
+	integralsRepository.ClearAllMaps();
+
 
 	unsigned int nrorbs = integralsRepository.getMolecule()->CountNumberOfContractedGaussians();
 
