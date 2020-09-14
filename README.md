@@ -75,9 +75,15 @@ You can do computation for a single atom, too, for now by putting it into a dumm
   Heatom.Init();
 ```
 
-### WORK IN PROGRESS
+### LATEST ADDITIONS
 
-I added some more basis sets files, while testing I noticed some issues with D orbitals (or higher), because I used some * basis sets where D appears even for molecules I tested (for example, those that involve oxygen, like H2O or CO2).
-It appears that there are still some bugs in computing some integrals that involve high L (by high I mean L > 1).
-As it's a variational method, the results shouldn't be lower than the Hartree Fock limit, which is unfortunately the case if orbitals other than S and P are involved.
+I added more basis sets, it's not limited to STO-nG. 
+While doing that, I found and fixed a bug in the integrals repository that manifested for orbitals having L > 1.
+Now it seems to work fine.
+
+Basis sets added:
+- Split valence orbitals: 3-21G, 6-21G, 6-31G
+- Besides 'split valence', polarization on heavy atoms: 6-31G*
+- 'Split valence', polarization on heavy atoms and hydrogen and diffusion functions on heavy atoms: 6-31+G**
+
 
