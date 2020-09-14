@@ -86,4 +86,6 @@ Basis sets added:
 - Besides 'split valence', polarization on heavy atoms: 6-31G*
 - 'Split valence', polarization on heavy atoms and hydrogen and diffusion functions on heavy atoms: 6-31+G**
 
+You may add more of them, the parsed format is nwchem.
+
 
