@@ -78,8 +78,6 @@ BOOL CHartreeFockDoc::OnNewDocument()
 	SetChartBoundsAndTicks();
 
 	basisSTO3G.Load("sto3g.txt");
-	//basisSTO3G.Load("6-31+g_st__st_.1.nw"); // for tests
-	//basisSTO3G.Load("6-31g_st_.1.nw");
 
 	// a check for the canonical order example in HSERIlib paper:
 	/*
