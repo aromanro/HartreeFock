@@ -392,7 +392,7 @@ namespace GaussianIntegrals {
 		}
 		else swapped = false;
 
-		const std::tuple<unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, double, double, double, double> params(orbital1->shellID, orbital2->shellID, orbital3->shellID, orbital4->shellID,
+		const std::tuple<unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, double, double, double, double> params(orbital1->centerID, orbital2->centerID, orbital3->centerID, orbital4->centerID,
 																																											orbital1->angularMomentum, orbital2->angularMomentum, orbital3->angularMomentum, orbital4->angularMomentum, 																																											 
 																																											orbital1->alpha, orbital2->alpha, orbital3->alpha, orbital4->alpha);
 		const auto it = electronElectronIntegralsVerticalAndTransferMap.find(params);
