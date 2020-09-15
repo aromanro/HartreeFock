@@ -16,7 +16,7 @@
 #include "RestrictedHartreeFock.h"
 #include "UnrestrictedHartreeFock.h"
 
-
+#include "Constants.h"
 
 
 // SHARED_HANDLERS can be defined in an ATL project implementing preview, thumbnail
@@ -57,7 +57,12 @@ CHartreeFockDoc::CHartreeFockDoc()
 {
 	m_Chart.title = L"Molecule Energy";
 	m_Chart.XAxisLabel = L"Bond Length (Ångströms)";
-	m_Chart.YAxisLabel = L"Energy (eV)";
+	
+	if (theApp.options.displayHartrees)
+		m_Chart.YAxisLabel = L"Energy (Hartree)";
+	else
+		m_Chart.YAxisLabel = L"Energy (eV)";
+
 	m_Chart.useSpline = false;
 }
 
@@ -464,6 +469,7 @@ void CHartreeFockDoc::ApplyChartOptions()
 	options.YSmallTicksEnergy = theApp.options.YSmallTicksEnergy;
 
 	options.DisplayHOMOEnergy = theApp.options.DisplayHOMOEnergy;
+	options.displayHartrees = theApp.options.displayHartrees;
 
 	SetChartData();
 
@@ -482,11 +488,24 @@ void CHartreeFockDoc::SetChartData()
 
 		std::vector<std::pair<double, double>> chartData;
 
-		for (const auto& val : results)
+		const double convAtomsEnergy = options.displayHartrees ? atomsEnergy / Hartree : atomsEnergy;
+
+		for (auto val : results)
 		{
-			if (2 == options.DisplayHOMOEnergy)	chartData.emplace_back(std::make_pair(std::get<0>(val), atomsEnergy - std::get<1>(val)));
+			if (options.displayHartrees) 
+			{
+				std::get<1>(val) /= Hartree;
+				std::get<2>(val) /= Hartree;
+			}
+
+			if (2 == options.DisplayHOMOEnergy) chartData.emplace_back(std::make_pair(std::get<0>(val), convAtomsEnergy - std::get<1>(val)));
 			else chartData.emplace_back(std::make_pair(std::get<0>(val), 0 == options.DisplayHOMOEnergy ? std::get<1>(val) : std::get<2>(val)));
 		}
+
+		if (options.displayHartrees)
+			m_Chart.YAxisLabel = L"Energy (Hartree)";
+		else
+			m_Chart.YAxisLabel = L"Energy (eV)";
 
 		m_Chart.AddDataSet(&chartData, 2, RGB(255, 0, 0));
 

@@ -79,7 +79,7 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file)
 		file << line.str();
 	}
 
-	Matrices::KineticMatrix kineticMatrix(&integralsRepository);
+	const Matrices::KineticMatrix kineticMatrix(&integralsRepository);
 
 	TRACE("\nKinetic Matrix:\n");
 	file << "\nKinetic Matrix:\n";
@@ -102,7 +102,7 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file)
 	TRACE("\nNuclear Matrix:\n");
 	file << "\nNuclear Matrix:\n";
 
-	Matrices::NuclearMatrix nuclearMatrix(&integralsRepository);
+	const Matrices::NuclearMatrix nuclearMatrix(&integralsRepository);
 
 	for (int i = 0; i < nuclearMatrix.matrix.rows(); ++i)
 	{
@@ -137,7 +137,7 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file)
 	// initialize
 
 
-	Eigen::MatrixXd h = kineticMatrix.matrix + nuclearMatrix.matrix;
+	const Eigen::MatrixXd h = kineticMatrix.matrix + nuclearMatrix.matrix;
 
 	TRACE("\nh Matrix:\n");
 	file << "\nh Matrix:\n";
@@ -168,7 +168,7 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file)
 	integralsRepository.ClearAllMaps();
 
 
-	unsigned int nrorbs = integralsRepository.getMolecule()->CountNumberOfContractedGaussians();
+	const unsigned int nrorbs = integralsRepository.getMolecule()->CountNumberOfContractedGaussians();
 
 	for (unsigned int i = 0; i < nrorbs; i++)
 		for (unsigned int j = 0; j < nrorbs; j++)

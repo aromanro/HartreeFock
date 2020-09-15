@@ -220,6 +220,7 @@
     <ClInclude Include="HartreeFockPropertyPage.h" />
     <ClInclude Include="HartreeFockThread.h" />
     <ClInclude Include="HartreeFockView.h" />
+    <ClInclude Include="Constants.h" />
     <ClInclude Include="IntegralsRepository.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="MathUtils.h" />

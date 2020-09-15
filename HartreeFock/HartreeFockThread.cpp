@@ -9,6 +9,8 @@
 #include "HartreeFockDoc.h"
 #include "ChemUtils.h"
 
+#include "Constants.h"
+
 HartreeFockThread::HartreeFockThread(const Options& options, CHartreeFockDoc* doc, const double start, const double end, const double step)
 	: m_Doc(doc), m_start(start), m_end(end), m_step(step), terminate(false), converged(true),
 	computeFirstAtom(false), computeSecondAtom(false), firstAtomEnergy(0), secondAtomEnergy(0)
@@ -135,7 +137,7 @@ void HartreeFockThread::Calculate()
 
 		if (!algorithm->converged) converged = false;
 
-		results.emplace_back(std::make_tuple(pos, result * 27.211385056, algorithm->HOMOEnergy * 27.211385056));
+		results.emplace_back(std::make_tuple(pos, result * Hartree, algorithm->HOMOEnergy * Hartree));
 		if (terminate) break;
 	}
 
@@ -195,5 +197,5 @@ double HartreeFockThread::ComputeAtom(const Systems::AtomWithShells& atom)
 
 	if (converged) converged = algorithm->converged;
 
-	return result * 27.211385056;
+	return result * Hartree;
 }

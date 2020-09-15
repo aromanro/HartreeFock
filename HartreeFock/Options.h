@@ -53,6 +53,7 @@ public:
 
 	bool useSplines;
 
+	bool displayHartrees;
 
 	int DisplayHOMOEnergy; // 0 - groundstate energy, 1 - HOMO energy, 2 - binding energy
 protected:
