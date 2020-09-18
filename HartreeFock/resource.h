@@ -55,6 +55,7 @@
 #define IDC_CHECK3                      1010
 #define IDC_MFCLINK2                    1011
 #define IDC_RADIO5                      1011
+#define IDC_CHECK4                      1011
 #define IDC_RADIO6                      1012
 #define IDC_RADIO7                      1013
 #define IDC_RADIO8                      1014

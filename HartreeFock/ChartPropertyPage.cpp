@@ -24,6 +24,7 @@ ChartPropertyPage::ChartPropertyPage()
 
 	useSplines = (theApp.options.useSplines ? BST_CHECKED : BST_UNCHECKED);
 	displayHartrees = (theApp.options.displayHartrees ? BST_CHECKED : BST_UNCHECKED);
+	displayBohrs = (theApp.options.displayBohrs ? BST_CHECKED : BST_UNCHECKED);
 
 	DisplayHOMOEnergy = theApp.options.DisplayHOMOEnergy;
 }
@@ -45,6 +46,7 @@ BEGIN_MESSAGE_MAP(ChartPropertyPage, CMFCPropertyPage)
 	ON_BN_CLICKED(IDC_RADIO2, &ChartPropertyPage::OnBnClickedRadio2)
 	ON_BN_CLICKED(IDC_RADIO3, &ChartPropertyPage::OnBnClickedRadio3)
 	ON_BN_CLICKED(IDC_CHECK3, &ChartPropertyPage::OnBnClickedCheck3)
+	ON_BN_CLICKED(IDC_CHECK4, &ChartPropertyPage::OnBnClickedCheck4)
 END_MESSAGE_MAP()
 
 
@@ -76,6 +78,7 @@ void ChartPropertyPage::ApplyValues()
 
 	theApp.options.useSplines = (useSplines == BST_CHECKED ? true : false);
 	theApp.options.displayHartrees = (displayHartrees == BST_CHECKED ? true : false);
+	theApp.options.displayBohrs = (displayBohrs == BST_CHECKED ? true : false);
 
 	theApp.options.DisplayHOMOEnergy = DisplayHOMOEnergy;
 
@@ -114,6 +117,7 @@ void ChartPropertyPage::DoDataExchange(CDataExchange* pDX)
 
 	DDX_Check(pDX, IDC_CHECK2, useSplines);
 	DDX_Check(pDX, IDC_CHECK3, displayHartrees);
+	DDX_Check(pDX, IDC_CHECK4, displayBohrs);
 
 	DDX_Radio(pDX, IDC_RADIO1, DisplayHOMOEnergy);
 }
@@ -180,6 +184,12 @@ void ChartPropertyPage::OnBnClickedRadio3()
 
 
 void ChartPropertyPage::OnBnClickedCheck3()
+{
+	SetModified();
+}
+
+
+void ChartPropertyPage::OnBnClickedCheck4()
 {
 	SetModified();
 }

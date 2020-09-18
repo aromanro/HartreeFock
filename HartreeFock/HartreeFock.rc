@@ -252,9 +252,11 @@ BEGIN
     EDITTEXT        IDC_EDIT5,63,89,40,14,ES_AUTOHSCROLL | ES_NUMBER
     RTEXT           "Small ticks no:",IDC_STATIC,113,92,46,8
     EDITTEXT        IDC_EDIT6,163,89,40,14,ES_AUTOHSCROLL | ES_NUMBER
-    CONTROL         "Use splines",IDC_CHECK2,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,125,51,10
+    CONTROL         "Use splines",IDC_CHECK2,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,128,51,10
     CONTROL         "Display Hartrees (unchecked display eV)",IDC_CHECK3,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,141,149,10
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,143,149,10
+    CONTROL         "Display Bohrs (unchecked display Ångströms)",IDC_CHECK4,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,158,163,10
     GROUPBOX        "Display",IDC_STATIC,177,121,125,68
     CONTROL         "Ground state energy",IDC_RADIO1,"Button",BS_AUTORADIOBUTTON | WS_GROUP,185,135,83,10
     CONTROL         "HOMO energy",IDC_RADIO2,"Button",BS_AUTORADIOBUTTON,185,153,61,10

@@ -45,6 +45,7 @@ protected:
 	unsigned int XSmallTicksBondLength;
 	int useSplines;
 	int displayHartrees;
+	int displayBohrs;
 
 	int DisplayHOMOEnergy;
 public:
@@ -52,6 +53,7 @@ public:
 	afx_msg void OnBnClickedRadio2();
 	afx_msg void OnBnClickedRadio3();
 	afx_msg void OnBnClickedCheck3();
+	afx_msg void OnBnClickedCheck4();
 };
 
 

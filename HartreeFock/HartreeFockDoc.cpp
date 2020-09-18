@@ -56,7 +56,11 @@ CHartreeFockDoc::CHartreeFockDoc()
 	: convergenceProblem(false), runningThreads(0), atomsEnergy(0)
 {
 	m_Chart.title = L"Molecule Energy";
-	m_Chart.XAxisLabel = L"Bond Length (Ångströms)";
+
+	if (theApp.options.displayBohrs)
+		m_Chart.XAxisLabel = L"Bond Length (Bohrs)";
+	else
+		m_Chart.XAxisLabel = L"Bond Length (Ångströms)";
 	
 	if (theApp.options.displayHartrees)
 		m_Chart.YAxisLabel = L"Energy (Hartree)";
@@ -444,7 +448,7 @@ void CHartreeFockDoc::SetChartBoundsAndTicks()
 	m_Chart.useSpline = options.useSplines;
 
 	m_Chart.XAxisMin = 0;
-	m_Chart.XAxisMax = options.XMaxBondLength;
+	m_Chart.XAxisMax = options.displayBohrs ? options.XMaxBondLength / Bohr : options.XMaxBondLength;
 
 	m_Chart.YAxisMin = options.YMinEnergy;
 	m_Chart.YAxisMax = options.YMaxEnergy;
@@ -470,6 +474,7 @@ void CHartreeFockDoc::ApplyChartOptions()
 
 	options.DisplayHOMOEnergy = theApp.options.DisplayHOMOEnergy;
 	options.displayHartrees = theApp.options.displayHartrees;
+	options.displayBohrs = theApp.options.displayBohrs;
 
 	SetChartData();
 
@@ -498,6 +503,9 @@ void CHartreeFockDoc::SetChartData()
 				std::get<2>(val) /= Hartree;
 			}
 
+			if (options.displayBohrs)
+				std::get<0>(val) /= Bohr;
+
 			if (2 == options.DisplayHOMOEnergy) chartData.emplace_back(std::make_pair(std::get<0>(val), convAtomsEnergy - std::get<1>(val)));
 			else chartData.emplace_back(std::make_pair(std::get<0>(val), 0 == options.DisplayHOMOEnergy ? std::get<1>(val) : std::get<2>(val)));
 		}
@@ -506,6 +514,12 @@ void CHartreeFockDoc::SetChartData()
 			m_Chart.YAxisLabel = L"Energy (Hartree)";
 		else
 			m_Chart.YAxisLabel = L"Energy (eV)";
+
+		if (options.displayBohrs)
+			m_Chart.XAxisLabel = L"Bond Length (Bohrs)";
+		else
+			m_Chart.XAxisLabel = L"Bond Length (Ångströms)";
+
 
 		m_Chart.AddDataSet(&chartData, 2, RGB(255, 0, 0));
 
