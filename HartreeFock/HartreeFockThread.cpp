@@ -102,11 +102,9 @@ HartreeFockThread::~HartreeFockThread()
 
 void HartreeFockThread::Calculate()
 {
-	const double bohr = 0.5291772106712;
-
 	for (double pos = m_start; pos < m_end; pos += m_step)
 	{
-		double dist = pos / bohr;
+		double dist = pos / Bohr;
 
 		// adjust the molecule coordinates
 		if (molecule.atoms.size() <= 2)
