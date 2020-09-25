@@ -58,7 +58,7 @@ namespace HartreeFock {
 		occupiedMinus.resize(nrOccupiedLevelsMinus, true);
 	}
 
-	void UnrestrictedHartreeFock::Step(int iter)
+	double UnrestrictedHartreeFock::Step(int iter)
 	{		
 		// *****************************************************************************************************************
 
@@ -135,12 +135,23 @@ namespace HartreeFock {
 
 		TRACE("Step: %d Energy: %f\n", iter, totalEnergy);
 
+		// calculate rms for differences between new and old density matrices, it can be used to check for convergence, too
+		Eigen::MatrixXd rmsDensityMatricesDif = newDensityMatrixPlus - DensityMatrixPlus;
+		rmsDensityMatricesDif = rmsDensityMatricesDif.cwiseProduct(rmsDensityMatricesDif);
+		double rmsD = sqrt(rmsDensityMatricesDif.sum());
+
+		rmsDensityMatricesDif = newDensityMatrixMinus - DensityMatrixMinus;
+		rmsDensityMatricesDif = rmsDensityMatricesDif.cwiseProduct(rmsDensityMatricesDif);
+		rmsD += sqrt(rmsDensityMatricesDif.sum());
+
 		// ***************************************************************************************************
 		// go to the next density matrices
 		// use mixing if alpha is set less then one
 
 		DensityMatrixPlus = alpha * newDensityMatrixPlus + (1. - alpha) * DensityMatrixPlus;
 		DensityMatrixMinus = alpha * newDensityMatrixMinus + (1. - alpha) * DensityMatrixMinus;
+
+		return rmsD;
 	}
 
 	void UnrestrictedHartreeFock::InitFockMatrices(int iter, Eigen::MatrixXd& FockMatrixPlus, Eigen::MatrixXd& FockMatrixMinus) const

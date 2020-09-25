@@ -64,11 +64,11 @@ namespace HartreeFock {
 		// some big number before bail out
 		for (int iter = 0; iter < maxIterations; ++iter)
 		{
-			Step(iter);
+			const double rmsD = Step(iter);
 
 			curEnergy = GetTotalEnergy();
 
-			if (abs(prevEnergy - curEnergy) <= 1E-13) {
+			if (abs(prevEnergy - curEnergy) <= 1E-13 && rmsD < 1E-8) {
 				converged = true;
 				break;
 			}

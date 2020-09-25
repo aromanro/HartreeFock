@@ -57,7 +57,7 @@ namespace HartreeFock {
 
 		double Calculate();
 		
-		virtual void Step(int iter) = 0;
+		virtual double Step(int iter) = 0;
 		virtual double GetTotalEnergy() const = 0;
 	protected:
 		static double DiffDensityMatrices(const Eigen::MatrixXd& oldP, const Eigen::MatrixXd& newP);

@@ -33,7 +33,7 @@ namespace HartreeFock {
 
 		virtual void Init(Systems::Molecule* molecule);
 
-		virtual void Step(int iter);
+		virtual double Step(int iter);
 		virtual double GetTotalEnergy() const;
 	};
 
