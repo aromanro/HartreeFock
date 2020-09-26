@@ -19,10 +19,10 @@ namespace HartreeFock {
 	{
 		HartreeFockAlgorithm::Init(molecule);
 
-		
+
 		DensityMatrixPlus = Eigen::MatrixXd::Zero(h.rows(), h.cols());
 		DensityMatrixMinus = Eigen::MatrixXd::Zero(h.rows(), h.cols());
-		
+
 		occupiedPlus.resize(0);
 		occupiedMinus.resize(0);
 
@@ -36,14 +36,14 @@ namespace HartreeFock {
 			nrOccupiedLevelsMinus = molecule->betaElectrons;
 		}
 
-		
+
 		// preventing setting too many electrons
 		if (nrOccupiedLevelsMinus + nrOccupiedLevelsPlus > static_cast<unsigned int>(2 * numberOfOrbitals))
 		{
 			nrOccupiedLevelsMinus = numberOfOrbitals;
-			nrOccupiedLevelsPlus = numberOfOrbitals;			
+			nrOccupiedLevelsPlus = numberOfOrbitals;
 		}
-		
+
 		if (nrOccupiedLevelsPlus > static_cast<unsigned int>(numberOfOrbitals))
 		{
 			const int dif = nrOccupiedLevelsPlus - numberOfOrbitals;
@@ -59,11 +59,11 @@ namespace HartreeFock {
 	}
 
 	double UnrestrictedHartreeFock::Step(int iter)
-	{		
+	{
 		// *****************************************************************************************************************
 
 		// the Fock matrices
-		Eigen::MatrixXd FockMatrixPlus; 
+		Eigen::MatrixXd FockMatrixPlus;
 		Eigen::MatrixXd FockMatrixMinus;
 
 		InitFockMatrices(iter, FockMatrixPlus, FockMatrixMinus);
@@ -91,7 +91,7 @@ namespace HartreeFock {
 			eigenvalsplus = FockMatrixPlusTransformed(0, 0) * Eigen::VectorXd::Ones(1);
 		}
 
-		
+
 		Eigen::MatrixXd Cminus;
 		Eigen::VectorXd eigenvalsminus;
 
@@ -165,10 +165,76 @@ namespace HartreeFock {
 			errorMatricesMinus.pop_front();
 			fockMatricesMinus.pop_front();
 		}
+
+		if (errorMatricesPlus.size() > 1)
+		{
+			// use DIIS
+			const size_t nrMatrices = errorMatricesPlus.size();
+			Eigen::MatrixXd Bplus = Eigen::MatrixXd::Zero(nrMatrices + 1, nrMatrices + 1);
+			Eigen::MatrixXd Bminus = Eigen::MatrixXd::Zero(nrMatrices + 1, nrMatrices + 1);
+
+			for (int i = 0; i < nrMatrices; ++i)
+			{
+				Bplus(0, i) = Bplus(i, 0) = -1;
+				Bminus(0, i) = Bminus(i, 0) = -1;
+			}
+
+			auto errorPlusIter1 = errorMatricesPlus.begin();
+			auto errorMinusIter1 = errorMatricesMinus.begin();
+			for (size_t i = 0; i < nrMatrices; ++i)
+			{
+				auto errorPlusIter2 = errorMatricesPlus.begin();
+				auto errorMinusIter2 = errorMatricesMinus.begin();
+
+				for (size_t j = 0; j < i; ++j)
+				{
+					Bplus(i, j) = Bplus(j, i) = (*errorPlusIter1).cwiseProduct(*errorPlusIter2).sum();
+					Bminus(i, j) = Bminus(j, i) = (*errorMinusIter1).cwiseProduct(*errorMinusIter2).sum();
+
+					++errorPlusIter2;
+					++errorMinusIter2;
+				}
+
+				Bplus(i, i) = (*errorPlusIter1).cwiseProduct(*errorPlusIter2).sum();
+				Bminus(i, i) = (*errorMinusIter1).cwiseProduct(*errorMinusIter2).sum();
+
+				++errorPlusIter1;
+				++errorMinusIter1;
+			}
+
+			// Solve the systems of linear equations
+			// Solve the system of linear equations
+
+			Eigen::VectorXd CPlus = Eigen::VectorXd::Zero(nrMatrices + 1);
+			CPlus(nrMatrices) = -1;
+			Eigen::VectorXd CMinus = Eigen::VectorXd::Zero(nrMatrices + 1);
+			CMinus(nrMatrices) = -1;
+
+			CPlus = Bplus.colPivHouseholderQr().solve(CPlus);
+			CMinus = Bminus.colPivHouseholderQr().solve(CMinus);
+
+			// compute the new Fock matrices
+
+			FockMatrixPlus = Eigen::MatrixXd::Zero(FockMatrixPlus.rows(), FockMatrixPlus.cols());
+			FockMatrixMinus = Eigen::MatrixXd::Zero(FockMatrixMinus.rows(), FockMatrixMinus.cols());
+
+			auto fockIterPlus = fockMatricesPlus.begin();
+			auto fockIterMinus = fockMatricesMinus.begin();
+			for (size_t i = 0; i < nrMatrices; ++i)
+			{
+				FockMatrixPlus += CPlus(i) * (*fockIterPlus);
+				FockMatrixMinus += CMinus(i) * (*fockIterMinus);
+
+				++fockIterPlus;
+				++fockIterMinus;
+			}
+		}
 		*/
 
+		// TODO: finish it!
+
 		// ***************************************************************************************************
-		// go to the next density matrices
+		// go to the next density matrices - don't do this if DIIS is used
 		// use mixing if alpha is set less then one
 
 		DensityMatrixPlus = alpha * newDensityMatrixPlus + (1. - alpha) * DensityMatrixPlus;
@@ -199,7 +265,7 @@ namespace HartreeFock {
 			{
 				FockMatrixPlus = h;
 				FockMatrixMinus = h;
-			}			
+			}
 
 			if (addAsymmetry && FockMatrixPlus.cols() > 1)
 			{
@@ -209,67 +275,23 @@ namespace HartreeFock {
 		}
 		else
 		{
-			if (errorMatricesPlus.size() > 1)
-			{
-				// use DIIS
-				const size_t nrMatrices = errorMatricesPlus.size();
-				Eigen::MatrixXd Bplus = Eigen::MatrixXd::Zero(nrMatrices + 1, nrMatrices + 1);
-				Eigen::MatrixXd Bminus = Eigen::MatrixXd::Zero(nrMatrices + 1, nrMatrices + 1);
+			Eigen::MatrixXd Gplus = Eigen::MatrixXd::Zero(h.rows(), h.cols());
+			Eigen::MatrixXd Gminus = Eigen::MatrixXd::Zero(h.rows(), h.cols());
 
-				for (int i = 0; i < nrMatrices; ++i)
-				{
-					Bplus(0, i) = Bplus(i, 0) = -1;
-					Bminus(0, i) = Bminus(i, 0) = -1;
-				}
+			for (int i = 0; i < numberOfOrbitals; ++i)
+				for (int j = 0; j < numberOfOrbitals; ++j)
+					for (int k = 0; k < numberOfOrbitals; ++k)
+						for (int l = 0; l < numberOfOrbitals; ++l)
+						{
+							double coulomb = integralsRepository.getElectronElectron(i, j, k, l);
+							double exchange = integralsRepository.getElectronElectron(i, l, k, j);
 
-				auto errorPlusIter1 = errorMatricesPlus.begin();
-				auto errorMinusIter1 = errorMatricesMinus.begin();
-				for (size_t i = 0; i < nrMatrices; ++i)
-				{
-					auto errorPlusIter2 = errorMatricesPlus.begin();
-					auto errorMinusIter2 = errorMatricesMinus.begin();
+							Gplus(i, j) += DensityMatrixPlus(k, l) * (coulomb - exchange) + DensityMatrixMinus(k, l) * coulomb; // the beta electrons interact with the alpha ones with coulomb interaction, too
+							Gminus(i, j) += DensityMatrixMinus(k, l) * (coulomb - exchange) + DensityMatrixPlus(k, l) * coulomb; // the alpha electrons interact with the beta ones with coulomb interaction, too
+						}
 
-					for (size_t j = 0; j < i; ++j)
-					{
-						Bplus(i, j) = Bplus(j, i) = (*errorPlusIter1).cwiseProduct(*errorPlusIter2).sum();
-						Bminus(i, j) = Bminus(j, i) = (*errorMinusIter1).cwiseProduct(*errorMinusIter2).sum();
-
-						++errorPlusIter2;
-						++errorMinusIter2;
-					}
-
-					Bplus(i, i) = (*errorPlusIter1).cwiseProduct(*errorPlusIter2).sum();
-					Bminus(i, i) = (*errorMinusIter1).cwiseProduct(*errorMinusIter2).sum();
-
-					++errorPlusIter1;
-					++errorMinusIter1;
-				}
-
-				// TODO: Solve the systems of linear equations
-
-				// compute the new Fock matrices
-
-			}
-			else
-			{
-				Eigen::MatrixXd Gplus = Eigen::MatrixXd::Zero(h.rows(), h.cols());
-				Eigen::MatrixXd Gminus = Eigen::MatrixXd::Zero(h.rows(), h.cols());
-
-				for (int i = 0; i < numberOfOrbitals; ++i)
-					for (int j = 0; j < numberOfOrbitals; ++j)
-						for (int k = 0; k < numberOfOrbitals; ++k)
-							for (int l = 0; l < numberOfOrbitals; ++l)
-							{
-								double coulomb = integralsRepository.getElectronElectron(i, j, k, l);
-								double exchange = integralsRepository.getElectronElectron(i, l, k, j);
-
-								Gplus(i, j) += DensityMatrixPlus(k, l) * (coulomb - exchange) + DensityMatrixMinus(k, l) * coulomb; // the beta electrons interact with the alpha ones with coulomb interaction, too
-								Gminus(i, j) += DensityMatrixMinus(k, l) * (coulomb - exchange) + DensityMatrixPlus(k, l) * coulomb; // the alpha electrons interact with the beta ones with coulomb interaction, too
-							}
-
-				FockMatrixPlus = h + Gplus;
-				FockMatrixMinus = h + Gminus;
-			}
+			FockMatrixPlus = h + Gplus;
+			FockMatrixMinus = h + Gminus;
 		}
 	}
 
@@ -289,33 +311,33 @@ namespace HartreeFock {
 
 		// only the values below the diagonal were added
 		// *2 to have the sum of all elements except those on diagonal
-		totalEnergy *= 2.; 
-		
+		totalEnergy *= 2.;
+
 		// now add the diagonal elements, too
 		for (int i = 0; i < h.rows(); ++i) totalEnergy += (calcDensityMatrixPlus(i, i) + calcDensityMatrixMinus(i, i)) * h(i, i);
 
 
-		for (unsigned int level = 0; level < occupiedPlus.size(); ++level)	
+		for (unsigned int level = 0; level < occupiedPlus.size(); ++level)
 			if (occupiedPlus[level]) totalEnergy += eigenvalsplus(level);
-		for (unsigned int level = 0; level < occupiedMinus.size(); ++level) 
+		for (unsigned int level = 0; level < occupiedMinus.size(); ++level)
 			if (occupiedMinus[level]) totalEnergy += eigenvalsminus(level);
 
 
 		HOMOEnergy = max(nrOccupiedLevelsPlus ? eigenvalsplus(nrOccupiedLevelsPlus - 1) : 0, nrOccupiedLevelsMinus ? eigenvalsminus(nrOccupiedLevelsMinus - 1) : 0);
 
 		// ***************************************************************************************
-		
+
 		/*
 		for (int i = 0; i < h.rows(); ++i)
 			for (int j = 0; j < h.cols(); ++j)
 				totalEnergy += (calcPplus(i, j) + calcPminus(i, j)) * h(j, i);
 
-		
+
 		for (unsigned int i = 0; i < h.rows(); ++i)
 			for (unsigned int j = 0; j < h.cols(); ++j)
 				totalEnergy += calcPplus(i, j) * Fplus(i, j) + calcPminus(i, j) * Fminus(i, j);
 				*/
-		// *******************************************************************************************
+				// *******************************************************************************************
 
 
 		totalEnergy /= 2.;

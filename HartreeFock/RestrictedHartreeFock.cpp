@@ -38,7 +38,7 @@ namespace HartreeFock {
 
 		// the Fock matrix
 		Eigen::MatrixXd FockMatrix;
-		
+
 		InitFockMatrix(iter, FockMatrix);
 
 		// ***************************************************************************************************************************
@@ -52,7 +52,7 @@ namespace HartreeFock {
 
 
 		// this hopefully is faster than the one commented above
-		
+
 		const Eigen::MatrixXd FockTransformed = Vt * FockMatrix * V;
 		const Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> es(FockTransformed);
 		const Eigen::MatrixXd& Cprime = es.eigenvectors();
@@ -60,7 +60,7 @@ namespace HartreeFock {
 
 		// normalize it
 		//NormalizeC(C, occupied);
-		
+
 		//***************************************************************************************************************
 
 		// calculate the density matrix
@@ -71,8 +71,8 @@ namespace HartreeFock {
 			for (int j = 0; j < h.cols(); ++j)
 				for (unsigned int vec = 0; vec < occupied.size(); ++vec) // only eigenstates that are occupied 
 					if (occupied[vec]) newDensityMatrix(i, j) += 2. * C(i, vec) * C(j, vec); // 2 is for the number of electrons in the eigenstate, it's the restricted Hartree-Fock
-															  
-		
+
+
 		//**************************************************************************************************************
 
 		const Eigen::VectorXd& eigenvals = es.eigenvalues();
@@ -87,9 +87,10 @@ namespace HartreeFock {
 		const double rmsD = sqrt(rmsDensityMatricesDif.sum());
 
 		// will be used for DIIS
+
 		/*
 		Eigen::MatrixXd errorMatrix = FockMatrix * newDensityMatrix * overlapMatrix.matrix - overlapMatrix.matrix * newDensityMatrix * FockMatrix;
-		
+
 		errorMatrices.emplace_back(errorMatrix);
 		fockMatrices.push_back(FockMatrix);
 		if (errorMatrices.size() > 6)
@@ -97,10 +98,59 @@ namespace HartreeFock {
 			errorMatrices.pop_front();
 			fockMatrices.pop_front();
 		}
+
+		if (errorMatrices.size() > 1)
+		{
+			// use DIIS
+			const size_t nrMatrices = errorMatrices.size();
+			Eigen::MatrixXd B = Eigen::MatrixXd::Zero(nrMatrices + 1, nrMatrices + 1);
+
+			for (int i = 0; i < nrMatrices; ++i)
+				B(0, i) = B(i, 0) = -1;
+
+			auto errorIter1 = errorMatrices.begin();
+			for (size_t i = 0; i < nrMatrices; ++i)
+			{
+				auto errorIter2 = errorMatrices.begin();
+
+				for (size_t j = 0; j < i; ++j)
+				{
+					B(i, j) = B(j, i) = (*errorIter1).cwiseProduct(*errorIter2).sum();
+
+					++errorIter2;
+				}
+
+				B(i, i) = (*errorIter1).cwiseProduct(*errorIter2).sum();
+
+				++errorIter1;
+			}
+
+			// Solve the system of linear equations
+
+			Eigen::VectorXd C = Eigen::VectorXd::Zero(nrMatrices + 1);
+			C(nrMatrices) = -1;
+
+			C = B.colPivHouseholderQr().solve(C);
+
+			// compute the new Fock matrix
+
+			FockMatrix = Eigen::MatrixXd::Zero(FockMatrix.rows(), FockMatrix.cols());
+
+			auto fockIter = fockMatrices.begin();
+			for (size_t i = 0; i < nrMatrices; ++i)
+			{
+				FockMatrix += C(i) * (*fockIter);
+				++fockIter;
+			}
+		}
+
 		*/
 
+		// TODO: finish it!
+
+
 		// ***************************************************************************************************
-		// go to the next density matrix
+		// go to the next density matrix - don't do this if DIIS is used
 
 		DensityMatrix = alpha * newDensityMatrix + (1. - alpha) * DensityMatrix;  // use mixing if alpha is set less than 1
 
@@ -128,53 +178,21 @@ namespace HartreeFock {
 		}
 		else
 		{
-			if (errorMatrices.size() > 1)
-			{
-				// use DIIS
-				const size_t nrMatrices = errorMatrices.size();
-				Eigen::MatrixXd B = Eigen::MatrixXd::Zero(nrMatrices + 1, nrMatrices + 1);
 
-				for (int i = 0; i < nrMatrices; ++i)
-					B(0, i) = B(i, 0) = -1;
+			Eigen::MatrixXd G = Eigen::MatrixXd::Zero(h.rows(), h.cols());
 
-				auto errorIter1 = errorMatrices.begin();
-				for (size_t i = 0; i < nrMatrices; ++i)
-				{
-					auto errorIter2 = errorMatrices.begin();
+			for (int i = 0; i < numberOfOrbitals; ++i)
+				for (int j = 0; j < numberOfOrbitals; ++j)
+					for (int k = 0; k < numberOfOrbitals; ++k)
+						for (int l = 0; l < numberOfOrbitals; ++l)
+						{
+							const double coulomb = integralsRepository.getElectronElectron(i, j, k, l);
+							const double exchange = integralsRepository.getElectronElectron(i, l, k, j);
 
-					for (size_t j = 0; j < i; ++j)
-					{
-						B(i, j) = B(j, i) = (*errorIter1).cwiseProduct(*errorIter2).sum();
+							G(i, j) += DensityMatrix(k, l) * (coulomb - 0.5 * exchange);
+						}
 
-						++errorIter2;
-					}
-
-					B(i, i) = (*errorIter1).cwiseProduct(*errorIter2).sum();
-
-					++errorIter1;
-				}
-
-				// TODO: Solve the system of linear equations
-
-				// compute the new Fock matrix
-			}
-			else
-			{
-				Eigen::MatrixXd G = Eigen::MatrixXd::Zero(h.rows(), h.cols());
-
-				for (int i = 0; i < numberOfOrbitals; ++i)
-					for (int j = 0; j < numberOfOrbitals; ++j)
-						for (int k = 0; k < numberOfOrbitals; ++k)
-							for (int l = 0; l < numberOfOrbitals; ++l)
-							{
-								const double coulomb = integralsRepository.getElectronElectron(i, j, k, l);
-								const double exchange = integralsRepository.getElectronElectron(i, l, k, j);
-
-								G(i, j) += DensityMatrix(k, l) * (coulomb - 0.5 * exchange);
-							}
-
-				FockMatrix = h + G;
-			}
+			FockMatrix = h + G;
 		}
 	}
 
@@ -192,19 +210,19 @@ namespace HartreeFock {
 
 		// only the values below the diagonal were added
 		// *2 to have the sum of all elements except those on diagonal
-		totalEnergy *= 2.; 
-		
+		totalEnergy *= 2.;
+
 		// now add the diagonal elements, too
 		for (int i = 0; i < h.rows(); ++i) totalEnergy += calcDensityMatrix(i, i) * h(i, i);
 
 		totalEnergy *= 0.5;
-	
+
 		for (unsigned int level = 0; level < occupied.size(); ++level)
 			if (occupied[level]) totalEnergy += eigenvals(level);
 
 		HOMOEnergy = eigenvals(nrOccupiedLevels - 1);
 
-		
+
 
 		// the above is equivalent with this commented code, but since we already have eigenvalues for F calculated, we can get rid of the matrix addition to obtain H
 /*
