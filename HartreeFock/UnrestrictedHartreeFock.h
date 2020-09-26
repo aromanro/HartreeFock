@@ -6,9 +6,12 @@ namespace HartreeFock {
 	class UnrestrictedHartreeFock :
 		public HartreeFockAlgorithm
 	{
+		friend class Test;
 	protected:
 		double totalEnergy;
 
+		std::list<Eigen::MatrixXd> errorMatricesPlus;
+		std::list<Eigen::MatrixXd> errorMatricesMinus;
 
 		void CalculateEnergy(const Eigen::VectorXd& eigenvalsplus, const Eigen::VectorXd& eigenvalsminus, const Eigen::MatrixXd& calcDensityMatrixPlus, const Eigen::MatrixXd& calcDensityMatrixMinus/*, const Eigen::MatrixXd& Fplus, const Eigen::MatrixXd& Fminus*/);
 		void InitFockMatrices(int iter, Eigen::MatrixXd& FockMatrixPlus, Eigen::MatrixXd& FockMatrixMinus) const;

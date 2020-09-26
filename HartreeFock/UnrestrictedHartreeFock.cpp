@@ -145,9 +145,19 @@ namespace HartreeFock {
 		rmsD += sqrt(rmsDensityMatricesDif.sum());
 
 		// will be used for DIIS
-		//Eigen::MatrixXd errorMatrixPlus = FockMatrixPlus * newDensityMatrixPlus * overlapMatrix.matrix - overlapMatrix.matrix * newDensityMatrixPlus * FockMatrixPlus;
-		//Eigen::MatrixXd errorMatrixMinus = FockMatrixMinus * newDensityMatrixMinus * overlapMatrix.matrix - overlapMatrix.matrix * newDensityMatrixMinus * FockMatrixMinus;
+		/*
+		const Eigen::MatrixXd errorMatrixPlus = FockMatrixPlus * newDensityMatrixPlus * overlapMatrix.matrix - overlapMatrix.matrix * newDensityMatrixPlus * FockMatrixPlus;
 
+		errorMatricesPlus.emplace_back(errorMatrixPlus);
+		if (errorMatricesPlus.size() > 6)
+			errorMatricesPlus.pop_front();
+
+		const Eigen::MatrixXd errorMatrixMinus = FockMatrixMinus * newDensityMatrixMinus * overlapMatrix.matrix - overlapMatrix.matrix * newDensityMatrixMinus * FockMatrixMinus;
+
+		errorMatricesMinus.emplace_back(errorMatrixMinus);
+		if (errorMatricesMinus.size() > 6)
+			errorMatricesMinus.pop_front();
+		*/
 
 		// ***************************************************************************************************
 		// go to the next density matrices

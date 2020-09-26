@@ -1,14 +1,19 @@
 #pragma once
 #include "HartreeFockAlgorithm.h"
 
+#include <list>
+
 namespace HartreeFock {
 
 
 	class RestrictedHartreeFock :
 		public HartreeFockAlgorithm
 	{
+		friend class Test;
 	protected:
 		double totalEnergy;
+
+		std::list<Eigen::MatrixXd> errorMatrices;
 
 		void CalculateEnergy(const Eigen::VectorXd& eigenvals, const Eigen::MatrixXd& calcDensityMatrix/*, Eigen::MatrixXd& F*/);
 		void InitFockMatrix(int iter, Eigen::MatrixXd& FockMatrix) const;
