@@ -149,14 +149,22 @@ namespace HartreeFock {
 		const Eigen::MatrixXd errorMatrixPlus = FockMatrixPlus * newDensityMatrixPlus * overlapMatrix.matrix - overlapMatrix.matrix * newDensityMatrixPlus * FockMatrixPlus;
 
 		errorMatricesPlus.emplace_back(errorMatrixPlus);
+		fockMatricesPlus.push_back(FockMatrixPlus);
 		if (errorMatricesPlus.size() > 6)
+		{
 			errorMatricesPlus.pop_front();
+			fockMatricesPlus.pop_front();
+		}
 
 		const Eigen::MatrixXd errorMatrixMinus = FockMatrixMinus * newDensityMatrixMinus * overlapMatrix.matrix - overlapMatrix.matrix * newDensityMatrixMinus * FockMatrixMinus;
 
 		errorMatricesMinus.emplace_back(errorMatrixMinus);
+		fockMatricesMinus.push_back(FockMatrixMinus);
 		if (errorMatricesMinus.size() > 6)
+		{
 			errorMatricesMinus.pop_front();
+			fockMatricesMinus.pop_front();
+		}
 		*/
 
 		// ***************************************************************************************************
@@ -201,23 +209,30 @@ namespace HartreeFock {
 		}
 		else
 		{
-			Eigen::MatrixXd Gplus = Eigen::MatrixXd::Zero(h.rows(), h.cols());
-			Eigen::MatrixXd Gminus = Eigen::MatrixXd::Zero(h.rows(), h.cols());
+			if (errorMatricesPlus.size() > 1)
+			{
+				// use DIIS
+			}
+			else
+			{
+				Eigen::MatrixXd Gplus = Eigen::MatrixXd::Zero(h.rows(), h.cols());
+				Eigen::MatrixXd Gminus = Eigen::MatrixXd::Zero(h.rows(), h.cols());
 
-			for (int i = 0; i < numberOfOrbitals; ++i)
-				for (int j = 0; j < numberOfOrbitals; ++j)
-					for (int k = 0; k < numberOfOrbitals; ++k)
-						for (int l = 0; l < numberOfOrbitals; ++l)
-						{
-							double coulomb = integralsRepository.getElectronElectron(i, j, k, l);
-							double exchange = integralsRepository.getElectronElectron(i, l, k, j);
+				for (int i = 0; i < numberOfOrbitals; ++i)
+					for (int j = 0; j < numberOfOrbitals; ++j)
+						for (int k = 0; k < numberOfOrbitals; ++k)
+							for (int l = 0; l < numberOfOrbitals; ++l)
+							{
+								double coulomb = integralsRepository.getElectronElectron(i, j, k, l);
+								double exchange = integralsRepository.getElectronElectron(i, l, k, j);
 
-							Gplus(i, j) += DensityMatrixPlus(k, l) * (coulomb - exchange) + DensityMatrixMinus(k, l) * coulomb; // the beta electrons interact with the alpha ones with coulomb interaction, too
-							Gminus(i, j) += DensityMatrixMinus(k, l) * (coulomb - exchange) + DensityMatrixPlus(k, l) * coulomb; // the alpha electrons interact with the beta ones with coulomb interaction, too
-						}
+								Gplus(i, j) += DensityMatrixPlus(k, l) * (coulomb - exchange) + DensityMatrixMinus(k, l) * coulomb; // the beta electrons interact with the alpha ones with coulomb interaction, too
+								Gminus(i, j) += DensityMatrixMinus(k, l) * (coulomb - exchange) + DensityMatrixPlus(k, l) * coulomb; // the alpha electrons interact with the beta ones with coulomb interaction, too
+							}
 
-			FockMatrixPlus = h + Gplus;
-			FockMatrixMinus = h + Gminus;
+				FockMatrixPlus = h + Gplus;
+				FockMatrixMinus = h + Gminus;
+			}
 		}
 	}
 

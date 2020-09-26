@@ -13,6 +13,9 @@ namespace HartreeFock {
 		std::list<Eigen::MatrixXd> errorMatricesPlus;
 		std::list<Eigen::MatrixXd> errorMatricesMinus;
 
+		std::list<Eigen::MatrixXd> fockMatricesPlus;
+		std::list<Eigen::MatrixXd> fockMatricesMinus;
+
 		void CalculateEnergy(const Eigen::VectorXd& eigenvalsplus, const Eigen::VectorXd& eigenvalsminus, const Eigen::MatrixXd& calcDensityMatrixPlus, const Eigen::MatrixXd& calcDensityMatrixMinus/*, const Eigen::MatrixXd& Fplus, const Eigen::MatrixXd& Fminus*/);
 		void InitFockMatrices(int iter, Eigen::MatrixXd& FockMatrixPlus, Eigen::MatrixXd& FockMatrixMinus) const;
 	public:

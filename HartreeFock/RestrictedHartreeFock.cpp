@@ -91,8 +91,12 @@ namespace HartreeFock {
 		Eigen::MatrixXd errorMatrix = FockMatrix * newDensityMatrix * overlapMatrix.matrix - overlapMatrix.matrix * newDensityMatrix * FockMatrix;
 		
 		errorMatrices.emplace_back(errorMatrix);
+		fockMatrices.push_back(FockMatrix);
 		if (errorMatrices.size() > 6)
+		{
 			errorMatrices.pop_front();
+			fockMatrices.pop_front();
+		}
 		*/
 
 		// ***************************************************************************************************
@@ -124,20 +128,27 @@ namespace HartreeFock {
 		}
 		else
 		{
-			Eigen::MatrixXd G = Eigen::MatrixXd::Zero(h.rows(), h.cols());
+			if (errorMatrices.size() > 1)
+			{
+				// use DIIS
+			}
+			else
+			{
+				Eigen::MatrixXd G = Eigen::MatrixXd::Zero(h.rows(), h.cols());
 
-			for (int i = 0; i < numberOfOrbitals; ++i)
-				for (int j = 0; j < numberOfOrbitals; ++j)
-					for (int k = 0; k < numberOfOrbitals; ++k)
-						for (int l = 0; l < numberOfOrbitals; ++l)
-						{
-							const double coulomb = integralsRepository.getElectronElectron(i, j, k, l);
-							const double exchange = integralsRepository.getElectronElectron(i, l, k, j);
+				for (int i = 0; i < numberOfOrbitals; ++i)
+					for (int j = 0; j < numberOfOrbitals; ++j)
+						for (int k = 0; k < numberOfOrbitals; ++k)
+							for (int l = 0; l < numberOfOrbitals; ++l)
+							{
+								const double coulomb = integralsRepository.getElectronElectron(i, j, k, l);
+								const double exchange = integralsRepository.getElectronElectron(i, l, k, j);
 
-							G(i, j) += DensityMatrix(k, l) * (coulomb - 0.5 * exchange);
-						}
+								G(i, j) += DensityMatrix(k, l) * (coulomb - 0.5 * exchange);
+							}
 
-			FockMatrix = h + G;
+				FockMatrix = h + G;
+			}
 		}
 	}
 
