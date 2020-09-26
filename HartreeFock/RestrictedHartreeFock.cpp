@@ -131,6 +131,32 @@ namespace HartreeFock {
 			if (errorMatrices.size() > 1)
 			{
 				// use DIIS
+				const size_t nrMatrices = errorMatrices.size();
+				Eigen::MatrixXd B = Eigen::MatrixXd::Zero(nrMatrices + 1, nrMatrices + 1);
+
+				for (int i = 0; i < nrMatrices; ++i)
+					B(0, i) = B(i, 0) = -1;
+
+				auto errorIter1 = errorMatrices.begin();
+				for (size_t i = 0; i < nrMatrices; ++i)
+				{
+					auto errorIter2 = errorMatrices.begin();
+
+					for (size_t j = 0; j < i; ++j)
+					{
+						B(i, j) = B(j, i) = (*errorIter1).cwiseProduct(*errorIter2).sum();
+
+						++errorIter2;
+					}
+
+					B(i, i) = (*errorIter1).cwiseProduct(*errorIter2).sum();
+
+					++errorIter1;
+				}
+
+				// TODO: Solve the system of linear equations
+
+				// compute the new Fock matrix
 			}
 			else
 			{

@@ -212,6 +212,43 @@ namespace HartreeFock {
 			if (errorMatricesPlus.size() > 1)
 			{
 				// use DIIS
+				const size_t nrMatrices = errorMatricesPlus.size();
+				Eigen::MatrixXd Bplus = Eigen::MatrixXd::Zero(nrMatrices + 1, nrMatrices + 1);
+				Eigen::MatrixXd Bminus = Eigen::MatrixXd::Zero(nrMatrices + 1, nrMatrices + 1);
+
+				for (int i = 0; i < nrMatrices; ++i)
+				{
+					Bplus(0, i) = Bplus(i, 0) = -1;
+					Bminus(0, i) = Bminus(i, 0) = -1;
+				}
+
+				auto errorPlusIter1 = errorMatricesPlus.begin();
+				auto errorMinusIter1 = errorMatricesMinus.begin();
+				for (size_t i = 0; i < nrMatrices; ++i)
+				{
+					auto errorPlusIter2 = errorMatricesPlus.begin();
+					auto errorMinusIter2 = errorMatricesMinus.begin();
+
+					for (size_t j = 0; j < i; ++j)
+					{
+						Bplus(i, j) = Bplus(j, i) = (*errorPlusIter1).cwiseProduct(*errorPlusIter2).sum();
+						Bminus(i, j) = Bminus(j, i) = (*errorMinusIter1).cwiseProduct(*errorMinusIter2).sum();
+
+						++errorPlusIter2;
+						++errorMinusIter2;
+					}
+
+					Bplus(i, i) = (*errorPlusIter1).cwiseProduct(*errorPlusIter2).sum();
+					Bminus(i, i) = (*errorMinusIter1).cwiseProduct(*errorMinusIter2).sum();
+
+					++errorPlusIter1;
+					++errorMinusIter1;
+				}
+
+				// TODO: Solve the systems of linear equations
+
+				// compute the new Fock matrices
+
 			}
 			else
 			{
