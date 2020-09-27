@@ -68,6 +68,97 @@ namespace HartreeFock {
 
 		InitFockMatrices(iter, FockMatrixPlus, FockMatrixMinus);
 
+		// will be used for DIIS
+
+		/*
+		bool UsedDIIS = false;
+		 
+		if (iter)
+		{
+			const Eigen::MatrixXd errorMatrixPlus = FockMatrixPlus * DensityMatrixPlus * overlapMatrix.matrix - overlapMatrix.matrix * DensityMatrixPlus * FockMatrixPlus;
+
+			errorMatricesPlus.emplace_back(errorMatrixPlus);
+			fockMatricesPlus.push_back(FockMatrixPlus);
+			if (errorMatricesPlus.size() > 6)
+			{
+				errorMatricesPlus.pop_front();
+				fockMatricesPlus.pop_front();
+			}
+
+			const Eigen::MatrixXd errorMatrixMinus = FockMatrixMinus * DensityMatrixMinus * overlapMatrix.matrix - overlapMatrix.matrix * DensityMatrixMinus * FockMatrixMinus;
+
+			errorMatricesMinus.emplace_back(errorMatrixMinus);
+			fockMatricesMinus.push_back(FockMatrixMinus);
+			if (errorMatricesMinus.size() > 6)
+			{
+				errorMatricesMinus.pop_front();
+				fockMatricesMinus.pop_front();
+			}
+
+			if (errorMatricesPlus.size() > 1)
+			{
+				// use DIIS
+				const size_t nrMatrices = errorMatricesPlus.size();
+				Eigen::MatrixXd Bplus = Eigen::MatrixXd::Zero(nrMatrices + 1, nrMatrices + 1);
+				Eigen::MatrixXd Bminus = Eigen::MatrixXd::Zero(nrMatrices + 1, nrMatrices + 1);
+
+				auto errorPlusIter1 = errorMatricesPlus.begin();
+				auto errorMinusIter1 = errorMatricesMinus.begin();
+				for (size_t i = 0; i < nrMatrices; ++i)
+				{
+					auto errorPlusIter2 = errorMatricesPlus.begin();
+					auto errorMinusIter2 = errorMatricesMinus.begin();
+
+					for (size_t j = 0; j < i; ++j)
+					{
+						Bplus(i, j) = Bplus(j, i) = (*errorPlusIter1).cwiseProduct(*errorPlusIter2).sum();
+						Bminus(i, j) = Bminus(j, i) = (*errorMinusIter1).cwiseProduct(*errorMinusIter2).sum();
+
+						++errorPlusIter2;
+						++errorMinusIter2;
+					}
+
+					Bplus(i, i) = (*errorPlusIter1).cwiseProduct(*errorPlusIter2).sum();
+					Bminus(i, i) = (*errorMinusIter1).cwiseProduct(*errorMinusIter2).sum();
+
+					Bplus(nrMatrices, i) = Bplus(i, nrMatrices) = -1;
+					Bminus(nrMatrices, i) = Bminus(i, nrMatrices) = -1;
+
+					++errorPlusIter1;
+					++errorMinusIter1;
+				}
+
+				// Solve the systems of linear equations
+
+				Eigen::VectorXd CPlus = Eigen::VectorXd::Zero(nrMatrices + 1);
+				CPlus(nrMatrices) = -1;
+				Eigen::VectorXd CMinus = Eigen::VectorXd::Zero(nrMatrices + 1);
+				CMinus(nrMatrices) = -1;
+
+				CPlus = Bplus.colPivHouseholderQr().solve(CPlus);
+				CMinus = Bminus.colPivHouseholderQr().solve(CMinus);
+
+				// compute the new Fock matrices
+
+				FockMatrixPlus = Eigen::MatrixXd::Zero(FockMatrixPlus.rows(), FockMatrixPlus.cols());
+				FockMatrixMinus = Eigen::MatrixXd::Zero(FockMatrixMinus.rows(), FockMatrixMinus.cols());
+
+				auto fockIterPlus = fockMatricesPlus.begin();
+				auto fockIterMinus = fockMatricesMinus.begin();
+				for (size_t i = 0; i < nrMatrices; ++i)
+				{
+					FockMatrixPlus += CPlus(i) * (*fockIterPlus);
+					FockMatrixMinus += CMinus(i) * (*fockIterMinus);
+
+					++fockIterPlus;
+					++fockIterMinus;
+				}
+
+				UsedDIIS = true;
+			}
+		}
+		*/
+
 		// ***************************************************************************************************************************
 
 		// solve the Pople-Nesbet–Berthier equations
@@ -144,101 +235,20 @@ namespace HartreeFock {
 		rmsDensityMatricesDif = rmsDensityMatricesDif.cwiseProduct(rmsDensityMatricesDif);
 		rmsD += sqrt(rmsDensityMatricesDif.sum());
 
-		// will be used for DIIS
-		/*
-		const Eigen::MatrixXd errorMatrixPlus = FockMatrixPlus * newDensityMatrixPlus * overlapMatrix.matrix - overlapMatrix.matrix * newDensityMatrixPlus * FockMatrixPlus;
-
-		errorMatricesPlus.emplace_back(errorMatrixPlus);
-		fockMatricesPlus.push_back(FockMatrixPlus);
-		if (errorMatricesPlus.size() > 6)
-		{
-			errorMatricesPlus.pop_front();
-			fockMatricesPlus.pop_front();
-		}
-
-		const Eigen::MatrixXd errorMatrixMinus = FockMatrixMinus * newDensityMatrixMinus * overlapMatrix.matrix - overlapMatrix.matrix * newDensityMatrixMinus * FockMatrixMinus;
-
-		errorMatricesMinus.emplace_back(errorMatrixMinus);
-		fockMatricesMinus.push_back(FockMatrixMinus);
-		if (errorMatricesMinus.size() > 6)
-		{
-			errorMatricesMinus.pop_front();
-			fockMatricesMinus.pop_front();
-		}
-
-		if (errorMatricesPlus.size() > 1)
-		{
-			// use DIIS
-			const size_t nrMatrices = errorMatricesPlus.size();
-			Eigen::MatrixXd Bplus = Eigen::MatrixXd::Zero(nrMatrices + 1, nrMatrices + 1);
-			Eigen::MatrixXd Bminus = Eigen::MatrixXd::Zero(nrMatrices + 1, nrMatrices + 1);
-
-			for (int i = 0; i < nrMatrices; ++i)
-			{
-				Bplus(0, i) = Bplus(i, 0) = -1;
-				Bminus(0, i) = Bminus(i, 0) = -1;
-			}
-
-			auto errorPlusIter1 = errorMatricesPlus.begin();
-			auto errorMinusIter1 = errorMatricesMinus.begin();
-			for (size_t i = 0; i < nrMatrices; ++i)
-			{
-				auto errorPlusIter2 = errorMatricesPlus.begin();
-				auto errorMinusIter2 = errorMatricesMinus.begin();
-
-				for (size_t j = 0; j < i; ++j)
-				{
-					Bplus(i, j) = Bplus(j, i) = (*errorPlusIter1).cwiseProduct(*errorPlusIter2).sum();
-					Bminus(i, j) = Bminus(j, i) = (*errorMinusIter1).cwiseProduct(*errorMinusIter2).sum();
-
-					++errorPlusIter2;
-					++errorMinusIter2;
-				}
-
-				Bplus(i, i) = (*errorPlusIter1).cwiseProduct(*errorPlusIter2).sum();
-				Bminus(i, i) = (*errorMinusIter1).cwiseProduct(*errorMinusIter2).sum();
-
-				++errorPlusIter1;
-				++errorMinusIter1;
-			}
-
-			// Solve the systems of linear equations
-			// Solve the system of linear equations
-
-			Eigen::VectorXd CPlus = Eigen::VectorXd::Zero(nrMatrices + 1);
-			CPlus(nrMatrices) = -1;
-			Eigen::VectorXd CMinus = Eigen::VectorXd::Zero(nrMatrices + 1);
-			CMinus(nrMatrices) = -1;
-
-			CPlus = Bplus.colPivHouseholderQr().solve(CPlus);
-			CMinus = Bminus.colPivHouseholderQr().solve(CMinus);
-
-			// compute the new Fock matrices
-
-			FockMatrixPlus = Eigen::MatrixXd::Zero(FockMatrixPlus.rows(), FockMatrixPlus.cols());
-			FockMatrixMinus = Eigen::MatrixXd::Zero(FockMatrixMinus.rows(), FockMatrixMinus.cols());
-
-			auto fockIterPlus = fockMatricesPlus.begin();
-			auto fockIterMinus = fockMatricesMinus.begin();
-			for (size_t i = 0; i < nrMatrices; ++i)
-			{
-				FockMatrixPlus += CPlus(i) * (*fockIterPlus);
-				FockMatrixMinus += CMinus(i) * (*fockIterMinus);
-
-				++fockIterPlus;
-				++fockIterMinus;
-			}
-		}
-		*/
-
-		// TODO: finish it!
-
 		// ***************************************************************************************************
-		// go to the next density matrices - don't do this if DIIS is used
+		// go to the next density matrices
 		// use mixing if alpha is set less then one
-
-		DensityMatrixPlus = alpha * newDensityMatrixPlus + (1. - alpha) * DensityMatrixPlus;
-		DensityMatrixMinus = alpha * newDensityMatrixMinus + (1. - alpha) * DensityMatrixMinus;
+		
+		//if (UsedDIIS)
+		//{
+		//	DensityMatrixPlus = newDensityMatrixPlus;
+		//	DensityMatrixMinus = newDensityMatrixMinus;
+		//}
+		//else
+		//{
+			DensityMatrixPlus = alpha * newDensityMatrixPlus + (1. - alpha) * DensityMatrixPlus;
+			DensityMatrixMinus = alpha * newDensityMatrixMinus + (1. - alpha) * DensityMatrixMinus;
+		//}
 
 		return rmsD;
 	}

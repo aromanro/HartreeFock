@@ -41,6 +41,74 @@ namespace HartreeFock {
 
 		InitFockMatrix(iter, FockMatrix);
 
+		// will be used for DIIS
+		
+		/*
+		bool UsedDIIS = false;
+
+		if (iter)
+		{
+			const Eigen::MatrixXd errorMatrix = FockMatrix * DensityMatrix * overlapMatrix.matrix - overlapMatrix.matrix * DensityMatrix * FockMatrix;
+
+			errorMatrices.emplace_back(errorMatrix);
+			fockMatrices.push_back(FockMatrix);
+			if (errorMatrices.size() > 6)
+			{
+				errorMatrices.pop_front();
+				fockMatrices.pop_front();
+			}
+
+			if (errorMatrices.size() > 1)
+			{
+				// use DIIS
+				const size_t nrMatrices = errorMatrices.size();
+				Eigen::MatrixXd B = Eigen::MatrixXd::Zero(nrMatrices + 1, nrMatrices + 1);
+
+				auto errorIter1 = errorMatrices.begin();
+				for (size_t i = 0; i < nrMatrices; ++i)
+				{
+					auto errorIter2 = errorMatrices.begin();
+
+					for (size_t j = 0; j < i; ++j)
+					{
+						B(i, j) = B(j, i) = (*errorIter1).cwiseProduct(*errorIter2).sum();
+
+						++errorIter2;
+					}
+
+					B(i, i) = (*errorIter1).cwiseProduct(*errorIter2).sum();
+
+
+					B(nrMatrices, i) = B(i, nrMatrices) = -1;
+
+					++errorIter1;
+				}
+
+				// Solve the system of linear equations
+
+				Eigen::VectorXd C = Eigen::VectorXd::Zero(nrMatrices + 1);
+				C(nrMatrices) = -1;
+
+				//C = B.colPivHouseholderQr().solve(C);
+				C = B.fullPivHouseholderQr().solve(C);
+
+				// compute the new Fock matrix
+
+				FockMatrix = Eigen::MatrixXd::Zero(FockMatrix.rows(), FockMatrix.cols());
+
+				auto fockIter = fockMatrices.begin();
+				for (size_t i = 0; i < nrMatrices; ++i)
+				{
+					FockMatrix += C(i) * *fockIter;
+					++fockIter;
+				}
+
+				UsedDIIS = true;
+			}			
+		}
+		*/
+		
+
 		// ***************************************************************************************************************************
 
 		// solve the Roothaan-Hall equation
@@ -86,73 +154,13 @@ namespace HartreeFock {
 		rmsDensityMatricesDif = rmsDensityMatricesDif.cwiseProduct(rmsDensityMatricesDif);
 		const double rmsD = sqrt(rmsDensityMatricesDif.sum());
 
-		// will be used for DIIS
-
-		/*
-		Eigen::MatrixXd errorMatrix = FockMatrix * newDensityMatrix * overlapMatrix.matrix - overlapMatrix.matrix * newDensityMatrix * FockMatrix;
-
-		errorMatrices.emplace_back(errorMatrix);
-		fockMatrices.push_back(FockMatrix);
-		if (errorMatrices.size() > 6)
-		{
-			errorMatrices.pop_front();
-			fockMatrices.pop_front();
-		}
-
-		if (errorMatrices.size() > 1)
-		{
-			// use DIIS
-			const size_t nrMatrices = errorMatrices.size();
-			Eigen::MatrixXd B = Eigen::MatrixXd::Zero(nrMatrices + 1, nrMatrices + 1);
-
-			for (int i = 0; i < nrMatrices; ++i)
-				B(0, i) = B(i, 0) = -1;
-
-			auto errorIter1 = errorMatrices.begin();
-			for (size_t i = 0; i < nrMatrices; ++i)
-			{
-				auto errorIter2 = errorMatrices.begin();
-
-				for (size_t j = 0; j < i; ++j)
-				{
-					B(i, j) = B(j, i) = (*errorIter1).cwiseProduct(*errorIter2).sum();
-
-					++errorIter2;
-				}
-
-				B(i, i) = (*errorIter1).cwiseProduct(*errorIter2).sum();
-
-				++errorIter1;
-			}
-
-			// Solve the system of linear equations
-
-			Eigen::VectorXd C = Eigen::VectorXd::Zero(nrMatrices + 1);
-			C(nrMatrices) = -1;
-
-			C = B.colPivHouseholderQr().solve(C);
-
-			// compute the new Fock matrix
-
-			FockMatrix = Eigen::MatrixXd::Zero(FockMatrix.rows(), FockMatrix.cols());
-
-			auto fockIter = fockMatrices.begin();
-			for (size_t i = 0; i < nrMatrices; ++i)
-			{
-				FockMatrix += C(i) * (*fockIter);
-				++fockIter;
-			}
-		}
-
-		*/
-
-		// TODO: finish it!
-
-
 		// ***************************************************************************************************
-		// go to the next density matrix - don't do this if DIIS is used
+		// go to the next density matrix
 
-		DensityMatrix = alpha * newDensityMatrix + (1. - alpha) * DensityMatrix;  // use mixing if alpha is set less than 1
+		//if (UsedDIIS)
+		//	DensityMatrix = newDensityMatrix;
+		//else
+			DensityMatrix = alpha * newDensityMatrix + (1. - alpha) * DensityMatrix;  // use mixing if alpha is set less than 1
 
 		return rmsD;
 	}
@@ -178,7 +186,6 @@ namespace HartreeFock {
 		}
 		else
 		{
-
 			Eigen::MatrixXd G = Eigen::MatrixXd::Zero(h.rows(), h.cols());
 
 			for (int i = 0; i < numberOfOrbitals; ++i)
