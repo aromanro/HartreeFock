@@ -70,17 +70,17 @@ namespace HartreeFock {
 
 		// will be used for DIIS
 
-		/*
+		
 		bool UsedDIIS = false;
 		 
-		if (iter)
+		if (iter && iter < 1000)
 		{
-			const Eigen::MatrixXd errorMatrixPlus = FockMatrixPlus * DensityMatrixPlus * overlapMatrix.matrix - overlapMatrix.matrix * DensityMatrixPlus * FockMatrixPlus;
+			const Eigen::MatrixXd errorMatrixPlus = overlapMatrix.matrix * DensityMatrixPlus * FockMatrixPlus - FockMatrixPlus * DensityMatrixPlus * overlapMatrix.matrix;
 
 			errorMatricesPlus.emplace_back(errorMatrixPlus);
 			fockMatricesPlus.push_back(FockMatrixPlus);
 
-			const Eigen::MatrixXd errorMatrixMinus = FockMatrixMinus * DensityMatrixMinus * overlapMatrix.matrix - overlapMatrix.matrix * DensityMatrixMinus * FockMatrixMinus;
+			const Eigen::MatrixXd errorMatrixMinus = overlapMatrix.matrix * DensityMatrixMinus * FockMatrixMinus - FockMatrixMinus * DensityMatrixMinus * overlapMatrix.matrix;
 
 			errorMatricesMinus.emplace_back(errorMatrixMinus);
 			fockMatricesMinus.push_back(FockMatrixMinus);
@@ -121,8 +121,8 @@ namespace HartreeFock {
 
 					if (i == nrMatrices - 1) lastErrorEst = sqrt(Bplus(i, i) + Bminus(i, i));
 
-					Bplus(nrMatrices, i) = Bplus(i, nrMatrices) = -1;
-					Bminus(nrMatrices, i) = Bminus(i, nrMatrices) = -1;
+					Bplus(nrMatrices, i) = Bplus(i, nrMatrices) = 1;
+					Bminus(nrMatrices, i) = Bminus(i, nrMatrices) = 1;
 
 					++errorPlusIter1;
 					++errorMinusIter1;
@@ -131,9 +131,9 @@ namespace HartreeFock {
 				// Solve the systems of linear equations
 
 				Eigen::VectorXd CPlus = Eigen::VectorXd::Zero(nrMatrices + 1);
-				CPlus(nrMatrices) = -1;
+				CPlus(nrMatrices) = 1;
 				Eigen::VectorXd CMinus = Eigen::VectorXd::Zero(nrMatrices + 1);
-				CMinus(nrMatrices) = -1;
+				CMinus(nrMatrices) = 1;
 
 				CPlus = Bplus.colPivHouseholderQr().solve(CPlus);
 				CMinus = Bminus.colPivHouseholderQr().solve(CMinus);
@@ -157,7 +157,8 @@ namespace HartreeFock {
 				UsedDIIS = true;
 			}
 		}
-		*/
+		else lastErrorEst = 0;
+		
 
 		// ***************************************************************************************************************************
 
@@ -240,16 +241,16 @@ namespace HartreeFock {
 		// go to the next density matrices
 		// use mixing if alpha is set less then one
 		
-		//if (UsedDIIS)
-		//{
-		//	DensityMatrixPlus = newDensityMatrixPlus;
-		//	DensityMatrixMinus = newDensityMatrixMinus;
-		//}
-		//else
-		//{
+		if (UsedDIIS)
+		{
+			DensityMatrixPlus = newDensityMatrixPlus;
+			DensityMatrixMinus = newDensityMatrixMinus;
+		}
+		else
+		{
 			DensityMatrixPlus = alpha * newDensityMatrixPlus + (1. - alpha) * DensityMatrixPlus;
 			DensityMatrixMinus = alpha * newDensityMatrixMinus + (1. - alpha) * DensityMatrixMinus;
-		//}
+		}
 
 		return rmsD;
 	}

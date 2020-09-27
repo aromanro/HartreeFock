@@ -42,13 +42,15 @@ namespace HartreeFock {
 		InitFockMatrix(iter, FockMatrix);
 
 		// will be used for DIIS
-		/*
+		
 		bool UsedDIIS = false;
 
-		if (iter)
+		if (iter && iter < 1000)
 		{
-			const Eigen::MatrixXd errorMatrix = FockMatrix * DensityMatrix * overlapMatrix.matrix - overlapMatrix.matrix * DensityMatrix * FockMatrix;
+			// the density matrix should commute with the Fock matrix. The difference is the error.
+			const Eigen::MatrixXd errorMatrix = overlapMatrix.matrix * DensityMatrix * FockMatrix - FockMatrix * DensityMatrix * overlapMatrix.matrix;
 
+			// another choice: if reached the limit of kept matrices, replace the ones with the bigger error
 			errorMatrices.emplace_back(errorMatrix);
 			fockMatrices.push_back(FockMatrix);
 			if (errorMatrices.size() > 6)
@@ -79,7 +81,7 @@ namespace HartreeFock {
 
 					if (i == nrMatrices - 1) lastErrorEst = sqrt(B(i, i));
 
-					B(nrMatrices, i) = B(i, nrMatrices) = -1;
+					B(nrMatrices, i) = B(i, nrMatrices) = 1;
 
 					++errorIter1;
 				}
@@ -87,7 +89,7 @@ namespace HartreeFock {
 				// Solve the system of linear equations
 
 				Eigen::VectorXd C = Eigen::VectorXd::Zero(nrMatrices + 1);
-				C(nrMatrices) = -1;
+				C(nrMatrices) = 1;
 
 				//C = B.colPivHouseholderQr().solve(C);
 				C = B.fullPivHouseholderQr().solve(C);
@@ -106,7 +108,8 @@ namespace HartreeFock {
 				UsedDIIS = true;
 			}	
 		}
-		*/
+		else lastErrorEst = 0;
+		
 
 		// ***************************************************************************************************************************
 
@@ -156,9 +159,9 @@ namespace HartreeFock {
 		// ***************************************************************************************************
 		// go to the next density matrix
 
-		//if (UsedDIIS)
-		//	DensityMatrix = newDensityMatrix;
-		//else
+		if (UsedDIIS)
+			DensityMatrix = newDensityMatrix;
+		else
 			DensityMatrix = alpha * newDensityMatrix + (1. - alpha) * DensityMatrix;  // use mixing if alpha is set less than 1
 
 		return rmsD;

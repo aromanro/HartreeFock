@@ -68,7 +68,7 @@ namespace HartreeFock {
 
 			curEnergy = GetTotalEnergy();
 
-			if (abs(prevEnergy - curEnergy) <= 1E-15 && rmsD < 1E-12 && lastErrorEst < 1E-2) {
+			if (abs(prevEnergy - curEnergy) <= 1E-13 && rmsD < 1E-7 && lastErrorEst < 1E-5) {
 				converged = true;
 				break;
 			}
