@@ -118,8 +118,8 @@ namespace HartreeFock {
 						++errorMinusIter2;
 					}
 
-					Bplus(i, i) = (*errorPlusIter1).cwiseProduct(*errorPlusIter2).sum();
-					Bminus(i, i) = (*errorMinusIter1).cwiseProduct(*errorMinusIter2).sum();
+					Bplus(i, i) = (*errorPlusIter1).cwiseProduct(*errorPlusIter1).sum();
+					Bminus(i, i) = (*errorMinusIter1).cwiseProduct(*errorMinusIter1).sum();
 
 					Bplus(nrMatrices, i) = Bplus(i, nrMatrices) = -1;
 					Bminus(nrMatrices, i) = Bminus(i, nrMatrices) = -1;
