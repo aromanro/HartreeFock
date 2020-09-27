@@ -6,7 +6,7 @@ namespace HartreeFock {
 
 	HartreeFockAlgorithm::HartreeFockAlgorithm(int iterations)
 		: nuclearRepulsionEnergy(0), numberOfOrbitals(0),  maxIterations(iterations), inited(false), alpha(0.75), initGuess(0.75), terminate(false), converged(false), 
-		HOMOEnergy(0)
+		HOMOEnergy(0), lastErrorEst(0)
 	{
 	}
 
@@ -68,7 +68,7 @@ namespace HartreeFock {
 
 			curEnergy = GetTotalEnergy();
 
-			if (abs(prevEnergy - curEnergy) <= 1E-13 && rmsD < 1E-7) {
+			if (abs(prevEnergy - curEnergy) <= 1E-15 && rmsD < 1E-12 && lastErrorEst < 1E-2) {
 				converged = true;
 				break;
 			}

@@ -50,6 +50,8 @@ namespace HartreeFock {
 
 		double HOMOEnergy;
 
+		double lastErrorEst;
+
 		HartreeFockAlgorithm(int iterations = 3000);
 		virtual ~HartreeFockAlgorithm();
 		

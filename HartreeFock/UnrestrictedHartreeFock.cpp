@@ -119,6 +119,8 @@ namespace HartreeFock {
 					Bplus(i, i) = (*errorPlusIter1).cwiseProduct(*errorPlusIter1).sum();
 					Bminus(i, i) = (*errorMinusIter1).cwiseProduct(*errorMinusIter1).sum();
 
+					if (i == nrMatrices - 1) lastErrorEst = sqrt(Bplus(i, i) + Bminus(i, i));
+
 					Bplus(nrMatrices, i) = Bplus(i, nrMatrices) = -1;
 					Bminus(nrMatrices, i) = Bminus(i, nrMatrices) = -1;
 

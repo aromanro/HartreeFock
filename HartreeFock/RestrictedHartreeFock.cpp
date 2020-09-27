@@ -42,7 +42,6 @@ namespace HartreeFock {
 		InitFockMatrix(iter, FockMatrix);
 
 		// will be used for DIIS
-		
 		/*
 		bool UsedDIIS = false;
 
@@ -78,6 +77,7 @@ namespace HartreeFock {
 
 					B(i, i) = (*errorIter1).cwiseProduct(*errorIter1).sum();
 
+					if (i == nrMatrices - 1) lastErrorEst = sqrt(B(i, i));
 
 					B(nrMatrices, i) = B(i, nrMatrices) = -1;
 
@@ -91,7 +91,7 @@ namespace HartreeFock {
 
 				//C = B.colPivHouseholderQr().solve(C);
 				C = B.fullPivHouseholderQr().solve(C);
-
+			
 				// compute the new Fock matrix
 
 				FockMatrix = Eigen::MatrixXd::Zero(FockMatrix.rows(), FockMatrix.cols());
@@ -107,9 +107,7 @@ namespace HartreeFock {
 			}	
 		}
 		*/
-		
-		
-		
+
 		// ***************************************************************************************************************************
 
 		// solve the Roothaan-Hall equation
