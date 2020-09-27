@@ -44,7 +44,7 @@ namespace HartreeFock {
 		// will be used for DIIS
 		
 		/*
-		//bool UsedDIIS = false;
+		bool UsedDIIS = false;
 
 		if (iter)
 		{
@@ -58,7 +58,7 @@ namespace HartreeFock {
 				fockMatrices.pop_front();
 			}
 
-			if (errorMatrices.size() > 1)
+			if (errorMatrices.size() > 2)
 			{
 				// use DIIS
 				const size_t nrMatrices = errorMatrices.size();
@@ -89,8 +89,8 @@ namespace HartreeFock {
 				Eigen::VectorXd C = Eigen::VectorXd::Zero(nrMatrices + 1);
 				C(nrMatrices) = -1;
 
-				C = B.colPivHouseholderQr().solve(C);
-				//C = B.fullPivHouseholderQr().solve(C);
+				//C = B.colPivHouseholderQr().solve(C);
+				C = B.fullPivHouseholderQr().solve(C);
 
 				// compute the new Fock matrix
 
@@ -103,10 +103,12 @@ namespace HartreeFock {
 					++fockIter;
 				}
 
-				//UsedDIIS = true;
-			}			
+				UsedDIIS = true;
+			}	
 		}
 		*/
+		
+		
 		
 		// ***************************************************************************************************************************
 
@@ -120,10 +122,10 @@ namespace HartreeFock {
 
 		// this hopefully is faster than the one commented above
 
-		const Eigen::MatrixXd FockTransformed = Vt * FockMatrix * V;
+		const Eigen::MatrixXd FockTransformed = Vt * FockMatrix * V; // orthogonalize
 		const Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> es(FockTransformed);
 		const Eigen::MatrixXd& Cprime = es.eigenvectors();
-		const Eigen::MatrixXd C = V * Cprime;
+		const Eigen::MatrixXd C = V * Cprime; // transform back the eigenvectors into the original non-orthogonalized AO basis
 
 		// normalize it
 		//NormalizeC(C, occupied);

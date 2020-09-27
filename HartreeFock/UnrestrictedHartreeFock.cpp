@@ -79,23 +79,21 @@ namespace HartreeFock {
 
 			errorMatricesPlus.emplace_back(errorMatrixPlus);
 			fockMatricesPlus.push_back(FockMatrixPlus);
-			if (errorMatricesPlus.size() > 6)
-			{
-				errorMatricesPlus.pop_front();
-				fockMatricesPlus.pop_front();
-			}
 
 			const Eigen::MatrixXd errorMatrixMinus = FockMatrixMinus * DensityMatrixMinus * overlapMatrix.matrix - overlapMatrix.matrix * DensityMatrixMinus * FockMatrixMinus;
 
 			errorMatricesMinus.emplace_back(errorMatrixMinus);
 			fockMatricesMinus.push_back(FockMatrixMinus);
-			if (errorMatricesMinus.size() > 6)
+
+			if (errorMatricesPlus.size() > 8)
 			{
+				errorMatricesPlus.pop_front();
+				fockMatricesPlus.pop_front();
 				errorMatricesMinus.pop_front();
 				fockMatricesMinus.pop_front();
 			}
 
-			if (errorMatricesPlus.size() > 1)
+			if (errorMatricesPlus.size() > 3)
 			{
 				// use DIIS
 				const size_t nrMatrices = errorMatricesPlus.size();
@@ -163,6 +161,7 @@ namespace HartreeFock {
 
 		// solve the Pople-Nesbet–Berthier equations
 
+		 // orthogonalize
 		const Eigen::MatrixXd FockMatrixPlusTransformed = Vt * FockMatrixPlus * V;
 		const Eigen::MatrixXd FockMatrixMinusTransformed = Vt * FockMatrixMinus * V;
 
@@ -173,7 +172,7 @@ namespace HartreeFock {
 		{
 			Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> esplus(FockMatrixPlusTransformed);
 			const Eigen::MatrixXd& Cplusprime = esplus.eigenvectors();
-			Cplus = V * Cplusprime;
+			Cplus = V * Cplusprime; // transform back the eigenvectors into the original non-orthogonalized AO basis
 			eigenvalsplus = esplus.eigenvalues();
 		}
 		else
@@ -190,7 +189,7 @@ namespace HartreeFock {
 		{
 			Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> esminus(FockMatrixMinusTransformed);
 			const Eigen::MatrixXd& Cminusprime = esminus.eigenvectors();
-			Cminus = V * Cminusprime;
+			Cminus = V * Cminusprime; // transform back the eigenvectors into the original non-orthogonalized AO basis
 			eigenvalsminus = esminus.eigenvalues();
 		}
 		else
