@@ -28,6 +28,11 @@ namespace HartreeFock {
 		// adjust the nrOccupied value above then to get the proper homo energy
 		std::vector<bool> occupied;
 
+		// results that might be needed in the end, after the last step
+		Eigen::VectorXd eigenvals;
+		Eigen::MatrixXd Ce; // eigenvectors transformed back into the non-orthogonal AO basis
+
+
 		RestrictedHartreeFock(int iterations = 3000);
 		virtual ~RestrictedHartreeFock();
 		

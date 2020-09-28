@@ -170,9 +170,6 @@ namespace HartreeFock {
 		const Eigen::MatrixXd FockMatrixPlusTransformed = Vt * FockMatrixPlus * V;
 		const Eigen::MatrixXd FockMatrixMinusTransformed = Vt * FockMatrixMinus * V;
 
-		Eigen::MatrixXd Cplus;
-		Eigen::VectorXd eigenvalsplus;
-
 		if (FockMatrixPlusTransformed.rows() > 1)
 		{
 			Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> esplus(FockMatrixPlusTransformed);
@@ -185,10 +182,6 @@ namespace HartreeFock {
 			Cplus = V * Eigen::MatrixXd::Ones(1, 1);
 			eigenvalsplus = FockMatrixPlusTransformed(0, 0) * Eigen::VectorXd::Ones(1);
 		}
-
-
-		Eigen::MatrixXd Cminus;
-		Eigen::VectorXd eigenvalsminus;
 
 		if (FockMatrixMinusTransformed.rows() > 1)
 		{

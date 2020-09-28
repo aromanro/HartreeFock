@@ -127,7 +127,7 @@ namespace HartreeFock {
 		const Eigen::MatrixXd FockTransformed = Vt * FockMatrix * V; // orthogonalize
 		const Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> es(FockTransformed);
 		const Eigen::MatrixXd& Cprime = es.eigenvectors();
-		const Eigen::MatrixXd C = V * Cprime; // transform back the eigenvectors into the original non-orthogonalized AO basis
+		Ce = V * Cprime; // transform back the eigenvectors into the original non-orthogonalized AO basis
 
 		// normalize it
 		//NormalizeC(C, occupied);
@@ -141,12 +141,12 @@ namespace HartreeFock {
 		for (int i = 0; i < h.rows(); ++i)
 			for (int j = 0; j < h.cols(); ++j)
 				for (unsigned int vec = 0; vec < occupied.size(); ++vec) // only eigenstates that are occupied 
-					if (occupied[vec]) newDensityMatrix(i, j) += 2. * C(i, vec) * C(j, vec); // 2 is for the number of electrons in the eigenstate, it's the restricted Hartree-Fock
+					if (occupied[vec]) newDensityMatrix(i, j) += 2. * Ce(i, vec) * Ce(j, vec); // 2 is for the number of electrons in the eigenstate, it's the restricted Hartree-Fock
 
 
 		//**************************************************************************************************************
 
-		const Eigen::VectorXd& eigenvals = es.eigenvalues();
+		eigenvals = es.eigenvalues();
 
 		CalculateEnergy(eigenvals, newDensityMatrix/*, FockMatrix*/);
 
