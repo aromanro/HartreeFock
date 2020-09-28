@@ -191,6 +191,9 @@ double HartreeFockThread::ComputeAtom(const Systems::AtomWithShells& atom)
 	algorithm->initGuess = opt.initialGuess;
 	algorithm->integralsRepository.useLotsOfMemory = opt.useLotsOfMemory;
 
+	algorithm->maxDIISiterations = opt.maxDIISiterations;
+	algorithm->UseDIIS = opt.useDIIS;
+
 	algorithm->Init(&atomM);
 
 	const double result = algorithm->Calculate();
