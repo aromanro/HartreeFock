@@ -57,6 +57,9 @@ public:
 	bool displayBohrs;
 
 	int DisplayHOMOEnergy; // 0 - groundstate energy, 1 - HOMO energy, 2 - binding energy
+
+	bool useDIIS;
+	int maxDIISiterations;
 protected:
 	static double GetDouble(LPCTSTR param, double defval);
 };

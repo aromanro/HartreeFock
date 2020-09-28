@@ -45,7 +45,7 @@ namespace HartreeFock {
 		
 		bool UsedDIIS = false;
 
-		if (iter && iter < 1000)
+		if (UseDIIS && iter && iter < maxDIISiterations)
 		{
 			// the density matrix should commute with the Fock matrix. The difference is the error.
 			const Eigen::MatrixXd errorMatrix = overlapMatrix.matrix * DensityMatrix * FockMatrix - FockMatrix * DensityMatrix * overlapMatrix.matrix;
@@ -91,8 +91,9 @@ namespace HartreeFock {
 				Eigen::VectorXd C = Eigen::VectorXd::Zero(nrMatrices + 1);
 				C(nrMatrices) = 1;
 
-				//C = B.colPivHouseholderQr().solve(C);
-				C = B.fullPivHouseholderQr().solve(C);
+				//C = B.fullPivLu().solve(C);
+				C = B.colPivHouseholderQr().solve(C);
+				//C = B.fullPivHouseholderQr().solve(C);
 			
 				// compute the new Fock matrix
 

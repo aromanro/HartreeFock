@@ -41,7 +41,9 @@ Options::Options()
 	useSplines(false),
 	displayHartrees(false),
 	displayBohrs(false),
-	DisplayHOMOEnergy(0)
+	DisplayHOMOEnergy(0),
+	useDIIS(true),
+	maxDIISiterations(1000)
 {
 }
 
@@ -90,6 +92,9 @@ void Options::Load()
 	displayBohrs = (1 == theApp.GetProfileInt(L"options", L"DisplayBohrs", 0) ? true : false);
 
 	DisplayHOMOEnergy = theApp.GetProfileInt(L"options", L"DisplayHOMOEnergy", 0);
+
+	useDIIS = (1 == theApp.GetProfileInt(L"options", L"UseDIIS", 1) ? true : false);
+	maxDIISiterations = theApp.GetProfileInt(L"options", L"MaxDIISiterations", 1000);
 }
 
 
@@ -132,6 +137,9 @@ void Options::Save()
 	theApp.WriteProfileInt(L"options", L"DisplayBohrs", displayBohrs ? 1 : 0);
 
 	theApp.WriteProfileInt(L"options", L"DisplayHOMOEnergy", DisplayHOMOEnergy);
+
+	theApp.WriteProfileInt(L"options", L"UseDIIS", useDIIS ? 1 : 0);
+	theApp.WriteProfileInt(L"options", L"MaxDIISiterations", maxDIISiterations);
 }
 
 double Options::GetDouble(LPCTSTR param, double defval)

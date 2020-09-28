@@ -43,6 +43,11 @@ protected:
 	int iterations;
 	double asymmetry;
 	int addAsymmetry;
+	int useDIIS;
+	int maxDIISiterations;
+public:
+	afx_msg void OnBnClickedCheck5();
+	afx_msg void OnEnChangeEdit5();
 };
 
 

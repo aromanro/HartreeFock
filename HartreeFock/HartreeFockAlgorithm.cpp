@@ -6,7 +6,7 @@ namespace HartreeFock {
 
 	HartreeFockAlgorithm::HartreeFockAlgorithm(int iterations)
 		: nuclearRepulsionEnergy(0), numberOfOrbitals(0),  maxIterations(iterations), inited(false), alpha(0.75), initGuess(0.75), terminate(false), converged(false), 
-		HOMOEnergy(0), lastErrorEst(0)
+		HOMOEnergy(0), lastErrorEst(0), UseDIIS(true), maxDIISiterations(1000)
 	{
 	}
 

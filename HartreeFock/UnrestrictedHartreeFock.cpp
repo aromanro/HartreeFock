@@ -73,7 +73,7 @@ namespace HartreeFock {
 		
 		bool UsedDIIS = false;
 		 
-		if (iter && iter < 1000)
+		if (UseDIIS && iter && iter < maxDIISiterations)
 		{
 			const Eigen::MatrixXd errorMatrixPlus = overlapMatrix.matrix * DensityMatrixPlus * FockMatrixPlus - FockMatrixPlus * DensityMatrixPlus * overlapMatrix.matrix;
 
@@ -135,6 +135,8 @@ namespace HartreeFock {
 				Eigen::VectorXd CMinus = Eigen::VectorXd::Zero(nrMatrices + 1);
 				CMinus(nrMatrices) = 1;
 
+				//CPlus = Bplus.fullPivHouseholderQr().solve(CPlus);
+				//CMinus = Bminus.fullPivHouseholderQr().solve(CMinus);
 				CPlus = Bplus.colPivHouseholderQr().solve(CPlus);
 				CMinus = Bminus.colPivHouseholderQr().solve(CMinus);
 

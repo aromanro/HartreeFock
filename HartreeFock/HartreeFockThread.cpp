@@ -30,6 +30,8 @@ HartreeFockThread::HartreeFockThread(const Options& options, CHartreeFockDoc* do
 
 	algorithm->integralsRepository.useLotsOfMemory = options.useLotsOfMemory;
 
+	algorithm->maxDIISiterations = options.maxDIISiterations;
+	algorithm->UseDIIS = options.useDIIS;
 
 	CT2CA psz1(options.m_atom1);
 	std::string str1(psz1);
