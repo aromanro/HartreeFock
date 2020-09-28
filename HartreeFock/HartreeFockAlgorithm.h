@@ -17,7 +17,9 @@ namespace HartreeFock {
 	class HartreeFockAlgorithm
 	{
 	protected:
-		
+		double totalEnergy;
+		double mp2Energy;
+
 		Matrices::OverlapMatrix overlapMatrix;
 		Matrices::KineticMatrix kineticMatrix;
 		Matrices::NuclearMatrix nuclearMatrix;
@@ -63,7 +65,19 @@ namespace HartreeFock {
 		double Calculate();
 		
 		virtual double Step(int iter) = 0;
-		virtual double GetTotalEnergy() const = 0;
+		
+		double GetTotalEnergy() const
+		{
+			return totalEnergy;
+		};
+
+		virtual double GetMP2Energy() const
+		{
+			return mp2Energy;
+		}
+
+		virtual double CalculateMp2Energy() = 0;
+
 	protected:
 		static double DiffDensityMatrices(const Eigen::MatrixXd& oldP, const Eigen::MatrixXd& newP);
 		void NormalizeC(Eigen::MatrixXd& C, const std::vector<bool>& occupied);

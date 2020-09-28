@@ -11,8 +11,6 @@ namespace HartreeFock {
 	{
 		friend class Test;
 	protected:
-		double totalEnergy;
-
 		std::list<Eigen::MatrixXd> errorMatrices;
 		std::list<Eigen::MatrixXd> fockMatrices;
 
@@ -36,10 +34,11 @@ namespace HartreeFock {
 		RestrictedHartreeFock(int iterations = 3000);
 		virtual ~RestrictedHartreeFock();
 		
-		virtual void Init(Systems::Molecule* molecule);
+		virtual void Init(Systems::Molecule* molecule) override;
 
-		virtual double Step(int iter);
-		virtual double GetTotalEnergy() const;
+		virtual double Step(int iter) override;
+
+		virtual double CalculateMp2Energy() override;
 	};
 
 }

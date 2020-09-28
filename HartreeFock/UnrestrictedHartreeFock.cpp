@@ -6,7 +6,7 @@ namespace HartreeFock {
 
 
 	UnrestrictedHartreeFock::UnrestrictedHartreeFock(int iterations)
-		: HartreeFockAlgorithm(iterations), totalEnergy(0), nrOccupiedLevelsPlus(0), nrOccupiedLevelsMinus(0), addAsymmetry(true), asymmetry(0.1)
+		: HartreeFockAlgorithm(iterations), nrOccupiedLevelsPlus(0), nrOccupiedLevelsMinus(0), addAsymmetry(true), asymmetry(0.1)
 	{
 	}
 
@@ -352,9 +352,13 @@ namespace HartreeFock {
 		totalEnergy += nuclearRepulsionEnergy;
 	}
 
-	double UnrestrictedHartreeFock::GetTotalEnergy() const
+	double UnrestrictedHartreeFock::CalculateMp2Energy()
 	{
-		return totalEnergy;
+		mp2Energy = 0;
+
+		// TODO: calculate it
+
+		return mp2Energy;
 	}
 
 }

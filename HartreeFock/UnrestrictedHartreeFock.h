@@ -8,8 +8,6 @@ namespace HartreeFock {
 	{
 		friend class Test;
 	protected:
-		double totalEnergy;
-
 		std::list<Eigen::MatrixXd> errorMatricesPlus;
 		std::list<Eigen::MatrixXd> errorMatricesMinus;
 
@@ -43,10 +41,11 @@ namespace HartreeFock {
 		UnrestrictedHartreeFock(int iterations = 3000);
 		virtual ~UnrestrictedHartreeFock();
 
-		virtual void Init(Systems::Molecule* molecule);
+		virtual void Init(Systems::Molecule* molecule) override;
 
-		virtual double Step(int iter);
-		virtual double GetTotalEnergy() const;
+		virtual double Step(int iter) override;
+
+		virtual double CalculateMp2Energy() override;
 	};
 
 }

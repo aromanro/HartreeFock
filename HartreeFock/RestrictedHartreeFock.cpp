@@ -5,7 +5,7 @@ namespace HartreeFock {
 
 
 	RestrictedHartreeFock::RestrictedHartreeFock(int iterations)
-		: HartreeFockAlgorithm(iterations), totalEnergy(std::numeric_limits<double>::infinity()), nrOccupiedLevels(0)
+		: HartreeFockAlgorithm(iterations), nrOccupiedLevels(0)
 	{
 	}
 
@@ -42,7 +42,7 @@ namespace HartreeFock {
 		InitFockMatrix(iter, FockMatrix);
 
 		// will be used for DIIS
-		
+
 		bool UsedDIIS = false;
 
 		if (UseDIIS && iter && iter < maxDIISiterations)
@@ -94,7 +94,7 @@ namespace HartreeFock {
 				//C = B.fullPivLu().solve(C);
 				C = B.colPivHouseholderQr().solve(C);
 				//C = B.fullPivHouseholderQr().solve(C);
-			
+
 				// compute the new Fock matrix
 
 				FockMatrix = Eigen::MatrixXd::Zero(FockMatrix.rows(), FockMatrix.cols());
@@ -107,10 +107,10 @@ namespace HartreeFock {
 				}
 
 				UsedDIIS = true;
-			}	
+			}
 		}
 		else lastErrorEst = 0;
-		
+
 
 		// ***************************************************************************************************************************
 
@@ -248,8 +248,13 @@ namespace HartreeFock {
 		totalEnergy += nuclearRepulsionEnergy;
 	}
 
-	double RestrictedHartreeFock::GetTotalEnergy() const
+	double RestrictedHartreeFock::CalculateMp2Energy()
 	{
-		return totalEnergy;
+		mp2Energy = 0;
+
+		// TODO: calculate it
+
+		return mp2Energy;
 	}
+
 }
