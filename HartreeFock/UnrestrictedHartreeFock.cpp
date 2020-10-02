@@ -135,10 +135,10 @@ namespace HartreeFock {
 				Eigen::VectorXd CMinus = Eigen::VectorXd::Zero(nrMatrices + 1);
 				CMinus(nrMatrices) = 1;
 
-				//CPlus = Bplus.fullPivHouseholderQr().solve(CPlus);
-				//CMinus = Bminus.fullPivHouseholderQr().solve(CMinus);
-				CPlus = Bplus.colPivHouseholderQr().solve(CPlus);
-				CMinus = Bminus.colPivHouseholderQr().solve(CMinus);
+				CPlus = Bplus.fullPivHouseholderQr().solve(CPlus);
+				CMinus = Bminus.fullPivHouseholderQr().solve(CMinus);
+				//CPlus = Bplus.colPivHouseholderQr().solve(CPlus);
+				//CMinus = Bminus.colPivHouseholderQr().solve(CMinus);
 
 				// compute the new Fock matrices
 
