@@ -53,13 +53,13 @@ namespace HartreeFock {
 			// another choice: if reached the limit of kept matrices, replace the ones with the bigger error
 			errorMatrices.emplace_back(errorMatrix);
 			fockMatrices.push_back(FockMatrix);
-			if (errorMatrices.size() > 6)
+			if (errorMatrices.size() > 8)
 			{
 				errorMatrices.pop_front();
 				fockMatrices.pop_front();
 			}
 
-			if (errorMatrices.size() > 2)
+			if (errorMatrices.size() > 6)
 			{
 				// use DIIS
 				const size_t nrMatrices = errorMatrices.size();
@@ -240,7 +240,7 @@ namespace HartreeFock {
 
 		for (int i = 0; i < H.rows(); ++i)
 			for (int j = 0; j < H.cols(); ++j)
-				totalEnergy += calcP(i, j) * H(j, i);
+				totalEnergy += calcDensityMatrix(i, j) * H(j, i);
 
 		totalEnergy /= 2.;
 */

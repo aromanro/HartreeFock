@@ -93,7 +93,7 @@ namespace HartreeFock {
 				fockMatricesMinus.pop_front();
 			}
 
-			if (errorMatricesPlus.size() > 3)
+			if (errorMatricesPlus.size() > 6)
 			{
 				// use DIIS
 				const size_t nrMatrices = errorMatricesPlus.size();
@@ -337,12 +337,12 @@ namespace HartreeFock {
 		/*
 		for (int i = 0; i < h.rows(); ++i)
 			for (int j = 0; j < h.cols(); ++j)
-				totalEnergy += (calcPplus(i, j) + calcPminus(i, j)) * h(j, i);
+				totalEnergy += (calcDensityMatrixPlus(i, j) + calcDensityMatrixMinus(i, j)) * h(j, i);
 
 
 		for (unsigned int i = 0; i < h.rows(); ++i)
 			for (unsigned int j = 0; j < h.cols(); ++j)
-				totalEnergy += calcPplus(i, j) * Fplus(i, j) + calcPminus(i, j) * Fminus(i, j);
+				totalEnergy += calcDensityMatrixPlus(i, j) * Fplus(i, j) + calcDensityMatrixMinus(i, j) * Fminus(i, j);
 				*/
 				// *******************************************************************************************
 
