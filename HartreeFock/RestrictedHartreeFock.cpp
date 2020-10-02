@@ -153,9 +153,8 @@ namespace HartreeFock {
 		TRACE("Step: %d Energy: %f\n", iter, totalEnergy);
 
 		// calculate rms for differences between new and old density matrices, it can be used to check for convergence, too
-		Eigen::MatrixXd rmsDensityMatricesDif = newDensityMatrix - DensityMatrix;
-		rmsDensityMatricesDif = rmsDensityMatricesDif.cwiseProduct(rmsDensityMatricesDif);
-		const double rmsD = sqrt(rmsDensityMatricesDif.sum());
+		const Eigen::MatrixXd rmsDensityMatricesDif = newDensityMatrix - DensityMatrix;
+		const double rmsD = sqrt(rmsDensityMatricesDif.cwiseProduct(rmsDensityMatricesDif).sum());
 
 		// ***************************************************************************************************
 		// go to the next density matrix
