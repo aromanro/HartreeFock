@@ -82,7 +82,7 @@ namespace HartreeFock {
 		}
 
 		// did it converge with DIIS?
-		if (UseDIIS && iter < maxDIISiterations && converged)
+		if (UseDIIS && iter < maxDIISiterations && converged && normalIterAfterDIIS)
 		{
 			UseDIIS = false;
 
