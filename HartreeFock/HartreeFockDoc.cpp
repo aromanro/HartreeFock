@@ -117,8 +117,8 @@ BOOL CHartreeFockDoc::OnNewDocument()
 
 	//Test::OutputMatricesForAtom("Ti", "sto3g.txt", "c:\\temp\\matrices.txt");
 
-	Test test;
-	test.TestWater("c:\\temp\\h2o.txt");
+	//Test test;
+	//test.TestWater("c:\\temp\\h2o.txt");
 
 	// Example for H2O and He (now with some other basis, too):
 
