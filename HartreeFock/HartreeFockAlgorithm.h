@@ -57,6 +57,8 @@ namespace HartreeFock {
 		bool UseDIIS;
 		int maxDIISiterations;
 
+		int normalIterAfterDIIS;
+
 		HartreeFockAlgorithm(int iterations = 3000);
 		virtual ~HartreeFockAlgorithm();
 		

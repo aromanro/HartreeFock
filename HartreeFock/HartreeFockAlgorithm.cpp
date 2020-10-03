@@ -1,12 +1,14 @@
 #include "stdafx.h"
 #include "HartreeFockAlgorithm.h"
 
+#include "Constants.h"
+
 
 namespace HartreeFock {
 
 	HartreeFockAlgorithm::HartreeFockAlgorithm(int iterations)
 		: totalEnergy(std::numeric_limits<double>::infinity()), mp2Energy(0), nuclearRepulsionEnergy(0), numberOfOrbitals(0),  maxIterations(iterations), inited(false), alpha(0.75), initGuess(0.75), terminate(false), converged(false),
-		HOMOEnergy(0), lastErrorEst(0), UseDIIS(true), maxDIISiterations(1000)
+		HOMOEnergy(0), lastErrorEst(0), UseDIIS(true), maxDIISiterations(1000), normalIterAfterDIIS(500)
 	{
 	}
 
@@ -61,21 +63,64 @@ namespace HartreeFock {
 
 		if (!inited) return prevEnergy;
 
-		// some big number before bail out
-		for (int iter = 0; iter < maxIterations; ++iter)
+		int iter = 0;
+		for (; iter < maxIterations; ++iter)
 		{
 			const double rmsD = Step(iter);
 
 			curEnergy = GetTotalEnergy();
 
-			if (abs(prevEnergy - curEnergy) <= 1E-13 && rmsD < 1E-7 && lastErrorEst < 1E-9) {
+			if (abs(prevEnergy - curEnergy) <= energyConvergence && rmsD < rmsDConvergence && lastErrorEst < diisConvergence) {
 				converged = true;
 				break;
 			}
 
-			if (terminate) break;
+			if (terminate) return curEnergy;
 
 			prevEnergy = curEnergy;
+		}
+
+		// did it converge with DIIS?
+		if (UseDIIS && iter < maxDIISiterations && converged)
+		{
+			UseDIIS = false;
+
+			// do a loop without checking the convergence, sometimes DIIS gets stuck in a bad position close to the minimum
+			for (int i = 0; i < normalIterAfterDIIS; ++i)
+			{
+				curEnergy = Step(iter + i);
+				if (terminate)
+				{
+					UseDIIS = true; // restore it back
+					return curEnergy;
+				}
+			}
+
+			iter += normalIterAfterDIIS;
+
+			// now continue with normal iteration with convergence checking
+			for (; iter < maxIterations; ++iter)
+			{
+				const double rmsD = Step(iter);
+
+				curEnergy = GetTotalEnergy();
+
+				if (abs(prevEnergy - curEnergy) <= energyConvergence && rmsDConvergence < rmsDConvergence) {
+					converged = true;
+					UseDIIS = true; // restore it back
+					return curEnergy;
+				}
+
+				if (terminate)
+				{
+					UseDIIS = true; // restore it back
+					return curEnergy;
+				}
+
+				prevEnergy = curEnergy;
+			}
+
+			UseDIIS = true; // restore it back
 		}
 
 		return curEnergy;
