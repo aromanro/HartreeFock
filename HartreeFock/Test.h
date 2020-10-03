@@ -19,6 +19,8 @@ public:
 	void TestMethane(const std::string& fileName, const std::string& sfileName = "", const std::string& tfileName = "", const std::string& vfileName = "", const std::string& erifileName = "");
 
 protected:
+	static void OutputMatrix(const Eigen::MatrixXd& matrix, std::ofstream& file);
+
 	Chemistry::Basis basisSTO3G;
 };
 

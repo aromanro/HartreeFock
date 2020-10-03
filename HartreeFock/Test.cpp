@@ -61,6 +61,27 @@ void Test::OutputMatricesForAtom(const std::string& atomName, const std::string&
 }
 
 
+void Test::OutputMatrix(const Eigen::MatrixXd& matrix, std::ofstream& file)
+{
+	for (int i = 0; i < matrix.rows(); ++i)
+	{
+		std::stringstream line;
+		line.precision(6);
+		line.setf(std::ios_base::fixed);
+
+		for (int j = 0; j < matrix.cols(); ++j)
+			line << matrix(i, j) << "\t\t\t";
+
+		line << std::endl;
+
+		file << line.str();
+	}
+
+	file << std::endl;
+}
+
+
+
 void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, const std::string& sfileName, const std::string& tfileName, const std::string& vfileName, const std::string& erifileName, const double expectedNucEnergy)
 {
 	HartreeFock::HartreeFockAlgorithm* hartreeFock;
@@ -94,57 +115,17 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 
 	file << "Overlap Matrix:\n";
 
-	for (int i = 0; i < hartreeFock->overlapMatrix.matrix.rows(); ++i)
-	{
-		std::stringstream line;
-		line.precision(6);
-		line.setf(std::ios_base::fixed);
-
-		for (int j = 0; j < hartreeFock->overlapMatrix.matrix.cols(); ++j)
-			line << hartreeFock->overlapMatrix.matrix(i, j) << "\t\t\t";
-
-		line << std::endl;
-
-		file << line.str();
-	}
-
+	OutputMatrix(hartreeFock->overlapMatrix.matrix, file);
 	CheckDifferences(hartreeFock->overlapMatrix.matrix, sfileName, file);
 
 	file << "\nKinetic Matrix:\n";
 
-	for (int i = 0; i < hartreeFock->kineticMatrix.matrix.rows(); ++i)
-	{
-		std::stringstream line;
-		line.precision(6);
-		line.setf(std::ios_base::fixed);
-
-		for (int j = 0; j < hartreeFock->kineticMatrix.matrix.cols(); ++j)
-			line << hartreeFock->kineticMatrix.matrix(i, j) << "\t\t\t";
-
-		line << std::endl;
-
-		file << line.str();
-	}
-
+	OutputMatrix(hartreeFock->kineticMatrix.matrix, file);
 	CheckDifferences(hartreeFock->kineticMatrix.matrix, tfileName, file);
 
 	file << "\nNuclear Matrix:\n";
 
-	for (int i = 0; i < hartreeFock->nuclearMatrix.matrix.rows(); ++i)
-	{
-		std::stringstream line;
-		line.precision(6);
-		line.setf(std::ios_base::fixed);
-
-		for (int j = 0; j < hartreeFock->nuclearMatrix.matrix.cols(); ++j)
-			line << hartreeFock->nuclearMatrix.matrix(i, j) << "\t\t\t";
-
-		line << std::endl;
-
-		file << line.str();
-	}
-
-
+	OutputMatrix(hartreeFock->nuclearMatrix.matrix, file);
 	CheckDifferences(hartreeFock->nuclearMatrix.matrix, vfileName, file);
 
 	file << std::endl;
@@ -166,35 +147,11 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 
 	file << "\nh Matrix:\n";
 
-	for (int i = 0; i < h.rows(); ++i)
-	{
-		std::stringstream line;
-		line.precision(6);
-		line.setf(std::ios_base::fixed);
-
-		for (int j = 0; j < h.cols(); ++j)
-			line << h(i, j) << "\t\t\t";
-
-		line << std::endl;
-
-		file << line.str();
-	}
+	OutputMatrix(h, file);
 
 	file << "\nV Matrix:\n";
 
-	for (int i = 0; i < hartreeFock->V.rows(); ++i)
-	{
-		std::stringstream line;
-		line.precision(6);
-		line.setf(std::ios_base::fixed);
-
-		for (int j = 0; j < hartreeFock->V.cols(); ++j)
-			line << hartreeFock->V(i, j) << "\t\t\t";
-
-		line << std::endl;
-
-		file << line.str();
-	}
+	OutputMatrix(hartreeFock->V, file);
 
 
 	file << "\ne-e Matrix:\n";
