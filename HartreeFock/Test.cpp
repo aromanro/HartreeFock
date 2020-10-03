@@ -263,12 +263,7 @@ void Test::CheckDifferences(const Eigen::MatrixXd& matrix, const std::string& ma
 				file << "Differences, matrix(" << i << "," << j << ")=" << matrix(i, j) << " Expected: " << val << std::endl;
 				++countDifferences;
 			}
-			/*
-			else
-			{
-				file << "NO Differences, matrix(" << i << "," << j << ")=" << matrix(i, j) << " Expected: " << val << std::endl;
-			}
-			*/
+			//else file << "NO Differences, matrix(" << i << "," << j << ")=" << matrix(i, j) << " Expected: " << val << std::endl;
 		}
 	}
 

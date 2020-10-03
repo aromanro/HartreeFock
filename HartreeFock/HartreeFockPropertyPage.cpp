@@ -142,7 +142,7 @@ void HartreeFockPropertyPage::DoDataExchange(CDataExchange* pDX)
 	DDV_MinMaxUInt(pDX, iterations, 50, 500000);
 	DDV_MinMaxDouble(pDX, asymmetry, 0.0, 1.);
 	DDV_MinMaxUInt(pDX, maxDIISiterations, 50, 500000);
-	DDV_MinMaxUInt(pDX, normalIterAfterDIIS, 50, 500000);
+	DDV_MinMaxUInt(pDX, normalIterAfterDIIS, 0, 500000);
 }
 
 
