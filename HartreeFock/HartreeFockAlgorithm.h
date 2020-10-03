@@ -16,6 +16,7 @@ namespace HartreeFock {
 
 	class HartreeFockAlgorithm
 	{
+		friend class Test;
 	protected:
 		double totalEnergy;
 		double mp2Energy;
