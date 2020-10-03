@@ -43,7 +43,8 @@ Options::Options()
 	displayBohrs(false),
 	DisplayHOMOEnergy(0),
 	useDIIS(true),
-	maxDIISiterations(1000)
+	maxDIISiterations(1000),
+	normalIterAfterDIIS(500)
 {
 }
 
@@ -95,6 +96,7 @@ void Options::Load()
 
 	useDIIS = (1 == theApp.GetProfileInt(L"options", L"UseDIIS", 1) ? true : false);
 	maxDIISiterations = theApp.GetProfileInt(L"options", L"MaxDIISiterations", 1000);
+	normalIterAfterDIIS = theApp.GetProfileInt(L"options", L"NormalIterAfterDIIS", 500);
 }
 
 
@@ -140,6 +142,7 @@ void Options::Save()
 
 	theApp.WriteProfileInt(L"options", L"UseDIIS", useDIIS ? 1 : 0);
 	theApp.WriteProfileInt(L"options", L"MaxDIISiterations", maxDIISiterations);
+	theApp.WriteProfileInt(L"options", L"NormalIterAfterDIIS", normalIterAfterDIIS);
 }
 
 double Options::GetDouble(LPCTSTR param, double defval)

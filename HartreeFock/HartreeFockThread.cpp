@@ -32,6 +32,7 @@ HartreeFockThread::HartreeFockThread(const Options& options, CHartreeFockDoc* do
 
 	algorithm->maxDIISiterations = options.maxDIISiterations;
 	algorithm->UseDIIS = options.useDIIS;
+	algorithm->normalIterAfterDIIS = options.normalIterAfterDIIS;
 
 	CT2CA psz1(options.m_atom1);
 	std::string str1(psz1);
@@ -193,6 +194,7 @@ double HartreeFockThread::ComputeAtom(const Systems::AtomWithShells& atom)
 
 	algorithm->maxDIISiterations = opt.maxDIISiterations;
 	algorithm->UseDIIS = opt.useDIIS;
+	algorithm->normalIterAfterDIIS = opt.normalIterAfterDIIS;
 
 	algorithm->Init(&atomM);
 

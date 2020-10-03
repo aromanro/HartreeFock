@@ -23,6 +23,7 @@ HartreeFockPropertyPage::HartreeFockPropertyPage()
 
 	useDIIS = (theApp.options.useDIIS ? BST_CHECKED : BST_UNCHECKED);
 	maxDIISiterations = theApp.options.maxDIISiterations;
+	normalIterAfterDIIS = theApp.options.normalIterAfterDIIS;
 }
 
 HartreeFockPropertyPage::~HartreeFockPropertyPage()
@@ -40,6 +41,7 @@ BEGIN_MESSAGE_MAP(HartreeFockPropertyPage, CMFCPropertyPage)
 	ON_EN_CHANGE(IDC_EDIT4, &HartreeFockPropertyPage::OnEnChangeEdit4)
 	ON_BN_CLICKED(IDC_CHECK5, &HartreeFockPropertyPage::OnBnClickedCheck5)
 	ON_EN_CHANGE(IDC_EDIT5, &HartreeFockPropertyPage::OnEnChangeEdit5)
+	ON_EN_CHANGE(IDC_EDIT6, &HartreeFockPropertyPage::OnEnChangeEdit6)
 END_MESSAGE_MAP()
 
 
@@ -70,6 +72,7 @@ void HartreeFockPropertyPage::ApplyValues()
 
 	theApp.options.useDIIS = (useDIIS == BST_CHECKED ? true : false);
 	theApp.options.maxDIISiterations = maxDIISiterations;
+	theApp.options.normalIterAfterDIIS = normalIterAfterDIIS;
 
 	theApp.options.Save();
 }
@@ -132,12 +135,14 @@ void HartreeFockPropertyPage::DoDataExchange(CDataExchange* pDX)
 
 	DDX_Check(pDX, IDC_CHECK5, useDIIS);
 	DDX_Text(pDX, IDC_EDIT5, maxDIISiterations);
+	DDX_Text(pDX, IDC_EDIT6, normalIterAfterDIIS);
 
 	DDV_MinMaxDouble(pDX, m_Alpha, 0.01, 1.);
 	DDV_MinMaxDouble(pDX, m_Guess, 0., 10.);
 	DDV_MinMaxUInt(pDX, iterations, 50, 500000);
 	DDV_MinMaxDouble(pDX, asymmetry, 0.0, 1.);
 	DDV_MinMaxUInt(pDX, maxDIISiterations, 50, 500000);
+	DDV_MinMaxUInt(pDX, normalIterAfterDIIS, 50, 500000);
 }
 
 
@@ -166,6 +171,12 @@ void HartreeFockPropertyPage::OnBnClickedCheck5()
 
 
 void HartreeFockPropertyPage::OnEnChangeEdit5()
+{
+	SetModified();
+}
+
+
+void HartreeFockPropertyPage::OnEnChangeEdit6()
 {
 	SetModified();
 }

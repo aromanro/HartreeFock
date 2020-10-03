@@ -60,6 +60,7 @@ public:
 
 	bool useDIIS;
 	int maxDIISiterations;
+	int normalIterAfterDIIS;
 protected:
 	static double GetDouble(LPCTSTR param, double defval);
 };
