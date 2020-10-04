@@ -415,7 +415,7 @@ namespace GaussianIntegrals {
 
 
 
-	inline void IntegralsRepository::CalculateElectronElectronIntegrals4(int i, int j, int k, int ij, const Orbitals::ContractedGaussianOrbital& orb1, const Orbitals::ContractedGaussianOrbital& orb2, const Orbitals::ContractedGaussianOrbital& orb3)
+	inline void IntegralsRepository::CalculateElectronElectronIntegrals4(int i, int j, int k, long long int ij, const Orbitals::ContractedGaussianOrbital& orb1, const Orbitals::ContractedGaussianOrbital& orb2, const Orbitals::ContractedGaussianOrbital& orb3)
 	{
 		int l = 0;
 		for (const auto& atom4 : m_Molecule->atoms)
@@ -423,7 +423,7 @@ namespace GaussianIntegrals {
 			{
 				for (const auto& orb4 : shell4.basisFunctions)
 				{
-					const int kl = k * (k + 1) / 2 + l;
+					const long long int kl = GetTwoIndex(k, l);
 					
 					if (ij <= kl)
 						electronElectronIntegrals[GetElectronElectronIndex(i, j, k, l)] = getElectronElectron(&orb1, &orb2, &orb3, &orb4);
@@ -449,7 +449,7 @@ namespace GaussianIntegrals {
 			for (const auto& shell2 : atom2.shells)
 				for (const auto& orb2 : shell2.basisFunctions)
 				{
-					int ij = i * (i + 1) / 2 + j;
+					const long long int ij = GetTwoIndex(i, j);
 
 					int k = 0;
 					for (const auto& atom3 : m_Molecule->atoms)

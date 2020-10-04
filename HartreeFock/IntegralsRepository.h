@@ -94,20 +94,24 @@ namespace GaussianIntegrals {
 		const GaussianNuclear& getNuclearVertical(const Systems::Atom& atom, const Orbitals::GaussianOrbital& gaussian1, const Orbitals::GaussianOrbital& gaussian2);
 
 		inline void CalculateElectronElectronIntegrals23(int i, const Orbitals::ContractedGaussianOrbital& orb1);
-		inline void CalculateElectronElectronIntegrals4(int i, int j, int k, int ij, const Orbitals::ContractedGaussianOrbital& orb1, const Orbitals::ContractedGaussianOrbital& orb2, const Orbitals::ContractedGaussianOrbital& orb3);
+		inline void CalculateElectronElectronIntegrals4(int i, int j, int k, long long int ij, const Orbitals::ContractedGaussianOrbital& orb1, const Orbitals::ContractedGaussianOrbital& orb2, const Orbitals::ContractedGaussianOrbital& orb3);
 	
+		inline static long long int GetTwoIndex(long long int i, long long int j)
+		{
+			return i * (i + 1ULL) / 2 + j;
+		}
 	
 		inline static long long int GetElectronElectronIndex(int ind1, int ind2, int ind3, int ind4)
 		{
 			if (ind1 < ind2) std::swap(ind1, ind2);
 			if (ind3 < ind4) std::swap(ind3, ind4);
 
-			long long int ind12 = ind1 * (ind1 + 1) / 2 + ind2;
-			long long int ind34 = ind3 * (ind3 + 1) / 2 + ind4;
+			long long int ind12 = GetTwoIndex(ind1, ind2);
+			long long int ind34 = GetTwoIndex(ind3, ind4);
 
 			if (ind12 < ind34) std::swap(ind12, ind34);
 
-			return ind12 * (ind12 + 1) / 2 + ind34;
+			return GetTwoIndex(ind12, ind34);
 		}
 
 		template<class Orb> static void SwapOrbitals(Orb **orb1, Orb **orb2, Orb **orb3, Orb **orb4);
