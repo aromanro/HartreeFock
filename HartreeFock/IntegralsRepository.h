@@ -18,9 +18,9 @@ namespace GaussianIntegrals {
 
 	class IntegralsRepository
 	{
-	protected:
+	public:
 		Systems::Molecule* m_Molecule;
-
+	protected:
 		std::map< double, BoysFunctions > boysFunctions;
 
 

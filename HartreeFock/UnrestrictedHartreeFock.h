@@ -46,6 +46,7 @@ namespace HartreeFock {
 		virtual double Step(int iter) override;
 
 		virtual double CalculateMp2Energy() override;
+		virtual double CalculateAtomicCharge(int atom) override;
 	};
 
 }

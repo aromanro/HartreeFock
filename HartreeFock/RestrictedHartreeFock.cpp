@@ -289,4 +289,34 @@ namespace HartreeFock {
 		return mp2Energy;
 	}
 
+
+	double RestrictedHartreeFock::CalculateAtomicCharge(int atom)
+	{
+		if (!integralsRepository.m_Molecule || integralsRepository.m_Molecule->atoms.size() <= atom) return 0;
+
+		double result = integralsRepository.m_Molecule->atoms[atom].Z;
+
+		int orbLowLimit = 0;
+		int orbHighLimit = 0;
+		for (int i = 0; i < integralsRepository.m_Molecule->atoms.size(); ++i)
+		{
+			const int numBasisFunctions = integralsRepository.m_Molecule->atoms[i].CountNumberOfContractedGaussians();
+			if (i == atom) 
+			{
+				orbHighLimit = orbLowLimit + numBasisFunctions;
+				break;
+			}			
+			orbLowLimit += numBasisFunctions;
+		}
+
+		// this is not so efficient, being done for each atom if needed, but it's ok
+		const Eigen::MatrixXd DS = DensityMatrix * overlapMatrix.matrix;
+
+		for (int i = orbLowLimit; i < orbHighLimit; ++i)
+			result -= DS(i, i);
+
+		return result;
+	}
+
+
 }

@@ -294,6 +294,10 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 
 			((HartreeFock::RestrictedHartreeFock*)hartreeFock)->DensityMatrix = DensityMatrix;
 		}
+
+
+		for (int atom = 0; atom < molecule.atoms.size(); ++atom)
+			file << "Atom " << atom << " charge: " << hartreeFock->CalculateAtomicCharge(atom) << std::endl;
 	}
 
 	delete hartreeFock;
