@@ -198,7 +198,7 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 
 		((HartreeFock::RestrictedHartreeFock*)hartreeFock)->InitFockMatrix(0, FockMatrix);
 
-		const Eigen::MatrixXd FockTransformed = hartreeFock->Vt * FockMatrix * hartreeFock->V; // orthogonalize
+		Eigen::MatrixXd FockTransformed = hartreeFock->Vt * FockMatrix * hartreeFock->V; // orthogonalize
 
 		file << "\nInitial transformed Fock Matrix:\n";
 
@@ -233,7 +233,67 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 		file.precision(14);
 		file << "\nInitial Hartree-Fock electronic energy: " << hartreeFock->GetTotalEnergy() - hartreeFock->nuclearRepulsionEnergy << " Hartrees" << std::endl;
 
+		((HartreeFock::RestrictedHartreeFock*)hartreeFock)->DensityMatrix = DensityMatrix;
 
+
+		double rmsD = 0;
+		double deltaE = 0;
+		for (int step = 1; step < 100; ++step)
+		{
+			((HartreeFock::RestrictedHartreeFock*)hartreeFock)->InitFockMatrix(step, FockMatrix);
+
+			if (1 == step)
+			{
+				file.precision(5);
+				file << "\nThe first iteration Fock matrix in the AO basis: \n";
+
+				OutputMatrix(FockMatrix, file);
+			}
+
+			// just copy/paste of the code from Restricted Hartree Fock class, with slight changes to work here, too:
+
+			FockTransformed = hartreeFock->Vt * FockMatrix * hartreeFock->V; // orthogonalize
+			const Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> esl(FockTransformed);
+			const Eigen::MatrixXd& Cprime = esl.eigenvectors();
+			Ce = hartreeFock->V * Cprime; // transform back the eigenvectors into the original non-orthogonalized AO basis
+
+			DensityMatrix = Eigen::MatrixXd::Zero(h.rows(), h.cols());
+
+			for (int i = 0; i < h.rows(); ++i)
+				for (int j = 0; j < h.cols(); ++j)
+					for (unsigned int vec = 0; vec < ((HartreeFock::RestrictedHartreeFock*)hartreeFock)->occupied.size(); ++vec) // only eigenstates that are occupied 
+						if (((HartreeFock::RestrictedHartreeFock*)hartreeFock)->occupied[vec]) DensityMatrix(i, j) += 2. * Ce(i, vec) * Ce(j, vec); // 2 is for the number of electrons in the eigenstate, it's the restricted Hartree-Fock
+
+
+			//**************************************************************************************************************
+
+			((HartreeFock::RestrictedHartreeFock*)hartreeFock)->eigenvals = esl.eigenvalues();
+
+			const double oldEnergy = hartreeFock->GetTotalEnergy();
+
+			((HartreeFock::RestrictedHartreeFock*)hartreeFock)->CalculateEnergy(((HartreeFock::RestrictedHartreeFock*)hartreeFock)->eigenvals, DensityMatrix/*, FockMatrix*/);
+
+			const double totalEnergy = hartreeFock->GetTotalEnergy();
+			deltaE = totalEnergy - oldEnergy;
+
+			// calculate rms for differences between new and old density matrices, it can be used to check for convergence, too
+			Eigen::MatrixXd rmsDensityMatricesDif = DensityMatrix - ((HartreeFock::RestrictedHartreeFock*)hartreeFock)->DensityMatrix;
+
+			rmsDensityMatricesDif *= 0.5; // there is a difference compared with the one from the reference, they don't multiply it with 2 as I do, so this is done for comparison purposes
+
+			rmsD = sqrt(rmsDensityMatricesDif.cwiseProduct(rmsDensityMatricesDif).sum());
+
+			file.precision(12);
+			file << step << "\t" << totalEnergy - hartreeFock->nuclearRepulsionEnergy << "\t" << totalEnergy << "\t" << deltaE << "\t" << rmsD << std::endl;
+
+
+			if (rmsD < 1E-12 && abs(deltaE)) break;
+
+			// ***************************************************************************************************
+			// go to the next density matrix
+
+			((HartreeFock::RestrictedHartreeFock*)hartreeFock)->DensityMatrix = DensityMatrix;
+		}
 	}
 
 	delete hartreeFock;
