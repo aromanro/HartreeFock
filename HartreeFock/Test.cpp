@@ -175,6 +175,20 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 
 	CheckDifferences(hartreeFock->integralsRepository, erifileName, file);
 
+
+	file << "\nChecking if orthogonalization really works, transformed overlap matrix:" << std::endl;
+
+	const Eigen::MatrixXd Stransf = hartreeFock->Vt * hartreeFock->overlapMatrix.matrix * hartreeFock->V;
+
+	OutputMatrix(Stransf, file);
+
+
+	file << "\nV:" << std::endl;
+	OutputMatrix(hartreeFock->V, file);
+
+	file << "\nVt:" << std::endl;
+	OutputMatrix(hartreeFock->Vt, file);
+
 	// now check 'step 0' (initialization) 
 
 	// check only the restricted algo for now
@@ -189,6 +203,37 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 		file << "\nInitial transformed Fock Matrix:\n";
 
 		OutputMatrix(FockTransformed, file);
+
+		const Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> es(FockTransformed);
+		const Eigen::MatrixXd& Cprime = es.eigenvectors();
+
+		file << "\nInitial MO Coefficients:\n";
+
+		OutputMatrix(Cprime, file);
+
+		Eigen::MatrixXd Ce = hartreeFock->V * Cprime; // transform back the eigenvectors into the original non-orthogonalized AO basis
+
+		Eigen::MatrixXd DensityMatrix = Eigen::MatrixXd::Zero(h.rows(), h.cols());
+
+		for (int i = 0; i < h.rows(); ++i)
+			for (int j = 0; j < h.cols(); ++j)
+				for (unsigned int vec = 0; vec < ((HartreeFock::RestrictedHartreeFock*)hartreeFock)->occupied.size(); ++vec) // only eigenstates that are occupied 
+					if (((HartreeFock::RestrictedHartreeFock*)hartreeFock)->occupied[vec]) DensityMatrix(i, j) += Ce(i, vec) * Ce(j, vec); // 2 is for the number of electrons in the eigenstate, it's the restricted Hartree-Fock
+
+
+		file << "\nInitial Density Matrix (no occupation multiplication):\n";
+
+		OutputMatrix(DensityMatrix, file);
+
+		((HartreeFock::RestrictedHartreeFock*)hartreeFock)->eigenvals = es.eigenvalues();
+
+		DensityMatrix *= 2;
+		((HartreeFock::RestrictedHartreeFock*)hartreeFock)->CalculateEnergy(((HartreeFock::RestrictedHartreeFock*)hartreeFock)->eigenvals, DensityMatrix/*, FockMatrix*/);
+
+		file.precision(14);
+		file << "\nInitial Hartree-Fock electronic energy: " << hartreeFock->GetTotalEnergy() - hartreeFock->nuclearRepulsionEnergy << " Hartrees" << std::endl;
+
+
 	}
 
 	delete hartreeFock;

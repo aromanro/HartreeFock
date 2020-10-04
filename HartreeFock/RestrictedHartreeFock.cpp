@@ -119,8 +119,44 @@ namespace HartreeFock {
 		//Eigen::GeneralizedSelfAdjointEigenSolver<Eigen::MatrixXd> es(FockMatrix, overlapMatrix.matrix);
 		//const Eigen::MatrixXd& C = es.eigenvectors();
 
-		// this hopefully is faster than the one commented above:
 		
+		// this hopefully :) is faster than the one commented above:
+		
+
+		// this is how it's working:
+
+		// the original generalized eigenvalue problem is:
+		// FockMatrix * C = S * C * eigenvalsDiag  
+		// where C is obviously the matrix with the eigenvectors as columns, S is the overlap matrix
+		
+		// insert S^-1/2 * S^1/2:
+		// FockMatrix * S^-1/2 * S^1/2 * C = S * S^-1/2 * S^1/2 * C * eigenvalsDiag
+		
+		// multiply to the left with S^1/2:
+		// S^1/2 * FockMatrix * S^-1/2 * S^1/2 * C = S^1/2 * S * S^-1/2 * S^1/2 * C * eigenvalsDiag
+		// but S^1/2 * FockMatrix * S^-1/2 = Vt * FockMatrix * V = FockTransformed and S^1/2 * S * S^-1/2 = I
+		
+		// so we have:
+		// FockTransformed * S^1/2 * C = S^1/2 * C * eigenvalsDiag
+		// call S^1/2 * C = Cprime
+		
+		// now we're left with the regular eigenvalue problem
+		// FockTransformed * Cprime = Cprime * eigenvalsDiag
+		// to get C in the original basis, that is, the AO one, just multiply Cprime to the left with S^-1/2 (called V in the code)
+		// S^-1/2 * Cprime = S^-1/2 * S^1/2 * C = I * C = C
+
+
+		// so, we end up with the rules:
+		
+		// transform an operator from the non-orthogonal AO basis into the orthonormal one:
+		// Otransformed = Vt * O * V
+		// transform a vector using:
+		// Xtransformed = Vt * X
+		
+		// obviously you can do the inverse transform, from the orthonormal MO basis back to the original AO basis easily:
+		// X = V * Xtransformed (just multiply the above one to the left with Vt)
+		// O = V * Otransformed * Vt (again, with multiplication to the left and right)
+
 		const Eigen::MatrixXd FockTransformed = Vt * FockMatrix * V; // orthogonalize
 		const Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> es(FockTransformed);
 		const Eigen::MatrixXd& Cprime = es.eigenvectors();
