@@ -118,8 +118,8 @@ BOOL CHartreeFockDoc::OnNewDocument()
 	//Test::OutputMatricesForAtom("Ti", "sto3g.txt", "c:\\temp\\matrices.txt");
 
 	//Test test;
-	//test.TestWater("c:\\temp\\h2o.txt", "c:\\temp\\s.dat", "c:\\temp\\t.dat", "c:\\temp\\v.dat", "c:\\temp\\eri.dat");
-	//test.TestMethane("c:\\temp\\ch4.txt", "c:\\temp\\s.dat", "c:\\temp\\t.dat", "c:\\temp\\v.dat", "c:\\temp\\eri.dat");
+	//test.TestWater("c:\\tests\\h2o.txt", "c:\\tests\\sh2o.dat", "c:\\tests\\th2o.dat", "c:\\tests\\vh2o.dat", "c:\\tests\\erih2o.dat");
+	//test.TestMethane("c:\\tests\\ch4.txt", "c:\\tests\\sch4.dat", "c:\\tests\\tch4.dat", "c:\\tests\\vch4.dat", "c:\\tests\\erich4.dat");
 
 	// Example for H2O and He (now with some other basis, too):
 

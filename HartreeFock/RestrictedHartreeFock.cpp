@@ -91,9 +91,7 @@ namespace HartreeFock {
 				Eigen::VectorXd C = Eigen::VectorXd::Zero(nrMatrices + 1);
 				C(nrMatrices) = 1;
 
-				//C = B.fullPivLu().solve(C);
-				//C = B.colPivHouseholderQr().solve(C);
-				C = B.fullPivHouseholderQr().solve(C);
+				C = B.colPivHouseholderQr().solve(C);
 
 				// compute the new Fock matrix
 
