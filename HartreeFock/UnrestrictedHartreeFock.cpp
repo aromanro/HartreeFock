@@ -168,10 +168,12 @@ namespace HartreeFock {
 		const Eigen::MatrixXd FockMatrixPlusTransformed = Vt * FockMatrixPlus * V;
 		const Eigen::MatrixXd FockMatrixMinusTransformed = Vt * FockMatrixMinus * V;
 
+		Eigen::MatrixXd Cplus, Cminus;
+		
 		if (FockMatrixPlusTransformed.rows() > 1)
 		{
 			Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> esplus(FockMatrixPlusTransformed);
-			const Eigen::MatrixXd& Cplusprime = esplus.eigenvectors();
+			Cplusprime = esplus.eigenvectors();
 			Cplus = V * Cplusprime; // transform back the eigenvectors into the original non-orthogonalized AO basis
 			eigenvalsplus = esplus.eigenvalues();
 		}
@@ -184,7 +186,7 @@ namespace HartreeFock {
 		if (FockMatrixMinusTransformed.rows() > 1)
 		{
 			Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> esminus(FockMatrixMinusTransformed);
-			const Eigen::MatrixXd& Cminusprime = esminus.eigenvectors();
+			Cminusprime = esminus.eigenvectors();
 			Cminus = V * Cminusprime; // transform back the eigenvectors into the original non-orthogonalized AO basis
 			eigenvalsminus = esminus.eigenvalues();
 		}
@@ -301,7 +303,7 @@ namespace HartreeFock {
 	}
 
 
-	void UnrestrictedHartreeFock::CalculateEnergy(const Eigen::VectorXd& eigenvalsplus, const Eigen::VectorXd& eigenvalsminus, const Eigen::MatrixXd& calcDensityMatrixPlus, const Eigen::MatrixXd& calcDensityMatrixMinus/*, const Eigen::MatrixXd& Fplus, const Eigen::MatrixXd& Fminus*/)
+	void UnrestrictedHartreeFock::CalculateEnergy(const Eigen::VectorXd& eigenvalsPlus, const Eigen::VectorXd& eigenvalsMinus, const Eigen::MatrixXd& calcDensityMatrixPlus, const Eigen::MatrixXd& calcDensityMatrixMinus/*, const Eigen::MatrixXd& Fplus, const Eigen::MatrixXd& Fminus*/)
 	{
 		totalEnergy = 0;
 
@@ -323,12 +325,12 @@ namespace HartreeFock {
 
 
 		for (unsigned int level = 0; level < occupiedPlus.size(); ++level)
-			if (occupiedPlus[level]) totalEnergy += eigenvalsplus(level);
+			if (occupiedPlus[level]) totalEnergy += eigenvalsPlus(level);
 		for (unsigned int level = 0; level < occupiedMinus.size(); ++level)
-			if (occupiedMinus[level]) totalEnergy += eigenvalsminus(level);
+			if (occupiedMinus[level]) totalEnergy += eigenvalsMinus(level);
 
 
-		HOMOEnergy = max(nrOccupiedLevelsPlus ? eigenvalsplus(nrOccupiedLevelsPlus - 1) : 0, nrOccupiedLevelsMinus ? eigenvalsminus(nrOccupiedLevelsMinus - 1) : 0);
+		HOMOEnergy = max(nrOccupiedLevelsPlus ? eigenvalsPlus(nrOccupiedLevelsPlus - 1) : 0, nrOccupiedLevelsMinus ? eigenvalsMinus(nrOccupiedLevelsMinus - 1) : 0);
 
 		// ***************************************************************************************
 

@@ -28,7 +28,7 @@ namespace HartreeFock {
 
 		// results that might be needed in the end, after the last step
 		Eigen::VectorXd eigenvals;
-		Eigen::MatrixXd Ce; // eigenvectors transformed back into the non-orthogonal AO basis
+		Eigen::MatrixXd Cprime; // eigenvectors in MO basis
 
 
 		RestrictedHartreeFock(int iterations = 3000);

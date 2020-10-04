@@ -159,8 +159,8 @@ namespace HartreeFock {
 
 		const Eigen::MatrixXd FockTransformed = Vt * FockMatrix * V; // orthogonalize
 		const Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> es(FockTransformed);
-		const Eigen::MatrixXd& Cprime = es.eigenvectors();
-		Ce = V * Cprime; // transform back the eigenvectors into the original non-orthogonalized AO basis
+		Cprime = es.eigenvectors();
+		const Eigen::MatrixXd C = V * Cprime; // transform back the eigenvectors into the original non-orthogonalized AO basis
 
 		// normalize it
 		//NormalizeC(C, occupied);
@@ -174,7 +174,7 @@ namespace HartreeFock {
 		for (int i = 0; i < h.rows(); ++i)
 			for (int j = 0; j < h.cols(); ++j)
 				for (unsigned int vec = 0; vec < occupied.size(); ++vec) // only eigenstates that are occupied 
-					if (occupied[vec]) newDensityMatrix(i, j) += 2. * Ce(i, vec) * Ce(j, vec); // 2 is for the number of electrons in the eigenstate, it's the restricted Hartree-Fock
+					if (occupied[vec]) newDensityMatrix(i, j) += 2. * C(i, vec) * C(j, vec); // 2 is for the number of electrons in the eigenstate, it's the restricted Hartree-Fock
 
 
 		//**************************************************************************************************************
@@ -238,7 +238,7 @@ namespace HartreeFock {
 		}
 	}
 
-	void RestrictedHartreeFock::CalculateEnergy(const Eigen::VectorXd& eigenvals, const Eigen::MatrixXd& calcDensityMatrix/*, Eigen::MatrixXd& F*/)
+	void RestrictedHartreeFock::CalculateEnergy(const Eigen::VectorXd& eigenvalues, const Eigen::MatrixXd& calcDensityMatrix/*, Eigen::MatrixXd& F*/)
 	{
 		// one way of calculating the energy
 
@@ -260,9 +260,9 @@ namespace HartreeFock {
 		totalEnergy *= 0.5;
 
 		for (unsigned int level = 0; level < occupied.size(); ++level)
-			if (occupied[level]) totalEnergy += eigenvals(level);
+			if (occupied[level]) totalEnergy += eigenvalues(level);
 
-		HOMOEnergy = eigenvals(nrOccupiedLevels - 1);
+		HOMOEnergy = eigenvalues(nrOccupiedLevels - 1);
 
 
 
@@ -284,7 +284,32 @@ namespace HartreeFock {
 	{
 		mp2Energy = 0;
 
-		// TODO: calculate it
+		GaussianIntegrals::MP2MolecularOrbitalsIntegralsRepository MP2repo(integralsRepository);
+
+		for (int i = 0; i < numberOfOrbitals; ++i)
+		{
+			if (i >= occupied.size() || !occupied[i]) continue; // only occupied
+			for (int j = 0; j < numberOfOrbitals; ++j)
+			{
+				if (j >= occupied.size() || !occupied[j]) continue; // only occupied
+				for (int a = 0; a < numberOfOrbitals; ++a)
+				{
+					if (a < occupied.size() && occupied[a]) continue; // only unoccupied
+					for (int b = 0; b < numberOfOrbitals; ++b)
+					{
+						if (b < occupied.size() && occupied[b]) continue;  // only unoccupied
+
+						const double Esumdif = eigenvals(i) + eigenvals(j) - eigenvals(a) - eigenvals(b);
+
+						const double eeiajb = MP2repo.getElectronElectron(i, a, j, b, Cprime);
+						const double eeibja = MP2repo.getElectronElectron(i, b, j, a, Cprime);
+						
+						mp2Energy +=  eeiajb * (2. * eeiajb - eeibja) / Esumdif;
+					}
+				}
+			}
+		}
+
 
 		return mp2Energy;
 	}

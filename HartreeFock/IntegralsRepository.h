@@ -122,7 +122,111 @@ namespace GaussianIntegrals {
 		{
 			return electronElectronIntegrals[GetElectronElectronIndex(orbital1, orbital2, orbital3, orbital4)];
 		}
+	};
 
+
+	class MP2MolecularOrbitalsIntegralsRepository
+	{
+	public:
+		MP2MolecularOrbitalsIntegralsRepository(const IntegralsRepository& repository) 
+			: m_repo(repository)
+		{
+		}
+
+		double getElectronElectron(int orbital1, int orbital2, int orbital3, int orbital4, const Eigen::MatrixXd& C)
+		{
+			const std::tuple<int, int, int, int> indTuple = std::make_tuple(orbital1, orbital2, orbital3, orbital4);
+			if (m_fourthLevelIntegrals.find(indTuple) != m_fourthLevelIntegrals.end())
+				return m_fourthLevelIntegrals.at(indTuple);
+
+			// don't have it yet, compute it
+			double result = 0;
+
+			// The very slow method, gets the same results as the faster one, but I think they might be both wrong
+			/*
+			for (int i = 0; i < C.cols(); ++i)
+			{
+				double res1 = 0;
+				for (int j = 0; j < C.cols(); ++j)
+				{
+					double res2 = 0;
+					for (int k = 0; k < C.cols(); ++k)
+					{
+						double res3 = 0;
+						for (int l = 0; l < C.cols(); ++l)
+							res3 += C(l, orbital4) * m_repo.getElectronElectron(i, j, k, l);
+						res2 += C(k, orbital3) * res3;
+					}
+					res1 += C(j, orbital2) * res2;
+				}
+				result += C(i, orbital1) * res1;
+			}
+			*/
+			
+			for (int mu = 0; mu < C.cols(); ++mu)
+				result += C(mu, orbital1) * getElectronElectronThirdLevel(mu, orbital2, orbital3, orbital4, C);
+
+			m_fourthLevelIntegrals[indTuple] = result;
+
+			return result;
+		}
+
+	protected:
+
+		double getElectronElectronFirstLevel(int orbital1, int orbital2, int orbital3, int orbital4, const Eigen::MatrixXd& C)
+		{
+			const std::tuple<int, int, int, int> indTuple = std::make_tuple(orbital1, orbital2, orbital3, orbital4);
+			if (m_firstLevelIntegrals.find(indTuple) != m_firstLevelIntegrals.end())
+				return m_firstLevelIntegrals.at(indTuple);
+
+			// don't have it yet, compute it
+			double result = 0;
+			for (int s = 0; s < C.cols(); ++s)
+				result += C(s, orbital4) * m_repo.getElectronElectron(orbital1, orbital2, orbital3, s);
+			
+			m_firstLevelIntegrals[indTuple] = result;
+			
+			return result;
+		}
+
+		double getElectronElectronSecondLevel(int orbital1, int orbital2, int orbital3, int orbital4, const Eigen::MatrixXd& C)
+		{
+			const std::tuple<int, int, int, int> indTuple = std::make_tuple(orbital1, orbital2, orbital3, orbital4);
+			if (m_secondLevelIntegrals.find(indTuple) != m_secondLevelIntegrals.end())
+				return m_secondLevelIntegrals.at(indTuple);
+
+			// don't have it yet, compute it
+			double result = 0;
+
+			for (int l = 0; l < C.cols(); ++l)
+				result += C(l, orbital3) * getElectronElectronFirstLevel(orbital1, orbital2, l, orbital4, C);
+			
+			m_secondLevelIntegrals[indTuple] = result;
+
+			return result;
+		}
+
+		double getElectronElectronThirdLevel(int orbital1, int orbital2, int orbital3, int orbital4, const Eigen::MatrixXd& C)
+		{
+			const std::tuple<int, int, int, int> indTuple = std::make_tuple(orbital1, orbital2, orbital3, orbital4);
+			if (m_thirdLevelIntegrals.find(indTuple) != m_thirdLevelIntegrals.end())
+				return m_thirdLevelIntegrals.at(indTuple);
+
+			// don't have it yet, compute it
+			double result = 0;
+			for (int nu = 0; nu < C.cols(); ++nu)
+				result += C(nu, orbital2) * getElectronElectronSecondLevel(orbital1, nu, orbital3, orbital4, C);
+
+			m_thirdLevelIntegrals[indTuple] = result;
+
+			return result;
+		}
+
+		const IntegralsRepository& m_repo;
+		std::map<std::tuple<int, int, int, int>, double> m_firstLevelIntegrals;
+		std::map<std::tuple<int, int, int, int>, double> m_secondLevelIntegrals;
+		std::map<std::tuple<int, int, int, int>, double> m_thirdLevelIntegrals;
+		std::map<std::tuple<int, int, int, int>, double> m_fourthLevelIntegrals;
 	};
 
 }

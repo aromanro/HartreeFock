@@ -43,7 +43,7 @@ void Test::OutputMatricesForAtom(const std::string& atomName, const std::string&
 	const int Z = Chemistry::ChemUtils::GetZForAtom(atomName);
 	for (auto& atom : basisCustom.atoms)
 	{
-		if (Z == atom.Z)
+		if (static_cast<const unsigned int>(Z) == atom.Z)
 		{
 			theAtom = atom;
 			break;
@@ -205,20 +205,20 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 		OutputMatrix(FockTransformed, file);
 
 		const Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> es(FockTransformed);
-		const Eigen::MatrixXd& Cprime = es.eigenvectors();
+		const Eigen::MatrixXd& Cprime0 = es.eigenvectors();
 
 		file << "\nInitial MO Coefficients:\n";
 
-		OutputMatrix(Cprime, file);
+		OutputMatrix(Cprime0, file);
 
-		Eigen::MatrixXd Ce = hartreeFock->V * Cprime; // transform back the eigenvectors into the original non-orthogonalized AO basis
+		Eigen::MatrixXd C = hartreeFock->V * Cprime0; // transform back the eigenvectors into the original non-orthogonalized AO basis
 
 		Eigen::MatrixXd DensityMatrix = Eigen::MatrixXd::Zero(h.rows(), h.cols());
 
 		for (int i = 0; i < h.rows(); ++i)
 			for (int j = 0; j < h.cols(); ++j)
 				for (unsigned int vec = 0; vec < ((HartreeFock::RestrictedHartreeFock*)hartreeFock)->occupied.size(); ++vec) // only eigenstates that are occupied 
-					if (((HartreeFock::RestrictedHartreeFock*)hartreeFock)->occupied[vec]) DensityMatrix(i, j) += Ce(i, vec) * Ce(j, vec); // 2 is for the number of electrons in the eigenstate, it's the restricted Hartree-Fock
+					if (((HartreeFock::RestrictedHartreeFock*)hartreeFock)->occupied[vec]) DensityMatrix(i, j) += C(i, vec) * C(j, vec); // 2 is for the number of electrons in the eigenstate, it's the restricted Hartree-Fock
 
 
 		file << "\nInitial Density Matrix (no occupation multiplication):\n";
@@ -255,14 +255,15 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 			FockTransformed = hartreeFock->Vt * FockMatrix * hartreeFock->V; // orthogonalize
 			const Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> esl(FockTransformed);
 			const Eigen::MatrixXd& Cprime = esl.eigenvectors();
-			Ce = hartreeFock->V * Cprime; // transform back the eigenvectors into the original non-orthogonalized AO basis
+			((HartreeFock::RestrictedHartreeFock*)hartreeFock)->Cprime = Cprime;
+			C = hartreeFock->V * Cprime; // transform back the eigenvectors into the original non-orthogonalized AO basis
 
 			DensityMatrix = Eigen::MatrixXd::Zero(h.rows(), h.cols());
 
 			for (int i = 0; i < h.rows(); ++i)
 				for (int j = 0; j < h.cols(); ++j)
 					for (unsigned int vec = 0; vec < ((HartreeFock::RestrictedHartreeFock*)hartreeFock)->occupied.size(); ++vec) // only eigenstates that are occupied 
-						if (((HartreeFock::RestrictedHartreeFock*)hartreeFock)->occupied[vec]) DensityMatrix(i, j) += 2. * Ce(i, vec) * Ce(j, vec); // 2 is for the number of electrons in the eigenstate, it's the restricted Hartree-Fock
+						if (((HartreeFock::RestrictedHartreeFock*)hartreeFock)->occupied[vec]) DensityMatrix(i, j) += 2. * C(i, vec) * C(j, vec); // 2 is for the number of electrons in the eigenstate, it's the restricted Hartree-Fock
 
 
 			//**************************************************************************************************************
@@ -287,17 +288,26 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 			file << step << "\t" << totalEnergy - hartreeFock->nuclearRepulsionEnergy << "\t" << totalEnergy << "\t" << deltaE << "\t" << rmsD << std::endl;
 
 
-			if (rmsD < 1E-12 && abs(deltaE)) break;
+			if (rmsD < 1E-12 && abs(deltaE) < 1E-13) break;
 
+			//if (step == 36) break;
 			// ***************************************************************************************************
 			// go to the next density matrix
 
 			((HartreeFock::RestrictedHartreeFock*)hartreeFock)->DensityMatrix = DensityMatrix;
 		}
 
+		file << std::endl;
 
 		for (int atom = 0; atom < molecule.atoms.size(); ++atom)
 			file << "Atom " << atom << " charge: " << hartreeFock->CalculateAtomicCharge(atom) << std::endl;
+
+		file << std::endl;
+
+		const double Emp2 = hartreeFock->CalculateMp2Energy();
+
+		file << "Emp2: " << Emp2 << std::endl;
+		file << "Total: " << hartreeFock->GetTotalEnergy() + Emp2 << std::endl;
 	}
 
 	delete hartreeFock;
