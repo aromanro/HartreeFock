@@ -68,9 +68,7 @@ namespace HartreeFock {
 		// it's the matrix with eigenvectors as columns, multiplying U * U^t just gets I
 		// the matrix elements being the scalar product of the vectors, which makes it is obviously zero everywhere (different vectors are orthogonal) except the diagonal, which gets 1, that is, the norm, the scalar product of a vector with itself
 		// due of the orthonormality
-
-		// V is unitary as well (easy to check out)
-
+		
 		// if you would do the transform with U^t * S * U, you would simply diagonalize S, obviously having the eigenvalues on the diagonal
 		// we want more than that, we want to get I, so we multiply left and right with s (S^-1/2 in the diagonal basis)
 		// we end up with a multiplication of three matrices, left and right having 1/sqrt(eigenvalue) on the diagonal and the middle one with eigenvalues on the diagonal
