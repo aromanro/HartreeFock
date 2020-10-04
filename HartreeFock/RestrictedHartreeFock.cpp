@@ -119,9 +119,8 @@ namespace HartreeFock {
 		//Eigen::GeneralizedSelfAdjointEigenSolver<Eigen::MatrixXd> es(FockMatrix, overlapMatrix.matrix);
 		//const Eigen::MatrixXd& C = es.eigenvectors();
 
-
-		// this hopefully is faster than the one commented above
-
+		// this hopefully is faster than the one commented above:
+		
 		const Eigen::MatrixXd FockTransformed = Vt * FockMatrix * V; // orthogonalize
 		const Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> es(FockTransformed);
 		const Eigen::MatrixXd& Cprime = es.eigenvectors();

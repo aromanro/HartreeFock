@@ -47,7 +47,6 @@ namespace HartreeFock {
 		U = solver.eigenvectors();
 		s = solver.eigenvalues().cwiseInverse().cwiseSqrt().asDiagonal();
 
-		//V = U * s;
 		V = U * s * U.adjoint(); // This is S^-1/2
 
 		Vt = V.adjoint();

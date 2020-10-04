@@ -85,7 +85,8 @@ void Test::OutputMatrix(const Eigen::MatrixXd& matrix, std::ofstream& file)
 void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, const std::string& sfileName, const std::string& tfileName, const std::string& vfileName, const std::string& erifileName, const double expectedNucEnergy)
 {
 	HartreeFock::HartreeFockAlgorithm* hartreeFock;
-	if (molecule.alphaElectrons % 2 == 0 && molecule.betaElectrons % 2 == 0)
+	const bool restricted = molecule.alphaElectrons == molecule.betaElectrons;
+	if (restricted)
 		hartreeFock = new HartreeFock::RestrictedHartreeFock();
 	else
 		hartreeFock = new HartreeFock::UnrestrictedHartreeFock();
@@ -176,7 +177,19 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 
 	// now check 'step 0' (initialization) 
 
+	// check only the restricted algo for now
+	if (restricted)
+	{
+		Eigen::MatrixXd FockMatrix;
 
+		((HartreeFock::RestrictedHartreeFock*)hartreeFock)->InitFockMatrix(0, FockMatrix);
+
+		const Eigen::MatrixXd FockTransformed = hartreeFock->Vt * FockMatrix * hartreeFock->V; // orthogonalize
+
+		file << "\nInitial transformed Fock Matrix:\n";
+
+		OutputMatrix(FockTransformed, file);
+	}
 
 	delete hartreeFock;
 }
