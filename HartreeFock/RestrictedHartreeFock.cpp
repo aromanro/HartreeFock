@@ -236,6 +236,9 @@ namespace HartreeFock {
 
 			FockMatrix = h + G;
 		}
+
+		// let's be sure it's symmetric
+		FockMatrix = (FockMatrix + FockMatrix.transpose()) * 0.5;
 	}
 
 	void RestrictedHartreeFock::CalculateEnergy(const Eigen::VectorXd& eigenvalues, const Eigen::MatrixXd& calcDensityMatrix/*, Eigen::MatrixXd& F*/)
@@ -315,7 +318,7 @@ namespace HartreeFock {
 	}
 
 
-	double RestrictedHartreeFock::CalculateAtomicCharge(int atom)
+	double RestrictedHartreeFock::CalculateAtomicCharge(int atom) const
 	{
 		if (!integralsRepository.m_Molecule || integralsRepository.m_Molecule->atoms.size() <= atom) return 0;
 
@@ -334,7 +337,7 @@ namespace HartreeFock {
 			orbLowLimit += numBasisFunctions;
 		}
 
-		// this is not so efficient, being done for each atom if needed, but it's ok
+		// this is not so efficient, being done for each atom if needed instead of once for all atoms, but it's ok
 		const Eigen::MatrixXd DS = DensityMatrix * overlapMatrix.matrix;
 
 		for (int i = orbLowLimit; i < orbHighLimit; ++i)

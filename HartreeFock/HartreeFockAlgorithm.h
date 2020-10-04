@@ -81,7 +81,7 @@ namespace HartreeFock {
 
 		virtual double CalculateMp2Energy() = 0;
 
-		virtual double CalculateAtomicCharge(int atom) = 0;
+		virtual double CalculateAtomicCharge(int atom) const = 0;
 
 	protected:
 		static double DiffDensityMatrices(const Eigen::MatrixXd& oldP, const Eigen::MatrixXd& newP);

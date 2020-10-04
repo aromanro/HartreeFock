@@ -361,7 +361,7 @@ namespace HartreeFock {
 		return mp2Energy;
 	}
 
-	double UnrestrictedHartreeFock::CalculateAtomicCharge(int atom)
+	double UnrestrictedHartreeFock::CalculateAtomicCharge(int atom) const
 	{
 		if (!integralsRepository.m_Molecule || integralsRepository.m_Molecule->atoms.size() <= atom) return 0;
 
@@ -380,7 +380,7 @@ namespace HartreeFock {
 			orbLowLimit += numBasisFunctions;
 		}
 
-		// this is not so efficient, being done for each atom if needed, but it's ok
+		// this is not so efficient, being done for each atom if needed instead of once for all atoms, but it's ok
 		const Eigen::MatrixXd DSPlus = DensityMatrixPlus * overlapMatrix.matrix;
 		const Eigen::MatrixXd DSMinus = DensityMatrixMinus * overlapMatrix.matrix;
 
