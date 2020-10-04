@@ -73,7 +73,7 @@ namespace HartreeFock {
 
 		// if you would do the transform with U^t * S * U, you would simply diagonalize S, obviously having the eigenvalues on the diagonal
 		// we want more than that, we want to get I, so we multiply left and right with s (S^-1/2 in the diagonal basis)
-		// we end up with a multiplication of a three matrices, left and right having 1/sqrt(eigenvalue) on the diagonal and the middle one with eigenvalues on the diagonal
+		// we end up with a multiplication of three matrices, left and right having 1/sqrt(eigenvalue) on the diagonal and the middle one with eigenvalues on the diagonal
 		// obviously that gets 1 on the diagonal and 0 elsewhere
 
 		// I = s * U^t * S * U * s

@@ -154,7 +154,7 @@ namespace HartreeFock {
 		// Xtransformed = Vt * X
 		
 		// obviously you can do the inverse transform, from the orthonormal MO basis back to the original AO basis easily:
-		// X = V * Xtransformed (just multiply the above one to the left with Vt)
+		// X = V * Xtransformed (just multiply the above one to the left with V)
 		// O = V * Otransformed * Vt (again, with multiplication to the left and right)
 
 		const Eigen::MatrixXd FockTransformed = Vt * FockMatrix * V; // orthogonalize
