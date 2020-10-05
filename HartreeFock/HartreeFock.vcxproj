@@ -210,6 +210,7 @@
     <ClInclude Include="ContractedGaussianOrbital.h" />
     <ClInclude Include="GaussianIntegral.h" />
     <ClInclude Include="GaussianKinetic.h" />
+    <ClInclude Include="GaussianMoment.h" />
     <ClInclude Include="GaussianNuclear.h" />
     <ClInclude Include="GaussianOrbital.h" />
     <ClInclude Include="GaussianOverlap.h" />
@@ -257,6 +258,7 @@
     <ClCompile Include="ContractedGaussianOrbital.cpp" />
     <ClCompile Include="GaussianIntegral.cpp" />
     <ClCompile Include="GaussianKinetic.cpp" />
+    <ClCompile Include="GaussianMoment.cpp" />
     <ClCompile Include="GaussianNuclear.cpp" />
     <ClCompile Include="GaussianOrbital.cpp" />
     <ClCompile Include="GaussianOverlap.cpp" />

@@ -12,6 +12,10 @@ namespace GaussianIntegrals {
 	// Evaluation of Gaussian Molecular Integrals, I. Overlap Integrals
 	// Here is a link: http://www.mathematica-journal.com/2012/02/evaluation-of-gaussian-molecular-integrals/
 
+	// overlap integrals are a special case of moment integrals 
+	// the recurrence relations are the same but there is one more for transfer of angular momentum from the third center
+	// see the GaussianMoment class comments for details
+
 	class GaussianOverlap : public GaussianIntegral {
 	public:
 		Eigen::MatrixXd matrixX;

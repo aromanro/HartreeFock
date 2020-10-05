@@ -50,10 +50,11 @@ namespace GaussianIntegrals {
 		// recurrence index
 		unsigned int limit = maxQN1 + maxQN2 + 1;
 
+		// vertical recurrence relation
 		for (unsigned int i = 2; i <= limit; ++i)
 			matrix(i, 0) = difCenter * matrix(i - 1, 0) + (i - 1.) / (2. * alpha) * matrix(i - 2, 0);
 
-		// transfer equation
+		// transfer equation - the horizontal recurrence relation
 		--limit;
 		for (unsigned int j = 1; j <= maxQN2; ++j, --limit)
 		{
