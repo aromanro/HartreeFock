@@ -125,6 +125,8 @@ namespace GaussianIntegrals {
 	};
 
 
+	// this class transforms the integrals that are needed for MP2 from AO basis into MO basis
+	// so the used coefficients are those in MO basis, not the transformed ones into the AO basis which are used to obtain the density matrix
 	class MP2MolecularOrbitalsIntegralsRepository
 	{
 	public:
@@ -133,7 +135,7 @@ namespace GaussianIntegrals {
 		{
 		}
 
-		double getElectronElectron(int orbital1, int orbital2, int orbital3, int orbital4, const Eigen::MatrixXd& C)
+		inline double getElectronElectron(int orbital1, int orbital2, int orbital3, int orbital4, const Eigen::MatrixXd& C)
 		{
 			const std::tuple<int, int, int, int> indTuple = std::make_tuple(orbital1, orbital2, orbital3, orbital4);
 			if (m_fourthLevelIntegrals.find(indTuple) != m_fourthLevelIntegrals.end())
@@ -173,7 +175,7 @@ namespace GaussianIntegrals {
 
 	protected:
 
-		double getElectronElectronFirstLevel(int orbital1, int orbital2, int orbital3, int orbital4, const Eigen::MatrixXd& C)
+		inline double getElectronElectronFirstLevel(int orbital1, int orbital2, int orbital3, int orbital4, const Eigen::MatrixXd& C)
 		{
 			const std::tuple<int, int, int, int> indTuple = std::make_tuple(orbital1, orbital2, orbital3, orbital4);
 			if (m_firstLevelIntegrals.find(indTuple) != m_firstLevelIntegrals.end())
@@ -189,7 +191,7 @@ namespace GaussianIntegrals {
 			return result;
 		}
 
-		double getElectronElectronSecondLevel(int orbital1, int orbital2, int orbital3, int orbital4, const Eigen::MatrixXd& C)
+		inline double getElectronElectronSecondLevel(int orbital1, int orbital2, int orbital3, int orbital4, const Eigen::MatrixXd& C)
 		{
 			const std::tuple<int, int, int, int> indTuple = std::make_tuple(orbital1, orbital2, orbital3, orbital4);
 			if (m_secondLevelIntegrals.find(indTuple) != m_secondLevelIntegrals.end())
@@ -206,7 +208,7 @@ namespace GaussianIntegrals {
 			return result;
 		}
 
-		double getElectronElectronThirdLevel(int orbital1, int orbital2, int orbital3, int orbital4, const Eigen::MatrixXd& C)
+		inline double getElectronElectronThirdLevel(int orbital1, int orbital2, int orbital3, int orbital4, const Eigen::MatrixXd& C)
 		{
 			const std::tuple<int, int, int, int> indTuple = std::make_tuple(orbital1, orbital2, orbital3, orbital4);
 			if (m_thirdLevelIntegrals.find(indTuple) != m_thirdLevelIntegrals.end())

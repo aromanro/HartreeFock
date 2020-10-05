@@ -107,7 +107,7 @@ void HartreeFockThread::Calculate()
 {
 	for (double pos = m_start; pos < m_end; pos += m_step)
 	{
-		double dist = pos / Bohr;
+		const double dist = pos / Bohr;
 
 		// adjust the molecule coordinates
 		if (molecule.atoms.size() <= 2)
@@ -132,9 +132,8 @@ void HartreeFockThread::Calculate()
 
 		algorithm->Init(&molecule);
 
-
-
 		double result = algorithm->Calculate();
+		//result += algorithm->CalculateMp2Energy();
 
 		if (!algorithm->converged) converged = false;
 

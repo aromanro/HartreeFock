@@ -229,7 +229,7 @@ namespace HartreeFock {
 						for (int l = 0; l < numberOfOrbitals; ++l)
 						{
 							const double coulomb = integralsRepository.getElectronElectron(i, j, k, l);
-							const double exchange = integralsRepository.getElectronElectron(i, l, k, j);
+							const double exchange = integralsRepository.getElectronElectron(i, l, k, j); // you may see it in other forms, that is, other order for indexes, but don't forget about symmetries
 
 							G(i, j) += DensityMatrix(k, l) * (coulomb - 0.5 * exchange);
 						}
@@ -292,22 +292,27 @@ namespace HartreeFock {
 		for (int i = 0; i < numberOfOrbitals; ++i)
 		{
 			if (i >= occupied.size() || !occupied[i]) continue; // only occupied
+
 			for (int j = 0; j < numberOfOrbitals; ++j)
 			{
 				if (j >= occupied.size() || !occupied[j]) continue; // only occupied
+
 				for (int a = 0; a < numberOfOrbitals; ++a)
 				{
 					if (a < occupied.size() && occupied[a]) continue; // only unoccupied
+
 					for (int b = 0; b < numberOfOrbitals; ++b)
 					{
 						if (b < occupied.size() && occupied[b]) continue;  // only unoccupied
 
 						const double Esumdif = eigenvals(i) + eigenvals(j) - eigenvals(a) - eigenvals(b);
-
+						
 						const double eeiajb = MP2repo.getElectronElectron(i, a, j, b, Cprime);
 						const double eeibja = MP2repo.getElectronElectron(i, b, j, a, Cprime);
 						
-						mp2Energy +=  eeiajb * (2. * eeiajb - eeibja) / Esumdif;
+						const double partE = eeiajb* (2. * eeiajb - eeibja) / Esumdif;
+
+						mp2Energy += partE;
 					}
 				}
 			}
