@@ -32,17 +32,8 @@ namespace HartreeFock {
 		occupied.resize(nrOccupiedLevels, true);
 	}
 
-	double RestrictedHartreeFock::Step(int iter)
+	bool RestrictedHartreeFock::DIISStep(int iter, Eigen::MatrixXd& FockMatrix)
 	{
-		// *****************************************************************************************************************
-
-		// the Fock matrix
-		Eigen::MatrixXd FockMatrix;
-
-		InitFockMatrix(iter, FockMatrix);
-
-		// will be used for DIIS
-
 		bool UsedDIIS = false;
 
 		if (UseDIIS && iter && iter < maxDIISiterations)
@@ -109,6 +100,22 @@ namespace HartreeFock {
 		}
 		else lastErrorEst = 0;
 
+		return UsedDIIS;
+	}
+
+
+	double RestrictedHartreeFock::Step(int iter)
+	{
+		// *****************************************************************************************************************
+
+		// the Fock matrix
+		Eigen::MatrixXd FockMatrix;
+
+		InitFockMatrix(iter, FockMatrix);
+
+		// will be used for DIIS
+
+		bool UsedDIIS = DIISStep(iter, FockMatrix);
 
 		// ***************************************************************************************************************************
 

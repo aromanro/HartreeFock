@@ -58,21 +58,11 @@ namespace HartreeFock {
 		occupiedMinus.resize(nrOccupiedLevelsMinus, true);
 	}
 
-	double UnrestrictedHartreeFock::Step(int iter)
+
+	bool UnrestrictedHartreeFock::DIISStep(int iter, Eigen::MatrixXd& FockMatrixPlus, Eigen::MatrixXd& FockMatrixMinus)
 	{
-		// *****************************************************************************************************************
-
-		// the Fock matrices
-		Eigen::MatrixXd FockMatrixPlus;
-		Eigen::MatrixXd FockMatrixMinus;
-
-		InitFockMatrices(iter, FockMatrixPlus, FockMatrixMinus);
-
-		// will be used for DIIS
-
-		
 		bool UsedDIIS = false;
-		 
+
 		if (UseDIIS && iter && iter < maxDIISiterations)
 		{
 			const Eigen::MatrixXd errorMatrixPlus = overlapMatrix.matrix * DensityMatrixPlus * FockMatrixPlus - FockMatrixPlus * DensityMatrixPlus * overlapMatrix.matrix;
@@ -158,8 +148,25 @@ namespace HartreeFock {
 			}
 		}
 		else lastErrorEst = 0;
-		
 
+		return UsedDIIS;
+	}
+
+
+	double UnrestrictedHartreeFock::Step(int iter)
+	{
+		// *****************************************************************************************************************
+
+		// the Fock matrices
+		Eigen::MatrixXd FockMatrixPlus;
+		Eigen::MatrixXd FockMatrixMinus;
+
+		InitFockMatrices(iter, FockMatrixPlus, FockMatrixMinus);
+
+		// will be used for DIIS
+
+		bool UsedDIIS = DIISStep(iter, FockMatrixPlus, FockMatrixMinus);
+		
 		// ***************************************************************************************************************************
 
 		// solve the Pople-Nesbet–Berthier equations

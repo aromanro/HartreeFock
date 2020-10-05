@@ -36,6 +36,7 @@ namespace HartreeFock {
 		
 		virtual void Init(Systems::Molecule* molecule) override;
 
+		bool DIISStep(int iter, Eigen::MatrixXd& FockMatrix);
 		virtual double Step(int iter) override;
 
 		virtual double CalculateMp2Energy() override;
