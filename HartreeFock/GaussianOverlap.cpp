@@ -57,10 +57,8 @@ namespace GaussianIntegrals {
 		// transfer equation - the horizontal recurrence relation
 		--limit;
 		for (unsigned int j = 1; j <= maxQN2; ++j, --limit)
-		{
 			for (unsigned int i = 0; i <= limit; ++i)
 				matrix(i, j) = matrix(i + 1ULL, j - 1ULL) + dif * matrix(i, j - 1ULL);
-		}
 
 		matrix = matrix.block(0, 0, maxQN1 + 1ULL, maxQN2 + 1ULL).eval();
 	}

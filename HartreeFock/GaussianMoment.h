@@ -17,6 +17,8 @@ namespace GaussianIntegrals {
     // also because only x or y or z are required (no products, like xy, or xz and so on) no maxQN3 should be passed as a parameter, 1 can be implied for that angular momentum
     // also a third alpha will be missing, since the third center is not about a Gaussian
 
+    // TODO: finish implementing it
+
     class GaussianMoment :
         public GaussianIntegral
     {
@@ -32,6 +34,42 @@ namespace GaussianIntegrals {
         double factor;
 
         GaussianMoment();
+
+        GaussianMoment(double alpha1, double alpha2, const Vector3D<double>& center1, const Vector3D<double>& center2, const Orbitals::QuantumNumbers::QuantumNumbers& maxQN1, const Orbitals::QuantumNumbers::QuantumNumbers& maxQN2)
+            : GaussianMoment(alpha1, alpha2, center1, center2, Vector3D<double>(0, 0, 0), maxQN1, maxQN2)
+        {
+        }
+
+        GaussianMoment(double alpha1, double alpha2, const Vector3D<double>& center1, const Vector3D<double>& center2, const Vector3D<double>& center3, const Orbitals::QuantumNumbers::QuantumNumbers& maxQN1, const Orbitals::QuantumNumbers::QuantumNumbers& maxQN2);
+
+
+        void Reset(double alpha1, double alpha2, const Vector3D<double>& center1, const Vector3D<double>& center2, const Orbitals::QuantumNumbers::QuantumNumbers& maxQN1, const Orbitals::QuantumNumbers::QuantumNumbers& maxQN2)
+        {
+            static const Vector3D<double> zeroV(0, 0, 0);
+            Reset(alpha1, alpha2, center1, center2, zeroV, maxQN1, maxQN2);
+        }
+
+        void Reset(double alpha1, double alpha2, const Vector3D<double>& center1, const Vector3D<double>& center2, const Vector3D<double>& center3, const Orbitals::QuantumNumbers::QuantumNumbers& maxQN1, const Orbitals::QuantumNumbers::QuantumNumbers& maxQN2);
+
+        double getMomentX(const Orbitals::QuantumNumbers::QuantumNumbers& QN1, const Orbitals::QuantumNumbers::QuantumNumbers& QN2) const
+        {
+            return getMoment(QN1, QN2, true, false, false);
+        }
+
+        double getMomentY(const Orbitals::QuantumNumbers::QuantumNumbers& QN1, const Orbitals::QuantumNumbers::QuantumNumbers& QN2) const
+        {
+            return getMoment(QN1, QN2, false, true, false);
+        }
+
+        double getMomentZ(const Orbitals::QuantumNumbers::QuantumNumbers& QN1, const Orbitals::QuantumNumbers::QuantumNumbers& QN2) const
+        {
+            return getMoment(QN1, QN2, false, true, false);
+        }
+
+    protected:
+        double getMoment(const Orbitals::QuantumNumbers::QuantumNumbers& QN1, const Orbitals::QuantumNumbers::QuantumNumbers& QN2, bool momentX, bool momentY, bool momentZ) const;
+        void CalculateMoment(Eigen::MatrixXd& matrix, Eigen::MatrixXd& matrix1, double alpha1, double alpha2, double center1, double center2, double center3, unsigned int maxQN1, unsigned int maxQN2);
+
     };
 
 }
