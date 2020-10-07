@@ -66,8 +66,9 @@ namespace GaussianIntegrals {
             return getMoment(QN1, QN2, false, true, false);
         }
 
-    protected:
         double getMoment(const Orbitals::QuantumNumbers::QuantumNumbers& QN1, const Orbitals::QuantumNumbers::QuantumNumbers& QN2, bool momentX, bool momentY, bool momentZ) const;
+
+    protected:
         void CalculateMoment(Eigen::MatrixXd& matrix, Eigen::MatrixXd& matrix1, double alpha1, double alpha2, double center1, double center2, double center3, unsigned int maxQN1, unsigned int maxQN2);
 
     };

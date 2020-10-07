@@ -107,6 +107,70 @@ namespace GaussianIntegrals {
 
 
 	//************************************************************************************************************************************************************
+	// MOMENT integrals
+	//************************************************************************************************************************************************************
+
+
+	double IntegralsRepository::getMoment(const Orbitals::GaussianOrbital& gaussian1, const Orbitals::GaussianOrbital& gaussian2, bool momentX, bool momentY, bool momentZ)
+	{
+		assert(m_Molecule);
+
+		const std::tuple<unsigned int, unsigned int, double, double > params(gaussian1.shellID, gaussian2.shellID, gaussian1.alpha, gaussian2.alpha);
+
+		auto it = momentIntegralsMap.find(params);
+		if (momentIntegralsMap.end() != it) return it->second.getMoment(gaussian1.angularMomentum, gaussian2.angularMomentum, momentX, momentY, momentZ);
+
+
+		// unfortunately it's not yet calculated
+		GaussianMoment moment;
+		auto result = momentIntegralsMap.insert(std::make_pair(params, moment));
+
+
+
+		Orbitals::QuantumNumbers::QuantumNumbers maxQN1(0, 0, 0), maxQN2(0, 0, 0);
+
+		// now find out the maximum quantum numbers
+
+		Systems::AtomWithShells* a1 = nullptr;
+		Systems::AtomWithShells* a2 = nullptr;
+
+		for (auto& atom : m_Molecule->atoms)
+		{
+			if (atom.position == gaussian1.center) a1 = &atom;
+			if (atom.position == gaussian2.center) a2 = &atom;
+
+			if (a1 && a2) break;
+		}
+
+		assert(a1);
+		assert(a2);
+
+		// now find the max quantum numbers
+
+		if (a1) a1->GetMaxQN(gaussian1.alpha, maxQN1);
+		if (a2) a2->GetMaxQN(gaussian2.alpha, maxQN2);
+
+		// calculate the integrals and that's about it
+
+		result.first->second.Reset(gaussian1.alpha, gaussian2.alpha, gaussian1.center, gaussian2.center, maxQN1, maxQN2);
+
+		return result.first->second.getMoment(gaussian1.angularMomentum, gaussian2.angularMomentum, momentX, momentY, momentZ);
+	}
+
+
+	double IntegralsRepository::getMoment(const Orbitals::ContractedGaussianOrbital& orbital1, const Orbitals::ContractedGaussianOrbital& orbital2, bool momentX, bool momentY, bool momentZ)
+	{
+		double res = 0;
+
+		for (auto& gaussian1 : orbital1.gaussianOrbitals)
+			for (auto& gaussian2 : orbital2.gaussianOrbitals)
+				res += gaussian1.normalizationFactor * gaussian2.normalizationFactor * gaussian1.coefficient * gaussian2.coefficient * getMoment(gaussian1, gaussian2, momentX, momentY, momentZ);
+
+		return res;
+	}
+
+
+	//************************************************************************************************************************************************************
 	// KINETIC integrals
 	//************************************************************************************************************************************************************
 

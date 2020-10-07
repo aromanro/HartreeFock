@@ -5,6 +5,7 @@
 #include "GaussianKinetic.h"
 #include "GaussianNuclear.h"
 #include "GaussianTwoElectrons.h"
+#include "GaussianMoment.h"
 #include "BoysFunctions.h"
 
 #include <map>
@@ -25,6 +26,8 @@ namespace GaussianIntegrals {
 
 
 		std::map < std::tuple<unsigned int, unsigned int, double, double>, GaussianOverlap> overlapIntegralsMap;
+		std::map < std::tuple<unsigned int, unsigned int, double, double>, GaussianMoment> momentIntegralsMap; // also contains the overlap, might replace the overlap map as well
+
 		std::map < std::tuple<unsigned int, unsigned int, double, double >, GaussianKinetic> kineticIntegralsMap;
 
 		std::map < std::tuple<unsigned int, unsigned int, unsigned int, double, double >, GaussianNuclear > nuclearVerticalIntegralsMap;
@@ -48,6 +51,40 @@ namespace GaussianIntegrals {
 		double getOverlap(const Orbitals::ContractedGaussianOrbital& orbital1, const Orbitals::ContractedGaussianOrbital& orbital2, bool extendForKinetic = true);
 		double getOverlap(const Orbitals::GaussianOrbital& gaussian1, const Orbitals::GaussianOrbital& gaussian2, bool extendForKinetic = true);
 
+		double getMoment(const Orbitals::ContractedGaussianOrbital& orbital1, const Orbitals::ContractedGaussianOrbital& orbital2, bool momentX, bool momentY, bool momentZ);
+		double getMoment(const Orbitals::GaussianOrbital& gaussian1, const Orbitals::GaussianOrbital& gaussian2, bool momentX, bool momentY, bool momentZ);
+
+		double getMomentX(const Orbitals::GaussianOrbital& gaussian1, const Orbitals::GaussianOrbital& gaussian2)
+		{
+			return getMoment(gaussian1, gaussian2, true, false, false);
+		}
+
+		double getMomentY(const Orbitals::GaussianOrbital& gaussian1, const Orbitals::GaussianOrbital& gaussian2)
+		{
+			return getMoment(gaussian1, gaussian2, false, true, false);
+		}
+
+		double getMomentZ(const Orbitals::GaussianOrbital& gaussian1, const Orbitals::GaussianOrbital& gaussian2)
+		{
+			return getMoment(gaussian1, gaussian2, false, true, false);
+		}
+
+		double getMomentX(const Orbitals::ContractedGaussianOrbital& orbital1, const Orbitals::ContractedGaussianOrbital& orbital2)
+		{
+			return getMoment(orbital1, orbital2, true, false, false);
+		}
+
+		double getMomentY(const Orbitals::ContractedGaussianOrbital& orbital1, const Orbitals::ContractedGaussianOrbital& orbital2)
+		{
+			return getMoment(orbital1, orbital2, false, true, false);
+		}
+
+		double getMomentZ(const Orbitals::ContractedGaussianOrbital& orbital1, const Orbitals::ContractedGaussianOrbital& orbital2)
+		{
+			return getMoment(orbital1, orbital2, false, true, false);
+		}
+
+
 		double getKinetic(const Orbitals::ContractedGaussianOrbital& orbital1, const Orbitals::ContractedGaussianOrbital& orbital2);
 		double getKinetic(const Orbitals::GaussianOrbital& gaussian1, const Orbitals::GaussianOrbital& gaussian2);
 
@@ -66,6 +103,7 @@ namespace GaussianIntegrals {
 		void ClearMatricesMaps() 
 		{
 			overlapIntegralsMap.clear();
+			//momentIntegralsMap.clear();
 			kineticIntegralsMap.clear();
 
 			nuclearVerticalIntegralsMap.clear();
@@ -89,6 +127,8 @@ namespace GaussianIntegrals {
 			ClearMatricesMaps();
 			ClearElectronElectronMaps();
 			boysFunctions.clear();
+
+			momentIntegralsMap.clear();
 		}
 	protected:
 		const GaussianNuclear& getNuclearVertical(const Systems::Atom& atom, const Orbitals::GaussianOrbital& gaussian1, const Orbitals::GaussianOrbital& gaussian2);
