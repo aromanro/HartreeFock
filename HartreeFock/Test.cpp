@@ -308,6 +308,13 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 
 		file << "Emp2: " << Emp2 << std::endl;
 		file << "Total: " << hartreeFock->GetTotalEnergy() + Emp2 << std::endl;
+
+		Vector3D<double> moment = hartreeFock->GetMoment();
+
+		file << std::endl;
+		file << "Mu-x: " << moment.X << std::endl;
+		file << "Mu-y: " << moment.Y << std::endl;
+		file << "Mu-z: " << moment.Z << std::endl;
 	}
 
 	delete hartreeFock;

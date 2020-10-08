@@ -84,7 +84,9 @@ namespace HartreeFock {
 
 		virtual double CalculateAtomicCharge(int atom) const = 0;
 
-		Vector3D<double> GetNuclearMoment();
+		Vector3D<double> GetNuclearMoment() const;
+
+		virtual Vector3D<double> GetMoment() const = 0;
 
 	protected:
 		static double DiffDensityMatrices(const Eigen::MatrixXd& oldP, const Eigen::MatrixXd& newP);

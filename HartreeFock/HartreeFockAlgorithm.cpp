@@ -210,7 +210,7 @@ namespace HartreeFock {
 	}
 
 
-	Vector3D<double> HartreeFockAlgorithm::GetNuclearMoment()
+	Vector3D<double> HartreeFockAlgorithm::GetNuclearMoment() const
 	{
 		Vector3D<double> moment;
 

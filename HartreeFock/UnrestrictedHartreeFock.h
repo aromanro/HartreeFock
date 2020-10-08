@@ -48,6 +48,7 @@ namespace HartreeFock {
 
 		virtual double CalculateMp2Energy() override;
 		virtual double CalculateAtomicCharge(int atom) const override;
+		virtual Vector3D<double> GetMoment() const override;
 	};
 
 }

@@ -358,5 +358,22 @@ namespace HartreeFock {
 		return result;
 	}
 
+	Vector3D<double> RestrictedHartreeFock::GetMoment() const
+	{
+		Vector3D<double> moment = GetNuclearMoment();
+		const unsigned long long int sz = DensityMatrix.cols();
+
+		for (unsigned int i = 0; i < sz; ++i)
+			for (unsigned int j = 0; j < sz; ++j)
+			{
+				const double dval = DensityMatrix(i, j);
+				moment.X -= dval * momentMatrix.matrix(i, j);
+				moment.Y -= dval * momentMatrix.matrixY(i, j);
+				moment.Z -= dval * momentMatrix.matrixZ(i, j);
+			}
+
+		return moment;
+	}
+
 
 }
