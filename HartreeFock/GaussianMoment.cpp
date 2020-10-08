@@ -21,13 +21,13 @@ namespace GaussianIntegrals {
 
 	void GaussianMoment::Reset(double alpha1, double alpha2, const Vector3D<double>& center1, const Vector3D<double>& center2, const Vector3D<double>& center3, const Orbitals::QuantumNumbers::QuantumNumbers& maxQN1, const Orbitals::QuantumNumbers::QuantumNumbers& maxQN2)
 	{
-		matrixX = Eigen::MatrixXd::Zero(3ULL + maxQN1.l + maxQN2.l, maxQN2.l + 1ULL);
-		matrixY = Eigen::MatrixXd::Zero(3ULL + maxQN1.m + maxQN2.m, maxQN2.m + 1ULL);
-		matrixZ = Eigen::MatrixXd::Zero(3ULL + maxQN1.n + maxQN2.n, maxQN2.n + 1ULL);
+		matrixX = Eigen::MatrixXd::Zero(3ULL + maxQN1.l + maxQN2.l, maxQN2.l + 2ULL);
+		matrixY = Eigen::MatrixXd::Zero(3ULL + maxQN1.m + maxQN2.m, maxQN2.m + 2ULL);
+		matrixZ = Eigen::MatrixXd::Zero(3ULL + maxQN1.n + maxQN2.n, maxQN2.n + 2ULL);
 
-		matrixX1 = Eigen::MatrixXd::Zero(2ULL + maxQN1.l + maxQN2.l, maxQN2.l + 1ULL);
-		matrixY1 = Eigen::MatrixXd::Zero(2ULL + maxQN1.m + maxQN2.m, maxQN2.m + 1ULL);
-		matrixZ1 = Eigen::MatrixXd::Zero(2ULL + maxQN1.n + maxQN2.n, maxQN2.n + 1ULL);
+		matrixX1 = Eigen::MatrixXd::Zero(2ULL + maxQN1.l + maxQN2.l, maxQN2.l + 2ULL);
+		matrixY1 = Eigen::MatrixXd::Zero(2ULL + maxQN1.m + maxQN2.m, maxQN2.m + 2ULL);
+		matrixZ1 = Eigen::MatrixXd::Zero(2ULL + maxQN1.n + maxQN2.n, maxQN2.n + 2ULL);
 
 		CalculateMoment(matrixX, matrixX1, alpha1, alpha2, center1.X, center2.X, center3.X, maxQN1.l, maxQN2.l);
 		CalculateMoment(matrixY, matrixY1, alpha1, alpha2, center1.Y, center2.Y, center3.Y, maxQN1.m, maxQN2.m);

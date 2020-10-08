@@ -68,7 +68,7 @@ namespace Matrices {
 		const Systems::Molecule* molecule = integralsRepository->getMolecule();
 		
 		matrixY = Eigen::MatrixXd::Zero(nrBasis, nrBasis);
-		matrixY = Eigen::MatrixXd::Zero(nrBasis, nrBasis);
+		matrixZ = Eigen::MatrixXd::Zero(nrBasis, nrBasis);
 
 		int i = 0;
 		for (const auto& atom1 : molecule->atoms)
