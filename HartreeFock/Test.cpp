@@ -309,12 +309,15 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 		file << "Emp2: " << Emp2 << std::endl;
 		file << "Total: " << hartreeFock->GetTotalEnergy() + Emp2 << std::endl;
 
-		Vector3D<double> moment = hartreeFock->GetMoment();
+		Vector3D<double> moment = hartreeFock->GetMoment(); // multiply with 2.541746473 for Debye
 
 		file << std::endl;
-		file << "Mu-x: " << moment.X << std::endl;
-		file << "Mu-y: " << moment.Y << std::endl;
-		file << "Mu-z: " << moment.Z << std::endl;
+		file << "Mu-x: " << moment.X << " au, " << moment.X * 2.541746473 << " D" << std::endl;
+		file << "Mu-y: " << moment.Y << " au, " << moment.Y * 2.541746473 << " D" << std::endl;
+		file << "Mu-z: " << moment.Z << " au, " << moment.Z * 2.541746473 << " D" << std::endl;
+		
+		const double total = moment.Length();
+		file << "Total dipole moment: " << total << " au, " << total * 2.541746473 << " D" << std::endl;
 	}
 
 	delete hartreeFock;
@@ -442,6 +445,12 @@ void Test::TestWater(const std::string& fileName, const std::string& sfileName, 
 	H2.position.X = -1.638036840407;
 	H2.position.Y = 1.136548822547;
 	H2.position.Z = 0;
+
+	// translate the molecule with O in zero
+	//const Vector3D<double> translate = O.position;
+	//O.position = Vector3D<double>(0, 0, 0);
+	//H1.position -= translate;
+	//H2.position -= translate;
 
 	molecule.atoms.push_back(O);
 	molecule.atoms.push_back(H1);

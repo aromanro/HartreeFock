@@ -66,7 +66,7 @@ namespace GaussianIntegrals {
 
 		double getMomentZ(const Orbitals::GaussianOrbital& gaussian1, const Orbitals::GaussianOrbital& gaussian2)
 		{
-			return getMoment(gaussian1, gaussian2, false, true, false);
+			return getMoment(gaussian1, gaussian2, false, false, true);
 		}
 
 		double getMomentX(const Orbitals::ContractedGaussianOrbital& orbital1, const Orbitals::ContractedGaussianOrbital& orbital2)
@@ -81,7 +81,7 @@ namespace GaussianIntegrals {
 
 		double getMomentZ(const Orbitals::ContractedGaussianOrbital& orbital1, const Orbitals::ContractedGaussianOrbital& orbital2)
 		{
-			return getMoment(orbital1, orbital2, false, true, false);
+			return getMoment(orbital1, orbital2, false, false, true);
 		}
 
 

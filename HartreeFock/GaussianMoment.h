@@ -63,7 +63,7 @@ namespace GaussianIntegrals {
 
         double getMomentZ(const Orbitals::QuantumNumbers::QuantumNumbers& QN1, const Orbitals::QuantumNumbers::QuantumNumbers& QN2) const
         {
-            return getMoment(QN1, QN2, false, true, false);
+            return getMoment(QN1, QN2, false, false, true);
         }
 
         double getMoment(const Orbitals::QuantumNumbers::QuantumNumbers& QN1, const Orbitals::QuantumNumbers::QuantumNumbers& QN2, bool momentX, bool momentY, bool momentZ) const;

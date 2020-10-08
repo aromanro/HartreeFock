@@ -59,21 +59,32 @@ namespace GaussianIntegrals {
 		// recurrence index
 		unsigned int limit = maxQN1 + maxQN2 + 2;
 
-		// vertical recurrence relation
+		// vertical recurrence relation - the same as for overlap
 		for (unsigned int i = 2; i <= limit; ++i)
 			matrix(i, 0) = difCenter * matrix(i - 1, 0) + (i - 1.) / (2. * alpha) * matrix(i - 2, 0);
 
+
 		--limit;
+
+		// for first column of matrix1 as well
+		for (unsigned int i = 0; i < limit; ++i)
+			matrix1(i, 0) = matrix(i + 1ULL, 0) + dif1 * matrix(i, 0);
+
 
 		// transfer equation - the horizontal recurrence relation
 		const unsigned int horzLimit = maxQN2 + 1;
 		for (unsigned int j = 1; j <= horzLimit; ++j, --limit)
 		{
+			const unsigned int jminus1 = j - 1ULL;
+			
+			// *** this is correct, is exactly as for overlap ********************************
+
 			for (unsigned int i = 0; i <= limit; ++i)
-				matrix(i, j) = matrix(i + 1ULL, j - 1ULL) + dif * matrix(i, j - 1ULL);
+				matrix(i, j) = matrix(i + 1ULL, jminus1) + dif * matrix(i, jminus1);
+
+			// *******************************************************************************
 
 			for (unsigned int i = 0; i < limit; ++i)
-				// TODO: check this!!!!! Might have a wrong sign
 				matrix1(i, j) = matrix(i + 1ULL, j) + dif1 * matrix(i, j);
 		}
 
