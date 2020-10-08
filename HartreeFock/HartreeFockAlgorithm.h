@@ -22,6 +22,7 @@ namespace HartreeFock {
 		double mp2Energy;
 
 		Matrices::OverlapMatrix overlapMatrix;
+		Matrices::MomentMatrix momentMatrix;
 		Matrices::KineticMatrix kineticMatrix;
 		Matrices::NuclearMatrix nuclearMatrix;
 		
@@ -82,6 +83,8 @@ namespace HartreeFock {
 		virtual double CalculateMp2Energy() = 0;
 
 		virtual double CalculateAtomicCharge(int atom) const = 0;
+
+		Vector3D<double> GetNuclearMoment();
 
 	protected:
 		static double DiffDensityMatrices(const Eigen::MatrixXd& oldP, const Eigen::MatrixXd& newP);

@@ -77,16 +77,19 @@ HartreeFockThread::HartreeFockThread(const Options& options, CHartreeFockDoc* do
 		basisPtr = &doc->basis6_31plusGstarstar;
 	}	
 
-	for (const auto &atom : basisPtr->atoms)
+	if (basisPtr)
 	{
-		if (Z1 == atom.Z) atom1 = atom;
-		if (Z2 == atom.Z) atom2 = atom;
-	}
+		for (const auto& atom : basisPtr->atoms)
+		{
+			if (Z1 == atom.Z) atom1 = atom;
+			if (Z2 == atom.Z) atom2 = atom;
+		}
 
-	molecule.atoms.push_back(atom1);
-	molecule.atoms.push_back(atom2);
-	molecule.atoms[1].SetCenterForShells();
-	if (options.twoAtom1) molecule.atoms.push_back(atom1);
+		molecule.atoms.push_back(atom1);
+		molecule.atoms.push_back(atom2);
+		molecule.atoms[1].SetCenterForShells();
+		if (options.twoAtom1) molecule.atoms.push_back(atom1);
+	}
 
 	molecule.alphaElectrons = options.alphaElectrons;
 	molecule.betaElectrons = options.betaElectrons;

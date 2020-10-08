@@ -63,6 +63,44 @@ namespace Matrices {
 				}
 	}
 
+	void MomentMatrix::Calculate()
+	{
+		const Systems::Molecule* molecule = integralsRepository->getMolecule();
+		
+		matrixY = Eigen::MatrixXd::Zero(nrBasis, nrBasis);
+		matrixY = Eigen::MatrixXd::Zero(nrBasis, nrBasis);
+
+		int i = 0;
+		for (const auto& atom1 : molecule->atoms)
+			for (const auto& shell1 : atom1.shells)
+				for (const auto& orbital1 : shell1.basisFunctions)
+				{
+					int j = 0;
+
+					for (const auto& atom2 : molecule->atoms)
+						for (const auto& shell2 : atom2.shells)
+							for (const auto& orbital2 : shell2.basisFunctions)
+							{
+								if (j >= i)
+								{
+									matrix(i, j) = integralsRepository->getMomentX(orbital1, orbital2);
+									matrixY(i, j) = integralsRepository->getMomentY(orbital1, orbital2);
+									matrixZ(i, j) = integralsRepository->getMomentZ(orbital1, orbital2);
+									if (i != j) 
+									{
+										matrix(j, i) = matrix(i, j);
+										matrixY(j, i) = matrixY(i, j);
+										matrixZ(j, i) = matrixZ(i, j);
+									}
+								}
+
+								++j;
+							}
+					++i;
+				}
+	}
+
+
 	void KineticMatrix::Calculate()
 	{
 		const Systems::Molecule* molecule = integralsRepository->getMolecule();

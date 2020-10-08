@@ -103,7 +103,7 @@ namespace GaussianIntegrals {
 		void ClearMatricesMaps() 
 		{
 			overlapIntegralsMap.clear();
-			//momentIntegralsMap.clear();
+			momentIntegralsMap.clear();
 			kineticIntegralsMap.clear();
 
 			nuclearVerticalIntegralsMap.clear();
@@ -127,8 +127,6 @@ namespace GaussianIntegrals {
 			ClearMatricesMaps();
 			ClearElectronElectronMaps();
 			boysFunctions.clear();
-
-			momentIntegralsMap.clear();
 		}
 	protected:
 		const GaussianNuclear& getNuclearVertical(const Systems::Atom& atom, const Orbitals::GaussianOrbital& gaussian1, const Orbitals::GaussianOrbital& gaussian2);

@@ -24,10 +24,12 @@ namespace HartreeFock {
 		integralsRepository.Reset(molecule);
 
 		overlapMatrix.SetRepository(&integralsRepository);
+		momentMatrix.SetRepository(&integralsRepository);
 		kineticMatrix.SetRepository(&integralsRepository);
 		nuclearMatrix.SetRepository(&integralsRepository);
 
 		overlapMatrix.Calculate();
+		momentMatrix.Calculate();
 		kineticMatrix.Calculate();
 		nuclearMatrix.Calculate();
 
@@ -206,6 +208,18 @@ namespace HartreeFock {
 			C.col(vec) /= sqrt(factor);
 		}
 	}
+
+
+	Vector3D<double> HartreeFockAlgorithm::GetNuclearMoment()
+	{
+		Vector3D<double> moment;
+
+		for (const Systems::Atom& atom : integralsRepository.getMolecule()->atoms)
+			moment += static_cast<double>(atom.Z) * atom.position;
+
+		return moment;
+	}
+
 
 }
 

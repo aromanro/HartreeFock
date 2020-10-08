@@ -37,6 +37,18 @@ namespace Matrices {
 	};
 
 
+	class MomentMatrix : public QuantumMatrix
+	{
+	public:
+		Eigen::MatrixXd matrixY;
+		Eigen::MatrixXd matrixZ;
+
+		MomentMatrix(GaussianIntegrals::IntegralsRepository* repository = nullptr) : QuantumMatrix(repository) { if (integralsRepository) Calculate(); }
+
+		virtual void Calculate();
+	};
+
+
 	class KineticMatrix : public QuantumMatrix 
 	{
 	public:
