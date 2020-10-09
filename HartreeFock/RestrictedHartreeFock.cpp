@@ -166,8 +166,8 @@ namespace HartreeFock {
 
 		const Eigen::MatrixXd FockTransformed = Vt * FockMatrix * V; // orthogonalize
 		const Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> es(FockTransformed);
-		Cprime = es.eigenvectors();
-		const Eigen::MatrixXd C = V * Cprime; // transform back the eigenvectors into the original non-orthogonalized AO basis
+		const Eigen::MatrixXd& Cprime = es.eigenvectors();
+		C = V * Cprime; // transform back the eigenvectors into the original non-orthogonalized AO basis
 
 		// normalize it
 		//NormalizeC(C, occupied);
@@ -314,10 +314,10 @@ namespace HartreeFock {
 
 						const double Esumdif = eigenvals(i) + eigenvals(j) - eigenvals(a) - eigenvals(b);
 						
-						const double eeiajb = MP2repo.getElectronElectron(i, a, j, b, Cprime);
-						const double eeibja = MP2repo.getElectronElectron(i, b, j, a, Cprime);
+						const double eeiajb = MP2repo.getElectronElectron(i, a, j, b, C);
+						const double eeibja = MP2repo.getElectronElectron(i, b, j, a, C);
 						
-						const double partE = eeiajb* (2. * eeiajb - eeibja) / Esumdif;
+						const double partE = eeiajb * (2. * eeiajb - eeibja) / Esumdif;
 
 						mp2Energy += partE;
 					}

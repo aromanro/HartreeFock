@@ -175,12 +175,10 @@ namespace HartreeFock {
 		const Eigen::MatrixXd FockMatrixPlusTransformed = Vt * FockMatrixPlus * V;
 		const Eigen::MatrixXd FockMatrixMinusTransformed = Vt * FockMatrixMinus * V;
 
-		Eigen::MatrixXd Cplus, Cminus;
-		
 		if (FockMatrixPlusTransformed.rows() > 1)
 		{
 			Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> esplus(FockMatrixPlusTransformed);
-			Cplusprime = esplus.eigenvectors();
+			const Eigen::MatrixXd& Cplusprime = esplus.eigenvectors();
 			Cplus = V * Cplusprime; // transform back the eigenvectors into the original non-orthogonalized AO basis
 			eigenvalsplus = esplus.eigenvalues();
 		}
@@ -193,7 +191,7 @@ namespace HartreeFock {
 		if (FockMatrixMinusTransformed.rows() > 1)
 		{
 			Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> esminus(FockMatrixMinusTransformed);
-			Cminusprime = esminus.eigenvectors();
+			const Eigen::MatrixXd& Cminusprime = esminus.eigenvectors();
 			Cminus = V * Cminusprime; // transform back the eigenvectors into the original non-orthogonalized AO basis
 			eigenvalsminus = esminus.eigenvalues();
 		}
@@ -364,6 +362,10 @@ namespace HartreeFock {
 		mp2Energy = 0;
 
 		// TODO: calculate it
+
+
+
+
 
 		return mp2Energy;
 	}

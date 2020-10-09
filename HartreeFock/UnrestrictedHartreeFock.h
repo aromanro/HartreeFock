@@ -35,8 +35,8 @@ namespace HartreeFock {
 		// results that might be needed in the end, after the last step
 		Eigen::VectorXd eigenvalsplus;
 		Eigen::VectorXd eigenvalsminus;
-		Eigen::MatrixXd Cplusprime;
-		Eigen::MatrixXd Cminusprime;
+		Eigen::MatrixXd Cplus;
+		Eigen::MatrixXd Cminus;
 
 		UnrestrictedHartreeFock(int iterations = 3000);
 		virtual ~UnrestrictedHartreeFock();

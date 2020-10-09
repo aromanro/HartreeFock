@@ -255,8 +255,8 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 			FockTransformed = hartreeFock->Vt * FockMatrix * hartreeFock->V; // orthogonalize
 			const Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> esl(FockTransformed);
 			const Eigen::MatrixXd& Cprime = esl.eigenvectors();
-			((HartreeFock::RestrictedHartreeFock*)hartreeFock)->Cprime = Cprime;
 			C = hartreeFock->V * Cprime; // transform back the eigenvectors into the original non-orthogonalized AO basis
+			((HartreeFock::RestrictedHartreeFock*)hartreeFock)->C = C;
 
 			DensityMatrix = Eigen::MatrixXd::Zero(h.rows(), h.cols());
 
