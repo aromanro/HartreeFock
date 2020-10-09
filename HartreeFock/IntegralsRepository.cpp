@@ -40,13 +40,17 @@ namespace GaussianIntegrals {
 		
 		const std::tuple<unsigned int, unsigned int, double, double > params(gaussian1.shellID, gaussian2.shellID, gaussian1.alpha, gaussian2.alpha);
 
-		auto it = overlapIntegralsMap.find(params);
-		if (overlapIntegralsMap.end() != it) return it->second.getOverlap(gaussian1.angularMomentum, gaussian2.angularMomentum);
+		//auto it = overlapIntegralsMap.find(params);
+		//if (overlapIntegralsMap.end() != it) return it->second.getOverlap(gaussian1.angularMomentum, gaussian2.angularMomentum);
 
+		auto it = momentIntegralsMap.find(params);
+		if (momentIntegralsMap.end() != it) return it->second.getOverlap(gaussian1.angularMomentum, gaussian2.angularMomentum);
 
 		// unfortunately it's not yet calculated
-		GaussianOverlap overlap;
-		auto result = overlapIntegralsMap.insert(std::make_pair(params, overlap));
+		//GaussianOverlap overlap;
+		//auto result = overlapIntegralsMap.insert(std::make_pair(params, overlap));
+		GaussianMoment moment;
+		auto result = momentIntegralsMap.insert(std::make_pair(params, moment));
 
 
 
@@ -195,8 +199,10 @@ namespace GaussianIntegrals {
 		auto it = kineticIntegralsMap.find(params);
 		if (kineticIntegralsMap.end() != it) return it->second.getKinetic(gaussian1.angularMomentum, gaussian2.angularMomentum);
 
-		auto oit = overlapIntegralsMap.find(params);
-		assert(oit != overlapIntegralsMap.end());
+		//auto oit = overlapIntegralsMap.find(params);
+		//assert(oit != overlapIntegralsMap.end());
+		auto oit = momentIntegralsMap.find(params);
+		assert(oit != momentIntegralsMap.end());
 
 		// unfortunately it's not yet calculated
 		GaussianKinetic kinetic(&gaussian1, &gaussian2, &oit->second);

@@ -25,7 +25,8 @@ namespace GaussianIntegrals {
 		std::map< double, BoysFunctions > boysFunctions;
 
 
-		std::map < std::tuple<unsigned int, unsigned int, double, double>, GaussianOverlap> overlapIntegralsMap;
+		// the momentIntegralsMap replaces this, as it also computes overlap
+		//std::map < std::tuple<unsigned int, unsigned int, double, double>, GaussianOverlap> overlapIntegralsMap;
 		std::map < std::tuple<unsigned int, unsigned int, double, double>, GaussianMoment> momentIntegralsMap; // also contains the overlap, might replace the overlap map as well
 
 		std::map < std::tuple<unsigned int, unsigned int, double, double >, GaussianKinetic> kineticIntegralsMap;
@@ -102,7 +103,7 @@ namespace GaussianIntegrals {
 
 		void ClearMatricesMaps() 
 		{
-			overlapIntegralsMap.clear();
+			//overlapIntegralsMap.clear();
 			momentIntegralsMap.clear();
 			kineticIntegralsMap.clear();
 

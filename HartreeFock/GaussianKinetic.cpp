@@ -1,17 +1,24 @@
 #include "stdafx.h"
 
+#include "GaussianOrbital.h"
+
 #include "GaussianOverlap.h"
+#include "GaussianMoment.h"
+
 #include "GaussianKinetic.h"
 
-#include "GaussianOrbital.h"
 
 namespace GaussianIntegrals {
 
 	GaussianKinetic::GaussianKinetic(const Orbitals::GaussianOrbital* gaussian1, const Orbitals::GaussianOrbital* gaussian2, const GaussianOverlap* overlap)
-		: m_gaussian1(gaussian1), m_gaussian2(gaussian2), m_overlap(overlap)
+		: m_gaussian1(gaussian1), m_gaussian2(gaussian2), m_overlap(overlap), m_moment(nullptr)
 	{		
 	}
 
+	GaussianKinetic::GaussianKinetic(const Orbitals::GaussianOrbital* gaussian1, const Orbitals::GaussianOrbital* gaussian2, const GaussianMoment* moment)
+		: m_gaussian1(gaussian1), m_gaussian2(gaussian2), m_overlap(nullptr), m_moment(moment)
+	{
+	}
 
 	GaussianKinetic::~GaussianKinetic()
 	{
@@ -23,13 +30,30 @@ namespace GaussianIntegrals {
 		matrixY = Eigen::MatrixXd::Zero(maxQN1.m + 1ULL, maxQN2.m + 1ULL);
 		matrixZ = Eigen::MatrixXd::Zero(maxQN1.n + 1ULL, maxQN2.n + 1ULL);
 
-		CalculateKinetic(matrixX, m_overlap->matrixX, alpha1, alpha2, maxQN1.l, maxQN2.l);
-		CalculateKinetic(matrixY, m_overlap->matrixY, alpha1, alpha2, maxQN1.m, maxQN2.m);
-		CalculateKinetic(matrixZ, m_overlap->matrixZ, alpha1, alpha2, maxQN1.n, maxQN2.n);
+		if (m_moment)
+		{
+			CalculateKinetic(matrixX, m_moment->matrixX, alpha1, alpha2, maxQN1.l, maxQN2.l);
+			CalculateKinetic(matrixY, m_moment->matrixY, alpha1, alpha2, maxQN1.m, maxQN2.m);
+			CalculateKinetic(matrixZ, m_moment->matrixZ, alpha1, alpha2, maxQN1.n, maxQN2.n);
+		}
+		else
+		{
+			CalculateKinetic(matrixX, m_overlap->matrixX, alpha1, alpha2, maxQN1.l, maxQN2.l);
+			CalculateKinetic(matrixY, m_overlap->matrixY, alpha1, alpha2, maxQN1.m, maxQN2.m);
+			CalculateKinetic(matrixZ, m_overlap->matrixZ, alpha1, alpha2, maxQN1.n, maxQN2.n);
+		}
 	}
 
 	double GaussianKinetic::getKinetic(const Orbitals::QuantumNumbers::QuantumNumbers& QN1, const Orbitals::QuantumNumbers::QuantumNumbers& QN2) const
 	{		
+		if (m_moment)
+			return m_moment->factor * (
+				matrixX(QN1.l, QN2.l) * m_moment->matrixY(QN1.m, QN2.m) * m_moment->matrixZ(QN1.n, QN2.n) +
+				m_moment->matrixX(QN1.l, QN2.l) * matrixY(QN1.m, QN2.m) * m_moment->matrixZ(QN1.n, QN2.n) +
+				m_moment->matrixX(QN1.l, QN2.l) * m_moment->matrixY(QN1.m, QN2.m) * matrixZ(QN1.n, QN2.n)
+				);
+
+
 		return m_overlap->factor * (
 				matrixX(QN1.l, QN2.l) * m_overlap->matrixY(QN1.m, QN2.m) * m_overlap->matrixZ(QN1.n, QN2.n) +
 				m_overlap->matrixX(QN1.l, QN2.l) * matrixY(QN1.m, QN2.m) * m_overlap->matrixZ(QN1.n, QN2.n) +

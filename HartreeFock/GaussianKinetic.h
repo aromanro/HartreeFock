@@ -5,6 +5,8 @@
 #include "QuantumNumbers.h"
 #include "GaussianIntegral.h"
 
+#include "GaussianMoment.h"
+
 namespace Orbitals {
 	class GaussianOrbital;
 }
@@ -22,6 +24,7 @@ namespace GaussianIntegrals {
 		const Orbitals::GaussianOrbital *m_gaussian1;
 		const Orbitals::GaussianOrbital *m_gaussian2;
 		const GaussianOverlap *m_overlap;
+		const GaussianMoment *m_moment;
 
 		Eigen::MatrixXd matrixX;
 		Eigen::MatrixXd matrixY;
@@ -29,6 +32,7 @@ namespace GaussianIntegrals {
 
 	public:
 		GaussianKinetic(const Orbitals::GaussianOrbital* gaussian1, const Orbitals::GaussianOrbital* gaussian2, const GaussianOverlap* overlap);
+		GaussianKinetic(const Orbitals::GaussianOrbital* gaussian1, const Orbitals::GaussianOrbital* gaussian2, const GaussianMoment* moment);
 		~GaussianKinetic();
 
 		void Reset(double alpha1, double alpha2, const Orbitals::QuantumNumbers::QuantumNumbers& maxQN1, const Orbitals::QuantumNumbers::QuantumNumbers& maxQN2);

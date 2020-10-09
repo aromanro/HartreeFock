@@ -42,8 +42,10 @@ namespace GaussianIntegrals {
 		return factor * (momentX ? matrixX1(QN1.l, QN2.l) : matrixX(QN1.l, QN2.l)) * (momentY ? matrixY1(QN1.m, QN2.m) : matrixY(QN1.m, QN2.m)) * (momentZ ? matrixZ1(QN1.n, QN2.n) : matrixZ(QN1.n, QN2.n));
 	}
 
-	// Not tested!!!!
-	// Implemented very fast, very probably is wrong!
+	double GaussianMoment::getOverlap(const Orbitals::QuantumNumbers::QuantumNumbers& QN1, const Orbitals::QuantumNumbers::QuantumNumbers& QN2) const
+	{
+		return factor * matrixX(QN1.l, QN2.l) * matrixY(QN1.m, QN2.m) * matrixZ(QN1.n, QN2.n); // or getMoment(QN1, QN2, false, false, false) but this is slightly faster
+	}
 
 	void GaussianMoment::CalculateMoment(Eigen::MatrixXd& matrix, Eigen::MatrixXd& matrix1, double alpha1, double alpha2, double center1, double center2, double center3, unsigned int maxQN1, unsigned int maxQN2)
 	{
