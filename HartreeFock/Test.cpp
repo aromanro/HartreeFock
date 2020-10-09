@@ -17,6 +17,8 @@
 #include "Basis.h"
 #include "ChemUtils.h"
 
+#include "Constants.h"
+
 #include <sstream>
 
 #include <fstream>
@@ -82,7 +84,7 @@ void Test::OutputMatrix(const Eigen::MatrixXd& matrix, std::ofstream& file)
 
 
 
-void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, const std::string& sfileName, const std::string& tfileName, const std::string& vfileName, const std::string& erifileName, const double expectedNucEnergy)
+void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, const std::string& sfileName, const std::string& tfileName, const std::string& vfileName, const std::string& erifileName, bool useDIIS, const double expectedNucEnergy)
 {
 	HartreeFock::HartreeFockAlgorithm* hartreeFock;
 	const bool restricted = molecule.alphaElectrons == molecule.betaElectrons;
@@ -91,7 +93,7 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 	else
 		hartreeFock = new HartreeFock::UnrestrictedHartreeFock();
 
-	hartreeFock->UseDIIS = false;
+	hartreeFock->UseDIIS = useDIIS;
 	hartreeFock->alpha = 0.5;
 	hartreeFock->initGuess = 0;
 
@@ -198,6 +200,8 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 
 		((HartreeFock::RestrictedHartreeFock*)hartreeFock)->InitFockMatrix(0, FockMatrix);
 
+		if (useDIIS) ((HartreeFock::RestrictedHartreeFock*)hartreeFock)->DIISStep(0, FockMatrix);
+
 		Eigen::MatrixXd FockTransformed = hartreeFock->Vt * FockMatrix * hartreeFock->V; // orthogonalize
 
 		file << "\nInitial transformed Fock Matrix:\n";
@@ -252,6 +256,9 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 
 			// just copy/paste of the code from Restricted Hartree Fock class, with slight changes to work here, too:
 
+			bool usedDiis = false;
+			if (useDIIS) usedDiis = ((HartreeFock::RestrictedHartreeFock*)hartreeFock)->DIISStep(step, FockMatrix);
+
 			FockTransformed = hartreeFock->Vt * FockMatrix * hartreeFock->V; // orthogonalize
 			const Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> esl(FockTransformed);
 			const Eigen::MatrixXd& Cprime = esl.eigenvectors();
@@ -285,10 +292,12 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 			rmsD = sqrt(rmsDensityMatricesDif.cwiseProduct(rmsDensityMatricesDif).sum());
 
 			file.precision(12);
-			file << step << "\t" << totalEnergy - hartreeFock->nuclearRepulsionEnergy << "\t" << totalEnergy << "\t" << deltaE << "\t" << rmsD << std::endl;
+			file << step << "\t" << totalEnergy - hartreeFock->nuclearRepulsionEnergy << "\t" << totalEnergy << "\t" << deltaE << "\t" << rmsD;
+			if (useDIIS) file << "\t" << hartreeFock->lastErrorEst;
+			file << std::endl;
 
 
-			if (rmsD < 1E-12 && abs(deltaE) < 1E-13) break;
+			if (rmsD < rmsDConvergence && abs(deltaE) < (useDIIS ? energyConvergenceDIIS : energyConvergence) && (!useDIIS || hartreeFock->lastErrorEst < diisConvergence)) break;
 
 			//if (step == 36) break;
 			// ***************************************************************************************************
@@ -418,7 +427,7 @@ void Test::CheckDifferences(const GaussianIntegrals::IntegralsRepository& repo, 
 // TODO: try to load the provided file at https://github.com/CrawfordGroup/ProgrammingProjects/tree/master/Project%2303 and do comparisons in the code
 // even the geometry of the molecule could be loaded from the file
 
-void Test::TestWater(const std::string& fileName, const std::string& sfileName, const std::string& tfileName, const std::string& vfileName, const std::string& erifileName)
+void Test::TestWater(const std::string& fileName, const std::string& sfileName, const std::string& tfileName, const std::string& vfileName, const std::string& erifileName, bool useDIIS)
 {
 	Systems::AtomWithShells H1,H2,O;
 
@@ -459,11 +468,11 @@ void Test::TestWater(const std::string& fileName, const std::string& sfileName, 
 
 	std::ofstream file(fileName);
 
-	OutputMatrices(molecule, file, sfileName, tfileName, vfileName, erifileName, 8.002367061810450);
+	OutputMatrices(molecule, file, sfileName, tfileName, vfileName, erifileName, useDIIS, 8.002367061810450);
 }
 
 
-void Test::TestMethane(const std::string& fileName, const std::string& sfileName, const std::string& tfileName, const std::string& vfileName, const std::string& erifileName)
+void Test::TestMethane(const std::string& fileName, const std::string& sfileName, const std::string& tfileName, const std::string& vfileName, const std::string& erifileName, bool useDIIS)
 {
 	Systems::AtomWithShells H1, H2, H3, H4, C;
 
@@ -508,5 +517,5 @@ void Test::TestMethane(const std::string& fileName, const std::string& sfileName
 
 	std::ofstream file(fileName);
 
-	OutputMatrices(molecule, file, sfileName, tfileName, vfileName, erifileName, 13.497304462036480);
+	OutputMatrices(molecule, file, sfileName, tfileName, vfileName, erifileName, useDIIS, 13.497304462036480);
 }

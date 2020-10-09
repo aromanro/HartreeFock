@@ -44,13 +44,13 @@ namespace HartreeFock {
 			// another choice: if reached the limit of kept matrices, replace the ones with the bigger error
 			errorMatrices.emplace_back(errorMatrix);
 			fockMatrices.push_back(FockMatrix);
-			if (errorMatrices.size() > 8)
+			if (errorMatrices.size() > 6)
 			{
 				errorMatrices.pop_front();
 				fockMatrices.pop_front();
 			}
 
-			if (errorMatrices.size() > 6)
+			if (errorMatrices.size() > 4)
 			{
 				// use DIIS
 				const size_t nrMatrices = errorMatrices.size();

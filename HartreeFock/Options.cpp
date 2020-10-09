@@ -44,7 +44,7 @@ Options::Options()
 	DisplayHOMOEnergy(0),
 	useDIIS(true),
 	maxDIISiterations(1000),
-	normalIterAfterDIIS(500)
+	normalIterAfterDIIS(0)
 {
 }
 
@@ -96,7 +96,7 @@ void Options::Load()
 
 	useDIIS = (1 == theApp.GetProfileInt(L"options", L"UseDIIS", 1) ? true : false);
 	maxDIISiterations = theApp.GetProfileInt(L"options", L"MaxDIISiterations", 1000);
-	normalIterAfterDIIS = theApp.GetProfileInt(L"options", L"NormalIterAfterDIIS", 500);
+	normalIterAfterDIIS = theApp.GetProfileInt(L"options", L"NormalIterAfterDIIS", 0);
 }
 
 

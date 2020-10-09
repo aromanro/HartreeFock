@@ -115,7 +115,7 @@ namespace HartreeFock {
 
 			curEnergy = GetTotalEnergy();
 
-			if (abs(prevEnergy - curEnergy) <= energyConvergence && rmsD < rmsDConvergence && lastErrorEst < diisConvergence) {
+			if (abs(prevEnergy - curEnergy) <= (UseDIIS ? energyConvergenceDIIS : energyConvergence) && rmsD < rmsDConvergence && lastErrorEst < diisConvergence) {
 				converged = true;
 				break;
 			}
@@ -150,7 +150,7 @@ namespace HartreeFock {
 
 				curEnergy = GetTotalEnergy();
 
-				if (abs(prevEnergy - curEnergy) <= energyConvergence && rmsDConvergence < rmsDConvergence) {
+				if (abs(prevEnergy - curEnergy) <= energyConvergence && rmsD < rmsDConvergence) {
 					converged = true;
 					UseDIIS = true; // restore it back
 					return curEnergy;
