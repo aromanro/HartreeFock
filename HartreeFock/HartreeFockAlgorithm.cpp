@@ -133,17 +133,25 @@ namespace HartreeFock {
 			// do a loop without checking the convergence, sometimes DIIS gets stuck in a bad position close to the minimum
 			for (int i = 0; i < normalIterAfterDIIS; ++i)
 			{
-				curEnergy = Step(iter + i);
+				Step(iter + i);
+
+				curEnergy = GetTotalEnergy();
 				if (terminate)
 				{
 					UseDIIS = true; // restore it back
 					return curEnergy;
 				}
+				prevEnergy = curEnergy;
 			}
 
 			iter += normalIterAfterDIIS;
 
-			// now continue with normal iteration with convergence checking
+			UseDIIS = true; // restore it back
+		}
+
+		// now continue with normal iteration with convergence checking
+		if (!converged)
+		{
 			for (; iter < maxIterations; ++iter)
 			{
 				const double rmsD = Step(iter);
@@ -152,20 +160,13 @@ namespace HartreeFock {
 
 				if (abs(prevEnergy - curEnergy) <= energyConvergence && rmsD < rmsDConvergence) {
 					converged = true;
-					UseDIIS = true; // restore it back
 					return curEnergy;
 				}
 
-				if (terminate)
-				{
-					UseDIIS = true; // restore it back
-					return curEnergy;
-				}
+				if (terminate) return curEnergy;
 
 				prevEnergy = curEnergy;
 			}
-
-			UseDIIS = true; // restore it back
 		}
 
 		return curEnergy;

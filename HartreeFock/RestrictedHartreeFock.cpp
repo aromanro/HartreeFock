@@ -56,6 +56,8 @@ namespace HartreeFock {
 				const size_t nrMatrices = errorMatrices.size();
 				Eigen::MatrixXd B = Eigen::MatrixXd::Zero(nrMatrices + 1, nrMatrices + 1);
 
+				lastErrorEst = 0;
+
 				auto errorIter1 = errorMatrices.begin();
 				for (size_t i = 0; i < nrMatrices; ++i)
 				{
@@ -70,12 +72,14 @@ namespace HartreeFock {
 
 					B(i, i) = (*errorIter1).cwiseProduct(*errorIter1).sum();
 
-					if (i == nrMatrices - 1) lastErrorEst = sqrt(B(i, i));
+					if (i == nrMatrices - 1 || i == nrMatrices - 2) lastErrorEst += B(i, i);
 
 					B(nrMatrices, i) = B(i, nrMatrices) = 1;
 
 					++errorIter1;
 				}
+
+				lastErrorEst = sqrt(lastErrorEst);
 
 				// Solve the system of linear equations
 

@@ -75,7 +75,7 @@ namespace HartreeFock {
 			errorMatricesMinus.emplace_back(errorMatrixMinus);
 			fockMatricesMinus.push_back(FockMatrixMinus);
 
-			if (errorMatricesPlus.size() > 6)
+			if (errorMatricesPlus.size() > 8)
 			{
 				errorMatricesPlus.pop_front();
 				fockMatricesPlus.pop_front();
@@ -92,6 +92,9 @@ namespace HartreeFock {
 
 				auto errorPlusIter1 = errorMatricesPlus.begin();
 				auto errorMinusIter1 = errorMatricesMinus.begin();
+
+				lastErrorEst = 0;
+
 				for (size_t i = 0; i < nrMatrices; ++i)
 				{
 					auto errorPlusIter2 = errorMatricesPlus.begin();
@@ -109,7 +112,7 @@ namespace HartreeFock {
 					Bplus(i, i) = (*errorPlusIter1).cwiseProduct(*errorPlusIter1).sum();
 					Bminus(i, i) = (*errorMinusIter1).cwiseProduct(*errorMinusIter1).sum();
 
-					if (i == nrMatrices - 1) lastErrorEst = sqrt(Bplus(i, i) + Bminus(i, i));
+					if (i == nrMatrices - 1 || i == nrMatrices - 2) lastErrorEst += Bplus(i, i) + Bminus(i, i);
 
 					Bplus(nrMatrices, i) = Bplus(i, nrMatrices) = 1;
 					Bminus(nrMatrices, i) = Bminus(i, nrMatrices) = 1;
@@ -117,6 +120,9 @@ namespace HartreeFock {
 					++errorPlusIter1;
 					++errorMinusIter1;
 				}
+
+				lastErrorEst = sqrt(lastErrorEst);
+
 
 				// Solve the systems of linear equations
 
@@ -231,11 +237,13 @@ namespace HartreeFock {
 		// calculate rms for differences between new and old density matrices, it can be used to check for convergence, too
 		Eigen::MatrixXd rmsDensityMatricesDif = newDensityMatrixPlus - DensityMatrixPlus;
 		rmsDensityMatricesDif = rmsDensityMatricesDif.cwiseProduct(rmsDensityMatricesDif);
-		double rmsD = sqrt(rmsDensityMatricesDif.sum());
+		double rmsD = rmsDensityMatricesDif.sum();
 
 		rmsDensityMatricesDif = newDensityMatrixMinus - DensityMatrixMinus;
 		rmsDensityMatricesDif = rmsDensityMatricesDif.cwiseProduct(rmsDensityMatricesDif);
-		rmsD += sqrt(rmsDensityMatricesDif.sum());
+		rmsD += rmsDensityMatricesDif.sum();
+
+		rmsD = sqrt(rmsD);
 
 		// ***************************************************************************************************
 		// go to the next density matrices
@@ -271,7 +279,7 @@ namespace HartreeFock {
 
 				for (int i = 0; i < h.rows(); ++i)
 					for (int j = 0; j < h.rows(); ++j)
-						FockMatrixPlus(i, j) = FockMatrixMinus(i, j) = initGuess * overlapMatrix.matrix(i, j) * (h(i, i) + h(j, j)) / 2.;
+						FockMatrixPlus(i, j) = FockMatrixMinus(i, j) = initGuess * overlapMatrix.matrix(i, j) * (h(i, i) + h(j, j)) * 0.5;
 			}
 			else
 			{
