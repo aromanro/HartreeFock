@@ -126,13 +126,13 @@ namespace HartreeFock {
 
 				// Solve the systems of linear equations
 
-				Eigen::VectorXd CPlus = Eigen::VectorXd::Zero(nrMatrices + 1);
-				CPlus(nrMatrices) = 1;
-				Eigen::VectorXd CMinus = Eigen::VectorXd::Zero(nrMatrices + 1);
-				CMinus(nrMatrices) = 1;
+				Eigen::VectorXd CPlusDIIS = Eigen::VectorXd::Zero(nrMatrices + 1);
+				CPlusDIIS(nrMatrices) = 1;
+				Eigen::VectorXd CMinusDIIS = Eigen::VectorXd::Zero(nrMatrices + 1);
+				CMinusDIIS(nrMatrices) = 1;
 
-				CPlus = Bplus.colPivHouseholderQr().solve(CPlus);
-				CMinus = Bminus.colPivHouseholderQr().solve(CMinus);
+				CPlusDIIS = Bplus.colPivHouseholderQr().solve(CPlusDIIS);
+				CMinusDIIS = Bminus.colPivHouseholderQr().solve(CMinusDIIS);
 
 				// compute the new Fock matrices
 
@@ -143,8 +143,8 @@ namespace HartreeFock {
 				auto fockIterMinus = fockMatricesMinus.begin();
 				for (size_t i = 0; i < nrMatrices; ++i)
 				{
-					FockMatrixPlus += CPlus(i) * (*fockIterPlus);
-					FockMatrixMinus += CMinus(i) * (*fockIterMinus);
+					FockMatrixPlus += CPlusDIIS(i) * (*fockIterPlus);
+					FockMatrixMinus += CMinusDIIS(i) * (*fockIterMinus);
 
 					++fockIterPlus;
 					++fockIterMinus;
@@ -184,30 +184,32 @@ namespace HartreeFock {
 		if (FockMatrixPlusTransformed.rows() > 1)
 		{
 			Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> esplus(FockMatrixPlusTransformed);
-			const Eigen::MatrixXd& Cplusprime = esplus.eigenvectors();
-			Cplus = V * Cplusprime; // transform back the eigenvectors into the original non-orthogonalized AO basis
 			eigenvalsplus = esplus.eigenvalues();
+			const Eigen::MatrixXd& Cplusprime = esplus.eigenvectors();
+
+			Cplus = V * Cplusprime; // transform back the eigenvectors into the original non-orthogonalized AO basis
 		}
 		else
 		{
-			Cplus = V * Eigen::MatrixXd::Ones(1, 1);
 			eigenvalsplus = FockMatrixPlusTransformed(0, 0) * Eigen::VectorXd::Ones(1);
+			Cplus = V * Eigen::MatrixXd::Ones(1, 1);
 		}
 
 		if (FockMatrixMinusTransformed.rows() > 1)
 		{
 			Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> esminus(FockMatrixMinusTransformed);
-			const Eigen::MatrixXd& Cminusprime = esminus.eigenvectors();
-			Cminus = V * Cminusprime; // transform back the eigenvectors into the original non-orthogonalized AO basis
 			eigenvalsminus = esminus.eigenvalues();
+			const Eigen::MatrixXd& Cminusprime = esminus.eigenvectors();
+
+			Cminus = V * Cminusprime; // transform back the eigenvectors into the original non-orthogonalized AO basis
 		}
 		else
 		{
-			Cminus = V * Eigen::MatrixXd::Ones(1, 1);
 			eigenvalsminus = FockMatrixMinusTransformed(0, 0) * Eigen::VectorXd::Ones(1);
+			Cminus = V * Eigen::MatrixXd::Ones(1, 1);
 		}
 
-		// normalize them
+		// normalize them - in some rare cases it seems to help
 		//NormalizeC(Cplus, occupiedPlus);
 		//NormalizeC(Cminus, occupiedMinus);
 

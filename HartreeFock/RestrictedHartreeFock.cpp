@@ -83,10 +83,10 @@ namespace HartreeFock {
 
 				// Solve the system of linear equations
 
-				Eigen::VectorXd C = Eigen::VectorXd::Zero(nrMatrices + 1);
-				C(nrMatrices) = 1;
+				Eigen::VectorXd CDIIS = Eigen::VectorXd::Zero(nrMatrices + 1);
+				CDIIS(nrMatrices) = 1;
 
-				C = B.colPivHouseholderQr().solve(C);
+				CDIIS = B.colPivHouseholderQr().solve(CDIIS);
 
 				// compute the new Fock matrix
 
@@ -95,7 +95,7 @@ namespace HartreeFock {
 				auto fockIter = fockMatrices.begin();
 				for (size_t i = 0; i < nrMatrices; ++i)
 				{
-					FockMatrix += C(i) * *fockIter;
+					FockMatrix += CDIIS(i) * *fockIter;
 					++fockIter;
 				}
 
@@ -170,10 +170,14 @@ namespace HartreeFock {
 
 		const Eigen::MatrixXd FockTransformed = Vt * FockMatrix * V; // orthogonalize
 		const Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> es(FockTransformed);
+		
+		eigenvals = es.eigenvalues();
 		const Eigen::MatrixXd& Cprime = es.eigenvectors();
+		
+		
 		C = V * Cprime; // transform back the eigenvectors into the original non-orthogonalized AO basis
 
-		// normalize it
+		// normalize it - in some rare cases it seems to help
 		//NormalizeC(C, occupied);
 
 		//***************************************************************************************************************
@@ -189,8 +193,6 @@ namespace HartreeFock {
 
 
 		//**************************************************************************************************************
-
-		eigenvals = es.eigenvalues();
 
 		CalculateEnergy(eigenvals, newDensityMatrix/*, FockMatrix*/);
 
