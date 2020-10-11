@@ -371,9 +371,65 @@ namespace HartreeFock {
 
 		// TODO: calculate it
 
+		GaussianIntegrals::MP2MolecularOrbitalsIntegralsRepository MP2repo(integralsRepository);
 
+		for (int i = 0; i < numberOfOrbitals; ++i)
+		{
+			if (i >= occupiedPlus.size() || !occupiedPlus[i]) continue; // only occupied
 
+			for (int j = 0; j < numberOfOrbitals; ++j)
+			{
+				if (j >= occupiedPlus.size() || !occupiedPlus[j]) continue; // only occupied
 
+				for (int a = 0; a < numberOfOrbitals; ++a)
+				{
+					if (a < occupiedPlus.size() && occupiedPlus[a]) continue; // only unoccupied
+
+					for (int b = 0; b < numberOfOrbitals; ++b)
+					{
+						if (b < occupiedPlus.size() && occupiedPlus[b]) continue;  // only unoccupied
+
+						const double Esumdif = eigenvalsplus(i) + eigenvalsplus(j) - eigenvalsplus(a) - eigenvalsplus(b);
+
+						const double eeiajb = MP2repo.getElectronElectron(i, a, j, b, Cplus);
+
+						const double partE = eeiajb * eeiajb / Esumdif;
+
+						mp2Energy += partE;
+					}
+				}
+			}
+		}
+
+		for (int i = 0; i < numberOfOrbitals; ++i)
+		{
+			if (i >= occupiedMinus.size() || !occupiedMinus[i]) continue; // only occupied
+
+			for (int j = 0; j < numberOfOrbitals; ++j)
+			{
+				if (j >= occupiedMinus.size() || !occupiedMinus[j]) continue; // only occupied
+
+				for (int a = 0; a < numberOfOrbitals; ++a)
+				{
+					if (a < occupiedMinus.size() && occupiedMinus[a]) continue; // only unoccupied
+
+					for (int b = 0; b < numberOfOrbitals; ++b)
+					{
+						if (b < occupiedMinus.size() && occupiedMinus[b]) continue;  // only unoccupied
+
+						const double Esumdif = eigenvalsminus(i) + eigenvalsminus(j) - eigenvalsminus(a) - eigenvalsminus(b);
+
+						const double eeiajb = MP2repo.getElectronElectron(i, a, j, b, Cminus);
+
+						const double partE = eeiajb * eeiajb / Esumdif;
+
+						mp2Energy += partE;
+					}
+				}
+			}
+		}
+
+		mp2Energy *= 0.25;
 
 		return mp2Energy;
 	}
