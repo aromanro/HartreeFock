@@ -61,6 +61,9 @@ public:
 	bool useDIIS;
 	int maxDIISiterations;
 	int normalIterAfterDIIS;
+
+	bool computePostHF;
+	int postHFmethod;
 protected:
 	static double GetDouble(LPCTSTR param, double defval);
 };
