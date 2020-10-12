@@ -75,7 +75,7 @@ namespace HartreeFock {
 			errorMatricesMinus.emplace_back(errorMatrixMinus);
 			fockMatricesMinus.push_back(FockMatrixMinus);
 
-			if (errorMatricesPlus.size() > 8)
+			if (errorMatricesPlus.size() > 6)
 			{
 				errorMatricesPlus.pop_front();
 				fockMatricesPlus.pop_front();
