@@ -35,6 +35,7 @@
 #define IDD_MOLECULEPROPERTYPAGE        310
 #define IDD_HARTREEFOCKPROPERTYPAGE     311
 #define IDD_COMPUTATIONPROPERTYPAGE     312
+#define IDD_POSTHFPROPERTYPAGE          313
 #define IDC_RADIO1                      1000
 #define IDC_RADIO2                      1001
 #define IDC_EDIT1                       1002

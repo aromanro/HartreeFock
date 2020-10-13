@@ -53,4 +53,5 @@ void COptionsPropertySheet::AddPages()
 	AddPage(&page2);
 	AddPage(&page3);
 	AddPage(&page4);
+	AddPage(&page5);
 }

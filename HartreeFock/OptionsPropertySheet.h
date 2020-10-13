@@ -4,7 +4,7 @@
 #include "HartreeFockPropertyPage.h"
 #include "ComputationPropertyPage.h"
 #include "MoleculePropertyPage.h"
-
+#include "PostHFProperyPage.h"
 
 // OptionsPropertySheet
 
@@ -23,7 +23,8 @@ protected:
 	MoleculePropertyPage page1;
 	HartreeFockPropertyPage page2;
 	ComputationPropertyPage page3;
-	ChartPropertyPage page4;
+	PostHFProperyPage page4;
+	ChartPropertyPage page5;
 
 	DECLARE_MESSAGE_MAP()
 

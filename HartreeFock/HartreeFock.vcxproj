@@ -231,6 +231,7 @@
     <ClInclude Include="Options.h" />
     <ClInclude Include="OptionsPropertySheet.h" />
     <ClInclude Include="Orbital.h" />
+    <ClInclude Include="PostHFProperyPage.h" />
     <ClInclude Include="PrimitiveShell.h" />
     <ClInclude Include="QuantumMatrix.h" />
     <ClInclude Include="QuantumNumbers.h" />
@@ -278,6 +279,7 @@
     <ClCompile Include="Options.cpp" />
     <ClCompile Include="OptionsPropertySheet.cpp" />
     <ClCompile Include="Orbital.cpp" />
+    <ClCompile Include="PostHFProperyPage.cpp" />
     <ClCompile Include="PrimitiveShell.cpp" />
     <ClCompile Include="QuantumMatrix.cpp" />
     <ClCompile Include="QuantumNumbers.cpp" />

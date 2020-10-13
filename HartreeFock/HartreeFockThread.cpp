@@ -136,7 +136,7 @@ void HartreeFockThread::Calculate()
 		algorithm->Init(&molecule);
 
 		double result = algorithm->Calculate();
-		//result += algorithm->CalculateMp2Energy();
+		if (opt.computePostHF) result += algorithm->CalculateMp2Energy();
 
 		if (!algorithm->converged) converged = false;
 
@@ -200,7 +200,8 @@ double HartreeFockThread::ComputeAtom(const Systems::AtomWithShells& atom)
 
 	algorithm->Init(&atomM);
 
-	const double result = algorithm->Calculate();
+	double result = algorithm->Calculate();
+	if (opt.computePostHF) result += algorithm->CalculateMp2Energy();
 
 	if (converged) converged = algorithm->converged;
 
