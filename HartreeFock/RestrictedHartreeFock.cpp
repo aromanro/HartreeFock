@@ -39,6 +39,7 @@ namespace HartreeFock {
 		if (UseDIIS && iter && iter < maxDIISiterations)
 		{
 			// the density matrix should commute with the Fock matrix. The difference is the error.
+			// another variant could be to subtract from the current Fock matrix the previous one to get an error estimate
 			const Eigen::MatrixXd errorMatrix = overlapMatrix.matrix * DensityMatrix * FockMatrix - FockMatrix * DensityMatrix * overlapMatrix.matrix;
 
 			// another choice: if reached the limit of kept matrices, replace the ones with the bigger error
