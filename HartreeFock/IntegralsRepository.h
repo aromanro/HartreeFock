@@ -174,9 +174,9 @@ namespace GaussianIntegrals {
 		{
 		}
 
-		inline double getElectronElectron(int orbital1, int orbital2, int orbital3, int orbital4, const Eigen::MatrixXd& C)
+		inline double getElectronElectron(unsigned int orbital1, unsigned int orbital2, unsigned int orbital3, unsigned int orbital4, const Eigen::MatrixXd& C)
 		{
-			const std::tuple<int, int, int, int> indTuple = std::make_tuple(orbital1, orbital2, orbital3, orbital4);
+			const std::tuple<unsigned int, unsigned int, unsigned int, unsigned int> indTuple = std::make_tuple(orbital1, orbital2, orbital3, orbital4);
 			if (m_fourthLevelIntegrals.find(indTuple) != m_fourthLevelIntegrals.end())
 				return m_fourthLevelIntegrals.at(indTuple);
 
@@ -204,7 +204,7 @@ namespace GaussianIntegrals {
 			}
 			*/
 			
-			for (int mu = 0; mu < C.cols(); ++mu)
+			for (unsigned int mu = 0; mu < C.cols(); ++mu)
 				result += C(mu, orbital1) * getElectronElectronThirdLevel(mu, orbital2, orbital3, orbital4, C);
 
 			m_fourthLevelIntegrals[indTuple] = result;
@@ -214,15 +214,15 @@ namespace GaussianIntegrals {
 
 	protected:
 
-		inline double getElectronElectronFirstLevel(int orbital1, int orbital2, int orbital3, int orbital4, const Eigen::MatrixXd& C)
+		inline double getElectronElectronFirstLevel(unsigned int orbital1, unsigned int orbital2, unsigned int orbital3, unsigned int orbital4, const Eigen::MatrixXd& C)
 		{
-			const std::tuple<int, int, int, int> indTuple = std::make_tuple(orbital1, orbital2, orbital3, orbital4);
+			const std::tuple<unsigned int, unsigned int, unsigned int, unsigned int> indTuple = std::make_tuple(orbital1, orbital2, orbital3, orbital4);
 			if (m_firstLevelIntegrals.find(indTuple) != m_firstLevelIntegrals.end())
 				return m_firstLevelIntegrals.at(indTuple);
 
 			// don't have it yet, compute it
 			double result = 0;
-			for (int s = 0; s < C.cols(); ++s)
+			for (unsigned int s = 0; s < C.cols(); ++s)
 				result += C(s, orbital4) * m_repo.getElectronElectron(orbital1, orbital2, orbital3, s);
 			
 			m_firstLevelIntegrals[indTuple] = result;
@@ -230,16 +230,16 @@ namespace GaussianIntegrals {
 			return result;
 		}
 
-		inline double getElectronElectronSecondLevel(int orbital1, int orbital2, int orbital3, int orbital4, const Eigen::MatrixXd& C)
+		inline double getElectronElectronSecondLevel(unsigned int orbital1, unsigned int orbital2, unsigned int orbital3, unsigned int orbital4, const Eigen::MatrixXd& C)
 		{
-			const std::tuple<int, int, int, int> indTuple = std::make_tuple(orbital1, orbital2, orbital3, orbital4);
+			const std::tuple<unsigned int, unsigned int, unsigned int, unsigned int> indTuple = std::make_tuple(orbital1, orbital2, orbital3, orbital4);
 			if (m_secondLevelIntegrals.find(indTuple) != m_secondLevelIntegrals.end())
 				return m_secondLevelIntegrals.at(indTuple);
 
 			// don't have it yet, compute it
 			double result = 0;
 
-			for (int l = 0; l < C.cols(); ++l)
+			for (unsigned int l = 0; l < C.cols(); ++l)
 				result += C(l, orbital3) * getElectronElectronFirstLevel(orbital1, orbital2, l, orbital4, C);
 			
 			m_secondLevelIntegrals[indTuple] = result;
@@ -247,15 +247,15 @@ namespace GaussianIntegrals {
 			return result;
 		}
 
-		inline double getElectronElectronThirdLevel(int orbital1, int orbital2, int orbital3, int orbital4, const Eigen::MatrixXd& C)
+		inline double getElectronElectronThirdLevel(unsigned int orbital1, unsigned int orbital2, unsigned int orbital3, unsigned int orbital4, const Eigen::MatrixXd& C)
 		{
-			const std::tuple<int, int, int, int> indTuple = std::make_tuple(orbital1, orbital2, orbital3, orbital4);
+			const std::tuple<unsigned int, unsigned int, unsigned int, unsigned int> indTuple = std::make_tuple(orbital1, orbital2, orbital3, orbital4);
 			if (m_thirdLevelIntegrals.find(indTuple) != m_thirdLevelIntegrals.end())
 				return m_thirdLevelIntegrals.at(indTuple);
 
 			// don't have it yet, compute it
 			double result = 0;
-			for (int nu = 0; nu < C.cols(); ++nu)
+			for (unsigned int nu = 0; nu < C.cols(); ++nu)
 				result += C(nu, orbital2) * getElectronElectronSecondLevel(orbital1, nu, orbital3, orbital4, C);
 
 			m_thirdLevelIntegrals[indTuple] = result;
@@ -264,10 +264,10 @@ namespace GaussianIntegrals {
 		}
 
 		const IntegralsRepository& m_repo;
-		std::map<std::tuple<int, int, int, int>, double> m_firstLevelIntegrals;
-		std::map<std::tuple<int, int, int, int>, double> m_secondLevelIntegrals;
-		std::map<std::tuple<int, int, int, int>, double> m_thirdLevelIntegrals;
-		std::map<std::tuple<int, int, int, int>, double> m_fourthLevelIntegrals;
+		std::map<std::tuple<unsigned int, unsigned int, unsigned int, unsigned int>, double> m_firstLevelIntegrals;
+		std::map<std::tuple<unsigned int, unsigned int, unsigned int, unsigned int>, double> m_secondLevelIntegrals;
+		std::map<std::tuple<unsigned int, unsigned int, unsigned int, unsigned int>, double> m_thirdLevelIntegrals;
+		std::map<std::tuple<unsigned int, unsigned int, unsigned int, unsigned int>, double> m_fourthLevelIntegrals;
 	};
 
 }

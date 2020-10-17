@@ -197,7 +197,7 @@ namespace GaussianIntegrals {
 				for (k = 80; k >= 1; --k) 
 					t0 = (k - a) / (1.0 + k / (x + t0));
 
-				double gim = exp(xam) / (x + t0);
+				const double gim = exp(xam) / (x + t0);
 				ga = tgamma(a);
 				gin = ga - gim;
 			}
