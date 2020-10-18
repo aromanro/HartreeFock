@@ -38,6 +38,22 @@ public:
 	Chemistry::Basis basis6_31Gstar;
 	Chemistry::Basis basis6_31plusGstarstar;
 
+	Chemistry::Basis basis6_31plusG;
+	Chemistry::Basis basis6_31plusGstar;
+	Chemistry::Basis basis6_31plusplusG;
+	Chemistry::Basis basis6_31plusplusGstar;
+	Chemistry::Basis basis6_31plusplusGstarstar;
+
+	Chemistry::Basis basis6_311G;
+	Chemistry::Basis basis6_311Gstar;
+	Chemistry::Basis basis6_311Gstarstar;
+	Chemistry::Basis basis6_311plusG;
+	Chemistry::Basis basis6_311plusGstar;
+	Chemistry::Basis basis6_311plusGstarstar;
+	Chemistry::Basis basis6_311plusplusG;
+	Chemistry::Basis basis6_311plusplusGstar;
+	Chemistry::Basis basis6_311plusplusGstarstar;
+
 	Chart m_Chart;
 
 	std::atomic_int runningThreads;

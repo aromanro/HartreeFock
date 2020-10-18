@@ -110,6 +110,23 @@ BOOL CHartreeFockDoc::OnNewDocument()
 	basis6_31Gstar.Load("6-31g_st_.1.nw");
 	basis6_31plusGstarstar.Load("6-31+g_st__st_.1.nw");
 
+	basis6_31plusG.Load("6-31+g.1.nw");
+	basis6_31plusGstar.Load("6-31+g_st_.1.nw");
+	basis6_31plusplusG.Load("6-31++g.1.nw");
+	basis6_31plusplusGstar.Load("6-31++g_st_.1.nw");
+	basis6_31plusplusGstarstar.Load("6-31++g_st__st_.1.nw");
+
+	basis6_311G.Load("6-311g.0.nw");
+	basis6_311Gstar.Load("6-311g_st_.0.nw");
+	basis6_311Gstarstar.Load("6-311g_st__st_.0.nw");
+	basis6_311plusG.Load("6-311+g.0.nw");
+	basis6_311plusGstar.Load("6-311+g_st_.0.nw");
+	basis6_311plusGstarstar.Load("6-311+g_st__st_.0.nw");
+	basis6_311plusplusG.Load("6-311++g.0.nw");
+	basis6_311plusplusGstar.Load("6-311++g_st_.0.nw");
+	basis6_311plusplusGstarstar.Load("6-311++g_st__st_.0.nw");
+
+
 #ifdef _DEBUG
 	//	Tests tests;
 	//	tests.Test(basisSTO3G);

@@ -200,7 +200,7 @@ BEGIN
     CONTROL         "Blog description",IDC_MFCLINK2,"MfcLink",WS_TABSTOP,41,42,114,14
 END
 
-IDD_MOLECULEPROPERTYPAGE DIALOGEX 0, 0, 287, 256
+IDD_MOLECULEPROPERTYPAGE DIALOGEX 0, 0, 371, 234
 STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_CAPTION
 CAPTION "Molecule"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
@@ -210,27 +210,41 @@ BEGIN
     CONTROL         "Two of them! (as in H2O, CO2...)",IDC_CHECK1,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,112,14,123,10
     RTEXT           "Atom 2:",IDC_STATIC,19,33,26,8
     COMBOBOX        IDC_COMBO2,49,31,55,41,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
-    GROUPBOX        "Basis",IDC_STATIC,7,47,128,137
+    GROUPBOX        "Basis",IDC_STATIC,7,47,207,137
     CONTROL         "STO-3G",IDC_RADIO1,"Button",BS_AUTORADIOBUTTON | WS_GROUP,16,60,41,10
     CONTROL         "STO-6G",IDC_RADIO2,"Button",BS_AUTORADIOBUTTON,16,77,41,10
     CONTROL         "3-21G",IDC_RADIO4,"Button",BS_AUTORADIOBUTTON,16,94,35,10
     CONTROL         "6-21G",IDC_RADIO5,"Button",BS_AUTORADIOBUTTON,16,111,35,10
     CONTROL         "6-31G",IDC_RADIO6,"Button",BS_AUTORADIOBUTTON,16,128,35,10
-    CONTROL         "6-31G*",IDC_RADIO7,"Button",BS_AUTORADIOBUTTON,16,146,39,10
-    CONTROL         "6-31+G**",IDC_RADIO8,"Button",BS_AUTORADIOBUTTON,16,164,49,10
-    LTEXT           "STO stands for 'Slater Type Orbitals'. G stands for Gaussian and the number from STO-nG is the number of gaussians in a Slater Type Orbital",IDC_STATIC,59,53,72,59
-    RTEXT           "Bond angle (degrees):",IDC_STATIC,165,34,72,8
-    EDITTEXT        IDC_EDIT1,240,30,40,14,ES_AUTOHSCROLL
-    RTEXT           "'Alpha' electrons:",IDC_STATIC,181,61,56,8
-    EDITTEXT        IDC_EDIT5,240,57,40,14,ES_AUTOHSCROLL | ES_NUMBER
-    RTEXT           "'Beta' electrons:",IDC_STATIC,185,79,52,8
-    EDITTEXT        IDC_EDIT6,240,76,40,14,ES_AUTOHSCROLL | ES_NUMBER
-    LTEXT           "'Alpha' and 'Beta' electrons should be equal for the restricted Hartree-Fock method",IDC_STATIC,139,97,141,19
+    CONTROL         "6-31G*",IDC_RADIO7,"Button",BS_AUTORADIOBUTTON,16,145,39,10
+    CONTROL         "6-31+G**",IDC_RADIO8,"Button",BS_AUTORADIOBUTTON,16,162,49,10
+    CONTROL         "6-31+G",IDC_RADIO9,"Button",BS_AUTORADIOBUTTON,79,60,41,10
+    CONTROL         "6-31+G*",IDC_RADIO10,"Button",BS_AUTORADIOBUTTON,79,77,45,10
+    CONTROL         "6-31++G",IDC_RADIO11,"Button",BS_AUTORADIOBUTTON,79,94,46,10
+    CONTROL         "6-31++G*",IDC_RADIO12,"Button",BS_AUTORADIOBUTTON,79,111,50,10
+    CONTROL         "6-31++G**",IDC_RADIO13,"Button",BS_AUTORADIOBUTTON,79,128,54,10
+    CONTROL         "6-311G",IDC_RADIO14,"Button",BS_AUTORADIOBUTTON,79,145,39,10
+    CONTROL         "6-311G*",IDC_RADIO15,"Button",BS_AUTORADIOBUTTON,79,162,43,10
+    CONTROL         "6-311G**",IDC_RADIO16,"Button",BS_AUTORADIOBUTTON,151,60,47,10
+    CONTROL         "6-311+G",IDC_RADIO17,"Button",BS_AUTORADIOBUTTON,151,77,45,10
+    CONTROL         "6-311+G*",IDC_RADIO18,"Button",BS_AUTORADIOBUTTON,151,94,49,10
+    CONTROL         "6-311+G**",IDC_RADIO19,"Button",BS_AUTORADIOBUTTON,151,111,53,10
+    CONTROL         "6-311++G",IDC_RADIO20,"Button",BS_AUTORADIOBUTTON,151,128,50,10
+    CONTROL         "6-311++G*",IDC_RADIO21,"Button",BS_AUTORADIOBUTTON,151,145,54,10
+    CONTROL         "6-311++G**",IDC_RADIO22,"Button",BS_AUTORADIOBUTTON,151,162,58,10
+    LTEXT           "STO stands for 'Slater Type Orbitals'. G stands for Gaussian and the number from STO-nG is the number of gaussians in a Slater Type Orbital",IDC_STATIC,219,127,72,59
+    RTEXT           "Bond angle (degrees):",IDC_STATIC,246,34,72,8
+    EDITTEXT        IDC_EDIT1,324,31,40,14,ES_AUTOHSCROLL
+    RTEXT           "'Alpha' electrons:",IDC_STATIC,262,62,56,8
+    EDITTEXT        IDC_EDIT5,324,58,40,14,ES_AUTOHSCROLL | ES_NUMBER
+    RTEXT           "'Beta' electrons:",IDC_STATIC,266,79,52,8
+    EDITTEXT        IDC_EDIT6,324,77,40,14,ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "'Alpha' and 'Beta' electrons should be equal for the restricted Hartree-Fock method",IDC_STATIC,219,102,141,19
     RTEXT           "Min bond length (Angstroms):",IDC_STATIC,9,192,96,8
     EDITTEXT        IDC_EDIT7,108,189,40,14,ES_AUTOHSCROLL
-    RTEXT           "Max bond length (Angstroms):",IDC_STATIC,7,211,98,8
-    EDITTEXT        IDC_EDIT8,108,208,40,14,ES_AUTOHSCROLL
-    LTEXT           "The 'min' value limits only calculations, the chart starts from 0 for the X axis, the 'max' value is both the limit for calculations and the chart",IDC_STATIC,7,232,273,17
+    RTEXT           "Max bond length (Angstroms):",IDC_STATIC,173,192,98,8
+    EDITTEXT        IDC_EDIT8,274,189,40,14,ES_AUTOHSCROLL
+    LTEXT           "The 'min' value limits only calculations, the chart starts from 0 for the X axis, the 'max' value is both the limit for calculations and the chart",IDC_STATIC,7,210,357,17
 END
 
 IDD_CHARTPROPERTYPAGE DIALOGEX 0, 0, 309, 196
@@ -370,9 +384,9 @@ BEGIN
     IDD_MOLECULEPROPERTYPAGE, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 280
+        RIGHTMARGIN, 364
         TOPMARGIN, 7
-        BOTTOMMARGIN, 249
+        BOTTOMMARGIN, 227
     END
 
     IDD_CHARTPROPERTYPAGE, DIALOG

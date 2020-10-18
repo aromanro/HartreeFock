@@ -54,6 +54,20 @@ BEGIN_MESSAGE_MAP(MoleculePropertyPage, CMFCPropertyPage)
 	ON_BN_CLICKED(IDC_RADIO6, &MoleculePropertyPage::OnBnClickedRadio6)
 	ON_BN_CLICKED(IDC_RADIO7, &MoleculePropertyPage::OnBnClickedRadio7)
 	ON_BN_CLICKED(IDC_RADIO8, &MoleculePropertyPage::OnBnClickedRadio8)
+	ON_BN_CLICKED(IDC_RADIO9, &MoleculePropertyPage::OnBnClickedRadio9)
+	ON_BN_CLICKED(IDC_RADIO10, &MoleculePropertyPage::OnBnClickedRadio10)
+	ON_BN_CLICKED(IDC_RADIO11, &MoleculePropertyPage::OnBnClickedRadio11)
+	ON_BN_CLICKED(IDC_RADIO12, &MoleculePropertyPage::OnBnClickedRadio12)
+	ON_BN_CLICKED(IDC_RADIO13, &MoleculePropertyPage::OnBnClickedRadio13)
+	ON_BN_CLICKED(IDC_RADIO14, &MoleculePropertyPage::OnBnClickedRadio14)
+	ON_BN_CLICKED(IDC_RADIO15, &MoleculePropertyPage::OnBnClickedRadio15)
+	ON_BN_CLICKED(IDC_RADIO16, &MoleculePropertyPage::OnBnClickedRadio16)
+	ON_BN_CLICKED(IDC_RADIO17, &MoleculePropertyPage::OnBnClickedRadio17)
+	ON_BN_CLICKED(IDC_RADIO18, &MoleculePropertyPage::OnBnClickedRadio18)
+	ON_BN_CLICKED(IDC_RADIO19, &MoleculePropertyPage::OnBnClickedRadio19)
+	ON_BN_CLICKED(IDC_RADIO20, &MoleculePropertyPage::OnBnClickedRadio20)
+	ON_BN_CLICKED(IDC_RADIO21, &MoleculePropertyPage::OnBnClickedRadio21)
+	ON_BN_CLICKED(IDC_RADIO22, &MoleculePropertyPage::OnBnClickedRadio22)
 END_MESSAGE_MAP()
 
 
@@ -222,33 +236,49 @@ void MoleculePropertyPage::FillCombos()
 	Chemistry::Basis *basisPtr = &doc->basisSTO6G; // some default
 
 	if (0 == theApp.options.basis)
-	{
 		basisPtr = &doc->basisSTO3G;
-	}
 	else if (1 == theApp.options.basis)
-	{
 		basisPtr = &doc->basisSTO6G;
-	}
 	else if (2 == theApp.options.basis)
-	{
 		basisPtr = &doc->basis3_21G;
-	}
 	else if (3 == theApp.options.basis)
-	{
 		basisPtr = &doc->basis6_21G;
-	}
 	else if (4 == theApp.options.basis)
-	{
 		basisPtr = &doc->basis6_31G;
-	}	
 	else if (5 == theApp.options.basis)
-	{
 		basisPtr = &doc->basis6_31Gstar;
-	}
 	else if (6 == theApp.options.basis)
-	{
 		basisPtr = &doc->basis6_31plusGstarstar;
-	}	
+	else if (7 == theApp.options.basis)
+		basisPtr = &doc->basis6_31plusG;
+	else if (8 == theApp.options.basis)
+		basisPtr = &doc->basis6_31plusGstar;
+	else if (9 == theApp.options.basis)
+		basisPtr = &doc->basis6_31plusplusG;
+	else if (10 == theApp.options.basis)
+		basisPtr = &doc->basis6_31plusplusGstar;
+	else if (11 == theApp.options.basis)
+		basisPtr = &doc->basis6_31plusplusGstarstar;
+	else if (12 == theApp.options.basis)
+		basisPtr = &doc->basis6_311G;
+	else if (13 == theApp.options.basis)
+		basisPtr = &doc->basis6_311Gstar;
+	else if (14 == theApp.options.basis)
+		basisPtr = &doc->basis6_311Gstarstar;
+	else if (15 == theApp.options.basis)
+		basisPtr = &doc->basis6_311plusG;
+	else if (16 == theApp.options.basis)
+		basisPtr = &doc->basis6_311plusGstar;
+	else if (17 == theApp.options.basis)
+		basisPtr = &doc->basis6_311plusGstarstar;
+	else if (18 == theApp.options.basis)
+		basisPtr = &doc->basis6_311plusplusG;
+	else if (19 == theApp.options.basis)
+		basisPtr = &doc->basis6_311plusplusGstar;
+	else if (20 == theApp.options.basis)
+		basisPtr = &doc->basis6_311plusplusGstarstar;
+
+
 
 	bool atom1Found = false;
 	bool atom2Found = false;
@@ -323,3 +353,87 @@ void MoleculePropertyPage::OnBnClickedRadio8()
 	OnBnClickedRadio1();
 }
 
+
+
+void MoleculePropertyPage::OnBnClickedRadio9()
+{
+	OnBnClickedRadio1();
+}
+
+
+void MoleculePropertyPage::OnBnClickedRadio10()
+{
+	OnBnClickedRadio1();
+}
+
+
+void MoleculePropertyPage::OnBnClickedRadio11()
+{
+	OnBnClickedRadio1();
+}
+
+
+void MoleculePropertyPage::OnBnClickedRadio12()
+{
+	OnBnClickedRadio1();
+}
+
+
+void MoleculePropertyPage::OnBnClickedRadio13()
+{
+	OnBnClickedRadio1();
+}
+
+
+void MoleculePropertyPage::OnBnClickedRadio14()
+{
+	OnBnClickedRadio1();
+}
+
+
+void MoleculePropertyPage::OnBnClickedRadio15()
+{
+	OnBnClickedRadio1();
+}
+
+
+void MoleculePropertyPage::OnBnClickedRadio16()
+{
+	OnBnClickedRadio1();
+}
+
+
+void MoleculePropertyPage::OnBnClickedRadio17()
+{
+	OnBnClickedRadio1();
+}
+
+
+void MoleculePropertyPage::OnBnClickedRadio18()
+{
+	OnBnClickedRadio1();
+}
+
+
+void MoleculePropertyPage::OnBnClickedRadio19()
+{
+	OnBnClickedRadio1();
+}
+
+
+void MoleculePropertyPage::OnBnClickedRadio20()
+{
+	OnBnClickedRadio1();
+}
+
+
+void MoleculePropertyPage::OnBnClickedRadio21()
+{
+	OnBnClickedRadio1();
+}
+
+
+void MoleculePropertyPage::OnBnClickedRadio22()
+{
+	OnBnClickedRadio1();
+}

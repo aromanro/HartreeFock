@@ -63,6 +63,21 @@ protected:
 
 	void FillCombos();
 	void AdjustElectrons();
+public:
+	afx_msg void OnBnClickedRadio9();
+	afx_msg void OnBnClickedRadio10();
+	afx_msg void OnBnClickedRadio11();
+	afx_msg void OnBnClickedRadio12();
+	afx_msg void OnBnClickedRadio13();
+	afx_msg void OnBnClickedRadio14();
+	afx_msg void OnBnClickedRadio15();
+	afx_msg void OnBnClickedRadio16();
+	afx_msg void OnBnClickedRadio17();
+	afx_msg void OnBnClickedRadio18();
+	afx_msg void OnBnClickedRadio19();
+	afx_msg void OnBnClickedRadio20();
+	afx_msg void OnBnClickedRadio21();
+	afx_msg void OnBnClickedRadio22();
 };
 
 
