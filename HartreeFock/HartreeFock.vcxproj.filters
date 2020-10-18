@@ -159,6 +159,9 @@
     <ClInclude Include="PostHFProperyPage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CoupledClusterSpinOrbitalsElectronElectronIntegralsRepository.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HartreeFock.cpp">
@@ -279,6 +282,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PostHFProperyPage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CoupledClusterSpinOrbitalsElectronElectronIntegralsRepository.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
