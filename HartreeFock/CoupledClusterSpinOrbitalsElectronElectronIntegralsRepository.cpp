@@ -1,5 +1,7 @@
 #include "stdafx.h"
 
+#include <assert.h>
+
 #include "CoupledClusterSpinOrbitalsElectronElectronIntegralsRepository.h"
 
 
