@@ -137,18 +137,13 @@ namespace GaussianIntegrals {
 	
 		inline static long long int GetTwoIndex(long long int i, long long int j)
 		{
-			return i * (i + 1ULL) / 2 + j;
+			return i < j ? j * (j + 1ULL) / 2 + i : i * (i + 1ULL) / 2 + j;
 		}
 	
-		inline static long long int GetElectronElectronIndex(int ind1, int ind2, int ind3, int ind4)
+		inline static long long int GetElectronElectronIndex(unsigned int ind1, unsigned int ind2, unsigned int ind3, unsigned int ind4)
 		{
-			if (ind1 < ind2) std::swap(ind1, ind2);
-			if (ind3 < ind4) std::swap(ind3, ind4);
-
 			long long int ind12 = GetTwoIndex(ind1, ind2);
 			long long int ind34 = GetTwoIndex(ind3, ind4);
-
-			if (ind12 < ind34) std::swap(ind12, ind34);
 
 			return GetTwoIndex(ind12, ind34);
 		}
