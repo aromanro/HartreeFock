@@ -3,6 +3,8 @@
 #include <vector>
 #include "Atom.h"
 
+#include "Basis.h"
+
 namespace Systems {
 
 
@@ -26,6 +28,8 @@ namespace Systems {
 		void SetCenterForShells();
 		void Normalize();
 		void Init();
+
+		bool LoadXYZ(const std::string& fileName, const Chemistry::Basis& basis);
 	};
 
 }

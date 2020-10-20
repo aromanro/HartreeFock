@@ -1,9 +1,17 @@
 #include "stdafx.h"
 #include "Molecule.h"
+#include "ChemUtils.h"
 
 #include <algorithm>
 #include <numeric>
 #include <functional>
+
+
+#include <sstream>
+
+#include <fstream>
+#include <iostream>
+#include <iomanip>
 
 namespace Systems {
 
@@ -126,4 +134,63 @@ void Systems::Molecule::Init()
 		alphaElectrons = static_cast<unsigned int>(elNum / 2);
 		betaElectrons = elNum - alphaElectrons;
 	}
+}
+
+
+bool Systems::Molecule::LoadXYZ(const std::string& fileName, const Chemistry::Basis& basis)
+{
+	try
+	{
+		std::ifstream mfile(fileName);
+		if (!mfile) return false;
+
+		std::string line;
+
+		if (!std::getline(mfile, line)) return false;
+
+		unsigned int nrAtoms = std::stoi(line);
+
+		// read comment
+		if (!std::getline(mfile, line)) return false;
+		for (unsigned int i = 0; i < nrAtoms; ++i)
+		{
+			if (!std::getline(mfile, line)) return false; // atom i
+			std::istringstream lineStream(line);
+
+			std::string atomName;
+			double x, y, z;
+
+			lineStream >> atomName >> x >> y >> z;
+
+			unsigned int Z = Chemistry::ChemUtils::GetZForAtom(atomName);
+			if (0 == Z) return false;
+
+			bool found = false;
+			for (const auto& atom : basis.atoms)
+			{
+				if (atom.Z == Z)
+				{
+					found = true;
+					atoms.push_back(atom);
+
+					atoms.back().position.X = x;
+					atoms.back().position.Y = y;
+					atoms.back().position.Z = z;
+
+					break;
+				}
+			}
+
+			if (!found) return false;
+		}
+
+		Init();
+
+		return true;
+	}
+	catch (...)
+	{
+	}
+
+	return false;
 }
