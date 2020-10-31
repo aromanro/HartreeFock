@@ -237,6 +237,7 @@
     <ClInclude Include="QuantumMatrix.h" />
     <ClInclude Include="QuantumNumbers.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="RestrictedCCSD.h" />
     <ClInclude Include="RestrictedHartreeFock.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -285,6 +286,7 @@
     <ClCompile Include="PrimitiveShell.cpp" />
     <ClCompile Include="QuantumMatrix.cpp" />
     <ClCompile Include="QuantumNumbers.cpp" />
+    <ClCompile Include="RestrictedCCSD.cpp" />
     <ClCompile Include="RestrictedHartreeFock.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
