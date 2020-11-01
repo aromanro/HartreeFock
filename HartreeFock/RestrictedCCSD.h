@@ -20,6 +20,13 @@ namespace HartreeFock {
 
         virtual void Init(Systems::Molecule* molecule) override;
 
+        void InitCC()
+        {
+            m_spinOrbitalBasisIntegrals->Compute(integralsRepository, C);
+            InitialGuessClusterAmplitudes();
+            f = getSpinOrbitalFockMatrix();
+        }
+
     private:
 
         // this should correspond to Step #1: Preparing the Spin-Orbital Basis Integrals
@@ -27,7 +34,6 @@ namespace HartreeFock {
 
         inline Eigen::MatrixXd getSpinOrbitalFockMatrix()
         {
-            numberOfSpinOrbitals = 2 * numberOfOrbitals;
             Eigen::MatrixXd spinOrbitalFockMatrix(numberOfSpinOrbitals, numberOfSpinOrbitals);
 
             Eigen::MatrixXd FockMatrixMO = C.transpose() * h * C;
@@ -57,6 +63,9 @@ namespace HartreeFock {
                         for (int b = 0; b < numberOfSpinOrbitals; ++b)
                             t4(i, j, a, b) = (*m_spinOrbitalBasisIntegrals)(i, j, a, b) / (eigenvals(i) + eigenvals(j) - eigenvals(a) - eigenvals(b));
         }
+
+
+    public:
 
         // just for checking against the MP2 energy
         double MP2EnergyFromt4() const
@@ -89,7 +98,12 @@ namespace HartreeFock {
             return 0.25 * result;
         }
         
+
+    private:
+
         int numberOfSpinOrbitals;
+
+        Eigen::MatrixXd f;
 
         Eigen::MatrixXd t2;
         

@@ -19,10 +19,10 @@ namespace HartreeFock {
 	{
 		RestrictedHartreeFock::Init(molecule);
 
-		if (m_spinOrbitalBasisIntegrals) delete m_spinOrbitalBasisIntegrals;
-		m_spinOrbitalBasisIntegrals = new GaussianIntegrals::CoupledClusterSpinOrbitalsElectronElectronIntegralsRepository(numberOfOrbitals);
+		numberOfSpinOrbitals = 2 * numberOfOrbitals;
 
-		m_spinOrbitalBasisIntegrals->Compute(integralsRepository, C);
+		if (m_spinOrbitalBasisIntegrals) delete m_spinOrbitalBasisIntegrals;
+		m_spinOrbitalBasisIntegrals = new GaussianIntegrals::CoupledClusterSpinOrbitalsElectronElectronIntegralsRepository(numberOfOrbitals);		
 	}
 
 }

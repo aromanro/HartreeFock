@@ -13,6 +13,7 @@
 
 #include "RestrictedHartreeFock.h"
 #include "UnrestrictedHartreeFock.h"
+#include "RestrictedCCSD.h"
 
 #include "Basis.h"
 #include "ChemUtils.h"
@@ -89,7 +90,8 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 	HartreeFock::HartreeFockAlgorithm* hartreeFock;
 	const bool restricted = molecule.alphaElectrons == molecule.betaElectrons;
 	if (restricted)
-		hartreeFock = new HartreeFock::RestrictedHartreeFock();
+		//hartreeFock = new HartreeFock::RestrictedHartreeFock();
+		hartreeFock = new HartreeFock::RestrictedCCSD();
 	else
 		hartreeFock = new HartreeFock::UnrestrictedHartreeFock();
 
@@ -317,6 +319,11 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 
 		file << "Emp2: " << Emp2 << std::endl;
 		file << "Total: " << hartreeFock->GetTotalEnergy() + Emp2 << std::endl;
+
+		((HartreeFock::RestrictedCCSD*)hartreeFock)->InitCC();
+		const double CCMP2 = ((HartreeFock::RestrictedCCSD*)hartreeFock)->MP2EnergyFromt4();
+		file << "Emp2 from CC: " << CCMP2 << std::endl;
+
 
 		Vector3D<double> moment = hartreeFock->GetMoment(); // multiply with 2.541746473 for Debye
 
