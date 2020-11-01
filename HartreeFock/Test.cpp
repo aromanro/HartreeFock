@@ -30,9 +30,9 @@
 // https://github.com/CrawfordGroup/ProgrammingProjects/tree/master/Project%2303
 // uses STO3G, so that's what is loaded
 
-Test::Test()
+Test::Test(const std::string& basisFile)
 {
-	basisSTO3G.Load("sto3g.txt");
+	basis.Load(basisFile);
 }
 
 void Test::OutputMatricesForAtom(const std::string& atomName, const std::string& basisSetName, const std::string& fileName)
@@ -431,7 +431,7 @@ void Test::TestWater(const std::string& fileName, const std::string& sfileName, 
 {
 	Systems::AtomWithShells H1,H2,O;
 
-	for (auto& atom : basisSTO3G.atoms)
+	for (auto& atom : basis.atoms)
 	{
 		if (1 == atom.Z)
 		{
@@ -476,7 +476,7 @@ void Test::TestMethane(const std::string& fileName, const std::string& sfileName
 {
 	Systems::AtomWithShells H1, H2, H3, H4, C;
 
-	for (auto& atom : basisSTO3G.atoms)
+	for (auto& atom : basis.atoms)
 	{
 		if (1 == atom.Z)
 		{

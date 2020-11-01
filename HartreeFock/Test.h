@@ -7,7 +7,7 @@
 class Test
 {
 public:
-	Test();
+	Test(const std::string& basisFile = "sto3g.txt");
 
 	static void OutputMatricesForAtom(const std::string& atomName, const std::string& basisSetName, const std::string& fileName);
 	static void OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, const std::string& sfileName = "", const std::string& tfileName = "", const std::string& vfileName = "", const std::string& erifileName = "", bool useDIIS = false, const double expectedNucEnergy = 0);
@@ -21,6 +21,6 @@ public:
 protected:
 	static void OutputMatrix(const Eigen::MatrixXd& matrix, std::ofstream& file);
 
-	Chemistry::Basis basisSTO3G;
+	Chemistry::Basis basis;
 };
 
