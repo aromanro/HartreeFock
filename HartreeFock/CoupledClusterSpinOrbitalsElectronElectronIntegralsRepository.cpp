@@ -26,12 +26,17 @@ namespace GaussianIntegrals {
 		MP2MolecularOrbitalsIntegralsRepository molecularEEintegrals(repository);
 
 		for (unsigned int p = 0; p < numberSpinOrbitals; ++p)
-			for (unsigned int q = 0; q < numberSpinOrbitals; q++)
-				for (unsigned int r = 0; r < numberSpinOrbitals; r++)
-					for (unsigned int s = 0; s < numberSpinOrbitals; s++) 
+			for (unsigned int q = 0; q < numberSpinOrbitals; ++q)
+				for (unsigned int r = 0; r < numberSpinOrbitals; ++r)
+					for (unsigned int s = 0; s < numberSpinOrbitals; ++s) 
 					{
-						const double value1 = molecularEEintegrals.getElectronElectron(p, r, q, s, C) * (p % 2 == r % 2) * (q % 2 == s % 2);
-						const double value2 = molecularEEintegrals.getElectronElectron(p, s, q, r, C) * (p % 2 == s % 2) * (q % 2 == r % 2);
+						const unsigned int hp = p / 2;
+						const unsigned int hr = r / 2;
+						const unsigned int hq = q / 2;
+						const unsigned int hs = s / 2;
+
+						const double value1 = molecularEEintegrals.getElectronElectron(hp, hr, hq, hs, C) * (p % 2 == r % 2) * (q % 2 == s % 2);
+						const double value2 = molecularEEintegrals.getElectronElectron(hp, hs, hq, hr, C) * (p % 2 == s % 2) * (q % 2 == r % 2);
 						m_integralsTensor(p, q, r, s) = value1 - value2;
 					}
 	}

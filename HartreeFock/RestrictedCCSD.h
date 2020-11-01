@@ -43,7 +43,12 @@ namespace HartreeFock {
                 {
                     spinOrbitalFockMatrix(p, q) = (p % 2 == q % 2) * FockMatrixMO(p / 2, q / 2);
                     for (int m = 0; m < numberOfSpinOrbitals; ++m)
+                    {
+                        const int orb = m / 2;
+                        if (orb >= occupied.size() || !occupied[orb]) continue; // only occupied
+
                         spinOrbitalFockMatrix(p, q) += (*m_spinOrbitalBasisIntegrals)(p, m, q, m);
+                    }
                 }
 
             return spinOrbitalFockMatrix;
@@ -61,7 +66,7 @@ namespace HartreeFock {
                 for (int j = 0; j < numberOfSpinOrbitals; ++j)
                     for (int a = 0; a < numberOfSpinOrbitals; ++a)
                         for (int b = 0; b < numberOfSpinOrbitals; ++b)
-                            t4(i, j, a, b) = (*m_spinOrbitalBasisIntegrals)(i, j, a, b) / (eigenvals(i) + eigenvals(j) - eigenvals(a) - eigenvals(b));
+                            t4(i, j, a, b) = (*m_spinOrbitalBasisIntegrals)(i, j, a, b) / (eigenvals(i / 2) + eigenvals(j / 2) - eigenvals(a / 2) - eigenvals(b / 2));
         }
 
 
@@ -74,19 +79,23 @@ namespace HartreeFock {
 
             for (int i = 0; i < numberOfSpinOrbitals; ++i)
             {
-                if (i >= occupied.size() || !occupied[i]) continue; // only occupied
+                const int orbi = i / 2;
+                if (orbi >= occupied.size() || !occupied[orbi]) continue; // only occupied
 
                 for (int j = 0; j < numberOfSpinOrbitals; ++j)
                 {
-                    if (j >= occupied.size() || !occupied[j]) continue; // only occupied
+                    const int orbj = j / 2;
+                    if (orbj >= occupied.size() || !occupied[orbj]) continue; // only occupied
 
                     for (int a = 0; a < numberOfSpinOrbitals; ++a)
                     {
-                        if (a < occupied.size() && occupied[a]) continue; // only unoccupied
+                        const int orba = a / 2;
+                        if (orba < occupied.size() && occupied[orba]) continue; // only unoccupied
 
                         for (int b = 0; b < numberOfSpinOrbitals; ++b)
                         {
-                            if (b < occupied.size() && occupied[b]) continue;  // only unoccupied
+                            const int orbb = b / 2;
+                            if (orbb < occupied.size() && occupied[orbb]) continue;  // only unoccupied
 
                             result += (*m_spinOrbitalBasisIntegrals)(i, j, a, b) * t4(i, j, a, b);
                         }
@@ -104,6 +113,9 @@ namespace HartreeFock {
         int numberOfSpinOrbitals;
 
         Eigen::MatrixXd f;
+
+
+        // TODO: lower the memory usage for t2 and t4, need only elements between occupied and not occupied?
 
         Eigen::MatrixXd t2;
         
