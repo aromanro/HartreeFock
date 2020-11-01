@@ -19,6 +19,8 @@ namespace HartreeFock {
 	public:
 		Eigen::MatrixXd DensityMatrix;
 
+		Eigen::MatrixXd LastMOFockMatrix;
+
 		unsigned int nrOccupiedLevels;
 
 		// for now in the program it will be filled up with true up to 'nrOccupiedLevels'
