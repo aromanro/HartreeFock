@@ -111,6 +111,7 @@ namespace HartreeFock {
     private:
 
         int numberOfSpinOrbitals;
+        int numberOfOccupiedSpinOrbitals;
 
         Eigen::MatrixXd f;
 

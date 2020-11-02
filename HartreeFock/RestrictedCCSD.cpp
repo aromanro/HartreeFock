@@ -5,7 +5,7 @@
 namespace HartreeFock {
 
 	RestrictedCCSD::RestrictedCCSD(int iterations)
-		: RestrictedHartreeFock(iterations), numberOfSpinOrbitals(0), m_spinOrbitalBasisIntegrals(nullptr)
+		: RestrictedHartreeFock(iterations), numberOfSpinOrbitals(0), numberOfOccupiedSpinOrbitals(0), m_spinOrbitalBasisIntegrals(nullptr)
 	{
 
 	}
@@ -20,6 +20,7 @@ namespace HartreeFock {
 		RestrictedHartreeFock::Init(molecule);
 
 		numberOfSpinOrbitals = 2 * numberOfOrbitals;
+		numberOfOccupiedSpinOrbitals = 2 * nrOccupiedLevels;
 
 		if (m_spinOrbitalBasisIntegrals) delete m_spinOrbitalBasisIntegrals;
 		m_spinOrbitalBasisIntegrals = new GaussianIntegrals::CoupledClusterSpinOrbitalsElectronElectronIntegralsRepository(numberOfOrbitals);		
