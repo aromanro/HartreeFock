@@ -63,10 +63,22 @@ namespace HartreeFock {
             t4.resize(numberOfSpinOrbitals, numberOfSpinOrbitals, numberOfSpinOrbitals, numberOfSpinOrbitals);
 
             for (int i = 0; i < numberOfSpinOrbitals; ++i)
+            {
+                const int hi = i / 2;
                 for (int j = 0; j < numberOfSpinOrbitals; ++j)
+                {
+                    const int hj = j / 2;
                     for (int a = 0; a < numberOfSpinOrbitals; ++a)
+                    {
+                        const int ha = a / 2;
                         for (int b = 0; b < numberOfSpinOrbitals; ++b)
-                            t4(i, j, a, b) = (*m_spinOrbitalBasisIntegrals)(i, j, a, b) / (eigenvals(i / 2) + eigenvals(j / 2) - eigenvals(a / 2) - eigenvals(b / 2));
+                        {
+                            const int hb = b / 2;
+                            t4(i, j, a, b) = (*m_spinOrbitalBasisIntegrals)(i, j, a, b) / (eigenvals(hi) + eigenvals(hj) - eigenvals(ha) - eigenvals(hb));
+                        }
+                    }
+                }
+            }
         }
 
 
