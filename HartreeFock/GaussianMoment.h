@@ -17,8 +17,6 @@ namespace GaussianIntegrals {
     // also because only x or y or z are required (no products, like xy, or xz and so on) no maxQN3 should be passed as a parameter, 1 can be implied for that angular momentum
     // also a third alpha will be missing, since the third center is not about a Gaussian
 
-    // TODO: finish implementing it
-
     class GaussianMoment :
         public GaussianIntegral
     {
