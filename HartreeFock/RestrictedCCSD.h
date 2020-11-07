@@ -29,6 +29,11 @@ namespace HartreeFock {
 
     private:
 
+        inline int delta(int i, int j)
+        {
+            return i == j ? 1 : 0;
+        }
+
         // this should correspond to Step #1: Preparing the Spin-Orbital Basis Integrals
         // implemented in a hurry, needs checking
 
@@ -108,6 +113,128 @@ namespace HartreeFock {
         }
 
 
+        // Step #3: Calculate the CC Intermediates
+        
+        // for the formulae, see J.F. Stanton, J. Gauss, J.D. Watts, and R.J. Bartlett, J. Chem. Phys. volume 94, pp. 4334-4345 (1991)
+        // "A direct product decomposition approach for symmetry exploitation in many-body methods. I. Energy calculations"
+
+        // formulae 3 - 13
+
+        // formulae 9 and 10 first, taus are needed in the following calculations
+
+        void CalculateTaus()
+        {
+            const int numberOfUnoccupiedSpinOrbitals = numberOfSpinOrbitals - numberOfOccupiedSpinOrbitals;
+
+            tau.resize(numberOfOccupiedSpinOrbitals, numberOfOccupiedSpinOrbitals, numberOfUnoccupiedSpinOrbitals, numberOfUnoccupiedSpinOrbitals);
+            taut.resize(numberOfOccupiedSpinOrbitals, numberOfOccupiedSpinOrbitals, numberOfUnoccupiedSpinOrbitals, numberOfUnoccupiedSpinOrbitals);
+
+            int indi = 0;
+            for (int i = 0; i < numberOfSpinOrbitals; ++i)
+            {
+                const int hi = i / 2;
+                if (hi >= occupied.size() || !occupied[hi]) continue; // only occupied
+
+                int indj = 0;
+                for (int j = 0; j < numberOfSpinOrbitals; ++j)
+                {
+                    const int hj = j / 2;
+                    if (hj >= occupied.size() || !occupied[hj]) continue; // only occupied
+
+                    int inda = 0;
+                    for (int a = 0; a < numberOfSpinOrbitals; ++a)
+                    {
+                        const int ha = a / 2;
+                        if (ha < occupied.size() && occupied[ha]) continue; // only unoccupied
+
+                        int indb = 0;
+                        for (int b = 0; b < numberOfSpinOrbitals; ++b)
+                        {
+                            const int hb = b / 2;
+                            if (hb < occupied.size() && occupied[hb]) continue; // only unoccupied
+
+                            const double term2 = t2(indi, inda) * t2(indj, indb) - t2(indi, indb) * t2(indj, inda);
+
+                            tau(indi, indj, inda, indb) = t4(indi, indj, inda, indb) + 0.5 * term2;
+                            taut(indi, indj, inda, indb) = t4(indi, indj, inda, indb) + term2;
+
+                            ++indb;
+                        }
+
+                        ++inda;
+                    }
+
+                    ++indj;
+                }
+
+                ++indi;
+            }
+
+        }
+
+
+
+
+
+        // end of computing intermediates
+
+
+
+        // compute denominator arrays
+
+        // formulae 12 and 13
+
+        void CalculateDenominatorArrays()
+        {
+            const int numberOfUnoccupiedSpinOrbitals = numberOfSpinOrbitals - numberOfOccupiedSpinOrbitals;
+
+            D2.resize(numberOfOccupiedSpinOrbitals, numberOfUnoccupiedSpinOrbitals);
+            D4.resize(numberOfOccupiedSpinOrbitals, numberOfOccupiedSpinOrbitals, numberOfUnoccupiedSpinOrbitals, numberOfUnoccupiedSpinOrbitals);
+
+
+            int indi = 0;
+            for (int i = 0; i < numberOfSpinOrbitals; ++i)
+            {
+                const int hi = i / 2;
+                if (hi >= occupied.size() || !occupied[hi]) continue; // only occupied
+
+                int inda = 0;
+                for (int a = 0; a < numberOfSpinOrbitals; ++a)
+                {
+                    const int ha = a / 2;
+                    if (ha < occupied.size() && occupied[ha]) continue; // only unoccupied
+
+                    D2(indi, inda) = f(i, i) - f(a, a);
+
+                    int indj = 0;
+                    for (int j = 0; j < numberOfSpinOrbitals; ++j)
+                    {
+                        const int hj = j / 2;
+                        if (hj >= occupied.size() || !occupied[hj]) continue; // only occupied
+
+                        int indb = 0;
+                        for (int b = 0; b < numberOfSpinOrbitals; ++b)
+                        {
+                            const int hb = b / 2;
+                            if (hb < occupied.size() && occupied[hb]) continue; // only unoccupied
+
+                            D4(indi, indj, inda, indb) = f(i, i) + f(j, j) - f(a, a) - f(b, b);
+
+                            ++indb;
+                        }
+
+                        ++indj;
+                    }
+
+                    ++inda;
+                }
+
+                ++indi;
+            }
+
+        }
+
+
     public:
 
         // just for checking against the MP2 energy
@@ -166,14 +293,29 @@ namespace HartreeFock {
         Eigen::MatrixXd f;
 
 
-        // TODO: lower the memory usage for t2 and t4, need only elements between occupied and not occupied?
-
         Eigen::MatrixXd t2;
         
         // they should be better implemented than my own implementation
         Eigen::Tensor<double, 4> t4;
         
         GaussianIntegrals::CoupledClusterSpinOrbitalsElectronElectronIntegralsRepository* m_spinOrbitalBasisIntegrals;
+
+        // intermediates
+        Eigen::MatrixXd Fae; // unoccupied, unoccupied
+        Eigen::MatrixXd Fmi; // occupied, occupied
+        Eigen::MatrixXd Fme; // occupied, unoccupied
+
+        Eigen::Tensor<double, 4> Wmnij; // occupied, occupied, occupied, occupied
+        Eigen::Tensor<double, 4> Wabef; // unoccupied, unoccupied, unoccupied, unoccupied
+        Eigen::Tensor<double, 4> Wmbej; // occupied, unoccupied, unoccupied, occupied
+
+        // effective doubles (two particle excitation operators)
+        Eigen::Tensor<double, 4> tau; // occupied, occupied, unoccupied, unoccupied
+        Eigen::Tensor<double, 4> taut; // occupied, occupied, unoccupied, unoccupied
+
+        // denominator arrays
+        Eigen::MatrixXd D2;
+        Eigen::Tensor<double, 4> D4;
     };
 
 }
