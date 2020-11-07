@@ -39,9 +39,12 @@ namespace HartreeFock {
             Eigen::MatrixXd FockMatrixMO = C.transpose() * h * C;
 
             for (int p = 0; p < numberOfSpinOrbitals; ++p)
+            {
+                const int hp = p / 2;
+
                 for (int q = 0; q < numberOfSpinOrbitals; ++q)
                 {
-                    spinOrbitalFockMatrix(p, q) = (p % 2 == q % 2) * FockMatrixMO(p / 2, q / 2);
+                    spinOrbitalFockMatrix(p, q) = (p % 2 == q % 2) * FockMatrixMO(hp, q / 2);
                     for (int m = 0; m < numberOfSpinOrbitals; ++m)
                     {
                         const int orb = m / 2;
@@ -50,6 +53,7 @@ namespace HartreeFock {
                         spinOrbitalFockMatrix(p, q) += (*m_spinOrbitalBasisIntegrals)(p, m, q, m);
                     }
                 }
+            }
 
             return spinOrbitalFockMatrix;
         }
@@ -58,26 +62,48 @@ namespace HartreeFock {
         // Step #2: Build the Initial-Guess Cluster Amplitudes
         void InitialGuessClusterAmplitudes()
         {
-            t2 = Eigen::MatrixXd::Zero(numberOfSpinOrbitals, numberOfSpinOrbitals);
+            const int numberOfUnoccupiedSpinOrbitals = numberOfSpinOrbitals - numberOfOccupiedSpinOrbitals;
 
-            t4.resize(numberOfSpinOrbitals, numberOfSpinOrbitals, numberOfSpinOrbitals, numberOfSpinOrbitals);
+            t2 = Eigen::MatrixXd::Zero(numberOfOccupiedSpinOrbitals, numberOfUnoccupiedSpinOrbitals);
 
+            t4.resize(numberOfOccupiedSpinOrbitals, numberOfOccupiedSpinOrbitals, numberOfUnoccupiedSpinOrbitals, numberOfUnoccupiedSpinOrbitals);
+
+            int indi = 0;
             for (int i = 0; i < numberOfSpinOrbitals; ++i)
             {
                 const int hi = i / 2;
+                if (hi >= occupied.size() || !occupied[hi]) continue; // only occupied
+
+                int indj = 0;
                 for (int j = 0; j < numberOfSpinOrbitals; ++j)
                 {
                     const int hj = j / 2;
+                    if (hj >= occupied.size() || !occupied[hj]) continue; // only occupied
+
+                    int inda = 0;
                     for (int a = 0; a < numberOfSpinOrbitals; ++a)
                     {
                         const int ha = a / 2;
+                        if (ha < occupied.size() && occupied[ha]) continue; // only unoccupied
+
+                        int indb = 0;
                         for (int b = 0; b < numberOfSpinOrbitals; ++b)
                         {
                             const int hb = b / 2;
-                            t4(i, j, a, b) = (*m_spinOrbitalBasisIntegrals)(i, j, a, b) / (eigenvals(hi) + eigenvals(hj) - eigenvals(ha) - eigenvals(hb));
+                            if (hb < occupied.size() && occupied[hb]) continue; // only unoccupied
+
+                            t4(indi, indj, inda, indb) = (*m_spinOrbitalBasisIntegrals)(i, j, a, b) / (eigenvals(hi) + eigenvals(hj) - eigenvals(ha) - eigenvals(hb));
+
+                            ++indb;
                         }
+
+                        ++inda;
                     }
+                
+                    ++indj;
                 }
+
+                ++indi;
             }
         }
 
@@ -89,30 +115,42 @@ namespace HartreeFock {
         {
             double result = 0;
 
+            int indi = 0;
             for (int i = 0; i < numberOfSpinOrbitals; ++i)
             {
                 const int orbi = i / 2;
                 if (orbi >= occupied.size() || !occupied[orbi]) continue; // only occupied
 
+                int indj = 0;
                 for (int j = 0; j < numberOfSpinOrbitals; ++j)
                 {
                     const int orbj = j / 2;
                     if (orbj >= occupied.size() || !occupied[orbj]) continue; // only occupied
 
+                    int inda = 0;
                     for (int a = 0; a < numberOfSpinOrbitals; ++a)
                     {
                         const int orba = a / 2;
                         if (orba < occupied.size() && occupied[orba]) continue; // only unoccupied
 
+                        int indb = 0;
                         for (int b = 0; b < numberOfSpinOrbitals; ++b)
                         {
                             const int orbb = b / 2;
                             if (orbb < occupied.size() && occupied[orbb]) continue;  // only unoccupied
 
-                            result += (*m_spinOrbitalBasisIntegrals)(i, j, a, b) * t4(i, j, a, b);
+                            result += (*m_spinOrbitalBasisIntegrals)(i, j, a, b) * t4(indi, indj, inda, indb);
+
+                            ++indb;
                         }
+
+                        ++inda;
                     }
+
+                    ++indj;
                 }
+
+                ++indi;
             }
 
 
