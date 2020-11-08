@@ -90,7 +90,10 @@ HartreeFockThread::HartreeFockThread(const Options& options, CHartreeFockDoc* do
 		basisPtr = &doc->basis6_311plusplusGstar;
 	else if (20 == options.basis)
 		basisPtr = &doc->basis6_311plusplusGstarstar;
-
+	else if (21 == options.basis)
+		basisPtr = &doc->dz;
+	else if (22 == options.basis)
+		basisPtr = &doc->dzp;
 
 	if (basisPtr)
 	{

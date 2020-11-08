@@ -75,6 +75,8 @@
 #define IDC_RADIO20                     1026
 #define IDC_RADIO21                     1027
 #define IDC_RADIO22                     1028
+#define IDC_RADIO23                     1029
+#define IDC_RADIO24                     1030
 #define ID_COMPUTATION_OPTIONS          32771
 #define ID_COMPUTATION_START            32772
 

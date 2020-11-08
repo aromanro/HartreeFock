@@ -126,6 +126,8 @@ BOOL CHartreeFockDoc::OnNewDocument()
 	basis6_311plusplusGstar.Load("6-311++g_st_.0.nw");
 	basis6_311plusplusGstarstar.Load("6-311++g_st__st_.0.nw");
 
+	dz.Load("dz (dunning-hay).0.nw");
+	dzp.Load("dzp (dunning-hay).0.nw");
 
 #ifdef _DEBUG
 	//	Tests tests;

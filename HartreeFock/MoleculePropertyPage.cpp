@@ -68,6 +68,8 @@ BEGIN_MESSAGE_MAP(MoleculePropertyPage, CMFCPropertyPage)
 	ON_BN_CLICKED(IDC_RADIO20, &MoleculePropertyPage::OnBnClickedRadio20)
 	ON_BN_CLICKED(IDC_RADIO21, &MoleculePropertyPage::OnBnClickedRadio21)
 	ON_BN_CLICKED(IDC_RADIO22, &MoleculePropertyPage::OnBnClickedRadio22)
+	ON_BN_CLICKED(IDC_RADIO23, &MoleculePropertyPage::OnBnClickedRadio23)
+	ON_BN_CLICKED(IDC_RADIO24, &MoleculePropertyPage::OnBnClickedRadio24)
 END_MESSAGE_MAP()
 
 
@@ -277,6 +279,10 @@ void MoleculePropertyPage::FillCombos()
 		basisPtr = &doc->basis6_311plusplusGstar;
 	else if (20 == theApp.options.basis)
 		basisPtr = &doc->basis6_311plusplusGstarstar;
+	else if (21 == theApp.options.basis)
+		basisPtr = &doc->dz;
+	else if (22 == theApp.options.basis)
+		basisPtr = &doc->dzp;
 
 
 
@@ -434,6 +440,18 @@ void MoleculePropertyPage::OnBnClickedRadio21()
 
 
 void MoleculePropertyPage::OnBnClickedRadio22()
+{
+	OnBnClickedRadio1();
+}
+
+
+void MoleculePropertyPage::OnBnClickedRadio23()
+{
+	OnBnClickedRadio1();
+}
+
+
+void MoleculePropertyPage::OnBnClickedRadio24()
 {
 	OnBnClickedRadio1();
 }

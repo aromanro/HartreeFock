@@ -54,6 +54,9 @@ public:
 	Chemistry::Basis basis6_311plusplusGstar;
 	Chemistry::Basis basis6_311plusplusGstarstar;
 
+	Chemistry::Basis dz;
+	Chemistry::Basis dzp;
+
 	Chart m_Chart;
 
 	std::atomic_int runningThreads;
