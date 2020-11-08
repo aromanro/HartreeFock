@@ -29,9 +29,14 @@ namespace HartreeFock {
 
     private:
 
-        inline int delta(int i, int j)
+        static inline int delta(int i, int j)
         {
             return i == j ? 1 : 0;
+        }
+
+        static inline int oneminusdelta(int i, int j)
+        {
+            return i == j ? 0 : 1;
         }
 
         // this should correspond to Step #1: Preparing the Spin-Orbital Basis Integrals
@@ -122,59 +127,15 @@ namespace HartreeFock {
 
         // formulae 9 and 10 first, taus are needed in the following calculations
 
-        void CalculateTaus()
-        {
-            const int numberOfUnoccupiedSpinOrbitals = numberOfSpinOrbitals - numberOfOccupiedSpinOrbitals;
+        void CalculateTaus();
 
-            tau.resize(numberOfOccupiedSpinOrbitals, numberOfOccupiedSpinOrbitals, numberOfUnoccupiedSpinOrbitals, numberOfUnoccupiedSpinOrbitals);
-            taut.resize(numberOfOccupiedSpinOrbitals, numberOfOccupiedSpinOrbitals, numberOfUnoccupiedSpinOrbitals, numberOfUnoccupiedSpinOrbitals);
-
-            int indi = 0;
-            for (int i = 0; i < numberOfSpinOrbitals; ++i)
-            {
-                const int hi = i / 2;
-                if (hi >= occupied.size() || !occupied[hi]) continue; // only occupied
-
-                int indj = 0;
-                for (int j = 0; j < numberOfSpinOrbitals; ++j)
-                {
-                    const int hj = j / 2;
-                    if (hj >= occupied.size() || !occupied[hj]) continue; // only occupied
-
-                    int inda = 0;
-                    for (int a = 0; a < numberOfSpinOrbitals; ++a)
-                    {
-                        const int ha = a / 2;
-                        if (ha < occupied.size() && occupied[ha]) continue; // only unoccupied
-
-                        int indb = 0;
-                        for (int b = 0; b < numberOfSpinOrbitals; ++b)
-                        {
-                            const int hb = b / 2;
-                            if (hb < occupied.size() && occupied[hb]) continue; // only unoccupied
-
-                            const double term2 = t2(indi, inda) * t2(indj, indb) - t2(indi, indb) * t2(indj, inda);
-
-                            tau(indi, indj, inda, indb) = t4(indi, indj, inda, indb) + 0.5 * term2;
-                            taut(indi, indj, inda, indb) = t4(indi, indj, inda, indb) + term2;
-
-                            ++indb;
-                        }
-
-                        ++inda;
-                    }
-
-                    ++indj;
-                }
-
-                ++indi;
-            }
-
-        }
+        void CalculateFae();
+        void CalculateFmi();
+        void CalculateFme();
 
 
 
-
+        void CalculateIntermediates();
 
         // end of computing intermediates
 
@@ -182,58 +143,17 @@ namespace HartreeFock {
 
         // compute denominator arrays
 
-        // formulae 12 and 13
+        // formulas 12 and 13
 
-        void CalculateDenominatorArrays()
+        inline double D(int i, int a) const
         {
-            const int numberOfUnoccupiedSpinOrbitals = numberOfSpinOrbitals - numberOfOccupiedSpinOrbitals;
-
-            D2.resize(numberOfOccupiedSpinOrbitals, numberOfUnoccupiedSpinOrbitals);
-            D4.resize(numberOfOccupiedSpinOrbitals, numberOfOccupiedSpinOrbitals, numberOfUnoccupiedSpinOrbitals, numberOfUnoccupiedSpinOrbitals);
-
-
-            int indi = 0;
-            for (int i = 0; i < numberOfSpinOrbitals; ++i)
-            {
-                const int hi = i / 2;
-                if (hi >= occupied.size() || !occupied[hi]) continue; // only occupied
-
-                int inda = 0;
-                for (int a = 0; a < numberOfSpinOrbitals; ++a)
-                {
-                    const int ha = a / 2;
-                    if (ha < occupied.size() && occupied[ha]) continue; // only unoccupied
-
-                    D2(indi, inda) = f(i, i) - f(a, a);
-
-                    int indj = 0;
-                    for (int j = 0; j < numberOfSpinOrbitals; ++j)
-                    {
-                        const int hj = j / 2;
-                        if (hj >= occupied.size() || !occupied[hj]) continue; // only occupied
-
-                        int indb = 0;
-                        for (int b = 0; b < numberOfSpinOrbitals; ++b)
-                        {
-                            const int hb = b / 2;
-                            if (hb < occupied.size() && occupied[hb]) continue; // only unoccupied
-
-                            D4(indi, indj, inda, indb) = f(i, i) + f(j, j) - f(a, a) - f(b, b);
-
-                            ++indb;
-                        }
-
-                        ++indj;
-                    }
-
-                    ++inda;
-                }
-
-                ++indi;
-            }
-
+            return f(i, i) - f(a, a);
         }
 
+        inline double D(int i, int j, int a, int b) const
+        {
+            return  f(i, i) + f(j, j) - f(a, a) - f(b, b);
+        }
 
     public:
 
@@ -312,10 +232,6 @@ namespace HartreeFock {
         // effective doubles (two particle excitation operators)
         Eigen::Tensor<double, 4> tau; // occupied, occupied, unoccupied, unoccupied
         Eigen::Tensor<double, 4> taut; // occupied, occupied, unoccupied, unoccupied
-
-        // denominator arrays
-        Eigen::MatrixXd D2;
-        Eigen::Tensor<double, 4> D4;
     };
 
 }
