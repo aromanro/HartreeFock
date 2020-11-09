@@ -129,10 +129,15 @@ namespace HartreeFock {
 
         void CalculateTaus();
 
+        // 3 - 5
         void CalculateFae();
         void CalculateFmi();
         void CalculateFme();
 
+        // 6 - 8
+        void CalculateWmnij();
+        void CalculateWabef();
+        void CalculateWmbej();
 
 
         void CalculateIntermediates();
