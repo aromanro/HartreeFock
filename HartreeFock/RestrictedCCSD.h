@@ -145,6 +145,12 @@ namespace HartreeFock {
         // end of computing intermediates
 
 
+        // Step #4: Compute the Updated Cluster Amplitudes
+
+        // eqn 1 and 2
+
+        Eigen::MatrixXd ComputeNewt2() const;
+        Eigen::Tensor<double, 4> ComputeNewt4() const;
 
         // compute denominator arrays
 

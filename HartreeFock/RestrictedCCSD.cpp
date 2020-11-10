@@ -497,4 +497,102 @@ namespace HartreeFock {
 	}
 
 
+	// formula 1
+	Eigen::MatrixXd RestrictedCCSD::ComputeNewt2() const
+	{
+		const int numberOfUnoccupiedSpinOrbitals = numberOfSpinOrbitals - numberOfOccupiedSpinOrbitals;
+
+		Eigen::MatrixXd newt2(numberOfOccupiedSpinOrbitals, numberOfUnoccupiedSpinOrbitals);
+
+		int indi = 0;
+		for (int i = 0; i < numberOfSpinOrbitals; ++i)
+		{
+			const int hi = i / 2;
+			if (hi >= occupied.size() || !occupied[hi]) continue; // only occupied
+		
+			int inda = 0;
+			for (int a = 0; a < numberOfSpinOrbitals; ++a)
+			{
+				const int orba = a / 2;
+				if (orba < occupied.size() && occupied[orba]) continue; // only unoccupied
+			
+				double sum1 = 0;
+				double sum2 = 0;
+				double sum3 = 0;
+				double sum4 = 0;
+				double sum5 = 0;
+				double sum6 = 0;
+			
+				// TODO: implement it!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+				newt2(indi, inda) = (f(i, a) + sum1 - sum2 + sum3 - sum4 - 0.5 * (sum5 + sum6)) / D(i, a);
+			
+				++inda;
+			}
+
+			++indi;
+		}
+
+
+		return newt2;
+	}
+
+	
+	// formula 2
+	Eigen::Tensor<double, 4> RestrictedCCSD::ComputeNewt4() const
+	{
+		const int numberOfUnoccupiedSpinOrbitals = numberOfSpinOrbitals - numberOfOccupiedSpinOrbitals;
+
+		Eigen::Tensor<double, 4> newt4(numberOfOccupiedSpinOrbitals, numberOfOccupiedSpinOrbitals, numberOfUnoccupiedSpinOrbitals, numberOfUnoccupiedSpinOrbitals);
+
+		int indi = 0;
+		for (int i = 0; i < numberOfSpinOrbitals; ++i)
+		{
+			const int hi = i / 2;
+			if (hi >= occupied.size() || !occupied[hi]) continue; // only occupied
+		
+			int indj = 0;
+			for (int j = 0; j < numberOfSpinOrbitals; ++j)
+			{
+				const int hj = j / 2;
+				if (hj >= occupied.size() || !occupied[hj]) continue; // only occupied
+			
+				int inda = 0;
+				for (int a = 0; a < numberOfSpinOrbitals; ++a)
+				{
+					const int orba = a / 2;
+					if (orba < occupied.size() && occupied[orba]) continue; // only unoccupied
+
+					int indb = 0;
+					for (int b = 0; b < numberOfSpinOrbitals; ++b)
+					{
+						const int hb = b / 2;
+						if (hb < occupied.size() && occupied[hb]) continue; // only unoccupied
+					
+					
+						// TODO: implement it!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+						// this is going to be painful :)
+					
+
+						//newt4(indi, indj, inda, indb) = /* a lot of terms */ / D(i, j, a, b);
+					
+						++indb;
+					}
+				
+					++inda;
+				}
+
+				++indj;
+			}
+			++indi;
+		}
+
+
+		return newt4;
+	}
+
+
 }
