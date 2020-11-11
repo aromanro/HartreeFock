@@ -523,8 +523,6 @@ namespace HartreeFock {
 				double sum5 = 0;
 				double sum6 = 0;
 			
-				// TODO: implement it!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
 				// sum1
 				int inde = 0;
 				for (int e = 0; e < numberOfSpinOrbitals; ++e)
@@ -545,7 +543,6 @@ namespace HartreeFock {
 
 					// sum2
 					sum2 += t2(indm, inda) * Fmi(indm, indi);
-
 
 					// sum3
 					int inde = 0;
@@ -579,7 +576,6 @@ namespace HartreeFock {
 
 							++indn;
 						}
-
 						++inde;
 					}
 
@@ -602,10 +598,8 @@ namespace HartreeFock {
 			
 				++inda;
 			}
-
 			++indi;
 		}
-
 
 		return newt2;
 	}
@@ -651,16 +645,13 @@ namespace HartreeFock {
 						//newt4(indi, indj, inda, indb) = /* a lot of terms */ / D(i, j, a, b);
 					
 						++indb;
-					}
-				
+					}				
 					++inda;
 				}
-
 				++indj;
 			}
 			++indi;
 		}
-
 
 		return newt4;
 	}
