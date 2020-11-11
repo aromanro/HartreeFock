@@ -525,7 +525,78 @@ namespace HartreeFock {
 			
 				// TODO: implement it!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+				// sum1
+				int inde = 0;
+				for (int e = 0; e < numberOfSpinOrbitals; ++e)
+				{
+					const int orbe = e / 2;
+					if (orbe < occupied.size() && occupied[orbe]) continue; // only unoccupied
+				
+					sum1 += t2(indi, inde) * Fme(inda, inde);
 
+					++inde;
+				}
+
+				int indm = 0;
+				for (int m = 0; m < numberOfSpinOrbitals; ++m)
+				{
+					const int orbm = m / 2;
+					if (orbm >= occupied.size() || !occupied[orbm]) continue; // only occupied
+
+					// sum2
+					sum2 += t2(indm, inda) * Fmi(indm, indi);
+
+
+					// sum3
+					int inde = 0;
+					for (int e = 0; e < numberOfSpinOrbitals; ++e)
+					{
+						const int orbe = e / 2;
+						if (orbe < occupied.size() && occupied[orbe]) continue; // only unoccupied
+					
+						sum3 += t4(indi, indm, inda, inde) * Fme(indm, inde);
+
+						// sum5
+						int indf = 0;
+						for (int f = 0; f < numberOfSpinOrbitals; ++f)
+						{
+							const int orbf = f / 2;
+							if (orbf < occupied.size() && occupied[orbf]) continue; // only unoccupied
+												
+							sum5 += t4(indi, indm, inde, indf) * (*m_spinOrbitalBasisIntegrals)(m, a, e, f);
+
+							++indf;
+						}
+
+						// sum6
+						int indn = 0;
+						for (int n = 0; n < numberOfSpinOrbitals; ++n)
+						{
+							const int orbn = n / 2;
+							if (orbn >= occupied.size() || !occupied[orbn]) continue; // only occupied
+						
+							sum6 += t4(indm, indn, inda, inde) * (*m_spinOrbitalBasisIntegrals)(n, m, e, i);
+
+							++indn;
+						}
+
+						++inde;
+					}
+
+
+					// sum4
+					int indf = 0;
+					for (int f = 0; f < numberOfSpinOrbitals; ++f)
+					{
+						const int orbf = f / 2;
+						if (orbf < occupied.size() && occupied[orbf]) continue; // only unoccupied
+											
+						sum4 += t2(indm, indf) * (*m_spinOrbitalBasisIntegrals)(m, a, i, f);
+
+						++indf;
+					}
+					++indm;
+				}
 
 				newt2(indi, inda) = (f(i, a) + sum1 - sum2 + sum3 - sum4 - 0.5 * (sum5 + sum6)) / D(i, a);
 			
