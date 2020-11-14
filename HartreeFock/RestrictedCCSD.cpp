@@ -637,12 +637,132 @@ namespace HartreeFock {
 						if (hb < occupied.size() && occupied[hb]) continue; // only unoccupied
 					
 					
-						// TODO: implement it!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+						double sum1 = 0;
+						double sum2 = 0;
+						double sum3 = 0;
+						double sum4 = 0;
+						double sum5 = 0;
+						double sum6 = 0;
+						double sum7 = 0;
 
-						// this is going to be painful :)
-					
+						// sum1 is a sum over e: can be used also for sum4 (e and f) and sum6 (also over e)
 
-						//newt4(indi, indj, inda, indb) = /* a lot of terms */ / D(i, j, a, b);
+						int inde = 0;
+						for (int e = 0; e < numberOfSpinOrbitals; ++e)
+						{
+							const int orbe = e / 2;
+							if (orbe < occupied.size() && occupied[orbe]) continue; // only unoccupied
+						
+						
+							// sum1 also has a sum over m inside:
+
+							double psum1 = 0;
+							double psum2 = 0;
+
+							int indm = 0;
+							for (int m = 0; m < numberOfSpinOrbitals; ++m)
+							{
+								const int orbm = m / 2;
+								if (orbm >= occupied.size() || !occupied[orbm]) continue; // only occupied
+
+								psum1 += t2(indm, indb) * Fme(indm, inde);
+								psum1 += t2(indm, inda) * Fme(indm, inde);
+
+								++indm;
+							}
+
+							sum1 += t4(indi, indj, inda, inde) * (Fae(indb, inde) - 0.5 * psum1) - t4(indi, indj, indb, inde) * (Fae(inda, inde) - 0.5 * psum2);
+
+							// sum4:
+						
+							int indf = 0;
+							for (int f = 0; f < numberOfSpinOrbitals; ++f)
+							{
+								const int orbf = f / 2;
+								if (orbf < occupied.size() && occupied[orbf]) continue; // only unoccupied
+							
+								sum4 += tau(indi, indj, inde, indf) * Wabef(inda, indb, inde, indf);
+							
+								++indf;
+							}
+
+							// sum6:
+
+							sum6 += t2(indi, inde) * (*m_spinOrbitalBasisIntegrals)(a, b, e, j) - t2(indj, inde) * (*m_spinOrbitalBasisIntegrals)(a, b, e, i);
+
+							++inde;
+						}
+
+
+						
+
+						// sum2 is a sum over m: can be used also for sum3 (over m and n), sum5 (over m and e), sum7 (over m)
+
+						int indm = 0;
+						for (int m = 0; m < numberOfSpinOrbitals; ++m)
+						{
+							const int orbm = m / 2;
+							if (orbm >= occupied.size() || !occupied[orbm]) continue; // only occupied
+
+							// sum2 also has a sum over e inside:
+
+							double psum1 = 0;
+							double psum2 = 0;
+
+							int inde = 0;
+							for (int e = 0; e < numberOfSpinOrbitals; ++e)
+							{
+								const int orbe = e / 2;
+								if (orbe < occupied.size() && occupied[orbe]) continue; // only unoccupied
+
+								psum1 += t2(indj, inde) * Fme(indm, inde);
+								psum1 += t2(indi, inde) * Fme(indm, inde);
+
+								++inde;
+							}
+
+							sum2 += t4(indi, indm, inda, indb) * (Fmi(indm, indj) + 0.5 * psum1) - t4(indj, indm, inda, indb) * (Fmi(indm, indi) + 0.5 * psum2);
+
+							// sum3:
+
+							int indn = 0;
+							for (int n = 0; n < numberOfSpinOrbitals; ++n)
+							{
+								const int orbn = n / 2;
+								if (orbn >= occupied.size() || !occupied[orbn]) continue; // only occupied
+							
+								sum3 += tau(indm, indn, inda, indb) * Wmnij(indm, indn, indi, indj);
+
+								++indn;
+							}
+
+							// sum5:
+
+							// this sum has permutation for both i, j and a, b
+
+							inde = 0;
+							for (int e = 0; e < numberOfSpinOrbitals; ++e)
+							{
+								const int orbe = e / 2;
+								if (orbe < occupied.size() && occupied[orbe]) continue; // only unoccupied
+							
+								sum5 += t4(indi, indm, inda, inde) * Wmbej(indm, indb, inde, indj) - t2(indi, inde) * t2(indm, inda) * (*m_spinOrbitalBasisIntegrals)(m, b, e, j)
+									 - (t4(indi, indm, indb, inde) * Wmbej(indm, inda, inde, indj) - t2(indi, inde) * t2(indm, indb) * (*m_spinOrbitalBasisIntegrals)(m, a, e, j))
+									 - (t4(indj, indm, inda, inde) * Wmbej(indm, indb, inde, indi) - t2(indj, inde) * t2(indm, inda) * (*m_spinOrbitalBasisIntegrals)(m, b, e, i))
+									 + (t4(indj, indm, indb, inde) * Wmbej(indm, inda, inde, indi) - t2(indj, inde) * t2(indm, indb) * (*m_spinOrbitalBasisIntegrals)(m, a, e, i));
+
+								++inde;
+							}
+
+							// sum7:
+
+							sum7 += t2(indm, inda) * (*m_spinOrbitalBasisIntegrals)(m, b, i, j) - t2(indm, indb) * (*m_spinOrbitalBasisIntegrals)(m, a, i, j);
+
+							++indm;
+						}
+
+
+						newt4(indi, indj, inda, indb) = ((*m_spinOrbitalBasisIntegrals)(i, j, a, b) + sum1 - sum2 + 0.5 * (sum3 + sum4) + sum5 + sum6 - sum7) / D(i, j, a, b);
 					
 						++indb;
 					}				
