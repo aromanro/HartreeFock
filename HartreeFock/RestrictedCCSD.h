@@ -216,6 +216,17 @@ namespace HartreeFock {
         }
         
 
+        // Step #5: Check for Convergence and Iterate
+
+        // current CC correlation energy:
+
+        double CorrelationEnergy() const;
+
+        double StepCC(int iter);
+
+
+        double CCEnergy;
+
     private:
 
         int numberOfSpinOrbitals;

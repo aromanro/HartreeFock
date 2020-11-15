@@ -5,7 +5,7 @@
 namespace HartreeFock {
 
 	RestrictedCCSD::RestrictedCCSD(int iterations)
-		: RestrictedHartreeFock(iterations), numberOfSpinOrbitals(0), numberOfOccupiedSpinOrbitals(0), m_spinOrbitalBasisIntegrals(nullptr)
+		: RestrictedHartreeFock(iterations), CCEnergy(std::numeric_limits<double>::infinity()), numberOfSpinOrbitals(0), numberOfOccupiedSpinOrbitals(0), m_spinOrbitalBasisIntegrals(nullptr)
 	{
 
 	}
@@ -777,4 +777,92 @@ namespace HartreeFock {
 	}
 
 
+
+	double RestrictedCCSD::CorrelationEnergy() const
+	{
+		const int numberOfUnoccupiedSpinOrbitals = numberOfSpinOrbitals - numberOfOccupiedSpinOrbitals;
+
+		double sum1 = 0;
+		double sum2 = 0;
+		double sum3 = 0;
+
+		int indi = 0;
+		for (int i = 0; i < numberOfSpinOrbitals; ++i)
+		{
+			const int hi = i / 2;
+			if (hi >= occupied.size() || !occupied[hi]) continue; // only occupied
+
+
+			int inda = 0;
+			for (int a = 0; a < numberOfSpinOrbitals; ++a)
+			{
+				const int orba = a / 2;
+				if (orba < occupied.size() && occupied[orba]) continue; // only unoccupied
+			
+				sum1 += f(i, a) * t2(indi, inda);
+
+				++inda;
+			}
+
+
+			int indj = 0;
+			for (int j = 0; j < numberOfSpinOrbitals; ++j)
+			{
+				const int hj = j / 2;
+				if (hj >= occupied.size() || !occupied[hj]) continue; // only occupied
+
+				inda = 0;
+				for (int a = 0; a < numberOfSpinOrbitals; ++a)
+				{
+					const int orba = a / 2;
+					if (orba < occupied.size() && occupied[orba]) continue; // only unoccupied
+
+					int indb = 0;
+					for (int b = 0; b < numberOfSpinOrbitals; ++b)
+					{
+						const int hb = b / 2;
+						if (hb < occupied.size() && occupied[hb]) continue; // only unoccupied
+
+						const double integral = (*m_spinOrbitalBasisIntegrals)(i, j, a, b);
+
+						sum2 += integral * t4(indi, indj, inda, indb);
+						sum3 += integral * t2(indi, inda) * t2(indj, indb);
+
+						++indb;
+					}
+					++inda;
+				}
+				++indj;
+			}
+			++indi;
+		}
+
+		return sum1 + 0.25 * sum2 + 0.5 * sum3;
+	}
+
+
+	double RestrictedCCSD::StepCC(int iter)
+	{
+		CalculateIntermediates();
+
+		Eigen::MatrixXd newt2 = ComputeNewt2();
+		Eigen::Tensor<double, 4> newt4 = ComputeNewt4();
+
+		// only for t2, for t4 it needs too many computations
+		const Eigen::MatrixXd rmst2dif = newt2 - t2;
+		const double rmsD = sqrt(rmst2dif.cwiseProduct(rmst2dif).sum());
+
+		t2 = newt2;
+		t4 = newt4;
+
+		CCEnergy = CorrelationEnergy();
+
+		return rmsD;
+	}
+
+
+
 }
+
+
+
