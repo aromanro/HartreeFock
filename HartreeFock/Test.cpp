@@ -335,7 +335,7 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 				file.precision(12);
 				file << "Iter: " << i + 1 << "\tEcc = " << newCCEnergy << std::endl;
 
-				if (rmsD < 1E-5 && abs(oldCCEnergy - newCCEnergy) < 1E-12) break;
+				if (rmsD < 1E-10 && abs(oldCCEnergy - newCCEnergy) < energyConvergence) break;
 			}
 
 			file << "Total CC: " << hartreeFock->GetTotalEnergy() + ((HartreeFock::RestrictedCCSD*)hartreeFock)->CCEnergy << std::endl;

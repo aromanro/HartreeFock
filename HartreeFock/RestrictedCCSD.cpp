@@ -836,8 +836,8 @@ namespace HartreeFock {
 	{
 		CalculateIntermediates();
 
-		Eigen::MatrixXd newt2 = ComputeNewt2();
-		Eigen::Tensor<double, 4> newt4 = ComputeNewt4();
+		const Eigen::MatrixXd newt2 = ComputeNewt2();
+		const Eigen::Tensor<double, 4> newt4 = ComputeNewt4();
 
 		// only for t2, for t4 it needs too many computations
 		const Eigen::MatrixXd rmst2dif = newt2 - t2;
