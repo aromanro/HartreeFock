@@ -59,8 +59,8 @@ namespace HartreeFock {
 
 						const double term2 = t2(indi, inda) * t2(indj, indb) - t2(indi, indb) * t2(indj, inda);
 
-						tau(indi, indj, inda, indb) = t4(indi, indj, inda, indb) + 0.5 * term2;
-						taut(indi, indj, inda, indb) = t4(indi, indj, inda, indb) + term2;
+						taut(indi, indj, inda, indb) = t4(indi, indj, inda, indb) + 0.5 * term2;
+						tau(indi, indj, inda, indb) = t4(indi, indj, inda, indb) + term2;
 
 						++indb;
 					}

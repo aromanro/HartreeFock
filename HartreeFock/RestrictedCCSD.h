@@ -39,8 +39,7 @@ namespace HartreeFock {
             return i == j ? 0 : 1;
         }
 
-        // this should correspond to Step #1: Preparing the Spin-Orbital Basis Integrals
-        // implemented in a hurry, needs checking
+        // Step #1: Preparing the Spin-Orbital Basis Integrals
 
         inline Eigen::MatrixXd getSpinOrbitalFockMatrix()
         {
