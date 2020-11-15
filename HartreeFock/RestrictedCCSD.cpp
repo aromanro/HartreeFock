@@ -57,10 +57,11 @@ namespace HartreeFock {
 						const int hb = b / 2;
 						if (hb < occupied.size() && occupied[hb]) continue; // only unoccupied
 
+						const double term1 = t4(indi, indj, inda, indb);
 						const double term2 = t2(indi, inda) * t2(indj, indb) - t2(indi, indb) * t2(indj, inda);
 
-						taut(indi, indj, inda, indb) = t4(indi, indj, inda, indb) + 0.5 * term2;
-						tau(indi, indj, inda, indb) = t4(indi, indj, inda, indb) + term2;
+						taut(indi, indj, inda, indb) = term1 + 0.5 * term2;
+						tau(indi, indj, inda, indb) = term1 + term2;
 
 						++indb;
 					}
