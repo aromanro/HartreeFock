@@ -531,7 +531,7 @@ namespace HartreeFock {
 					const int orbe = e / 2;
 					if (orbe < occupied.size() && occupied[orbe]) continue; // only unoccupied
 				
-					sum1 += t2(indi, inde) * Fme(inda, inde);
+					sum1 += t2(indi, inde) * Fae(inda, inde);
 
 					++inde;
 				}
