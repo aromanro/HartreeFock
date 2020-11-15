@@ -801,22 +801,11 @@ namespace HartreeFock {
 			
 				sum1 += f(i, a) * t2(indi, inda);
 
-				++inda;
-			}
-
-
-			int indj = 0;
-			for (int j = 0; j < numberOfSpinOrbitals; ++j)
-			{
-				const int hj = j / 2;
-				if (hj >= occupied.size() || !occupied[hj]) continue; // only occupied
-
-				inda = 0;
-				for (int a = 0; a < numberOfSpinOrbitals; ++a)
+				int indj = 0;
+				for (int j = 0; j < numberOfSpinOrbitals; ++j)
 				{
-					const int orba = a / 2;
-					if (orba < occupied.size() && occupied[orba]) continue; // only unoccupied
-
+					const int hj = j / 2;
+					if (hj >= occupied.size() || !occupied[hj]) continue; // only occupied
 					int indb = 0;
 					for (int b = 0; b < numberOfSpinOrbitals; ++b)
 					{
@@ -830,10 +819,11 @@ namespace HartreeFock {
 
 						++indb;
 					}
-					++inda;
+					++indj;
 				}
-				++indj;
+				++inda;
 			}
+
 			++indi;
 		}
 
