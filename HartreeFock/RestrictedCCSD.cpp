@@ -666,8 +666,10 @@ namespace HartreeFock {
 								const int orbm = m / 2;
 								if (orbm >= occupied.size() || !occupied[orbm]) continue; // only occupied
 
-								psum1 += t2(indm, indb) * Fme(indm, inde);
-								psum1 += t2(indm, inda) * Fme(indm, inde);
+								const double F = Fme(indm, inde);
+
+								psum1 += t2(indm, indb) * F;
+								psum2 += t2(indm, inda) * F;
 
 								++indm;
 							}
@@ -716,8 +718,10 @@ namespace HartreeFock {
 								const int orbe = e / 2;
 								if (orbe < occupied.size() && occupied[orbe]) continue; // only unoccupied
 
-								psum1 += t2(indj, inde) * Fme(indm, inde);
-								psum1 += t2(indi, inde) * Fme(indm, inde);
+								const double F = Fme(indm, inde);
+
+								psum1 += t2(indj, inde) * F;
+								psum2 += t2(indi, inde) * F;
 
 								++inde;
 							}
