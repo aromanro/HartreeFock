@@ -56,8 +56,8 @@ namespace HartreeFock {
                     spinOrbitalFockMatrix(p, q) = (p % 2 == q % 2) * FockMatrixMO(hp, q / 2);
                     for (int m = 0; m < numberOfSpinOrbitals; ++m)
                     {
-                        const int orb = m / 2;
-                        if (orb >= occupied.size() || !occupied[orb]) continue; // only occupied
+                        const int hm = m / 2;
+                        if (hm >= occupied.size() || !occupied[hm]) continue; // only occupied
 
                         spinOrbitalFockMatrix(p, q) += (*m_spinOrbitalBasisIntegrals)(p, m, q, m);
                     }
@@ -105,13 +105,10 @@ namespace HartreeFock {
 
                             ++indb;
                         }
-
                         ++inda;
-                    }
-                
+                    }                
                     ++indj;
                 }
-
                 ++indi;
             }
         }
@@ -200,16 +197,12 @@ namespace HartreeFock {
 
                             ++indb;
                         }
-
                         ++inda;
                     }
-
                     ++indj;
                 }
-
                 ++indi;
             }
-
 
             return 0.25 * result;
         }

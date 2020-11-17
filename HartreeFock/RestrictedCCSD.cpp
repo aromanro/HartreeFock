@@ -65,16 +65,12 @@ namespace HartreeFock {
 
 						++indb;
 					}
-
 					++inda;
 				}
-
 				++indj;
 			}
-
 			++indi;
 		}
-
 	}
 
 	// formula 3
@@ -86,14 +82,14 @@ namespace HartreeFock {
 		int inda = 0;
 		for (int a = 0; a < numberOfSpinOrbitals; ++a)
 		{
-			const int orba = a / 2;
-			if (orba < occupied.size() && occupied[orba]) continue; // only unoccupied
+			const int ha = a / 2;
+			if (ha < occupied.size() && occupied[ha]) continue; // only unoccupied
 
 			int inde = 0;
 			for (int e = 0; e < numberOfSpinOrbitals; ++e)
 			{
-				const int orbe = e / 2;
-				if (orbe < occupied.size() && occupied[orbe]) continue; // only unoccupied
+				const int he = e / 2;
+				if (he < occupied.size() && occupied[he]) continue; // only unoccupied
 	
 				double sum1 = 0;
 				double sum2 = 0;
@@ -102,24 +98,24 @@ namespace HartreeFock {
 				int indm = 0;
 				for (int m = 0; m < numberOfSpinOrbitals; ++m)
 				{
-					const int orbm = m / 2;
-					if (orbm >= occupied.size() || !occupied[orbm]) continue; // only occupied
+					const int hm = m / 2;
+					if (hm >= occupied.size() || !occupied[hm]) continue; // only occupied
 
 					sum1 += f(m, e) * t2(indm, inda);
 
 					int indf = 0;
 					for (int f = 0; f < numberOfSpinOrbitals; ++f)
 					{
-						const int orbf = f / 2;
-						if (orbf < occupied.size() && occupied[orbf]) continue; // only unoccupied
+						const int hf = f / 2;
+						if (hf < occupied.size() && occupied[hf]) continue; // only unoccupied
 					
 						sum2 += t2(indm, indf) * (*m_spinOrbitalBasisIntegrals)(m, a, f, e);
 
 						int indn = 0;
 						for (int n = 0; n < numberOfSpinOrbitals; ++n)
 						{
-							const int orbn = n / 2;
-							if (orbn >= occupied.size() || !occupied[orbn]) continue; // only occupied
+							const int hn = n / 2;
+							if (hn >= occupied.size() || !occupied[hn]) continue; // only occupied
 						
 							sum3 += taut(indm, indn, inda, indf) * (*m_spinOrbitalBasisIntegrals)(m, n, e, f);
 
@@ -134,7 +130,6 @@ namespace HartreeFock {
 				
 				++inde;
 			}
-
 			++inda;
 		}
 	}
@@ -147,8 +142,8 @@ namespace HartreeFock {
 		int indm = 0;
 		for (int m = 0; m < numberOfSpinOrbitals; ++m)
 		{
-			const int orbm = m / 2;
-			if (orbm >= occupied.size() || !occupied[orbm]) continue; // only occupied
+			const int hm = m / 2;
+			if (hm >= occupied.size() || !occupied[hm]) continue; // only occupied
 		
 			int indi = 0;
 			for (int i = 0; i < numberOfSpinOrbitals; ++i)
@@ -163,24 +158,24 @@ namespace HartreeFock {
 				int inde = 0;
 				for (int e = 0; e < numberOfSpinOrbitals; ++e)
 				{
-					const int orbe = e / 2;
-					if (orbe < occupied.size() && occupied[orbe]) continue; // only unoccupied
+					const int he = e / 2;
+					if (he < occupied.size() && occupied[he]) continue; // only unoccupied
 
-					sum1 += f(m, e) * t2(indi, inde);
+					sum1 += t2(indi, inde) * f(m, e);
 
 					int indn = 0;
 					for (int n = 0; n < numberOfSpinOrbitals; ++n)
 					{
-						const int orbn = n / 2;
-						if (orbn >= occupied.size() || !occupied[orbn]) continue; // only occupied
+						const int hn = n / 2;
+						if (hn >= occupied.size() || !occupied[hn]) continue; // only occupied
 
 						sum2 += t2(indn, inde) * (*m_spinOrbitalBasisIntegrals)(m, n, i, e);
 
 						int indf = 0;
 						for (int f = 0; f < numberOfSpinOrbitals; ++f)
 						{
-							const int orbf = f / 2;
-							if (orbf < occupied.size() && occupied[orbf]) continue; // only unoccupied
+							const int hf = f / 2;
+							if (hf < occupied.size() && occupied[hf]) continue; // only unoccupied
 
 							sum3 += taut(indi, indn, inde, indf) * (*m_spinOrbitalBasisIntegrals)(m, n, e, f);
 
@@ -188,7 +183,6 @@ namespace HartreeFock {
 						}
 						++indn;
 					}
-
 					++inde;
 				}
 
@@ -197,7 +191,6 @@ namespace HartreeFock {
 
 				++indi;
 			}
-
 			++indm;
 		}
 	}
@@ -213,34 +206,33 @@ namespace HartreeFock {
 		int indm = 0;
 		for (int m = 0; m < numberOfSpinOrbitals; ++m)
 		{
-			const int orbm = m / 2;
-			if (orbm >= occupied.size() || !occupied[orbm]) continue; // only occupied
+			const int hm = m / 2;
+			if (hm >= occupied.size() || !occupied[hm]) continue; // only occupied
 
 			int inde = 0;
 			for (int e = 0; e < numberOfSpinOrbitals; ++e)
 			{
-				const int orbe = e / 2;
-				if (orbe < occupied.size() && occupied[orbe]) continue; // only unoccupied
+				const int he = e / 2;
+				if (he < occupied.size() && occupied[he]) continue; // only unoccupied
 
 				double nfSum = 0;
 
 				int indn = 0;
 				for (int n = 0; n < numberOfSpinOrbitals; ++n)
 				{
-					const int orbn = n / 2;
-					if (orbn >= occupied.size() || !occupied[orbn]) continue; // only occupied
+					const int hn = n / 2;
+					if (hn >= occupied.size() || !occupied[hn]) continue; // only occupied
 
 					int indf = 0;
 					for (int f = 0; f < numberOfSpinOrbitals; ++f)
 					{
-						const int orbf = f / 2;
-						if (orbf < occupied.size() && occupied[orbf]) continue; // only unoccupied
+						const int hf = f / 2;
+						if (hf < occupied.size() && occupied[hf]) continue; // only unoccupied
 					
 						nfSum += t2(indn, indf) * (*m_spinOrbitalBasisIntegrals)(m, n, e, f);
 
 						++indf;
-					}
-				
+					}				
 					++indn;
 				}
 
@@ -249,7 +241,6 @@ namespace HartreeFock {
 
 				++inde;
 			}
-
 			++indm;
 		}
 	}
@@ -264,14 +255,14 @@ namespace HartreeFock {
 		int indm = 0;
 		for (int m = 0; m < numberOfSpinOrbitals; ++m)
 		{
-			const int orbm = m / 2;
-			if (orbm >= occupied.size() || !occupied[orbm]) continue; // only occupied
+			const int hm = m / 2;
+			if (hm >= occupied.size() || !occupied[hm]) continue; // only occupied
 
 			int indn = 0;
 			for (int n = 0; n < numberOfSpinOrbitals; ++n)
 			{
-				const int orbn = n / 2;
-				if (orbn >= occupied.size() || !occupied[orbn]) continue; // only occupied
+				const int hn = n / 2;
+				if (hn >= occupied.size() || !occupied[hn]) continue; // only occupied
 
 				int indi = 0;
 				for (int i = 0; i < numberOfSpinOrbitals; ++i)
@@ -291,8 +282,8 @@ namespace HartreeFock {
 						int inde = 0;
 						for (int e = 0; e < numberOfSpinOrbitals; ++e)
 						{
-							const int orbe = e / 2;
-							if (orbe < occupied.size() && occupied[orbe]) continue; // only unoccupied
+							const int he = e / 2;
+							if (he < occupied.size() && occupied[he]) continue; // only unoccupied
 
 							sum1 += t2(indj, inde) * (*m_spinOrbitalBasisIntegrals)(m, n, i, e) - t2(indi, inde) * (*m_spinOrbitalBasisIntegrals)(m, n, j, e);
 
@@ -300,8 +291,8 @@ namespace HartreeFock {
 							int indf = 0;
 							for (int f = 0; f < numberOfSpinOrbitals; ++f)
 							{
-								const int orbf = f / 2;
-								if (orbf < occupied.size() && occupied[orbf]) continue; // only unoccupied
+								const int hf = f / 2;
+								if (hf < occupied.size() && occupied[hf]) continue; // only unoccupied
 							
 								sum2 += tau(indi, indj, inde, indf) * (*m_spinOrbitalBasisIntegrals)(m, n, e, f);
 							
@@ -315,13 +306,10 @@ namespace HartreeFock {
 					
 						++indj;
 					}
-
 					++indi;
-				}
-			
+				}			
 				++indn;
 			}
-
 			++indm;
 		}
 	}
@@ -335,8 +323,8 @@ namespace HartreeFock {
 		int inda = 0;
 		for (int a = 0; a < numberOfSpinOrbitals; ++a)
 		{
-			const int orba = a / 2;
-			if (orba < occupied.size() && occupied[orba]) continue; // only unoccupied
+			const int ha = a / 2;
+			if (ha < occupied.size() && occupied[ha]) continue; // only unoccupied
 		
 			int indb = 0;
 			for (int b = 0; b < numberOfSpinOrbitals; ++b)
@@ -347,14 +335,14 @@ namespace HartreeFock {
 				int inde = 0;
 				for (int e = 0; e < numberOfSpinOrbitals; ++e)
 				{
-					const int orbe = e / 2;
-					if (orbe < occupied.size() && occupied[orbe]) continue; // only unoccupied
+					const int he = e / 2;
+					if (he < occupied.size() && occupied[he]) continue; // only unoccupied
 
 					int indf = 0;
 					for (int f = 0; f < numberOfSpinOrbitals; ++f)
 					{
-						const int orbf = f / 2;
-						if (orbf < occupied.size() && occupied[orbf]) continue; // only unoccupied
+						const int hf = f / 2;
+						if (hf < occupied.size() && occupied[hf]) continue; // only unoccupied
 
 						double sum1 = 0;
 						double sum2 = 0;
@@ -362,8 +350,8 @@ namespace HartreeFock {
 						int indm = 0;
 						for (int m = 0; m < numberOfSpinOrbitals; ++m)
 						{
-							const int orbm = m / 2;
-							if (orbm >= occupied.size() || !occupied[orbm]) continue; // only occupied
+							const int hm = m / 2;
+							if (hm >= occupied.size() || !occupied[hm]) continue; // only occupied
 
 							sum1 += t2(indm, indb) * (*m_spinOrbitalBasisIntegrals)(a, m, e, f) - t2(indm, inda) * (*m_spinOrbitalBasisIntegrals)(b, m, e, f);
 
@@ -386,11 +374,9 @@ namespace HartreeFock {
 						++indf;
 					}
 					++inde;
-				}
-			
+				}			
 				++indb;
-			}
-		
+			}		
 			++inda;
 		}
 	}
@@ -404,8 +390,8 @@ namespace HartreeFock {
 		int indm = 0;
 		for (int m = 0; m < numberOfSpinOrbitals; ++m)
 		{
-			const int orbm = m / 2;
-			if (orbm >= occupied.size() || !occupied[orbm]) continue; // only occupied
+			const int hm = m / 2;
+			if (hm >= occupied.size() || !occupied[hm]) continue; // only occupied
 
 			int indb = 0;
 			for (int b = 0; b < numberOfSpinOrbitals; ++b)
@@ -416,8 +402,8 @@ namespace HartreeFock {
 				int inde = 0;
 				for (int e = 0; e < numberOfSpinOrbitals; ++e)
 				{
-					const int orbe = e / 2;
-					if (orbe < occupied.size() && occupied[orbe]) continue; // only unoccupied
+					const int he = e / 2;
+					if (he < occupied.size() && occupied[he]) continue; // only unoccupied
 
 					int indj = 0;
 					for (int j = 0; j < numberOfSpinOrbitals; ++j)
@@ -433,16 +419,16 @@ namespace HartreeFock {
 						int indf = 0;
 						for (int f = 0; f < numberOfSpinOrbitals; ++f)
 						{
-							const int orbf = f / 2;
-							if (orbf < occupied.size() && occupied[orbf]) continue; // only unoccupied
+							const int hf = f / 2;
+							if (hf < occupied.size() && occupied[hf]) continue; // only unoccupied
 						
 							sum1 += t2(indj, indf) * (*m_spinOrbitalBasisIntegrals)(m, b, e, f);
 
 							int indn = 0;
 							for (int n = 0; n < numberOfSpinOrbitals; ++n)
 							{
-								const int orbn = n / 2;
-								if (orbn >= occupied.size() || !occupied[orbn]) continue; // only occupied
+								const int hn = n / 2;
+								if (hn >= occupied.size() || !occupied[hn]) continue; // only occupied
 							
 								sum3 += (0.5 * t4(indj, indn, indf, indb) + t2(indj, indf) * t2(indn, indb)) * (*m_spinOrbitalBasisIntegrals)(m, n, e, f);
 							
@@ -457,8 +443,8 @@ namespace HartreeFock {
 						int indn = 0;
 						for (int n = 0; n < numberOfSpinOrbitals; ++n)
 						{
-							const int orbn = n / 2;
-							if (orbn >= occupied.size() || !occupied[orbn]) continue; // only occupied
+							const int hn = n / 2;
+							if (hn >= occupied.size() || !occupied[hn]) continue; // only occupied
 						
 							sum2 += t2(indn, indb) * (*m_spinOrbitalBasisIntegrals)(m, n, e, j);
 
@@ -469,13 +455,10 @@ namespace HartreeFock {
 
 						++indj;
 					}
-
 					++inde;
 				}
-
 				++indb;
 			}
-
 			++indm;
 		}
 	}
@@ -514,8 +497,8 @@ namespace HartreeFock {
 			int inda = 0;
 			for (int a = 0; a < numberOfSpinOrbitals; ++a)
 			{
-				const int orba = a / 2;
-				if (orba < occupied.size() && occupied[orba]) continue; // only unoccupied
+				const int ha = a / 2;
+				if (ha < occupied.size() && occupied[ha]) continue; // only unoccupied
 			
 				double sum1 = 0;
 				double sum2 = 0;
@@ -528,8 +511,8 @@ namespace HartreeFock {
 				int inde = 0;
 				for (int e = 0; e < numberOfSpinOrbitals; ++e)
 				{
-					const int orbe = e / 2;
-					if (orbe < occupied.size() && occupied[orbe]) continue; // only unoccupied
+					const int he = e / 2;
+					if (he < occupied.size() && occupied[he]) continue; // only unoccupied
 				
 					sum1 += t2(indi, inde) * Fae(inda, inde);
 
@@ -539,18 +522,18 @@ namespace HartreeFock {
 				int indm = 0;
 				for (int m = 0; m < numberOfSpinOrbitals; ++m)
 				{
-					const int orbm = m / 2;
-					if (orbm >= occupied.size() || !occupied[orbm]) continue; // only occupied
+					const int hm = m / 2;
+					if (hm >= occupied.size() || !occupied[hm]) continue; // only occupied
 
 					// sum2
 					sum2 += t2(indm, inda) * Fmi(indm, indi);
 
 					// sum3
-					int inde = 0;
+					inde = 0;
 					for (int e = 0; e < numberOfSpinOrbitals; ++e)
 					{
-						const int orbe = e / 2;
-						if (orbe < occupied.size() && occupied[orbe]) continue; // only unoccupied
+						const int he = e / 2;
+						if (he < occupied.size() && occupied[he]) continue; // only unoccupied
 					
 						sum3 += t4(indi, indm, inda, inde) * Fme(indm, inde);
 
@@ -558,8 +541,8 @@ namespace HartreeFock {
 						int indf = 0;
 						for (int f = 0; f < numberOfSpinOrbitals; ++f)
 						{
-							const int orbf = f / 2;
-							if (orbf < occupied.size() && occupied[orbf]) continue; // only unoccupied
+							const int hf = f / 2;
+							if (hf < occupied.size() && occupied[hf]) continue; // only unoccupied
 												
 							sum5 += t4(indi, indm, inde, indf) * (*m_spinOrbitalBasisIntegrals)(m, a, e, f);
 
@@ -570,8 +553,8 @@ namespace HartreeFock {
 						int indn = 0;
 						for (int n = 0; n < numberOfSpinOrbitals; ++n)
 						{
-							const int orbn = n / 2;
-							if (orbn >= occupied.size() || !occupied[orbn]) continue; // only occupied
+							const int hn = n / 2;
+							if (hn >= occupied.size() || !occupied[hn]) continue; // only occupied
 						
 							sum6 += t4(indm, indn, inda, inde) * (*m_spinOrbitalBasisIntegrals)(n, m, e, i);
 
@@ -585,8 +568,8 @@ namespace HartreeFock {
 					int indf = 0;
 					for (int f = 0; f < numberOfSpinOrbitals; ++f)
 					{
-						const int orbf = f / 2;
-						if (orbf < occupied.size() && occupied[orbf]) continue; // only unoccupied
+						const int hf = f / 2;
+						if (hf < occupied.size() && occupied[hf]) continue; // only unoccupied
 											
 						sum4 += t2(indm, indf) * (*m_spinOrbitalBasisIntegrals)(m, a, i, f);
 
@@ -628,16 +611,15 @@ namespace HartreeFock {
 				int inda = 0;
 				for (int a = 0; a < numberOfSpinOrbitals; ++a)
 				{
-					const int orba = a / 2;
-					if (orba < occupied.size() && occupied[orba]) continue; // only unoccupied
+					const int ha = a / 2;
+					if (ha < occupied.size() && occupied[ha]) continue; // only unoccupied
 
 					int indb = 0;
 					for (int b = 0; b < numberOfSpinOrbitals; ++b)
 					{
 						const int hb = b / 2;
 						if (hb < occupied.size() && occupied[hb]) continue; // only unoccupied
-					
-					
+										
 						double sum1 = 0;
 						double sum2 = 0;
 						double sum3 = 0;
@@ -712,7 +694,7 @@ namespace HartreeFock {
 							double psum1 = 0;
 							double psum2 = 0;
 
-							int inde = 0;
+							inde = 0;
 							for (int e = 0; e < numberOfSpinOrbitals; ++e)
 							{
 								const int orbe = e / 2;
@@ -828,7 +810,6 @@ namespace HartreeFock {
 				}
 				++inda;
 			}
-
 			++indi;
 		}
 
