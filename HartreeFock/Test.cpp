@@ -324,7 +324,7 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 		{
 			((HartreeFock::RestrictedCCSD*)hartreeFock)->InitCC();
 			const double CCMP2 = ((HartreeFock::RestrictedCCSD*)hartreeFock)->MP2EnergyFromt4();
-			file << "Emp2 from CC: " << CCMP2 << std::endl;
+			file << "Emp2 from CC: " << CCMP2 << std::endl << std::endl;
 
 			//file << "Emp2 from CC with general formula: " << ((HartreeFock::RestrictedCCSD*)hartreeFock)->CorrelationEnergy() << std::endl; 
 

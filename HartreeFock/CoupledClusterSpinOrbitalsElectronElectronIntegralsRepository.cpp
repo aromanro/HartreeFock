@@ -38,8 +38,8 @@ namespace GaussianIntegrals {
 					{
 						const unsigned int hs = s / 2;
 
-						const double value1 = molecularEEintegrals.getElectronElectron(hp, hr, hq, hs, C) * (p % 2 == r % 2) * (q % 2 == s % 2);
-						const double value2 = molecularEEintegrals.getElectronElectron(hp, hs, hq, hr, C) * (p % 2 == s % 2) * (q % 2 == r % 2);
+						const double value1 = molecularEEintegrals.getElectronElectron(hp, hr, hq, hs, C) * (p % 2 == r % 2 ? 1 : 0) * (q % 2 == s % 2 ? 1 : 0);
+						const double value2 = molecularEEintegrals.getElectronElectron(hp, hs, hq, hr, C) * (p % 2 == s % 2 ? 1 : 0) * (q % 2 == r % 2 ? 1 : 0);
 						m_integralsTensor(p, q, r, s) = value1 - value2;
 					}
 				}

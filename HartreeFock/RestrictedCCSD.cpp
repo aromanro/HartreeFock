@@ -435,7 +435,7 @@ namespace HartreeFock {
 								++indn;
 							}
 
-							++f;
+							++indf;
 						}
 					
 

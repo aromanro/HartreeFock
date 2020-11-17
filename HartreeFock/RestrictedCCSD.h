@@ -53,7 +53,7 @@ namespace HartreeFock {
 
                 for (int q = 0; q < numberOfSpinOrbitals; ++q)
                 {
-                    spinOrbitalFockMatrix(p, q) = (p % 2 == q % 2) * FockMatrixMO(hp, q / 2);
+                    spinOrbitalFockMatrix(p, q) = (p % 2 == q % 2 ? 1 : 0) * FockMatrixMO(hp, q / 2);
                     for (int m = 0; m < numberOfSpinOrbitals; ++m)
                     {
                         const int hm = m / 2;
@@ -122,7 +122,6 @@ namespace HartreeFock {
         // formulae 3 - 13
 
         // formulae 9 and 10 first, taus are needed in the following calculations
-
         void CalculateTaus();
 
         // 3 - 5
