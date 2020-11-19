@@ -884,9 +884,10 @@ namespace HartreeFock {
 								// connected and disconnected triples
 
 								const double td = (t2(indi, inda) * (*m_spinOrbitalBasisIntegrals)(j, k, b, c) - t2(indi, indb) * (*m_spinOrbitalBasisIntegrals)(j, k, a, c) - t2(indi, indc) * (*m_spinOrbitalBasisIntegrals)(j, k, b, a)
-										  - (t2(indj, inda) * (*m_spinOrbitalBasisIntegrals)(i, k, b, c) - t2(indj, indb) * (*m_spinOrbitalBasisIntegrals)(i, k, a, c) - t2(indj, indc) * (*m_spinOrbitalBasisIntegrals)(i, k, b, a))
-										  - (t2(indk, inda) * (*m_spinOrbitalBasisIntegrals)(j, i, b, c) - t2(indk, indb) * (*m_spinOrbitalBasisIntegrals)(j, i, a, c) - t2(indk, indc) * (*m_spinOrbitalBasisIntegrals)(j, i, b, a))
-									) / Dijkabc;
+									- (t2(indj, inda) * (*m_spinOrbitalBasisIntegrals)(i, k, b, c) - t2(indj, indb) * (*m_spinOrbitalBasisIntegrals)(i, k, a, c) - t2(indj, indc) * (*m_spinOrbitalBasisIntegrals)(i, k, b, a))
+									- (t2(indk, inda) * (*m_spinOrbitalBasisIntegrals)(j, i, b, c) - t2(indk, indb) * (*m_spinOrbitalBasisIntegrals)(j, i, a, c) - t2(indk, indc) * (*m_spinOrbitalBasisIntegrals)(j, i, b, a))
+									);
+								   // / Dijkabc;
 
 								double sum1 = 0;
 
@@ -918,10 +919,12 @@ namespace HartreeFock {
 									++indm;
 								}
 
-								const double tc = (sum1 - sum2) / Dijkabc;
+								const double tc = (sum1 - sum2);
+								                            // / Dijkabc;
 								
-								sum += tc * Dijkabc * (tc + td);
-							
+								//sum += tc * Dijkabc * (tc + td);
+								sum += tc * (tc + td) / Dijkabc; // simplified formula, one division instead of two
+
 								++indc;
 							}							
 							++indb;
