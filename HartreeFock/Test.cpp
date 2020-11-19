@@ -341,6 +341,12 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 			}
 
 			file << "Total CC: " << hartreeFock->GetTotalEnergy() + ((HartreeFock::RestrictedCCSD*)hartreeFock)->CCEnergy << std::endl;
+
+			const double Te = ((HartreeFock::RestrictedCCSD*)hartreeFock)->TEnergy();
+
+			file << "E(T): " << Te << std::endl;
+
+			file << "Total ECCSD(T): " << hartreeFock->GetTotalEnergy() + ((HartreeFock::RestrictedCCSD*)hartreeFock)->CCEnergy + Te << std::endl;
 		}
 
 		Vector3D<double> moment = hartreeFock->GetMoment(); // multiply with 2.541746473 for Debye

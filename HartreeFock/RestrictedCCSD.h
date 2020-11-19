@@ -161,6 +161,13 @@ namespace HartreeFock {
             return  f(i, i) + f(j, j) - f(a, a) - f(b, b);
         }
 
+        // needed for the triples correction
+
+        inline double D(int i, int j, int k, int a, int b, int c) const
+        {
+            return  f(i, i) + f(j, j) + f(k, k) - f(a, a) - f(b, b) - f(c, c);
+        }
+
     public:
 
         // just for checking against the MP2 energy
@@ -209,9 +216,12 @@ namespace HartreeFock {
 
         // Step #5: Check for Convergence and Iterate
 
-        // current CC correlation energy:
+        // current CC correlation energy (CCSD):
 
         double CorrelationEnergy() const;
+
+        // triples correction
+        double TEnergy() const;
 
         double StepCC(int iter);
 
@@ -219,7 +229,6 @@ namespace HartreeFock {
         double CCEnergy;
 
     private:
-
         int numberOfSpinOrbitals;
         int numberOfOccupiedSpinOrbitals;
 
