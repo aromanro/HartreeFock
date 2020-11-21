@@ -96,8 +96,8 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 		hartreeFock = new HartreeFock::UnrestrictedHartreeFock();
 
 	hartreeFock->UseDIIS = useDIIS;
-	hartreeFock->alpha = 0.5;
-	hartreeFock->initGuess = 0;
+	hartreeFock->alpha = 0.7;
+	hartreeFock->initGuess = 0.3;
 
 	hartreeFock->Init(&molecule);
 
@@ -299,7 +299,7 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 			file << std::endl;
 
 
-			if (rmsD < rmsDConvergence && abs(deltaE) < (useDIIS ? energyConvergenceDIIS : energyConvergence) && (!useDIIS || hartreeFock->lastErrorEst < diisConvergence)) break;
+			if (rmsD < rmsDConvergence && (abs(deltaE) < (useDIIS ? energyConvergenceDIIS : energyConvergence)) && (!useDIIS || hartreeFock->lastErrorEst < diisConvergence)) break;
 
 			//if (step == 36) break;
 			// ***************************************************************************************************
