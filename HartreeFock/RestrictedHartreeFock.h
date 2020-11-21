@@ -1,5 +1,6 @@
 #pragma once
 #include "HartreeFockAlgorithm.h"
+#include "DIIS.h"
 
 #include <list>
 
@@ -11,8 +12,7 @@ namespace HartreeFock {
 	{
 		friend class Test;
 	protected:
-		std::list<Eigen::MatrixXd> errorMatrices;
-		std::list<Eigen::MatrixXd> fockMatrices;
+		DIIS<Eigen::MatrixXd> diis;
 
 		void CalculateEnergy(const Eigen::VectorXd& eigenvals, const Eigen::MatrixXd& calcDensityMatrix/*, Eigen::MatrixXd& F*/);
 		void InitFockMatrix(int iter, Eigen::MatrixXd& FockMatrix) const;

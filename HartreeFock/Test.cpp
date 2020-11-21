@@ -93,11 +93,14 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 		//hartreeFock = new HartreeFock::RestrictedHartreeFock();
 		hartreeFock = new HartreeFock::RestrictedCCSD();
 	else
+	{
 		hartreeFock = new HartreeFock::UnrestrictedHartreeFock();
+		((HartreeFock::UnrestrictedHartreeFock*)hartreeFock)->addAsymmetry = false;
+	}
 
 	hartreeFock->UseDIIS = useDIIS;
-	hartreeFock->alpha = 0.7;
-	hartreeFock->initGuess = 0.3;
+	hartreeFock->alpha = 0.5;
+	hartreeFock->initGuess = 0.7;
 
 	hartreeFock->Init(&molecule);
 

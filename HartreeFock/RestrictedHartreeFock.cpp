@@ -40,66 +40,15 @@ namespace HartreeFock {
 		{
 			// the density matrix should commute with the Fock matrix. The difference is the error.
 			// another variant could be to subtract from the current Fock matrix the previous one to get an error estimate
-			const Eigen::MatrixXd errorMatrix = overlapMatrix.matrix * DensityMatrix * FockMatrix - FockMatrix * DensityMatrix * overlapMatrix.matrix;
+			Eigen::MatrixXd errorMatrix = overlapMatrix.matrix * DensityMatrix * FockMatrix - FockMatrix * DensityMatrix * overlapMatrix.matrix;
 
 			// another choice: if reached the limit of kept matrices, replace the ones with the bigger error
-			errorMatrices.emplace_back(errorMatrix);
-			fockMatrices.push_back(FockMatrix);
-			if (errorMatrices.size() > 6)
-			{
-				errorMatrices.pop_front();
-				fockMatrices.pop_front();
-			}
-
-			if (errorMatrices.size() > 4)
+			
+			if (diis.AddValueAndError(FockMatrix, errorMatrix))
 			{
 				// use DIIS
-				const size_t nrMatrices = errorMatrices.size();
-				Eigen::MatrixXd B = Eigen::MatrixXd::Zero(nrMatrices + 1, nrMatrices + 1);
-
-				lastErrorEst = 0;
-
-				auto errorIter1 = errorMatrices.begin();
-				for (size_t i = 0; i < nrMatrices; ++i)
-				{
-					auto errorIter2 = errorMatrices.begin();
-
-					for (size_t j = 0; j < i; ++j)
-					{
-						B(i, j) = B(j, i) = (*errorIter1).cwiseProduct(*errorIter2).sum();
-
-						++errorIter2;
-					}
-
-					B(i, i) = (*errorIter1).cwiseProduct(*errorIter1).sum();
-
-					if (i == nrMatrices - 1 || i == nrMatrices - 2) lastErrorEst += B(i, i);
-
-					B(nrMatrices, i) = B(i, nrMatrices) = 1;
-
-					++errorIter1;
-				}
-
-				lastErrorEst = sqrt(lastErrorEst);
-
-				// Solve the system of linear equations
-
-				Eigen::VectorXd CDIIS = Eigen::VectorXd::Zero(nrMatrices + 1);
-				CDIIS(nrMatrices) = 1;
-
-				CDIIS = B.colPivHouseholderQr().solve(CDIIS);
-
-				// compute the new Fock matrix
-
-				FockMatrix = Eigen::MatrixXd::Zero(FockMatrix.rows(), FockMatrix.cols());
-
-				auto fockIter = fockMatrices.begin();
-				for (size_t i = 0; i < nrMatrices; ++i)
-				{
-					FockMatrix += CDIIS(i) * *fockIter;
-					++fockIter;
-				}
-
+				lastErrorEst = diis.Estimate(FockMatrix);
+				
 				UsedDIIS = true;
 			}
 		}

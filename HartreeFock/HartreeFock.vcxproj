@@ -209,6 +209,7 @@
     <ClInclude Include="ComputationThread.h" />
     <ClInclude Include="ContractedGaussianOrbital.h" />
     <ClInclude Include="CoupledClusterSpinOrbitalsElectronElectronIntegralsRepository.h" />
+    <ClInclude Include="DIIS.h" />
     <ClInclude Include="GaussianIntegral.h" />
     <ClInclude Include="GaussianKinetic.h" />
     <ClInclude Include="GaussianMoment.h" />
