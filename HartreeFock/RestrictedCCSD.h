@@ -7,6 +7,8 @@
 
 #include <eigen/eigen>
 
+#include "DIIS.h"
+
 // implementation guided by this tutorial: https://github.com/CrawfordGroup/ProgrammingProjects/tree/master/Project%2305
 
 namespace HartreeFock {
@@ -254,6 +256,10 @@ namespace HartreeFock {
         // effective doubles (two particle excitation operators)
         Eigen::Tensor<double, 4> tau; // occupied, occupied, unoccupied, unoccupied
         Eigen::Tensor<double, 4> taut; // occupied, occupied, unoccupied, unoccupied
+
+        DIIS<Eigen::MatrixXd, 3> diisT2;
+        // needs specialization for tensors
+        DIIS<Eigen::Tensor<double, 4>, 3, 3> diisT4;
     };
 
 }
