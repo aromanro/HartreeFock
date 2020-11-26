@@ -86,7 +86,7 @@ public:
 	double Estimate(Eigen::Tensor<double, 4>& value) const
 	{
 		const size_t nrMatrices = errors.size();
-		Eigen::Tensor<double, 4> B = Eigen::Tensor<double, 4>::Zero(nrMatrices + 1, nrMatrices + 1);
+		Eigen::MatrixXd B = Eigen::MatrixXd::Zero(nrMatrices + 1, nrMatrices + 1);
 
 		double lastErrorEst = 0;
 
@@ -97,12 +97,16 @@ public:
 
 			for (size_t j = 0; j < i; ++j)
 			{
-				B(i, j) = B(j, i) = (*errorIter1).cwiseProduct(*errorIter2).sum();
+				const Eigen::Tensor<double, 0> val = (*errorIter1 * *errorIter2).sum();
+				const double dval = val();
+				B(i, j) = B(j, i) = dval;
 
 				++errorIter2;
 			}
 
-			B(i, i) = (*errorIter1).cwiseProduct(*errorIter1).sum();
+			const Eigen::Tensor<double, 0> diagVal = (*errorIter1 * *errorIter1).sum();
+			const double ddiagVal = diagVal();
+			B(i, i) = ddiagVal;
 
 			if (i == nrMatrices - 1 || i == nrMatrices - 2) lastErrorEst += B(i, i);
 
@@ -122,7 +126,7 @@ public:
 
 		// compute the new value
 
-		value = Eigen::Tensor<double, 4>::Zero(value.dimensions());
+		value.setZero();
 
 		auto iter = values.begin();
 		for (size_t i = 0; i < nrMatrices; ++i, ++iter)

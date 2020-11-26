@@ -227,6 +227,8 @@ namespace HartreeFock {
 
         double StepCC(int iter);
 
+        bool DIISStep(int iter, Eigen::MatrixXd& newt2, Eigen::Tensor<double, 4> newt4);
+
 
         double CCEnergy;
 

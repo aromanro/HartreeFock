@@ -817,6 +817,31 @@ namespace HartreeFock {
 	}
 
 
+	bool RestrictedCCSD::DIISStep(int iter, Eigen::MatrixXd& newt2, Eigen::Tensor<double, 4> newt4)
+	{
+		bool UsedDIIS = false;
+
+		if (UseDIIS && iter && iter < maxDIISiterations)
+		{
+			Eigen::MatrixXd errorMatrix = newt2 - t2;
+			Eigen::Tensor<double, 4> errorTensor = newt4 - t4;
+
+			diisT2.AddValueAndError(newt2, errorMatrix);
+
+			if (diisT4.AddValueAndError(newt4, errorTensor))
+			{
+				// use DIIS
+				lastErrorEst = diisT2.Estimate(newt2) + diisT4.Estimate(newt4);
+
+				UsedDIIS = true;
+			}
+		}
+		else lastErrorEst = 0;
+
+		return UsedDIIS;
+	}
+
+
 	double RestrictedCCSD::StepCC(int iter)
 	{
 		CalculateIntermediates();
