@@ -343,7 +343,7 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 
 				deltaE = oldCCEnergy - newCCEnergy;
 
-				if (rmsD < rmsDConvergence && (abs(deltaE) < (useDIIS ? energyConvergenceDIIS : energyConvergence)) && (!useDIIS || hartreeFock->lastErrorEst < diisConvergence)) break;
+				if (rmsD < rmsDConvergence && (abs(deltaE) < (useDIIS ? CCenergyConvergenceDIIS : energyConvergence)) && (!useDIIS || hartreeFock->lastErrorEst < CCdiisConvergence)) break;
 			}
 
 			file << "Total CC: " << hartreeFock->GetTotalEnergy() + ((HartreeFock::RestrictedCCSD*)hartreeFock)->CCEnergy << std::endl;

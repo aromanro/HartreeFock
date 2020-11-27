@@ -817,19 +817,19 @@ namespace HartreeFock {
 	}
 
 
-	bool RestrictedCCSD::DIISStep(int iter, Eigen::MatrixXd& newt2, Eigen::Tensor<double, 4> newt4)
+	bool RestrictedCCSD::DIISStep(int iter, Eigen::MatrixXd& newt2, Eigen::Tensor<double, 4>& newt4)
 	{
 		bool UsedDIIS = false;
 
-		if (UseDIIS && iter && iter < maxDIISiterations)
+		if (UseDIIS && iter < maxDIISiterations)
 		{
 			{
 				Eigen::MatrixXd errorMatrix = newt2 - t2;
-				diisT2.AddValueAndError(newt2, errorMatrix);
+				diisT2.AddValueAndError(t2, errorMatrix);
 			}
 
 			Eigen::Tensor<double, 4> errorTensor = newt4 - t4;
-			if (diisT4.AddValueAndError(newt4, errorTensor))
+			if (diisT4.AddValueAndError(t4, errorTensor))
 			{
 				// use DIIS
 				lastErrorEst = diisT2.Estimate(newt2) + diisT4.Estimate(newt4);
