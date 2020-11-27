@@ -259,9 +259,9 @@ namespace HartreeFock {
         Eigen::Tensor<double, 4> tau; // occupied, occupied, unoccupied, unoccupied
         Eigen::Tensor<double, 4> taut; // occupied, occupied, unoccupied, unoccupied
 
-        DIIS<Eigen::MatrixXd, 3> diisT2;
+        DIIS<Eigen::MatrixXd, 4, 3> diisT2;
         // needs specialization for tensors
-        DIIS<Eigen::Tensor<double, 4>, 3, 3> diisT4;
+        DIIS<Eigen::Tensor<double, 4>, 4, 3> diisT4;
     };
 
 }

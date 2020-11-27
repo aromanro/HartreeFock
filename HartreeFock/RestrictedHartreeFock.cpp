@@ -69,7 +69,7 @@ namespace HartreeFock {
 
 		// will be used for DIIS
 
-		bool UsedDIIS = DIISStep(iter, FockMatrix);
+		const bool UsedDIIS = DIISStep(iter, FockMatrix);
 
 		// ***************************************************************************************************************************
 
@@ -160,7 +160,7 @@ namespace HartreeFock {
 		else
 			DensityMatrix = alpha * newDensityMatrix + (1. - alpha) * DensityMatrix;  // use mixing if alpha is set less than 1
 
-		LastMOFockMatrix = FockTransformed;
+		//LastMOFockMatrix = FockTransformed;
 
 		return rmsD;
 	}

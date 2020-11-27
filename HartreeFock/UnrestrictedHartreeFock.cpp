@@ -96,7 +96,7 @@ namespace HartreeFock {
 
 		// will be used for DIIS
 
-		bool UsedDIIS = DIISStep(iter, FockMatrixPlus, FockMatrixMinus);
+		const bool UsedDIIS = DIISStep(iter, FockMatrixPlus, FockMatrixMinus);
 		
 		// ***************************************************************************************************************************
 

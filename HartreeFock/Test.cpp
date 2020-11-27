@@ -331,16 +331,19 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 
 			//file << "Emp2 from CC with general formula: " << ((HartreeFock::RestrictedCCSD*)hartreeFock)->CorrelationEnergy() << std::endl; 
 
-			for (int i = 0; i < 100; ++i)
+			for (int i = 1; i < 100; ++i)
 			{
 				const double oldCCEnergy = ((HartreeFock::RestrictedCCSD*)hartreeFock)->CCEnergy;
 				const double rmsD = ((HartreeFock::RestrictedCCSD*)hartreeFock)->StepCC(i);
 				const double newCCEnergy = ((HartreeFock::RestrictedCCSD*)hartreeFock)->CCEnergy;
 
 				file.precision(12);
-				file << "Iter: " << i + 1 << "\tEcc = " << newCCEnergy << std::endl;
+				file << "Iter: " << i << "\tEcc = " << newCCEnergy << std::endl;
 
-				if (rmsD < rmsDConvergence && abs(oldCCEnergy - newCCEnergy) < energyConvergence) break;
+
+				deltaE = oldCCEnergy - newCCEnergy;
+
+				if (rmsD < rmsDConvergence && (abs(deltaE) < (useDIIS ? energyConvergenceDIIS : energyConvergence)) && (!useDIIS || hartreeFock->lastErrorEst < diisConvergence)) break;
 			}
 
 			file << "Total CC: " << hartreeFock->GetTotalEnergy() + ((HartreeFock::RestrictedCCSD*)hartreeFock)->CCEnergy << std::endl;

@@ -19,7 +19,7 @@ namespace HartreeFock {
 	public:
 		Eigen::MatrixXd DensityMatrix;
 
-		Eigen::MatrixXd LastMOFockMatrix;
+		//Eigen::MatrixXd LastMOFockMatrix;
 
 		unsigned int nrOccupiedLevels;
 

@@ -823,11 +823,12 @@ namespace HartreeFock {
 
 		if (UseDIIS && iter && iter < maxDIISiterations)
 		{
-			Eigen::MatrixXd errorMatrix = newt2 - t2;
+			{
+				Eigen::MatrixXd errorMatrix = newt2 - t2;
+				diisT2.AddValueAndError(newt2, errorMatrix);
+			}
+
 			Eigen::Tensor<double, 4> errorTensor = newt4 - t4;
-
-			diisT2.AddValueAndError(newt2, errorMatrix);
-
 			if (diisT4.AddValueAndError(newt4, errorTensor))
 			{
 				// use DIIS
@@ -846,8 +847,10 @@ namespace HartreeFock {
 	{
 		CalculateIntermediates();
 
-		const Eigen::MatrixXd newt2 = ComputeNewt2();
-		const Eigen::Tensor<double, 4> newt4 = ComputeNewt4();
+		Eigen::MatrixXd newt2 = ComputeNewt2();
+		Eigen::Tensor<double, 4> newt4 = ComputeNewt4();
+
+		DIISStep(iter, newt2, newt4);
 
 		// only for t2, for t4 it needs too many computations
 		const Eigen::MatrixXd rmst2dif = newt2 - t2;
