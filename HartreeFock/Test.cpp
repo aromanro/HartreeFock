@@ -331,7 +331,7 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 
 			//file << "Emp2 from CC with general formula: " << ((HartreeFock::RestrictedCCSD*)hartreeFock)->CorrelationEnergy() << std::endl; 
 
-			for (int i = 1; i < 100; ++i)
+			for (int i = 0; i < 100; ++i)
 			{
 				const double oldCCEnergy = ((HartreeFock::RestrictedCCSD*)hartreeFock)->CCEnergy;
 				const double rmsD = ((HartreeFock::RestrictedCCSD*)hartreeFock)->StepCC(i);

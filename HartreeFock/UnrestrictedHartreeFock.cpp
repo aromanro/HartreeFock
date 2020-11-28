@@ -65,10 +65,10 @@ namespace HartreeFock {
 
 		if (UseDIIS && iter && iter < maxDIISiterations)
 		{
-			Eigen::MatrixXd errorMatrixPlus = overlapMatrix.matrix * DensityMatrixPlus * FockMatrixPlus - FockMatrixPlus * DensityMatrixPlus * overlapMatrix.matrix;
+			const Eigen::MatrixXd errorMatrixPlus = overlapMatrix.matrix * DensityMatrixPlus * FockMatrixPlus - FockMatrixPlus * DensityMatrixPlus * overlapMatrix.matrix;
 			diisPlus.AddValueAndError(FockMatrixPlus, errorMatrixPlus);
 
-			Eigen::MatrixXd errorMatrixMinus = overlapMatrix.matrix * DensityMatrixMinus * FockMatrixMinus - FockMatrixMinus * DensityMatrixMinus * overlapMatrix.matrix;
+			const Eigen::MatrixXd errorMatrixMinus = overlapMatrix.matrix * DensityMatrixMinus * FockMatrixMinus - FockMatrixMinus * DensityMatrixMinus * overlapMatrix.matrix;
 
 			if (diisMinus.AddValueAndError(FockMatrixMinus, errorMatrixMinus))
 			{

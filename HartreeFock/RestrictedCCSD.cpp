@@ -821,18 +821,22 @@ namespace HartreeFock {
 	{
 		bool UsedDIIS = false;
 
-		if (UseDIIS && iter < maxDIISiterations)
+		if (UseDIIS && iter && iter < maxDIISiterations)
 		{
 			{
-				Eigen::MatrixXd errorMatrix = newt2 - t2;
-				diisT2.AddValueAndError(t2, errorMatrix);
+				const Eigen::MatrixXd errorMatrix = newt2 - t2;
+
+				if (diisT2.AddValueAndError(t2, errorMatrix))
+					lastErrorEst = diisT2.Estimate(newt2);
+				else
+					lastErrorEst = 0;				
 			}
 
-			Eigen::Tensor<double, 4> errorTensor = newt4 - t4;
+			const Eigen::Tensor<double, 4> errorTensor = newt4 - t4;
 			if (diisT4.AddValueAndError(t4, errorTensor))
 			{
 				// use DIIS
-				lastErrorEst = diisT2.Estimate(newt2) + diisT4.Estimate(newt4);
+				lastErrorEst += diisT4.Estimate(newt4);
 
 				UsedDIIS = true;
 			}

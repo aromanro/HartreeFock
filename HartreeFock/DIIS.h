@@ -12,9 +12,9 @@ public:
 	std::list<ValueType> values;
 
 	// returns true if there is enough data to estimate the next value
-	bool AddValueAndError(const ValueType& value, ValueType& error)
+	bool AddValueAndError(const ValueType& value, const ValueType& error)
 	{
-		errors.emplace_back(error);
+		errors.push_back(error);
 		values.push_back(value);
 		if (errors.size() > maxRetained)
 		{
@@ -27,7 +27,7 @@ public:
 };
 
 
-template <typename ValueType, int maxRetained = 6, int firstEstimate = 5> class DIIS : public DIISStorage<ValueType, maxRetained, firstEstimate>
+template <typename ValueType, int maxRetained = 6, int firstEstimate = 5, bool limitExtrapolation = false> class DIIS : public DIISStorage<ValueType, maxRetained, firstEstimate>
 {
 public:
 
@@ -38,10 +38,10 @@ public:
 
 		double lastErrorEst = 0;
 
-		auto errorIter1 = errors.begin();
+		auto errorIter1 = errors.cbegin();
 		for (size_t i = 0; i < nrMatrices; ++i)
 		{
-			auto errorIter2 = errors.begin();
+			auto errorIter2 = errors.cbegin();
 
 			for (size_t j = 0; j < i; ++j)
 			{
@@ -68,11 +68,27 @@ public:
 
 		CDIIS = B.colPivHouseholderQr().solve(CDIIS);
 
+
+		if (limitExtrapolation)
+		{
+			// see the referred article for this: "Accelerating the convergence of the coupled-cluster approach: The use of the DIIS method" Gustavo E.Scuseria, Timothy J.Lee, Henry F.Schaefer
+
+			ValueType errorVectorExtrapolated = ValueType::Zero(errors.back().rows(), errors.back().cols());
+			auto iterErr = errors.cbegin();
+			for (size_t i = 0; i < nrMatrices; ++i, ++iterErr)
+				errorVectorExtrapolated += CDIIS(i) * *iterErr;
+
+			const double errorExtrNorm = errorVectorExtrapolated.cwiseProduct(errorVectorExtrapolated).sum();
+			if (errorExtrNorm > 1E-5)
+				return lastErrorEst;
+		}
+
+
 		// compute the new value
 
 		value = ValueType::Zero(value.rows(), value.cols());
 
-		auto iter = values.begin();
+		auto iter = values.cbegin();
 		for (size_t i = 0; i < nrMatrices; ++i, ++iter)
 			value += CDIIS(i) * *iter;
 			
@@ -80,7 +96,7 @@ public:
 	}
 };
 
-template<int maxRetained, int firstEstimate> class DIIS<Eigen::Tensor<double, 4>, maxRetained, firstEstimate> : public DIISStorage<Eigen::Tensor<double, 4>, maxRetained, firstEstimate>
+template<int maxRetained, int firstEstimate, bool limitExtrapolation> class DIIS<Eigen::Tensor<double, 4>, maxRetained, firstEstimate, limitExtrapolation> : public DIISStorage<Eigen::Tensor<double, 4>, maxRetained, firstEstimate>
 {
 public:
 	double Estimate(Eigen::Tensor<double, 4>& value) const
@@ -90,10 +106,10 @@ public:
 
 		double lastErrorEst = 0;
 
-		auto errorIter1 = errors.begin();
+		auto errorIter1 = errors.cbegin();
 		for (size_t i = 0; i < nrMatrices; ++i)
 		{
-			auto errorIter2 = errors.begin();
+			auto errorIter2 = errors.cbegin();
 
 			for (size_t j = 0; j < i; ++j)
 			{
@@ -124,11 +140,27 @@ public:
 
 		CDIIS = B.colPivHouseholderQr().solve(CDIIS);
 
+		if (limitExtrapolation)
+		{
+			// see the referred article for this: "Accelerating the convergence of the coupled-cluster approach: The use of the DIIS method" Gustavo E.Scuseria, Timothy J.Lee, Henry F.Schaefer
+
+			Eigen::Tensor<double, 4> errorVectorExtrapolated(errors.back().dimensions());
+			errorVectorExtrapolated.setZero();
+			std::list<Eigen::Tensor<double, 4>>::const_iterator iterErr = errors.cbegin();
+			for (size_t i = 0; i < nrMatrices; ++i, ++iterErr)
+				errorVectorExtrapolated += CDIIS(i) * *iterErr;
+
+			const Eigen::Tensor<double, 0> errorExtrNorm = (errorVectorExtrapolated * errorVectorExtrapolated).sum();
+			const double derrorExtrNorm = errorExtrNorm();
+			if (derrorExtrNorm > 1E-5)
+				return lastErrorEst;
+		}
+
 		// compute the new value
 
 		value.setZero();
 
-		auto iter = values.begin();
+		auto iter = values.cbegin();
 		for (size_t i = 0; i < nrMatrices; ++i, ++iter)
 			value += CDIIS(i) * *iter;
 
