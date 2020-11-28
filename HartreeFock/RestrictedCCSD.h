@@ -240,10 +240,12 @@ namespace HartreeFock {
 
 
         Eigen::MatrixXd t2;
-        
+        //Eigen::MatrixXd nonExtrapolatedt2;
+
         // they should be better implemented than my own implementation
         Eigen::Tensor<double, 4> t4;
-        
+        //Eigen::Tensor<double, 4> nonExtrapolatedt4;
+
         GaussianIntegrals::CoupledClusterSpinOrbitalsElectronElectronIntegralsRepository* m_spinOrbitalBasisIntegrals;
 
         // intermediates
@@ -259,9 +261,9 @@ namespace HartreeFock {
         Eigen::Tensor<double, 4> tau; // occupied, occupied, unoccupied, unoccupied
         Eigen::Tensor<double, 4> taut; // occupied, occupied, unoccupied, unoccupied
 
-        DIIS<Eigen::MatrixXd, 8, 2, false> diisT2;
+        DIIS<Eigen::MatrixXd, 8, 3, false> diisT2;
         // needs specialization for tensors
-        DIIS<Eigen::Tensor<double, 4>, 8, 2, false> diisT4;
+        DIIS<Eigen::Tensor<double, 4>, 8, 3, false> diisT4;
     };
 
 }

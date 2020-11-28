@@ -9,7 +9,7 @@ const double energyConvergence = 1E-13;
 const double rmsDConvergence = 1E-10;
 const double diisConvergence = 1E-10;
 
-const double CCenergyConvergenceDIIS = 1E-12;
-const double CCdiisConvergence = 1E-12;
+const double CCenergyConvergenceDIIS = 1E-10;
+const double CCdiisConvergence = 1E-10;
 
 

@@ -338,7 +338,7 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 				const double newCCEnergy = ((HartreeFock::RestrictedCCSD*)hartreeFock)->CCEnergy;
 
 				file.precision(12);
-				file << "Iter: " << i << "\tEcc = " << newCCEnergy << std::endl;
+				file << "Iter: " << i + 1 << "\tEcc = " << newCCEnergy << std::endl;
 
 
 				deltaE = oldCCEnergy - newCCEnergy;

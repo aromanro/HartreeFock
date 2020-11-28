@@ -826,20 +826,30 @@ namespace HartreeFock {
 			{
 				const Eigen::MatrixXd errorMatrix = newt2 - t2;
 
-				if (diisT2.AddValueAndError(t2, errorMatrix))
+				const double errorNorm = errorMatrix.cwiseProduct(errorMatrix).sum();
+
+				const bool diisCanBeDone = diisT2.AddValueAndError(newt2, errorMatrix);
+
+				if (diisCanBeDone && errorNorm > 1E-14 && iter % 2 == 0)
 					lastErrorEst = diisT2.Estimate(newt2);
 				else
-					lastErrorEst = 0;				
+					lastErrorEst = errorNorm;
 			}
 
 			const Eigen::Tensor<double, 4> errorTensor = newt4 - t4;
-			if (diisT4.AddValueAndError(t4, errorTensor))
+
+			const Eigen::Tensor<double, 0> errorNorm = (errorTensor * errorTensor).sum();
+			const double errorNormVal = errorNorm();
+
+			const bool diisCanBeDone = diisT4.AddValueAndError(newt4, errorTensor);
+
+			if (diisCanBeDone && errorNormVal > 1E-14 && iter % 2 == 0)
 			{
 				// use DIIS
 				lastErrorEst += diisT4.Estimate(newt4);
-
 				UsedDIIS = true;
 			}
+			else lastErrorEst += errorNormVal;
 		}
 		else lastErrorEst = 0;
 
@@ -854,6 +864,16 @@ namespace HartreeFock {
 		Eigen::MatrixXd newt2 = ComputeNewt2();
 		Eigen::Tensor<double, 4> newt4 = ComputeNewt4();
 
+		/*
+		Eigen::MatrixXd savenewt2;
+		Eigen::Tensor<double, 4> savenewt4;
+		if (UseDIIS)
+		{
+			savenewt2 = newt2;
+			savenewt4 = newt4;
+		}
+		*/
+
 		DIISStep(iter, newt2, newt4);
 
 		// only for t2, for t4 it needs too many computations
@@ -862,6 +882,13 @@ namespace HartreeFock {
 
 		t2 = newt2;
 		t4 = newt4;
+		/*
+		if (UseDIIS)
+		{
+			nonExtrapolatedt2 = savenewt2;
+			nonExtrapolatedt4 = savenewt4;
+		}
+		*/
 
 		CCEnergy = CorrelationEnergy();
 
