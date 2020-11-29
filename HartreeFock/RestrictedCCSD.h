@@ -266,6 +266,8 @@ namespace HartreeFock {
         //DIIS<Eigen::Tensor<double, 4>, 8, 3, false> diisT4;
 
         DIIS<Eigen::VectorXd, 8, 2, false> diist;
+        Eigen::VectorXd errorVector;
+        Eigen::VectorXd valueVector;
     };
 
 }

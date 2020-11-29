@@ -855,8 +855,8 @@ namespace HartreeFock {
 
 			const long long int vectorSize = newt2.size() + newt4.size();
 
-			Eigen::VectorXd errorVector(vectorSize);
-			Eigen::VectorXd valueVector(vectorSize);
+			errorVector.resize(vectorSize);
+			valueVector.resize(vectorSize);
 
 			int index = 0;
 			for (int i = 0; i < newt2.rows(); ++i)
