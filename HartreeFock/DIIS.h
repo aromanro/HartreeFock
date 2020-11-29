@@ -34,7 +34,7 @@ public:
 	double Estimate(ValueType &value) const
 	{
 		const size_t nrMatrices = errors.size();
-		ValueType B = ValueType::Zero(nrMatrices + 1, nrMatrices + 1);
+		Eigen::MatrixXd B = Eigen::MatrixXd::Zero(nrMatrices + 1, nrMatrices + 1);
 
 		double lastErrorEst = 0;
 
@@ -68,7 +68,6 @@ public:
 
 		CDIIS = B.colPivHouseholderQr().solve(CDIIS);
 
-
 		if (limitExtrapolation)
 		{
 			// see the referred article for this: "Accelerating the convergence of the coupled-cluster approach: The use of the DIIS method" Gustavo E.Scuseria, Timothy J.Lee, Henry F.Schaefer
@@ -83,15 +82,13 @@ public:
 				return lastErrorEst;
 		}
 
-
 		// compute the new value
-
 		value = ValueType::Zero(value.rows(), value.cols());
 
 		auto iter = values.cbegin();
 		for (size_t i = 0; i < nrMatrices; ++i, ++iter)
 			value += CDIIS(i) * *iter;
-			
+
 		return lastErrorEst;
 	}
 };

@@ -334,7 +334,7 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 			for (int i = 0; i < 100; ++i)
 			{
 				const double oldCCEnergy = ((HartreeFock::RestrictedCCSD*)hartreeFock)->CCEnergy;
-				const double rmsD = ((HartreeFock::RestrictedCCSD*)hartreeFock)->StepCC(i);
+				rmsD = ((HartreeFock::RestrictedCCSD*)hartreeFock)->StepCC(i);
 				const double newCCEnergy = ((HartreeFock::RestrictedCCSD*)hartreeFock)->CCEnergy;
 
 				file.precision(12);

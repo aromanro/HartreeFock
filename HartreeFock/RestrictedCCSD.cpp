@@ -823,6 +823,7 @@ namespace HartreeFock {
 
 		if (UseDIIS && iter && iter < maxDIISiterations)
 		{
+			/*
 			{
 				const Eigen::MatrixXd errorMatrix = newt2 - t2;
 
@@ -850,6 +851,60 @@ namespace HartreeFock {
 				UsedDIIS = true;
 			}
 			else lastErrorEst += errorNormVal;
+			*/
+
+			const long long int vectorSize = newt2.size() + newt4.size();
+
+			Eigen::VectorXd errorVector(vectorSize);
+			Eigen::VectorXd valueVector(vectorSize);
+
+			int index = 0;
+			for (int i = 0; i < newt2.rows(); ++i)
+				for (int j = 0; j < newt2.cols(); ++j)
+				{
+					valueVector[index] = newt2(i, j);
+					errorVector[index] = newt2(i, j) - t2(i, j);
+					++index;
+				}
+
+			const std::array<Eigen::Index, 1> one_dim{ { newt4.size() } };
+			const Eigen::Tensor<double, 1> t4reshaped = t4.reshape(one_dim);
+			Eigen::Tensor<double, 1> newt4reshaped = newt4.reshape(one_dim);
+
+			for (int i = 0; i < newt4.size(); ++i)
+			{
+				valueVector[index] = newt4reshaped[i];
+				errorVector[index] = newt4reshaped[i] - t4reshaped[i];
+				++index;
+			}
+
+			const double errorNorm = errorVector.cwiseProduct(errorVector).sum();
+			const bool diisCanBeDone = diist.AddValueAndError(valueVector, errorVector);
+
+			if (diisCanBeDone && errorNorm > 1E-18 /*&& iter % 2 == 0*/)
+			{
+				// use DIIS
+				lastErrorEst = diist.Estimate(valueVector);
+				UsedDIIS = true;
+
+				// now copy back results
+				index = 0;
+				for (int i = 0; i < newt2.rows(); ++i)
+					for (int j = 0; j < newt2.cols(); ++j)
+					{
+						newt2(i, j) = valueVector[index];
+						++index;
+					}
+				
+				for (int i = 0; i < newt4.size(); ++i)
+				{
+					newt4reshaped[i] = valueVector[index];
+					++index;
+				}
+
+				newt4 = newt4reshaped.reshape(newt4.dimensions());
+			}
+			else lastErrorEst = 0;
 		}
 		else lastErrorEst = 0;
 
