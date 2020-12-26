@@ -3,10 +3,6 @@
 
 #include "CoupledClusterSpinOrbitalsElectronElectronIntegralsRepository.h"
 
-#include <unsupported/Eigen/CXX11/Tensor>
-
-#include <eigen/eigen>
-
 #include "DIIS.h"
 
 // implementation guided by this tutorial: https://github.com/CrawfordGroup/ProgrammingProjects/tree/master/Project%2305

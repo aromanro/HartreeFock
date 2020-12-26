@@ -1,7 +1,8 @@
 #pragma once
 
-
 #include <unsupported/Eigen/CXX11/Tensor>
+
+#include <eigen/eigen>
 
 // will need specialization for types different than eigen matrices!
 
