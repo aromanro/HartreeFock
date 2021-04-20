@@ -39,7 +39,7 @@ namespace HartreeFock {
 
         // Step #1: Preparing the Spin-Orbital Basis Integrals
 
-        inline Eigen::MatrixXd getSpinOrbitalFockMatrix()
+        inline Eigen::MatrixXd getSpinOrbitalFockMatrix() const
         {
             Eigen::MatrixXd spinOrbitalFockMatrix(numberOfSpinOrbitals, numberOfSpinOrbitals);
 
