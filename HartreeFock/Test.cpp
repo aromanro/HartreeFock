@@ -325,37 +325,34 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 		file << "Emp2: " << Emp2 << std::endl;
 		file << "Total: " << hartreeFock->GetTotalEnergy() + Emp2 << std::endl;
 
-		if (restricted)
+		((HartreeFock::RestrictedCCSD*)hartreeFock)->InitCC();
+		const double CCMP2 = ((HartreeFock::RestrictedCCSD*)hartreeFock)->MP2EnergyFromt4();
+		file << "Emp2 from CC: " << CCMP2 << std::endl << std::endl;
+
+		//file << "Emp2 from CC with general formula: " << ((HartreeFock::RestrictedCCSD*)hartreeFock)->CorrelationEnergy() << std::endl; 
+
+		for (int i = 0; i < 100; ++i)
 		{
-			((HartreeFock::RestrictedCCSD*)hartreeFock)->InitCC();
-			const double CCMP2 = ((HartreeFock::RestrictedCCSD*)hartreeFock)->MP2EnergyFromt4();
-			file << "Emp2 from CC: " << CCMP2 << std::endl << std::endl;
+			const double oldCCEnergy = ((HartreeFock::RestrictedCCSD*)hartreeFock)->CCEnergy;
+			rmsD = ((HartreeFock::RestrictedCCSD*)hartreeFock)->StepCC(i);
+			const double newCCEnergy = ((HartreeFock::RestrictedCCSD*)hartreeFock)->CCEnergy;
 
-			//file << "Emp2 from CC with general formula: " << ((HartreeFock::RestrictedCCSD*)hartreeFock)->CorrelationEnergy() << std::endl; 
-
-			for (int i = 0; i < 100; ++i)
-			{
-				const double oldCCEnergy = ((HartreeFock::RestrictedCCSD*)hartreeFock)->CCEnergy;
-				rmsD = ((HartreeFock::RestrictedCCSD*)hartreeFock)->StepCC(i);
-				const double newCCEnergy = ((HartreeFock::RestrictedCCSD*)hartreeFock)->CCEnergy;
-
-				file.precision(12);
-				file << "Iter: " << i + 1 << "\tEcc = " << newCCEnergy << std::endl;
+			file.precision(12);
+			file << "Iter: " << i + 1 << "\tEcc = " << newCCEnergy << std::endl;
 
 
-				deltaE = oldCCEnergy - newCCEnergy;
+			deltaE = oldCCEnergy - newCCEnergy;
 
-				if (rmsD < rmsDConvergence && (abs(deltaE) < (useDIIS ? CCenergyConvergenceDIIS : energyConvergence)) && (!useDIIS || hartreeFock->lastErrorEst < CCdiisConvergence)) break;
-			}
-
-			file << "Total CC: " << hartreeFock->GetTotalEnergy() + ((HartreeFock::RestrictedCCSD*)hartreeFock)->CCEnergy << std::endl;
-
-			const double Te = ((HartreeFock::RestrictedCCSD*)hartreeFock)->TEnergy();
-
-			file << "E(T): " << Te << std::endl;
-
-			file << "Total ECCSD(T): " << hartreeFock->GetTotalEnergy() + ((HartreeFock::RestrictedCCSD*)hartreeFock)->CCEnergy + Te << std::endl;
+			if (rmsD < rmsDConvergence && (abs(deltaE) < (useDIIS ? CCenergyConvergenceDIIS : energyConvergence)) && (!useDIIS || hartreeFock->lastErrorEst < CCdiisConvergence)) break;
 		}
+
+		file << "Total CC: " << hartreeFock->GetTotalEnergy() + ((HartreeFock::RestrictedCCSD*)hartreeFock)->CCEnergy << std::endl;
+
+		const double Te = ((HartreeFock::RestrictedCCSD*)hartreeFock)->TEnergy();
+
+		file << "E(T): " << Te << std::endl;
+
+		file << "Total ECCSD(T): " << hartreeFock->GetTotalEnergy() + ((HartreeFock::RestrictedCCSD*)hartreeFock)->CCEnergy + Te << std::endl;
 
 		Vector3D<double> moment = hartreeFock->GetMoment(); // multiply with 2.541746473 for Debye
 
@@ -363,35 +360,33 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 		file << "Mu-x: " << moment.X << " au, " << moment.X * 2.541746473 << " D" << std::endl;
 		file << "Mu-y: " << moment.Y << " au, " << moment.Y * 2.541746473 << " D" << std::endl;
 		file << "Mu-z: " << moment.Z << " au, " << moment.Z * 2.541746473 << " D" << std::endl;
-		
+
 		const double total = moment.Length();
 		file << "Total dipole moment: " << total << " au, " << total * 2.541746473 << " D" << std::endl;
 
 
 		// test CIS
-		if (restricted)
-		{
-			HartreeFock::RestrictedCIS restrictedCIS((HartreeFock::RestrictedHartreeFock*)hartreeFock);
 
-			restrictedCIS.Init();
+		HartreeFock::RestrictedCIS restrictedCIS((HartreeFock::RestrictedHartreeFock*)hartreeFock);
 
-			Eigen::MatrixXd CISH = restrictedCIS.getSpinOrbitalCISMatrix();
+		restrictedCIS.Init();
 
-			file.precision(5);
-			file << "\nCIS Matrix: \n";
+		Eigen::MatrixXd CISH = restrictedCIS.getSpinOrbitalCISMatrix();
 
-			OutputMatrix(CISH, file);
+		file.precision(5);
+		file << "\nCIS Matrix: \n";
+
+		OutputMatrix(CISH, file);
 
 
-			const Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> es(CISH, Eigen::DecompositionOptions::EigenvaluesOnly);
+		const Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> escis(CISH, Eigen::DecompositionOptions::EigenvaluesOnly);
 
-			Eigen::VectorXd eigenvals = es.eigenvalues();
+		Eigen::VectorXd eigenvals = escis.eigenvalues();
 
-			file << "\nCIS Eigenvalues: \n";
+		file << "\nCIS Eigenvalues: \n";
 
-			for (int i = 0; i < eigenvals.rows(); ++i)
-				file << eigenvals(i) << std::endl;
-		}
+		for (int i = 0; i < eigenvals.rows(); ++i)
+			file << eigenvals(i) << std::endl;
 	}
 
 	delete hartreeFock;
@@ -402,7 +397,7 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 void Test::CheckDifferences(const Eigen::MatrixXd& matrix, const std::string& matrixFileName, std::ofstream& file)
 {
 	if (matrixFileName.empty() || !file) return;
-	
+
 	std::ifstream mfile(matrixFileName);
 	if (!mfile) return;
 
@@ -420,7 +415,7 @@ void Test::CheckDifferences(const Eigen::MatrixXd& matrix, const std::string& ma
 		double val;
 
 		lineStream >> i >> j >> val;
-		
+
 		// indexed from 1 in the files
 		--i;
 		--j;
@@ -494,7 +489,7 @@ void Test::CheckDifferences(const GaussianIntegrals::IntegralsRepository& repo, 
 
 void Test::TestWater(const std::string& fileName, const std::string& sfileName, const std::string& tfileName, const std::string& vfileName, const std::string& erifileName, bool useDIIS)
 {
-	Systems::AtomWithShells H1,H2,O;
+	Systems::AtomWithShells H1, H2, O;
 
 	for (auto& atom : basis.atoms)
 	{
