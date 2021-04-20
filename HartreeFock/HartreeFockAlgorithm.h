@@ -26,8 +26,10 @@ namespace HartreeFock {
 		Matrices::KineticMatrix kineticMatrix;
 		Matrices::NuclearMatrix nuclearMatrix;
 		
+	public:
 		Eigen::MatrixXd h;
 
+	protected:
 		double nuclearRepulsionEnergy;
 
 		Eigen::MatrixXd U;
