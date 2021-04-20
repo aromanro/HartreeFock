@@ -15,6 +15,8 @@
 #include "UnrestrictedHartreeFock.h"
 #include "RestrictedCCSD.h"
 
+#include "RestrictedCIS.h"
+
 #include "Basis.h"
 #include "ChemUtils.h"
 
@@ -369,7 +371,16 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 		// test CIS
 		if (restricted)
 		{
+			HartreeFock::RestrictedCIS restrictedCIS((HartreeFock::RestrictedHartreeFock*)hartreeFock);
 
+			restrictedCIS.Init();
+
+			Eigen::MatrixXd CISH = restrictedCIS.getSpinOrbitalCISMatrix();
+
+			file.precision(5);
+			file << "\nCIS Matrix: \n";
+
+			OutputMatrix(CISH, file);
 		}
 	}
 

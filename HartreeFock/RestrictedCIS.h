@@ -7,6 +7,7 @@ namespace HartreeFock {
 
 	class RestrictedCIS
 	{
+	public:
 		RestrictedCIS(RestrictedHartreeFock* hf = nullptr);		
 		virtual ~RestrictedCIS();
 
@@ -27,11 +28,15 @@ namespace HartreeFock {
 				const int hi = i / 2;
 				if (hi >= m_HartreeFock->occupied.size() || !m_HartreeFock->occupied[hi]) continue; // only occupied
 
+				const int indibase = indi * numberOfUnoccupiedSpinOrbitals;
+
 				int indj = 0;
 				for (int j = 0; j < numberOfSpinOrbitals; ++j)
 				{
 					const int hj = j / 2;
 					if (hj >= m_HartreeFock->occupied.size() || !m_HartreeFock->occupied[hj]) continue; // only occupied
+
+					const int indjbase = indj * numberOfUnoccupiedSpinOrbitals;
 
 					int inda = 0;
 					for (int a = 0; a < numberOfSpinOrbitals; ++a)
@@ -45,8 +50,8 @@ namespace HartreeFock {
 							const int hb = b / 2;
 							if (hb < m_HartreeFock->occupied.size() && m_HartreeFock->occupied[hb]) continue; // only unoccupied
 
-							const int ind1 = indi + inda * numberOfUnoccupiedSpinOrbitals;
-							const int ind2 = indj + indb * numberOfUnoccupiedSpinOrbitals;
+							const int ind1 = indibase + inda;
+							const int ind2 = indjbase + indb;
 							H(ind1, ind2) = (*m_spinOrbitalBasisIntegrals)(a, j, i, b);
 
 							if (delta(i, j)) H(ind1, ind2) += f(a, b);

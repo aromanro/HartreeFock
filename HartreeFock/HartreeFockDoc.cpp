@@ -138,6 +138,7 @@ BOOL CHartreeFockDoc::OnNewDocument()
 
 	//Test test;
 	//test.TestWater("c:\\tests\\h2o.txt", "c:\\tests\\sh2o.dat", "c:\\tests\\th2o.dat", "c:\\tests\\vh2o.dat", "c:\\tests\\erih2o.dat", true);
+	
 	//test.TestMethane("c:\\tests\\ch4.txt", "c:\\tests\\sch4.dat", "c:\\tests\\tch4.dat", "c:\\tests\\vch4.dat", "c:\\tests\\erich4.dat", true);
 
 	// Example for H2O and He (now with some other basis, too):
