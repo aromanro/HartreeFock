@@ -44,13 +44,14 @@ namespace HartreeFock {
 						const int ha = a / 2;
 						if (ha < m_HartreeFock->occupied.size() && m_HartreeFock->occupied[ha]) continue; // only unoccupied
 
+						const int ind1 = indibase + inda;
+
 						int indb = 0;
 						for (int b = 0; b < numberOfSpinOrbitals; ++b)
 						{
 							const int hb = b / 2;
 							if (hb < m_HartreeFock->occupied.size() && m_HartreeFock->occupied[hb]) continue; // only unoccupied
 
-							const int ind1 = indibase + inda;
 							const int ind2 = indjbase + indb;
 							H(ind1, ind2) = (*m_spinOrbitalBasisIntegrals)(a, j, i, b);
 

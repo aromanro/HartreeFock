@@ -381,6 +381,16 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 			file << "\nCIS Matrix: \n";
 
 			OutputMatrix(CISH, file);
+
+
+			const Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> es(CISH, Eigen::DecompositionOptions::EigenvaluesOnly);
+
+			Eigen::VectorXd eigenvals = es.eigenvalues();
+
+			file << "\nCIS Eigenvalues: \n";
+
+			for (int i = 0; i < eigenvals.rows(); ++i)
+				file << eigenvals(i) << std::endl;
 		}
 	}
 
