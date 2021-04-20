@@ -2,24 +2,24 @@
 
 #include <assert.h>
 
-#include "CoupledClusterSpinOrbitalsElectronElectronIntegralsRepository.h"
+#include "SpinOrbitalsElectronElectronIntegralsRepository.h"
 
 
 namespace GaussianIntegrals {
 
-	CoupledClusterSpinOrbitalsElectronElectronIntegralsRepository::CoupledClusterSpinOrbitalsElectronElectronIntegralsRepository(int numOrbitals)
+	SpinOrbitalsElectronElectronIntegralsRepository::SpinOrbitalsElectronElectronIntegralsRepository(int numOrbitals)
 		: m_integralsTensor(2 * numOrbitals, 2 * numOrbitals, 2 * numOrbitals, 2 * numOrbitals)
 	{
 	}
 	
-	CoupledClusterSpinOrbitalsElectronElectronIntegralsRepository::CoupledClusterSpinOrbitalsElectronElectronIntegralsRepository(int numOrbitals, IntegralsRepository& repository, const Eigen::MatrixXd& C)
-		: CoupledClusterSpinOrbitalsElectronElectronIntegralsRepository(numOrbitals)
+	SpinOrbitalsElectronElectronIntegralsRepository::SpinOrbitalsElectronElectronIntegralsRepository(int numOrbitals, IntegralsRepository& repository, const Eigen::MatrixXd& C)
+		: SpinOrbitalsElectronElectronIntegralsRepository(numOrbitals)
 	{
 		Compute(repository, C);
 	}
 
 
-	void CoupledClusterSpinOrbitalsElectronElectronIntegralsRepository::Compute(IntegralsRepository& repository, const Eigen::MatrixXd& C)
+	void SpinOrbitalsElectronElectronIntegralsRepository::Compute(IntegralsRepository& repository, const Eigen::MatrixXd& C)
 	{
 		const unsigned int numberSpinOrbitals = m_integralsTensor.GetDim(0);
 

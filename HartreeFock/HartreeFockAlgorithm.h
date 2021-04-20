@@ -35,13 +35,13 @@ namespace HartreeFock {
 		Eigen::MatrixXd V;
 		Eigen::MatrixXd Vt;
 
-		int numberOfOrbitals;
-
 		int maxIterations;
 
 		bool inited;
 
 	public:
+		int numberOfOrbitals;
+
 		GaussianIntegrals::IntegralsRepository integralsRepository;
 
 		double alpha;

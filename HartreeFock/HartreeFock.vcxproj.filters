@@ -159,13 +159,16 @@
     <ClInclude Include="PostHFProperyPage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CoupledClusterSpinOrbitalsElectronElectronIntegralsRepository.h">
+    <ClInclude Include="SpinOrbitalsElectronElectronIntegralsRepository.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RestrictedCCSD.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DIIS.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RestrictedCIS.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -290,10 +293,13 @@
     <ClCompile Include="PostHFProperyPage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CoupledClusterSpinOrbitalsElectronElectronIntegralsRepository.cpp">
+    <ClCompile Include="SpinOrbitalsElectronElectronIntegralsRepository.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RestrictedCCSD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RestrictedCIS.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

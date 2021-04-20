@@ -6,11 +6,11 @@
 
 namespace GaussianIntegrals {
 	
-	class CoupledClusterSpinOrbitalsElectronElectronIntegralsRepository
+	class SpinOrbitalsElectronElectronIntegralsRepository
 	{
 	public:
-		CoupledClusterSpinOrbitalsElectronElectronIntegralsRepository(int numOrbitals);
-		CoupledClusterSpinOrbitalsElectronElectronIntegralsRepository(int numOrbitals, IntegralsRepository& repository, const Eigen::MatrixXd& C);
+		SpinOrbitalsElectronElectronIntegralsRepository(int numOrbitals);
+		SpinOrbitalsElectronElectronIntegralsRepository(int numOrbitals, IntegralsRepository& repository, const Eigen::MatrixXd& C);
 
 
 		void Compute(IntegralsRepository& repository, const Eigen::MatrixXd& C);

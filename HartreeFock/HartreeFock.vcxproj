@@ -208,7 +208,8 @@
     <ClInclude Include="ComputationPropertyPage.h" />
     <ClInclude Include="ComputationThread.h" />
     <ClInclude Include="ContractedGaussianOrbital.h" />
-    <ClInclude Include="CoupledClusterSpinOrbitalsElectronElectronIntegralsRepository.h" />
+    <ClInclude Include="RestrictedCIS.h" />
+    <ClInclude Include="SpinOrbitalsElectronElectronIntegralsRepository.h" />
     <ClInclude Include="DIIS.h" />
     <ClInclude Include="GaussianIntegral.h" />
     <ClInclude Include="GaussianKinetic.h" />
@@ -260,7 +261,8 @@
     <ClCompile Include="ComputationPropertyPage.cpp" />
     <ClCompile Include="ComputationThread.cpp" />
     <ClCompile Include="ContractedGaussianOrbital.cpp" />
-    <ClCompile Include="CoupledClusterSpinOrbitalsElectronElectronIntegralsRepository.cpp" />
+    <ClCompile Include="RestrictedCIS.cpp" />
+    <ClCompile Include="SpinOrbitalsElectronElectronIntegralsRepository.cpp" />
     <ClCompile Include="GaussianIntegral.cpp" />
     <ClCompile Include="GaussianKinetic.cpp" />
     <ClCompile Include="GaussianMoment.cpp" />

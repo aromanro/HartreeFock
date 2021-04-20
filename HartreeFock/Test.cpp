@@ -364,6 +364,13 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 		
 		const double total = moment.Length();
 		file << "Total dipole moment: " << total << " au, " << total * 2.541746473 << " D" << std::endl;
+
+
+		// test CIS
+		if (restricted)
+		{
+
+		}
 	}
 
 	delete hartreeFock;

@@ -1,7 +1,7 @@
 #pragma once
 #include "RestrictedHartreeFock.h"
 
-#include "CoupledClusterSpinOrbitalsElectronElectronIntegralsRepository.h"
+#include "SpinOrbitalsElectronElectronIntegralsRepository.h"
 
 #include "DIIS.h"
 
@@ -242,7 +242,7 @@ namespace HartreeFock {
         Eigen::Tensor<double, 4> t4;
         //Eigen::Tensor<double, 4> nonExtrapolatedt4;
 
-        GaussianIntegrals::CoupledClusterSpinOrbitalsElectronElectronIntegralsRepository* m_spinOrbitalBasisIntegrals;
+        GaussianIntegrals::SpinOrbitalsElectronElectronIntegralsRepository* m_spinOrbitalBasisIntegrals;
 
         // intermediates
         Eigen::MatrixXd Fae; // unoccupied, unoccupied

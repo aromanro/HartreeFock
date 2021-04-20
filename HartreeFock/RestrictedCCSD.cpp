@@ -23,7 +23,7 @@ namespace HartreeFock {
 		numberOfOccupiedSpinOrbitals = 2 * nrOccupiedLevels;
 
 		if (m_spinOrbitalBasisIntegrals) delete m_spinOrbitalBasisIntegrals;
-		m_spinOrbitalBasisIntegrals = new GaussianIntegrals::CoupledClusterSpinOrbitalsElectronElectronIntegralsRepository(numberOfOrbitals);		
+		m_spinOrbitalBasisIntegrals = new GaussianIntegrals::SpinOrbitalsElectronElectronIntegralsRepository(numberOfOrbitals);		
 	}
 
 	void RestrictedCCSD::CalculateTaus()
