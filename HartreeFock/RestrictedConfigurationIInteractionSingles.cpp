@@ -1,21 +1,21 @@
 #include "stdafx.h"
-#include "RestrictedCIS.h"
+#include "RestrictedConfigurationIInteractionSingles.h"
 
 
 namespace HartreeFock {
 
-	RestrictedCIS::RestrictedCIS(RestrictedHartreeFock* hf)
+	RestrictedConfigurationIInteractionSingles::RestrictedConfigurationIInteractionSingles(RestrictedHartreeFock* hf)
 		: m_HartreeFock(hf), numberOfSpinOrbitals(0), numberOfOccupiedSpinOrbitals(0), m_spinOrbitalBasisIntegrals(nullptr)
 	{		
 	}
 
-	RestrictedCIS::~RestrictedCIS()
+	RestrictedConfigurationIInteractionSingles::~RestrictedConfigurationIInteractionSingles()
 	{
 		delete m_spinOrbitalBasisIntegrals;
 	}
 
 
-	bool RestrictedCIS::Init()
+	bool RestrictedConfigurationIInteractionSingles::Init()
 	{
 		if (!m_HartreeFock) return false;
 

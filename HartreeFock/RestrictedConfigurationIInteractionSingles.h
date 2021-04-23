@@ -5,11 +5,11 @@
 
 namespace HartreeFock {
 
-	class RestrictedCIS
+	class RestrictedConfigurationIInteractionSingles
 	{
 	public:
-		RestrictedCIS(RestrictedHartreeFock* hf = nullptr);		
-		virtual ~RestrictedCIS();
+		RestrictedConfigurationIInteractionSingles(RestrictedHartreeFock* hf = nullptr);
+		virtual ~RestrictedConfigurationIInteractionSingles();
 
 		bool Init();
 

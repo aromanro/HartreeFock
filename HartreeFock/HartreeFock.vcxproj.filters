@@ -168,7 +168,7 @@
     <ClInclude Include="DIIS.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RestrictedCIS.h">
+    <ClInclude Include="RestrictedConfigurationIInteractionSingles.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -299,7 +299,7 @@
     <ClCompile Include="RestrictedCCSD.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RestrictedCIS.cpp">
+    <ClCompile Include="RestrictedConfigurationIInteractionSingles.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

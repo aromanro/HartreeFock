@@ -15,7 +15,7 @@
 #include "UnrestrictedHartreeFock.h"
 #include "RestrictedCCSD.h"
 
-#include "RestrictedCIS.h"
+#include "RestrictedConfigurationIInteractionSingles.h"
 
 #include "Basis.h"
 #include "ChemUtils.h"
@@ -367,7 +367,7 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 
 		// test CIS
 
-		HartreeFock::RestrictedCIS restrictedCIS((HartreeFock::RestrictedHartreeFock*)hartreeFock);
+		HartreeFock::RestrictedConfigurationIInteractionSingles restrictedCIS((HartreeFock::RestrictedHartreeFock*)hartreeFock);
 
 		restrictedCIS.Init();
 
