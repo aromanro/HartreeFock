@@ -112,11 +112,13 @@ namespace HartreeFock {
 							const int tb = 2 * b;
 							const int ind2 = indjbase + indb;
 							
-							H(ind1, ind2) = (*m_spinOrbitalBasisIntegrals)(ta, tj, ti, tb) + (*m_spinOrbitalBasisIntegrals)(ta, tj + 1, ti, tb + 1);
+							//H(ind1, ind2) = (*m_spinOrbitalBasisIntegrals)(ta, tj, ti, tb) + (*m_spinOrbitalBasisIntegrals)(ta, tj + 1, ti, tb + 1);
+
+							// as above or using directly the molecular spatial orbitals
+							H(ind1, ind2) = 2. * m_molecularEEintegrals->getElectronElectron(a, i, j, b, m_HartreeFock->C) - m_molecularEEintegrals->getElectronElectron(a, b, j, i, m_HartreeFock->C);
 
 							if (delta(i, j)) H(ind1, ind2) += f(ta, tb);
 							if (delta(a, b)) H(ind1, ind2) -= f(ti, tj);
-
 
 							++indb;
 						}
@@ -173,7 +175,10 @@ namespace HartreeFock {
 							const int tb = 2 * b;
 							const int ind2 = indjbase + indb;
 
-							H(ind1, ind2) = (*m_spinOrbitalBasisIntegrals)(ta, tj, ti, tb) - (*m_spinOrbitalBasisIntegrals)(ta, tj + 1, ti, tb + 1);
+							//H(ind1, ind2) = (*m_spinOrbitalBasisIntegrals)(ta, tj, ti, tb) - (*m_spinOrbitalBasisIntegrals)(ta, tj + 1, ti, tb + 1);
+
+							// as above or using directly the molecular spatial orbitals
+							H(ind1, ind2) = -m_molecularEEintegrals->getElectronElectron(a, b, j, i, m_HartreeFock->C);
 
 							if (delta(i, j)) H(ind1, ind2) += f(ta, tb);
 							if (delta(a, b)) H(ind1, ind2) -= f(ti, tj);
