@@ -374,7 +374,7 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 		Eigen::MatrixXd CISH = restrictedCIS.getSpinOrbitalCISMatrix();
 
 		file.precision(5);
-		file << "\nCIS Matrix: \n";
+		file << "\nCIS Hamiltonian Matrix: \n";
 
 		OutputMatrix(CISH, file);
 
@@ -387,6 +387,62 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 
 		for (int i = 0; i < eigenvals.rows(); ++i)
 			file << eigenvals(i) << std::endl;
+
+
+		file.precision(5);
+		file << "\nSpin-adapted CIS singlet Hamiltonian Matrix: \n";
+
+		CISH = restrictedCIS.getSpinAdaptedCISSinglet();
+
+		OutputMatrix(CISH, file);
+
+
+		file << "\nCIS Singlet Eigenvalues: \n";
+
+		const Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> escisSinglet(CISH, Eigen::DecompositionOptions::EigenvaluesOnly);
+
+		eigenvals = escisSinglet.eigenvalues();
+		
+		for (int i = 0; i < eigenvals.rows(); ++i)
+			file << eigenvals(i) << std::endl;
+
+
+
+		file.precision(5);
+		file << "\nSpin-adapted CIS triplet Hamiltonian Matrix: \n";
+
+		CISH = restrictedCIS.getSpinAdaptedCISTriplet();
+
+		OutputMatrix(CISH, file);
+
+
+		file << "\nCIS Triplet Eigenvalues: \n";
+
+		const Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> escisTriplet(CISH, Eigen::DecompositionOptions::EigenvaluesOnly);
+
+		eigenvals = escisTriplet.eigenvalues();
+
+		for (int i = 0; i < eigenvals.rows(); ++i)
+			file << eigenvals(i) << std::endl;
+
+		const Eigen::MatrixXd TDHFm = restrictedCIS.getTDHFMatrix();
+
+		file << "\nTDHF / RPA Hamiltonian: \n";
+		OutputMatrix(TDHFm, file);
+
+		const Eigen::EigenSolver<Eigen::MatrixXd> TDHFSolver(TDHFm, false);
+		
+		const Eigen::VectorXcd& eigenv = TDHFSolver.eigenvalues();
+		std::vector<double> vals;
+		for (int i = 0; i < eigenv.rows(); ++i)
+			vals.push_back(eigenv(i).real());
+
+		std::sort(vals.begin(), vals.end());
+
+		file << "\nRPA Excitation Energies:: \n";
+
+		for (int i = 0; i < vals.size(); ++i)
+			file << vals[i] << std::endl;
 	}
 
 	delete hartreeFock;

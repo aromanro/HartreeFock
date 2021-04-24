@@ -161,10 +161,10 @@ namespace GaussianIntegrals {
 
 	// this class transforms the integrals that are needed for MP2 from AO basis into MO basis
 	// so the used coefficients are those in MO basis, not the transformed ones into the AO basis which are used to obtain the density matrix
-	class MP2MolecularOrbitalsIntegralsRepository
+	class MolecularOrbitalsIntegralsRepository
 	{
 	public:
-		MP2MolecularOrbitalsIntegralsRepository(const IntegralsRepository& repository) 
+		MolecularOrbitalsIntegralsRepository(const IntegralsRepository& repository) 
 			: m_repo(repository)
 		{
 		}
@@ -178,7 +178,7 @@ namespace GaussianIntegrals {
 			// don't have it yet, compute it
 			double result = 0;
 
-			// The very slow method, gets the same results as the faster one, but I think they might be both wrong
+			// The very slow method, gets the same results as the faster one
 			/*
 			for (int i = 0; i < C.cols(); ++i)
 			{

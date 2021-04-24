@@ -298,7 +298,7 @@ namespace HartreeFock {
 
 		// TODO: calculate it
 
-		GaussianIntegrals::MP2MolecularOrbitalsIntegralsRepository MP2repo(integralsRepository);
+		GaussianIntegrals::MolecularOrbitalsIntegralsRepository MP2repo(integralsRepository);
 
 		for (int i = 0; i < numberOfOrbitals; ++i)
 		{
