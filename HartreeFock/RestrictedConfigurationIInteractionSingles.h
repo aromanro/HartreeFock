@@ -216,6 +216,14 @@ namespace HartreeFock {
 		}
 
 
+		// obtain E^2 with this
+		inline Eigen::MatrixXd getReducedTDHFMatrix() const
+		{
+			Eigen::MatrixXd A = getSpinOrbitalCISMatrix();
+			Eigen::MatrixXd B = getB();
+
+			return (A + B) * (A - B);
+		}
 
 	private:
 		

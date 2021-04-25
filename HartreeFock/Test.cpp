@@ -439,7 +439,23 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 
 		std::sort(vals.begin(), vals.end());
 
-		file << "\nRPA Excitation Energies:: \n";
+		file << "\nRPA Excitation Energies: \n";
+
+		for (int i = 0; i < vals.size(); ++i)
+			file << vals[i] << std::endl;
+
+
+		file << "\nRPA Excitation Energies (method 2): \n";
+
+		const Eigen::MatrixXd TDHFmr = restrictedCIS.getReducedTDHFMatrix();
+		const Eigen::EigenSolver<Eigen::MatrixXd> TDHFReducedSolver(TDHFmr, Eigen::DecompositionOptions::EigenvaluesOnly);
+
+		const Eigen::VectorXcd& eigenv2 = TDHFReducedSolver.eigenvalues();
+
+		vals.clear();
+		for (int i = 0; i < eigenv2.rows(); ++i)
+			vals.push_back(sqrt(eigenv2(i).real()));
+		std::sort(vals.begin(), vals.end());
 
 		for (int i = 0; i < vals.size(); ++i)
 			file << vals[i] << std::endl;
