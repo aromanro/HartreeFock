@@ -88,4 +88,15 @@ Basis sets added:
 
 You may add more of them, the parsed format is nwchem.
 
+### Tutorials from Crawford Group
+
+Most of those are already implemented:
+
+https://github.com/CrawfordGroup/ProgrammingProjects
+
+Projects for MP2, DIIS, CCSD(T), CIS and TDHF/RPA are implemented.
+DIIS and MP2 are implemented for both the restricted and unrestricted methods.
+
+Projects 1 and 2 are not implemented here, maybe I'll add a python workbook for those in the python repository, 3 was already implemented obviously before finding this.
+Project 7 is also not implemented, also 9 and 13.
 
