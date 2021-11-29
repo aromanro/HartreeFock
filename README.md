@@ -1,5 +1,5 @@
 # HartreeFock
-A program implementing the Hartree–Fock/self-consistent field method
+A program implementing the Hartree–Fock/self-consistent field method (and more, see the README at the end)
 
 Description is available here: http://compphys.go.ro/the-hartree-fock-program/
 
