@@ -1,6 +1,8 @@
 # HartreeFock
 A program implementing the Hartree–Fock/self-consistent field method (and more, see the README at the end)
 
+[![CodeFactor](https://www.codefactor.io/repository/github/aromanro/hartreefock/badge)](https://www.codefactor.io/repository/github/aromanro/hartreefock)
+
 Description is available here: http://compphys.go.ro/the-hartree-fock-program/
 
 Some Hartree-Fock theory here: http://compphys.go.ro/the-hartree-fock-method/
