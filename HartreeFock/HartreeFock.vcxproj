@@ -207,11 +207,13 @@
     <ClInclude Include="BoysFunction.h" />
     <ClInclude Include="BoysFunctions.h" />
     <ClInclude Include="Chart.h" />
+    <ClInclude Include="ChartAxis.h" />
     <ClInclude Include="ChartPropertyPage.h" />
     <ClInclude Include="ChemUtils.h" />
     <ClInclude Include="ComputationPropertyPage.h" />
     <ClInclude Include="ComputationThread.h" />
     <ClInclude Include="ContractedGaussianOrbital.h" />
+    <ClInclude Include="DataSets.h" />
     <ClInclude Include="RestrictedConfigurationIInteractionSingles.h" />
     <ClInclude Include="SpinOrbitalsElectronElectronIntegralsRepository.h" />
     <ClInclude Include="DIIS.h" />
@@ -260,11 +262,13 @@
     <ClCompile Include="BoysFunction.cpp" />
     <ClCompile Include="BoysFunctions.cpp" />
     <ClCompile Include="Chart.cpp" />
+    <ClCompile Include="ChartAxis.cpp" />
     <ClCompile Include="ChartPropertyPage.cpp" />
     <ClCompile Include="ChemUtils.cpp" />
     <ClCompile Include="ComputationPropertyPage.cpp" />
     <ClCompile Include="ComputationThread.cpp" />
     <ClCompile Include="ContractedGaussianOrbital.cpp" />
+    <ClCompile Include="DataSets.cpp" />
     <ClCompile Include="RestrictedConfigurationIInteractionSingles.cpp" />
     <ClCompile Include="SpinOrbitalsElectronElectronIntegralsRepository.cpp" />
     <ClCompile Include="GaussianIntegral.cpp" />

@@ -171,6 +171,12 @@
     <ClInclude Include="RestrictedConfigurationIInteractionSingles.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ChartAxis.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DataSets.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HartreeFock.cpp">
@@ -300,6 +306,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RestrictedConfigurationIInteractionSingles.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChartAxis.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DataSets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

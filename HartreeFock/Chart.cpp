@@ -1,316 +1,6 @@
 #include "stdafx.h"
 #include "Chart.h"
 
-
-Chart::Axis::Axis(Chart *p, bool isx)
-	: parent(p), numTicks(-1), numBigTicks(-1), isX(isx)
-{
-}
-
-void Chart::Axis::Draw(Gdiplus::Graphics& g, Gdiplus::Point& start, int length, int length2, float fontSize)
-{
-	Gdiplus::Pen *pen = new Gdiplus::Pen((Gdiplus::ARGB)Gdiplus::Color::Black);
-	pen->SetWidth(2);
-
-	Gdiplus::Point end(start.X + length + (isX ? length/30 : length/10), start.Y);
-	g.DrawLine(pen, start, end);
-	delete pen;
-
-	end.X += 4;
-
-	Gdiplus::Point end2(end.X - 15, end.Y - 6);
-	Gdiplus::Point end3(end.X - 15, end.Y + 6);
-
-	const Gdiplus::Point points[] = { end, end2, end3 };
-	
-	Gdiplus::SolidBrush *brush = new Gdiplus::SolidBrush((Gdiplus::ARGB)Gdiplus::Color::Black);
-	g.FillPolygon(brush, points, 3);
-	delete brush;
-
-	DrawTicks(g, start, length);	
-
-	if ((isX && parent->XAxisGrid) || (!isX && parent->YAxisGrid))
-		DrawGrid(g, start, length, length2);
-
-	DrawLabels(g, start, length, fontSize);
-}
-
-int Chart::Axis::GetNumTicks() const
-{
-	if (numTicks > 0) return numTicks;
-	else if (nullptr == parent) return 10;
-
-	return parent->GetNumTicks();
-}
-
-int Chart::Axis::GetNumBigTicks() const
-{
-	if (numBigTicks > 0) return numBigTicks;
-	else if (nullptr == parent) return 5;
-
-	return parent->GetNumBigTicks();
-}
-
-bool Chart::Axis::ShouldDrawFirstTick() const
-{
-	if (nullptr == parent) return false;
-
-	return (isX ? parent->drawStartTickX : parent->drawStartTickY);
-}
-
-void Chart::Axis::DrawTicks(Gdiplus::Graphics& g, Gdiplus::Point& start, int length)
-{
-	int nrticks = GetNumTicks();
-	double ticklen = static_cast<double>(length) / nrticks;
-
-	Gdiplus::Pen pen((Gdiplus::ARGB)Gdiplus::Color::Black);
-	pen.SetWidth(2);
-
-	Gdiplus::Point pt(start);
-	Gdiplus::Point pte(start);
-	pte.Y += 6;
-	for (int i = (ShouldDrawFirstTick() ? 0 : 1); i <= nrticks; ++i)
-	{
-		pt.X = static_cast<int>(start.X + i * ticklen);
-		pte.X = pt.X;
-		g.DrawLine(&pen, pt, pte);
-	}
-
-	nrticks = GetNumBigTicks();
-	ticklen = static_cast<double>(length) / nrticks;
-
-	pt = start;
-	pte = start;
-	pte.Y += 9;
-	for (int i = (ShouldDrawFirstTick() ? 0 : 1); i <= nrticks; ++i)
-	{
-		pt.X = static_cast<int>(start.X + i * ticklen);
-		pte.X = pt.X;
-		g.DrawLine(&pen, pt, pte);
-	}
-}
-
-std::list<CString> Chart::Axis::GetLabels() const
-{
-	if (labels.size()) return labels;
-	else if (isX) return parent->GetXLabels();
-	
-	return parent->GetYLabels();
-}
-
-void Chart::Axis::DrawLabels(Gdiplus::Graphics& g, Gdiplus::Point& start, int length, float fontSize)
-{
-	Gdiplus::GraphicsState state = g.Save();
-
-	if (!isX) g.ScaleTransform(1, -1);
-
-	std::list<CString> l = GetLabels();
-
-	if (0 == l.size()) return;
-
-	const int nrticks = GetNumBigTicks();
-	double ticklen = static_cast<double>(length) / nrticks;
-
-	Gdiplus::RectF rect;
-	
-	rect.Height = parent->GetLabelHeight(isX);
-	rect.Width = parent->GetLabelWidth(isX);
-
-	if (isX) {
-		rect.X = -static_cast<float>(rect.Width/2.) - static_cast<float>(ShouldDrawFirstTick() ? ticklen : 0);
-		rect.Y = static_cast<float>(start.Y + 12);
-	}
-	else {
-		rect.X = static_cast<float>(start.Y - rect.Width - 12);
-		rect.Y = -10 + static_cast<float>(ShouldDrawFirstTick() ? ticklen : 0);
-	}
-	
-	auto label = l.begin();
-	for (int i = (ShouldDrawFirstTick() ? 0 : 1); i <= nrticks; ++i)
-	{
-		if (label == l.end()) break;
-				
-		g.TranslateTransform(static_cast<float>(ticklen),0);
-		
-		if (!isX) g.RotateTransform(90.);
-
-		// draw the label...
-		parent->DrawText(*label, g, rect, isX ? Gdiplus::StringAlignment::StringAlignmentCenter : Gdiplus::StringAlignment::StringAlignmentFar, fontSize);
-
-		if (!isX) g.RotateTransform(-90.);
-
-		++label;
-	}
-
-	g.Restore(state);
-}
-
-void Chart::Axis::DrawGrid(Gdiplus::Graphics& g, Gdiplus::Point& start, int length, int length2)
-{
-	const int nrticks = GetNumBigTicks();
-	const double ticklen = static_cast<double>(length) / nrticks;
-
-	Gdiplus::Pen pen((Gdiplus::ARGB)Gdiplus::Color::LightGray);
-	//pen.SetDashStyle(DashStyle::DashStyleDashDot);
-
-	static const float pattern[] = { 6, 2, 3, 2 };
-	pen.SetDashPattern(pattern, 4);
-
-	Gdiplus::Point pt = start;
-	pt.Y-=2;
-	Gdiplus::Point pte = start;
-	pte.Y -= length2;
-	for (int i = 1; i < nrticks + 1; ++i)
-	{
-		pt.X = static_cast<int>(start.X + i * ticklen);
-		pte.X = pt.X;
-		g.DrawLine(&pen, pt, pte);
-	}
-}
-
-
-
-double Chart::DataSets::DataSet::getXMin() const
-{
-	double result = DBL_MAX;
-
-	for (const auto &p : points)
-		if (p.X < result) result = p.X;
-
-	return result;
-}
-
-double Chart::DataSets::DataSet::getYMin() const
-{
-	double result = DBL_MAX;
-
-	for (const auto &p : points)
-		if (p.Y < result) result = p.Y;
-
-	return result;
-}
-
-double Chart::DataSets::DataSet::getXMax() const
-{
-	double result = DBL_MIN;
-
-	for (const auto &p : points)
-		if (p.X > result) result = p.X;
-
-	return result;
-}
-
-double Chart::DataSets::DataSet::getYMax() const
-{
-	double result = DBL_MIN;
-
-	for (const auto &p : points)
-		if (p.Y > result) result = p.Y;
-
-	return result;
-}
-
-double Chart::DataSets::DataSet::ConvertValue(double val, double valMin, double valMax, double chartMin, double chartMax)
-{
-	return chartMin + (val - valMin) / (valMax - valMin) * (chartMax - chartMin);
-}
-
-
-void Chart::DataSets::DataSet::Draw(Gdiplus::Graphics& g, const Gdiplus::RectF& boundRect, const Gdiplus::RectF& dataRect, bool spline) const
-{
-	if (points.size() < static_cast<unsigned int>(spline ? 3 : 2)) return;
-	Gdiplus::Pen pen(Gdiplus::Color::MakeARGB(255, GetRValue(color), GetGValue(color), GetBValue(color)));
-	pen.SetWidth(lineWidth);
-
-	const double valMinX = dataRect.X;
-	const double valMinY = dataRect.Y;
-	const double valMaxX = static_cast<double>(dataRect.X) + dataRect.Width;
-	const double valMaxY = static_cast<double>(dataRect.Y) + dataRect.Height;
-
-	const double chartMinX = static_cast<double>(boundRect.X);
-	const double chartMinY = boundRect.Y;
-	const double chartMaxX = static_cast<double>(boundRect.X) + boundRect.Width;
-	const double chartMaxY = static_cast<double>(boundRect.Y) + boundRect.Height;
-
-
-	Gdiplus::PointF *pnts = new Gdiplus::PointF[points.size()];
-	int index = 0;
-	for (const auto &pnt : points)
-	{
-		pnts[index].X = static_cast<float>(ConvertValue(pnt.X, valMinX, valMaxX, chartMinX, chartMaxX));
-		pnts[index].Y = static_cast<float>(ConvertValue(pnt.Y, valMinY, valMaxY, chartMinY, chartMaxY));
-		++index;
-	}
-
-	if (spline) g.DrawCurve(&pen, pnts, index);
-	else g.DrawLines(&pen, pnts, index);
-
-	delete[] pnts;
-}
-
-
-
-double Chart::DataSets::getXMin() const
-{
-	double result = DBL_MAX;
-
-	for (const auto &p : dataSets)
-	{
-		const double val = p.getXMin();
-		if (val < result) result = val;
-	}
-
-	return result;
-}
-
-double Chart::DataSets::getYMin() const
-{
-	double result = DBL_MAX;
-
-	for (const auto &p : dataSets)
-	{
-		const double val = p.getYMin();
-		if (val < result) result = val;
-	}
-
-	return result;
-}
-
-double Chart::DataSets::getXMax() const
-{
-	double result = DBL_MIN;
-
-	for (const auto &p : dataSets)
-	{
-		const double val = p.getXMax();
-		if (val > result) result = val;
-	}
-
-	return result;
-}
-
-double Chart::DataSets::getYMax() const
-{
-	double result = DBL_MIN;
-
-	for (const auto &p : dataSets)
-	{
-		const double val = p.getYMax();
-		if (val > result) result = val;
-	}
-
-	return result;
-}
-
-void Chart::DataSets::Draw(Gdiplus::Graphics& g, const Gdiplus::RectF& boundRect, const Gdiplus::RectF& dataRect, bool spline) const
-{
-	g.SetClip(boundRect);
-	for (const auto &dataSet : dataSets)
-		dataSet.Draw(g, boundRect, dataRect, spline);
-}
-
-
-
 Chart::Chart()
 	: X(this, true), Y(this, false), XAxisGrid(true), YAxisGrid(true),
 	XAxisMin(DBL_MIN), XAxisMax(DBL_MAX), YAxisMin(DBL_MIN), YAxisMax(DBL_MAX),
@@ -464,7 +154,6 @@ void Chart::Draw(const CDC* pDC, CRect& rect)
 
 	if (antialias) g.SetSmoothingMode(Gdiplus::SmoothingMode::SmoothingModeAntiAlias);
 
-
 	Gdiplus::SolidBrush brush((Gdiplus::ARGB)Gdiplus::Color::White);
 	g.FillRectangle(&brush, rect.left, rect.top, rect.Width(), rect.Height());
 
@@ -473,6 +162,17 @@ void Chart::Draw(const CDC* pDC, CRect& rect)
 
 	DrawText(title, g, boundRect);
 
+	DrawAxis(g, rect, titleHeight);
+
+	DrawData(g, rect);
+
+	// now draw the buffer on the screen
+	Gdiplus::Graphics gdi(pDC->GetSafeHdc());
+	gdi.DrawImage(&buffer, posX, posY);
+}
+
+void Chart::DrawAxis(Gdiplus::Graphics& g, CRect& rect, int titleHeight)
+{
 	// make room for title and labels
 	int leftSide = min(max(rect.Width() / 20, 70), 100);
 	int top = max(titleHeight * 2, rect.Height() / 10);
@@ -480,58 +180,72 @@ void Chart::Draw(const CDC* pDC, CRect& rect)
 
 	chartRect = rect;
 
-	// try to find out the labels font size
-	Gdiplus::RectF labelBound(0,0,GetLabelWidth(true),GetLabelHeight(true));
-
-	float fontSize = static_cast<float>(maxLabelHeight);
-	std::list<CString> labels = X.GetLabels();
-	for (auto label : labels)
-		fontSize = min(fontSize, static_cast<float>(GetNeededFontSize(label, g, labelBound)));
-	
-	labelBound.Width = GetLabelWidth(false);
-	labelBound.Height = GetLabelHeight(false);
-	labels = Y.GetLabels();
-	for (auto label : labels)
-		fontSize = min(fontSize, static_cast<float>(GetNeededFontSize(label, g, labelBound)));
-
+	float fontSize = GetLabelFontSize(g);
 
 	// draw horizontal axis
 	g.TranslateTransform(static_cast<float>(rect.left), static_cast<float>(rect.bottom));
 	Gdiplus::Point zero(0, 0);
 	X.Draw(g, zero, rect.Width(), rect.Height(), fontSize);
 
-	g.ScaleTransform(1,-1);
+	// vertical
+	g.ScaleTransform(1, -1);
 	g.RotateTransform(90.);
-
 	Y.Draw(g, zero, rect.Height(), rect.Width(), fontSize);
 
 	g.ResetTransform();
 
-	// draw X label
-	if (XAxisLabel.GetLength())
-	{
-		Gdiplus::RectF localLabelBound(static_cast<float>(rect.left), static_cast<float>(rect.top + rect.Height() + rect.Height() / 12.), static_cast<float>(rect.Width()), min(static_cast<float>(min(rect.Width(),rect.Height()) / 12.), maxAxisLabelHeight));
-		DrawText(XAxisLabel, g, localLabelBound);
-	}
-
-	// draw Y label
-	if (YAxisLabel.GetLength())
-	{
-		g.TranslateTransform(static_cast<float>(rect.left), static_cast<float>(rect.bottom));
-		g.RotateTransform(-90.);
-		Gdiplus::RectF localLabelBound(static_cast<float>(rect.Height() / 10.), -static_cast<float>(leftSide) , static_cast<float>(rect.Height()), min(static_cast<float>(min(rect.Width(), rect.Height()) / 12.), maxAxisLabelHeight));
-		DrawText(YAxisLabel, g, localLabelBound);
-	}
+	DrawXLabel(g, rect);
+	DrawYLabel(g, rect, leftSide);
 
 	g.ResetTransform();
 	g.TranslateTransform(static_cast<float>(rect.left), static_cast<float>(rect.bottom));
 	g.ScaleTransform(1, -1);
+}
 
-	boundRect.X = 0;
-	boundRect.Y = 0;
-	boundRect.Width = static_cast<float>(rect.Width());
-	boundRect.Height = static_cast<float>(rect.Height());
 
+float Chart::GetLabelFontSize(Gdiplus::Graphics& g)
+{
+	// try to find out the labels font size
+	Gdiplus::RectF labelBound(0, 0, GetLabelWidth(true), GetLabelHeight(true));
+
+	float fontSize = static_cast<float>(maxLabelHeight);
+	std::list<CString> labels = X.GetLabels();
+	for (auto label : labels)
+		fontSize = min(fontSize, static_cast<float>(GetNeededFontSize(label, g, labelBound)));
+
+	labelBound.Width = GetLabelWidth(false);
+	labelBound.Height = GetLabelHeight(false);
+	labels = Y.GetLabels();
+	for (auto label : labels)
+		fontSize = min(fontSize, static_cast<float>(GetNeededFontSize(label, g, labelBound)));
+
+	return fontSize;
+}
+
+
+void Chart::DrawXLabel(Gdiplus::Graphics& g, const CRect& rect)
+{
+	if (XAxisLabel.GetLength())
+	{
+		Gdiplus::RectF localLabelBound(static_cast<float>(rect.left), static_cast<float>(rect.top + rect.Height() + rect.Height() / 12.), static_cast<float>(rect.Width()), min(static_cast<float>(min(rect.Width(), rect.Height()) / 12.), maxAxisLabelHeight));
+		DrawText(XAxisLabel, g, localLabelBound);
+	}
+}
+
+void Chart::DrawYLabel(Gdiplus::Graphics& g, const CRect& rect, int leftSide)
+{
+	if (YAxisLabel.GetLength())
+	{
+		g.TranslateTransform(static_cast<float>(rect.left), static_cast<float>(rect.bottom));
+		g.RotateTransform(-90.);
+		Gdiplus::RectF localLabelBound(static_cast<float>(rect.Height() / 10.), -static_cast<float>(leftSide), static_cast<float>(rect.Height()), min(static_cast<float>(min(rect.Width(), rect.Height()) / 12.), maxAxisLabelHeight));
+		DrawText(YAxisLabel, g, localLabelBound);
+	}
+}
+
+void Chart::DrawData(Gdiplus::Graphics& g, const CRect& rect)
+{
+	Gdiplus::RectF boundRect(0, 0, static_cast<float>(rect.Width()), static_cast<float>(rect.Height()));
 	Gdiplus::RectF dataRect;
 
 	dataRect.X = static_cast<float>((XAxisMin == DBL_MIN) ? dataSets.getXMin() : XAxisMin);
@@ -540,14 +254,11 @@ void Chart::Draw(const CDC* pDC, CRect& rect)
 	dataRect.Width = static_cast<float>(((XAxisMax == DBL_MAX) ? dataSets.getXMax() : XAxisMax) - dataRect.X);
 	dataRect.Height = static_cast<float>(((YAxisMax == DBL_MAX) ? dataSets.getYMax() : YAxisMax) - dataRect.Y);
 
-	if (dataRect.Width > 0 && dataRect.Height > 0) 
+	if (dataRect.Width > 0 && dataRect.Height > 0)
 		dataSets.Draw(g, boundRect, dataRect, useSpline);
-
-	// now draw the buffer on the screen
-	Gdiplus::Graphics gdi(pDC->GetSafeHdc());
-	gdi.DrawImage(&buffer, posX, posY);
-
 }
+
+
 
 void Chart::AddDataSet(const double *dataX, const double *dataY, unsigned int len, float lineWidth, COLORREF color)
 {

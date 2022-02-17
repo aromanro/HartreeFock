@@ -1,40 +1,12 @@
 #pragma once
 
-#include <list>
-#include <vector>
+#include "ChartAxis.h"
+#include "DataSets.h"
 
 class Chart
 {
+	friend class Axis;
 protected:
-	class Axis {
-	protected:
-		Chart* parent;
-		bool isX;
-
-		int numTicks;
-		int numBigTicks;
-
-		std::list<CString> labels;
-
-		int GetNumTicks() const;
-		bool ShouldDrawFirstTick() const;
-
-		void DrawTicks(Gdiplus::Graphics& g, Gdiplus::Point& start, int length);
-		void DrawGrid(Gdiplus::Graphics& g, Gdiplus::Point& start, int length, int length2);
-		void DrawLabels(Gdiplus::Graphics& g, Gdiplus::Point& start, int length, float fontSize = 0);
-	public:
-		Axis(Chart* parent, bool isX);
-
-		int GetNumBigTicks() const;
-
-		void Draw(Gdiplus::Graphics& g, Gdiplus::Point& start, int length, int length2, float fontSize = 0);
-		void SetNumTicks(int ticks) { numTicks = ticks; }
-		void SetNumBigTicks(int ticks) { numBigTicks = ticks; }
-
-		void SetLabels(const std::list<CString>& l) { labels = l; }
-		std::list<CString> GetLabels() const;
-	};
-
 	Axis X;
 	Axis Y;
 
@@ -52,39 +24,10 @@ protected:
 	int GetNeededFontSize(CString& str, const Gdiplus::Graphics& g, const Gdiplus::RectF& boundRect) const;
 
 	void DrawText(CString &str, Gdiplus::Graphics& g, const Gdiplus::RectF& boundRect, Gdiplus::StringAlignment align = Gdiplus::StringAlignmentCenter, float fontSize = 0);
+
 public:
 	Chart();
 	~Chart();
-
-	class DataSets {
-	public:
-		class DataSet {
-		public:
-			DataSet() : color(RGB(0, 0, 0)), lineWidth(0) {}
-
-			std::vector<Gdiplus::PointF> points;
-			COLORREF color;
-			float lineWidth;
-
-			double getXMin() const;
-			double getYMin() const;
-			double getXMax() const;
-			double getYMax() const;
-
-			void Draw(Gdiplus::Graphics& g, const Gdiplus::RectF& boundRect, const Gdiplus::RectF& dataRect, bool spline = true) const;
-		protected:
-			static double ConvertValue(double val, double valMin, double valMax, double chartMin, double chartMax);
-		};
-
-		std::list<DataSet> dataSets;
-
-		double getXMin() const;
-		double getYMin() const;
-		double getXMax() const;
-		double getYMax() const;
-
-		void Draw(Gdiplus::Graphics& g, const Gdiplus::RectF& boundRect, const Gdiplus::RectF& dataRect, bool spline = true) const;
-	};
 
 	DataSets dataSets;
 
@@ -124,5 +67,12 @@ public:
 	int maxTitleHeight;
 	int maxAxisLabelHeight;
 	int maxLabelHeight;
+
+protected:
+	void DrawXLabel(Gdiplus::Graphics& g, const CRect& rect);
+	void DrawYLabel(Gdiplus::Graphics& g, const CRect& rect, int leftSide);
+	void DrawData(Gdiplus::Graphics& g, const CRect& rect);
+	void DrawAxis(Gdiplus::Graphics& g, CRect& rect, int titleHeight);
+	float GetLabelFontSize(Gdiplus::Graphics& g);
 };
 
