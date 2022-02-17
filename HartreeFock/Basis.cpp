@@ -300,7 +300,6 @@ namespace Chemistry {
 
 		file << "END" << std::endl;
 	}
-
 }
 
 void Chemistry::Basis::Normalize()

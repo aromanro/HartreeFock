@@ -16,6 +16,7 @@ namespace HartreeFock {
 
 		void CalculateEnergy(const Eigen::VectorXd& eigenvals, const Eigen::MatrixXd& calcDensityMatrix/*, Eigen::MatrixXd& F*/);
 		void InitFockMatrix(int iter, Eigen::MatrixXd& FockMatrix) const;
+
 	public:
 		Eigen::MatrixXd DensityMatrix;
 
@@ -36,14 +37,14 @@ namespace HartreeFock {
 		RestrictedHartreeFock(int iterations = 3000);
 		virtual ~RestrictedHartreeFock();
 		
-		virtual void Init(Systems::Molecule* molecule) override;
+		void Init(Systems::Molecule* molecule) override;
 
 		bool DIISStep(int iter, Eigen::MatrixXd& FockMatrix);
-		virtual double Step(int iter) override;
+		double Step(int iter) override;
 
-		virtual double CalculateMp2Energy() override;
-		virtual double CalculateAtomicCharge(int atom) const override;
-		virtual Vector3D<double> GetMoment() const override;
+		double CalculateMp2Energy() override;
+		double CalculateAtomicCharge(int atom) const override;
+		Vector3D<double> GetMoment() const override;
 	};
 
 }

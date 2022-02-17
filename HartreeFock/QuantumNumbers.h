@@ -99,7 +99,6 @@ namespace Orbitals {
 				
 				return temp;
 			}
-
 		};
 
 		inline bool operator<(const QuantumNumbers& lhs, const QuantumNumbers& rhs) { return lhs.AngularMomentum() < rhs.AngularMomentum(); }

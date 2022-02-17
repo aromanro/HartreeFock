@@ -13,7 +13,6 @@ IMPLEMENT_DYNAMIC(CNumberEdit, CEdit)
 CNumberEdit::CNumberEdit()
 	: m_GoodSel(0), m_Cancelling(false), allowNegative(true)
 {
-
 }
 
 CNumberEdit::~CNumberEdit()
@@ -64,7 +63,6 @@ void CNumberEdit::OnEnUpdate()
 	}
 	else
 		m_GoodValue = str;
-
 }
 
 

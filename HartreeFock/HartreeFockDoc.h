@@ -27,7 +27,6 @@ protected: // create from serialization only
 
 // Attributes
 public:
-
 	Chemistry::Basis basisSTO3G;
 	Chemistry::Basis basisSTO6G;
 
@@ -71,10 +70,7 @@ public:
 	double atomsEnergy;
 
 // Operations
-public:
-
 // Overrides
-public:
 	virtual BOOL OnNewDocument();
 	virtual void Serialize(CArchive& ar);
 #ifdef SHARED_HANDLERS
@@ -83,7 +79,6 @@ public:
 #endif // SHARED_HANDLERS
 
 // Implementation
-public:
 	virtual ~CHartreeFockDoc();
 #ifdef _DEBUG
 	virtual void AssertValid() const;
@@ -91,15 +86,14 @@ public:
 #endif
 
 protected:
-
 // Generated message map functions
-protected:
 	DECLARE_MESSAGE_MAP()
 
 #ifdef SHARED_HANDLERS
 	// Helper function that sets search content for a Search Handler
 	void SetSearchContent(const CString& value);
 #endif // SHARED_HANDLERS
+
 public:
 	afx_msg void OnComputationStart();
 	bool isFinished();

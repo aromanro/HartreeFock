@@ -33,16 +33,16 @@ namespace Orbitals {
 	public:
 		std::vector<GaussianOrbital> basisFunctions;
 		
-		virtual Vector3D<double> getCenter() const override;
+		Vector3D<double> getCenter() const override;
 
 		double getAlpha() const;
 
 		PrimitiveGaussianShell();
 		~PrimitiveGaussianShell();
 
-		virtual double operator()(const Vector3D<double>& r) const override;
-		virtual Vector3D<double> getGradient(const Vector3D<double>& r) const override;
-		virtual double getLaplacian(const Vector3D<double>& r) const override;
+		double operator()(const Vector3D<double>& r) const override;
+		Vector3D<double> getGradient(const Vector3D<double>& r) const override;
+		double getLaplacian(const Vector3D<double>& r) const override;
 
 		void Normalize();
 	};
@@ -53,7 +53,6 @@ namespace Orbitals {
 	{
 	public:
 		std::vector<ContractedGaussianOrbital> basisFunctions;
-
 		
 		ContractedGaussianShell();
 		~ContractedGaussianShell();
@@ -61,10 +60,8 @@ namespace Orbitals {
 		void AddOrbitals(char type);
 		void AddGaussians(double exponent);
 
-		virtual Vector3D<double> getCenter() const override;
+		Vector3D<double> getCenter() const override;
 		std::string GetShellString() const;
-
-
 
 		unsigned int CountOrbitals(char orbital) const;
 		unsigned int CountContractedOrbitals(char orbital) const;
@@ -72,12 +69,14 @@ namespace Orbitals {
 		unsigned int CountNumberOfContractedGaussians() const;
 		unsigned int CountNumberOfGaussians() const;
 
-		virtual double operator()(const Vector3D<double>& r) const override;
-		virtual Vector3D<double> getGradient(const Vector3D<double>& r) const override;
-		virtual double getLaplacian(const Vector3D<double>& r) const override;
+		double operator()(const Vector3D<double>& r) const override;
+		Vector3D<double> getGradient(const Vector3D<double>& r) const override;
+		double getLaplacian(const Vector3D<double>& r) const override;
+
 	protected:
 		static unsigned int AdjustOrbitalsCount(char orbital, unsigned int res);
 		void AddOrbitalsInCanonicalOrder(unsigned int L);
+	
 	public:
 		void SetCenters(const Vector3D<double>& center);
 		void Normalize();

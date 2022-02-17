@@ -420,7 +420,6 @@ void CHartreeFockDoc::StopThreads(bool cancel)
 		{
 			if (thrd->computeFirstAtom)
 			{
-
 				if (options.twoAtom1) atomsEnergy += thrd->firstAtomEnergy * 2;
 				else atomsEnergy += thrd->firstAtomEnergy;
 			}

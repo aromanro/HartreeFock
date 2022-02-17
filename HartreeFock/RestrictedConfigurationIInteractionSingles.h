@@ -225,8 +225,7 @@ namespace HartreeFock {
 			return (A + B) * (A - B);
 		}
 
-	private:
-		
+	private:		
 		// there is some common functionality with coupled cluster - move it in a common base class or member?
 
 		static inline int delta(int i, int j)

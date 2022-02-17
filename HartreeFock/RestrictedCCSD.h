@@ -16,7 +16,7 @@ namespace HartreeFock {
         RestrictedCCSD(int iterations = 3000);
         virtual ~RestrictedCCSD();
 
-        virtual void Init(Systems::Molecule* molecule) override;
+        void Init(Systems::Molecule* molecule) override;
 
         void InitCC()
         {
@@ -26,7 +26,6 @@ namespace HartreeFock {
         }
 
     private:
-
         static inline int delta(int i, int j)
         {
             return i == j ? 1 : 0;
@@ -167,7 +166,6 @@ namespace HartreeFock {
         }
 
     public:
-
         // just for checking against the MP2 energy
         double MP2EnergyFromt4() const
         {

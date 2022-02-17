@@ -129,6 +129,7 @@ namespace GaussianIntegrals {
 			ClearElectronElectronMaps();
 			boysFunctions.clear();
 		}
+
 	protected:
 		const GaussianNuclear& getNuclearVertical(const Systems::Atom& atom, const Orbitals::GaussianOrbital& gaussian1, const Orbitals::GaussianOrbital& gaussian2);
 
@@ -149,6 +150,7 @@ namespace GaussianIntegrals {
 		}
 
 		template<class Orb> static void SwapOrbitals(Orb **orb1, Orb **orb2, Orb **orb3, Orb **orb4);
+
 	public:
 		void CalculateElectronElectronIntegrals();
 
@@ -208,7 +210,6 @@ namespace GaussianIntegrals {
 		}
 
 	protected:
-
 		inline double getElectronElectronFirstLevel(unsigned int orbital1, unsigned int orbital2, unsigned int orbital3, unsigned int orbital4, const Eigen::MatrixXd& C)
 		{
 			const std::tuple<unsigned int, unsigned int, unsigned int, unsigned int> indTuple = std::make_tuple(orbital1, orbital2, orbital3, orbital4);

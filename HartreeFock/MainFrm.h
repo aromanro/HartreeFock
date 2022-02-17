@@ -8,28 +8,21 @@
 #include "HartreeFockDoc.h"
 
 class CMainFrame : public CFrameWndEx
-{
-	
+{	
 protected: // create from serialization only
 	CMainFrame();
 	DECLARE_DYNCREATE(CMainFrame)
 
 // Attributes
 public:
-
 // Operations
-public:
-
 // Overrides
-public:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 	virtual BOOL LoadFrame(UINT nIDResource, DWORD dwDefaultStyle = WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE, CWnd* pParentWnd = NULL, CCreateContext* pContext = NULL);
 
 	CHartreeFockDoc* GetDocument();
 
-
 // Implementation
-public:
 	virtual ~CMainFrame();
 #ifdef _DEBUG
 	virtual void AssertValid() const;
@@ -51,6 +44,7 @@ protected:
 	afx_msg void OnUpdateApplicationLook(CCmdUI* pCmdUI);
 	afx_msg void OnSettingChange(UINT uFlags, LPCTSTR lpszSection);
 	DECLARE_MESSAGE_MAP()
+
 public:
 	afx_msg void OnComputationOptions();
 };

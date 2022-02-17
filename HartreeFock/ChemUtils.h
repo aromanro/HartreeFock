@@ -8,8 +8,8 @@ namespace Chemistry {
 	{
 	protected:
 		static const char* atoms[];
-	public:
 
+	public:
 		static unsigned int GetZForAtom(const std::string& name);
 		static std::string GetAtomNameForZ(unsigned int Z);
 	};

@@ -550,9 +550,10 @@ namespace GaussianIntegrals {
 
 		if (GetProcessMemoryInfo(hProcess, &pmc, sizeof(pmc)))
 		{
+			static const wchar_t format[] = L"\nProcess ID: %u\n\tPeakWorkingSetSize: %f\n\tWorkingSetSize: %f\n\tPagefileUsage: %f\n\tPeakPagefileUsage: %f\n";
 			wchar_t buf[4096];
 
-			swprintf(buf, 4096, L"\nProcess ID: %u\n\tPeakWorkingSetSize: %f\n\tWorkingSetSize: %f\n\tPagefileUsage: %f\n\tPeakPagefileUsage: %f\n",
+			swprintf(buf, 4096, format,
 				processID, pmc.PeakWorkingSetSize / (1024.*1024.), pmc.WorkingSetSize / (1024.*1024.), pmc.PagefileUsage / (1024.*1024.), pmc.PeakPagefileUsage / (1024.*1024.));
 
 			AfxMessageBox(buf);

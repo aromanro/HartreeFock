@@ -7,7 +7,6 @@ namespace HartreeFock {
 	RestrictedCCSD::RestrictedCCSD(int iterations)
 		: RestrictedHartreeFock(iterations), CCEnergy(std::numeric_limits<double>::infinity()), numberOfSpinOrbitals(0), numberOfOccupiedSpinOrbitals(0), m_spinOrbitalBasisIntegrals(nullptr)
 	{
-
 	}
 
 	RestrictedCCSD::~RestrictedCCSD()

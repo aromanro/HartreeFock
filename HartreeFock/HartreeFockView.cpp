@@ -40,7 +40,6 @@ CHartreeFockView::CHartreeFockView()
 	: timer(NULL)
 {
 	// TODO: add construction code here
-
 }
 
 CHartreeFockView::~CHartreeFockView()

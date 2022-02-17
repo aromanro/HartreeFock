@@ -31,7 +31,6 @@ public:
 template <typename ValueType, int maxRetained = 6, int firstEstimate = 5, bool limitExtrapolation = false> class DIIS : public DIISStorage<ValueType, maxRetained, firstEstimate>
 {
 public:
-
 	double Estimate(ValueType &value) const
 	{
 		const size_t nrMatrices = errors.size();
@@ -164,6 +163,5 @@ public:
 
 		return lastErrorEst;
 	}
-
 };
 
