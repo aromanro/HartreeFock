@@ -103,5 +103,8 @@ public:
 	afx_msg void OnUpdateComputationStart(CCmdUI *pCmdUI);
 	void SetChartBoundsAndTicks();
 	void ApplyChartOptions();
+
+protected:
 	void SetChartData();
+	void SetChartTitle();
 };

@@ -546,39 +546,44 @@ void CHartreeFockDoc::SetChartData()
 
 		m_Chart.AddDataSet(&chartData, 2, RGB(255, 0, 0));
 
-		CString title;
-		if (options.twoAtom1)
-		{
-			if (options.m_atom1 == options.m_atom2)
-			{
-				title = options.m_atom1 + L"3";
-			}
-			else if (options.m_atom1 == L"O")
-			{
-				title = options.m_atom2 + options.m_atom1 + L"2";
-			}
-			else
-			{
-				title = options.m_atom1 + L"2" + options.m_atom2;
-			}
-		}
-		else
-		{
-			if (options.m_atom1 == options.m_atom2)
-				title = options.m_atom1 + L"2";
-			else
-				title = options.m_atom1 + options.m_atom2;
-		}
-
-		if (0 == options.DisplayHOMOEnergy)
-			title += L" Molecule Energy";
-		else if (1 == options.DisplayHOMOEnergy)
-			title += L" HOMO Energy";
-		else
-			title += L" Binding Energy";
-
-		if (convergenceProblem) title += L" (convergence issues)";
-
-		m_Chart.title = title;
+		SetChartTitle();
 	}
+}
+
+void CHartreeFockDoc::SetChartTitle()
+{
+	CString title;
+	if (options.twoAtom1)
+	{
+		if (options.m_atom1 == options.m_atom2)
+		{
+			title = options.m_atom1 + L"3";
+		}
+		else if (options.m_atom1 == L"O")
+		{
+			title = options.m_atom2 + options.m_atom1 + L"2";
+		}
+		else
+		{
+			title = options.m_atom1 + L"2" + options.m_atom2;
+		}
+	}
+	else
+	{
+		if (options.m_atom1 == options.m_atom2)
+			title = options.m_atom1 + L"2";
+		else
+			title = options.m_atom1 + options.m_atom2;
+	}
+
+	if (0 == options.DisplayHOMOEnergy)
+		title += L" Molecule Energy";
+	else if (1 == options.DisplayHOMOEnergy)
+		title += L" HOMO Energy";
+	else
+		title += L" Binding Energy";
+
+	if (convergenceProblem) title += L" (convergence issues)";
+
+	m_Chart.title = title;
 }
