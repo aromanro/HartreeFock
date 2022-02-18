@@ -587,3 +587,75 @@ void CHartreeFockDoc::SetChartTitle()
 
 	m_Chart.title = title;
 }
+
+Chemistry::Basis* CHartreeFockDoc::GetBasis(const Options& options)
+{
+	Chemistry::Basis* basisPtr = nullptr;
+
+	if (0 == options.basis)
+		basisPtr = &basisSTO3G;
+	else if (1 == options.basis)
+		basisPtr = &basisSTO6G;
+	else if (2 == options.basis)
+		basisPtr = &basis3_21G;
+	else if (3 == options.basis)
+		basisPtr = &basis6_21G;
+	else if (21 == options.basis)
+		basisPtr = &dz;
+	else if (22 == options.basis)
+		basisPtr = &dzp;
+	else basisPtr = GetBasis6_31(options);
+
+	return basisPtr;
+}
+
+Chemistry::Basis* CHartreeFockDoc::GetBasis6_31(const Options& options)
+{
+	Chemistry::Basis* basisPtr = nullptr;
+
+	if (4 == options.basis)
+		basisPtr = &basis6_31G;
+	else if (5 == options.basis)
+		basisPtr = &basis6_31Gstar;
+	else if (6 == options.basis)
+		basisPtr = &basis6_31plusGstarstar;
+	else if (7 == options.basis)
+		basisPtr = &basis6_31plusG;
+	else if (8 == options.basis)
+		basisPtr = &basis6_31plusGstar;
+	else if (9 == options.basis)
+		basisPtr = &basis6_31plusplusG;
+	else if (10 == options.basis)
+		basisPtr = &basis6_31plusplusGstar;
+	else if (11 == options.basis)
+		basisPtr = &basis6_31plusplusGstarstar;
+	else basisPtr = GetBasis6_311(options);
+
+	return basisPtr;
+}
+
+Chemistry::Basis* CHartreeFockDoc::GetBasis6_311(const Options& options)
+{
+	Chemistry::Basis* basisPtr = nullptr;
+
+	if (12 == options.basis)
+		basisPtr = &basis6_311G;
+	else if (13 == options.basis)
+		basisPtr = &basis6_311Gstar;
+	else if (14 == options.basis)
+		basisPtr = &basis6_311Gstarstar;
+	else if (15 == options.basis)
+		basisPtr = &basis6_311plusG;
+	else if (16 == options.basis)
+		basisPtr = &basis6_311plusGstar;
+	else if (17 == options.basis)
+		basisPtr = &basis6_311plusGstarstar;
+	else if (18 == options.basis)
+		basisPtr = &basis6_311plusplusG;
+	else if (19 == options.basis)
+		basisPtr = &basis6_311plusplusGstar;
+	else if (20 == options.basis)
+		basisPtr = &basis6_311plusplusGstarstar;
+
+	return basisPtr;
+}

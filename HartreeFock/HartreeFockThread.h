@@ -55,8 +55,5 @@ public:
 private:
 	void ComputeAtoms();
 	double ComputeAtom(const Systems::AtomWithShells& atom);
-	Chemistry::Basis* GetBasis(const Options& options);
-	Chemistry::Basis* GetBasis6_31(const Options& options);
-	Chemistry::Basis* GetBasis6_311(const Options& options);
 };
 

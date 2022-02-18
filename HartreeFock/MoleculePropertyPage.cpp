@@ -235,56 +235,9 @@ void MoleculePropertyPage::FillCombos()
 	comboBox2.ResetContent();
 
 	CHartreeFockDoc* doc = dynamic_cast<CMainFrame*>(theApp.m_pMainWnd)->GetDocument();
-	Chemistry::Basis *basisPtr = &doc->basisSTO6G; // some default
-
-	if (0 == theApp.options.basis)
-		basisPtr = &doc->basisSTO3G;
-	else if (1 == theApp.options.basis)
+	Chemistry::Basis* basisPtr = doc->GetBasis(theApp.options);
+	if (basisPtr == nullptr)
 		basisPtr = &doc->basisSTO6G;
-	else if (2 == theApp.options.basis)
-		basisPtr = &doc->basis3_21G;
-	else if (3 == theApp.options.basis)
-		basisPtr = &doc->basis6_21G;
-	else if (4 == theApp.options.basis)
-		basisPtr = &doc->basis6_31G;
-	else if (5 == theApp.options.basis)
-		basisPtr = &doc->basis6_31Gstar;
-	else if (6 == theApp.options.basis)
-		basisPtr = &doc->basis6_31plusGstarstar;
-	else if (7 == theApp.options.basis)
-		basisPtr = &doc->basis6_31plusG;
-	else if (8 == theApp.options.basis)
-		basisPtr = &doc->basis6_31plusGstar;
-	else if (9 == theApp.options.basis)
-		basisPtr = &doc->basis6_31plusplusG;
-	else if (10 == theApp.options.basis)
-		basisPtr = &doc->basis6_31plusplusGstar;
-	else if (11 == theApp.options.basis)
-		basisPtr = &doc->basis6_31plusplusGstarstar;
-	else if (12 == theApp.options.basis)
-		basisPtr = &doc->basis6_311G;
-	else if (13 == theApp.options.basis)
-		basisPtr = &doc->basis6_311Gstar;
-	else if (14 == theApp.options.basis)
-		basisPtr = &doc->basis6_311Gstarstar;
-	else if (15 == theApp.options.basis)
-		basisPtr = &doc->basis6_311plusG;
-	else if (16 == theApp.options.basis)
-		basisPtr = &doc->basis6_311plusGstar;
-	else if (17 == theApp.options.basis)
-		basisPtr = &doc->basis6_311plusGstarstar;
-	else if (18 == theApp.options.basis)
-		basisPtr = &doc->basis6_311plusplusG;
-	else if (19 == theApp.options.basis)
-		basisPtr = &doc->basis6_311plusplusGstar;
-	else if (20 == theApp.options.basis)
-		basisPtr = &doc->basis6_311plusplusGstarstar;
-	else if (21 == theApp.options.basis)
-		basisPtr = &doc->dz;
-	else if (22 == theApp.options.basis)
-		basisPtr = &doc->dzp;
-
-
 
 	bool atom1Found = false;
 	bool atom2Found = false;

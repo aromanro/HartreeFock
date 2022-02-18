@@ -103,8 +103,11 @@ public:
 	afx_msg void OnUpdateComputationStart(CCmdUI *pCmdUI);
 	void SetChartBoundsAndTicks();
 	void ApplyChartOptions();
+	Chemistry::Basis* GetBasis(const Options& options);
 
 protected:
 	void SetChartData();
 	void SetChartTitle();
+	Chemistry::Basis* GetBasis6_31(const Options& options);
+	Chemistry::Basis* GetBasis6_311(const Options& options);
 };
