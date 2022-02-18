@@ -109,7 +109,16 @@ Chemistry::Basis* HartreeFockThread::GetBasis6_31(const Options& options)
 		basisPtr = &m_Doc->basis6_31plusplusGstar;
 	else if (11 == options.basis)
 		basisPtr = &m_Doc->basis6_31plusplusGstarstar;
-	else if (12 == options.basis)
+	else basisPtr = GetBasis6_311(options);
+
+	return basisPtr;
+}
+
+Chemistry::Basis* HartreeFockThread::GetBasis6_311(const Options& options)
+{
+	Chemistry::Basis* basisPtr = nullptr;
+
+	if (12 == options.basis)
 		basisPtr = &m_Doc->basis6_311G;
 	else if (13 == options.basis)
 		basisPtr = &m_Doc->basis6_311Gstar;
