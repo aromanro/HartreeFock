@@ -294,11 +294,19 @@ namespace HartreeFock {
 
 	double UnrestrictedHartreeFock::CalculateMp2Energy()
 	{
-		mp2Energy = 0;
-
-		// TODO: calculate it
-
 		GaussianIntegrals::MolecularOrbitalsIntegralsRepository MP2repo(integralsRepository);
+
+		mp2Energy = CalculateMp2EnergyPlus(MP2repo);
+		mp2Energy += CalculateMp2EnergyMinus(MP2repo);
+
+		mp2Energy *= 0.25;
+
+		return mp2Energy;
+	}
+
+	double UnrestrictedHartreeFock::CalculateMp2EnergyPlus(GaussianIntegrals::MolecularOrbitalsIntegralsRepository& MP2repo) const
+	{
+		double mp2Energyt = 0;
 
 		for (int i = 0; i < numberOfOrbitals; ++i)
 		{
@@ -322,11 +330,18 @@ namespace HartreeFock {
 
 						const double partE = eeiajb * eeiajb / Esumdif;
 
-						mp2Energy += partE;
+						mp2Energyt += partE;
 					}
 				}
 			}
 		}
+
+		return mp2Energyt;
+	}
+
+	double UnrestrictedHartreeFock::CalculateMp2EnergyMinus(GaussianIntegrals::MolecularOrbitalsIntegralsRepository& MP2repo) const
+	{
+		double mp2Energyt = 0;
 
 		for (int i = 0; i < numberOfOrbitals; ++i)
 		{
@@ -350,16 +365,15 @@ namespace HartreeFock {
 
 						const double partE = eeiajb * eeiajb / Esumdif;
 
-						mp2Energy += partE;
+						mp2Energyt += partE;
 					}
 				}
 			}
 		}
 
-		mp2Energy *= 0.25;
-
-		return mp2Energy;
+		return mp2Energyt;
 	}
+
 
 	double UnrestrictedHartreeFock::CalculateAtomicCharge(int atom) const
 	{
