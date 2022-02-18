@@ -80,7 +80,20 @@ Chemistry::Basis* HartreeFockThread::GetBasis(const Options& options)
 		basisPtr = &m_Doc->basis3_21G;
 	else if (3 == options.basis)
 		basisPtr = &m_Doc->basis6_21G;
-	else if (4 == options.basis)
+	else if (21 == options.basis)
+		basisPtr = &m_Doc->dz;
+	else if (22 == options.basis)
+		basisPtr = &m_Doc->dzp;
+	else basisPtr = GetBasis6_31(options);
+
+	return basisPtr;
+}
+
+Chemistry::Basis* HartreeFockThread::GetBasis6_31(const Options& options)
+{
+	Chemistry::Basis* basisPtr = nullptr;
+
+	if (4 == options.basis)
 		basisPtr = &m_Doc->basis6_31G;
 	else if (5 == options.basis)
 		basisPtr = &m_Doc->basis6_31Gstar;
@@ -114,10 +127,6 @@ Chemistry::Basis* HartreeFockThread::GetBasis(const Options& options)
 		basisPtr = &m_Doc->basis6_311plusplusGstar;
 	else if (20 == options.basis)
 		basisPtr = &m_Doc->basis6_311plusplusGstarstar;
-	else if (21 == options.basis)
-		basisPtr = &m_Doc->dz;
-	else if (22 == options.basis)
-		basisPtr = &m_Doc->dzp;
 
 	return basisPtr;
 }
