@@ -35,6 +35,7 @@ protected:
 
 	Systems::AtomWithShells atom1, atom2;
 	Options opt;
+
 public:
 	HartreeFockThread(const Options& options, CHartreeFockDoc* doc, const double start, const double end, const double step);
 	virtual ~HartreeFockThread();
@@ -50,8 +51,10 @@ public:
 
 	double firstAtomEnergy;
 	double secondAtomEnergy;
+
 private:
 	void ComputeAtoms();
 	double ComputeAtom(const Systems::AtomWithShells& atom);
+	Chemistry::Basis* GetBasis(const Options& options);
 };
 

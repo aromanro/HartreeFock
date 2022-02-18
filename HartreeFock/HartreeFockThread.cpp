@@ -46,55 +46,7 @@ HartreeFockThread::HartreeFockThread(const Options& options, CHartreeFockDoc* do
 
 	// construct the molecule
 
-	Chemistry::Basis* basisPtr = nullptr;
-
-	if (0 == options.basis)
-		basisPtr = &doc->basisSTO3G;
-	else if (1 == options.basis)
-		basisPtr = &doc->basisSTO6G;
-	else if (2 == options.basis)
-		basisPtr = &doc->basis3_21G;
-	else if (3 == options.basis)
-		basisPtr = &doc->basis6_21G;
-	else if (4 == options.basis)
-		basisPtr = &doc->basis6_31G;
-	else if (5 == options.basis)
-		basisPtr = &doc->basis6_31Gstar;
-	else if (6 == options.basis)
-		basisPtr = &doc->basis6_31plusGstarstar;
-	else if (7 == options.basis)
-		basisPtr = &doc->basis6_31plusG;
-	else if (8 == options.basis)
-		basisPtr = &doc->basis6_31plusGstar;
-	else if (9 == options.basis)
-		basisPtr = &doc->basis6_31plusplusG;
-	else if (10 == options.basis)
-		basisPtr = &doc->basis6_31plusplusGstar;
-	else if (11 == options.basis)
-		basisPtr = &doc->basis6_31plusplusGstarstar;
-	else if (12 == options.basis)
-		basisPtr = &doc->basis6_311G;
-	else if (13 == options.basis)
-		basisPtr = &doc->basis6_311Gstar;
-	else if (14 == options.basis)
-		basisPtr = &doc->basis6_311Gstarstar;
-	else if (15 == options.basis)
-		basisPtr = &doc->basis6_311plusG;
-	else if (16 == options.basis)
-		basisPtr = &doc->basis6_311plusGstar;
-	else if (17 == options.basis)
-		basisPtr = &doc->basis6_311plusGstarstar;
-	else if (18 == options.basis)
-		basisPtr = &doc->basis6_311plusplusG;
-	else if (19 == options.basis)
-		basisPtr = &doc->basis6_311plusplusGstar;
-	else if (20 == options.basis)
-		basisPtr = &doc->basis6_311plusplusGstarstar;
-	else if (21 == options.basis)
-		basisPtr = &doc->dz;
-	else if (22 == options.basis)
-		basisPtr = &doc->dzp;
-
+	Chemistry::Basis* basisPtr = GetBasis(options);
 	if (basisPtr)
 	{
 		for (const auto& atom : basisPtr->atoms)
@@ -114,6 +66,60 @@ HartreeFockThread::HartreeFockThread(const Options& options, CHartreeFockDoc* do
 
 	molecule.SetIDs();
 	opt = options;
+}
+
+Chemistry::Basis* HartreeFockThread::GetBasis(const Options& options)
+{
+	Chemistry::Basis* basisPtr = nullptr;
+
+	if (0 == options.basis)
+		basisPtr = &m_Doc->basisSTO3G;
+	else if (1 == options.basis)
+		basisPtr = &m_Doc->basisSTO6G;
+	else if (2 == options.basis)
+		basisPtr = &m_Doc->basis3_21G;
+	else if (3 == options.basis)
+		basisPtr = &m_Doc->basis6_21G;
+	else if (4 == options.basis)
+		basisPtr = &m_Doc->basis6_31G;
+	else if (5 == options.basis)
+		basisPtr = &m_Doc->basis6_31Gstar;
+	else if (6 == options.basis)
+		basisPtr = &m_Doc->basis6_31plusGstarstar;
+	else if (7 == options.basis)
+		basisPtr = &m_Doc->basis6_31plusG;
+	else if (8 == options.basis)
+		basisPtr = &m_Doc->basis6_31plusGstar;
+	else if (9 == options.basis)
+		basisPtr = &m_Doc->basis6_31plusplusG;
+	else if (10 == options.basis)
+		basisPtr = &m_Doc->basis6_31plusplusGstar;
+	else if (11 == options.basis)
+		basisPtr = &m_Doc->basis6_31plusplusGstarstar;
+	else if (12 == options.basis)
+		basisPtr = &m_Doc->basis6_311G;
+	else if (13 == options.basis)
+		basisPtr = &m_Doc->basis6_311Gstar;
+	else if (14 == options.basis)
+		basisPtr = &m_Doc->basis6_311Gstarstar;
+	else if (15 == options.basis)
+		basisPtr = &m_Doc->basis6_311plusG;
+	else if (16 == options.basis)
+		basisPtr = &m_Doc->basis6_311plusGstar;
+	else if (17 == options.basis)
+		basisPtr = &m_Doc->basis6_311plusGstarstar;
+	else if (18 == options.basis)
+		basisPtr = &m_Doc->basis6_311plusplusG;
+	else if (19 == options.basis)
+		basisPtr = &m_Doc->basis6_311plusplusGstar;
+	else if (20 == options.basis)
+		basisPtr = &m_Doc->basis6_311plusplusGstarstar;
+	else if (21 == options.basis)
+		basisPtr = &m_Doc->dz;
+	else if (22 == options.basis)
+		basisPtr = &m_Doc->dzp;
+
+	return basisPtr;
 }
 
 
