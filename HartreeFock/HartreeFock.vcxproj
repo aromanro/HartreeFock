@@ -269,6 +269,9 @@
     <ClCompile Include="ComputationThread.cpp" />
     <ClCompile Include="ContractedGaussianOrbital.cpp" />
     <ClCompile Include="DataSets.cpp" />
+    <ClCompile Include="RestrictedCCSDTriples.cpp" />
+    <ClCompile Include="RestrictedCCSD_F.cpp" />
+    <ClCompile Include="RestrictedCCSD_W.cpp" />
     <ClCompile Include="RestrictedConfigurationIInteractionSingles.cpp" />
     <ClCompile Include="SpinOrbitalsElectronElectronIntegralsRepository.cpp" />
     <ClCompile Include="GaussianIntegral.cpp" />

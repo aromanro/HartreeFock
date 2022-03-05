@@ -314,6 +314,15 @@
     <ClCompile Include="DataSets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="RestrictedCCSDTriples.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RestrictedCCSD_F.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RestrictedCCSD_W.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="HartreeFock.rc">
