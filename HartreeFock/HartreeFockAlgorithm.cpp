@@ -109,6 +109,24 @@ namespace HartreeFock {
 		if (!inited) return prevEnergy;
 
 		int iter = 0;
+		FirstIterations(iter, curEnergy, prevEnergy);
+		if (terminate) return curEnergy;
+
+		// did it converge with DIIS?
+		if (UseDIIS && iter < maxDIISiterations && converged && normalIterAfterDIIS)
+		{
+			SelfConsistentIterations(iter, curEnergy, prevEnergy);
+			if (terminate) return curEnergy;
+		}
+
+		// now continue with normal iteration with convergence checking
+		NormalIterations(iter, curEnergy, prevEnergy);
+
+		return curEnergy;
+	}
+
+	void HartreeFockAlgorithm::FirstIterations(int& iter, double& curEnergy, double& prevEnergy)
+	{
 		for (; iter < maxIterations; ++iter)
 		{
 			const double rmsD = Step(iter);
@@ -120,36 +138,38 @@ namespace HartreeFock {
 				break;
 			}
 
-			if (terminate) return curEnergy;
+			if (terminate) return;
 
 			prevEnergy = curEnergy;
 		}
+	}
 
-		// did it converge with DIIS?
-		if (UseDIIS && iter < maxDIISiterations && converged && normalIterAfterDIIS)
+
+	void HartreeFockAlgorithm::SelfConsistentIterations(int& iter, double& curEnergy, double& prevEnergy)
+	{
+		UseDIIS = false;
+
+		// do a loop without checking the convergence, sometimes DIIS gets stuck in a bad position close to the minimum
+		for (int i = 0; i < normalIterAfterDIIS; ++i)
 		{
-			UseDIIS = false;
+			Step(iter + i);
 
-			// do a loop without checking the convergence, sometimes DIIS gets stuck in a bad position close to the minimum
-			for (int i = 0; i < normalIterAfterDIIS; ++i)
+			curEnergy = GetTotalEnergy();
+			if (terminate)
 			{
-				Step(iter + i);
-
-				curEnergy = GetTotalEnergy();
-				if (terminate)
-				{
-					UseDIIS = true; // restore it back
-					return curEnergy;
-				}
-				prevEnergy = curEnergy;
+				UseDIIS = true; // restore it back
+				return;
 			}
-
-			iter += normalIterAfterDIIS;
-
-			UseDIIS = true; // restore it back
+			prevEnergy = curEnergy;
 		}
 
-		// now continue with normal iteration with convergence checking
+		iter += normalIterAfterDIIS;
+
+		UseDIIS = true; // restore it back
+	}
+
+	void HartreeFockAlgorithm::NormalIterations(int& iter, double& curEnergy, double& prevEnergy)
+	{
 		if (!converged)
 		{
 			for (; iter < maxIterations; ++iter)
@@ -160,17 +180,16 @@ namespace HartreeFock {
 
 				if (abs(prevEnergy - curEnergy) <= energyConvergence && rmsD < rmsDConvergence) {
 					converged = true;
-					return curEnergy;
+					return;
 				}
 
-				if (terminate) return curEnergy;
+				if (terminate) return;
 
 				prevEnergy = curEnergy;
 			}
 		}
-
-		return curEnergy;
 	}
+
 
 	double HartreeFockAlgorithm::DiffDensityMatrices(const Eigen::MatrixXd& oldP, const Eigen::MatrixXd& newP)
 	{

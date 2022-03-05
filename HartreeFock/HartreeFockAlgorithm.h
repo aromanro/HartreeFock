@@ -93,6 +93,10 @@ namespace HartreeFock {
 	protected:
 		static double DiffDensityMatrices(const Eigen::MatrixXd& oldP, const Eigen::MatrixXd& newP);
 		void NormalizeC(Eigen::MatrixXd& C, const std::vector<bool>& occupied);
+
+		void FirstIterations(int& iter, double& curEnergy, double& prevEnergy);
+		void SelfConsistentIterations(int& iter, double& curEnergy, double& prevEnergy);
+		void NormalIterations(int& iter, double& curEnergy, double& prevEnergy);
 	};
 
 
