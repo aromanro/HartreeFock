@@ -4,6 +4,8 @@
 
 #include "BoysFunctions.h"
 
+#include <string>
+#include <sstream>
 #include <psapi.h>
 
 namespace GaussianIntegrals {
@@ -551,13 +553,12 @@ namespace GaussianIntegrals {
 		if (GetProcessMemoryInfo(hProcess, &pmc, sizeof(pmc)))
 		{
 			const double MB = 1024. * 1024.;
-			static const wchar_t format[] = L"\nProcess ID: %u\n\tPeakWorkingSetSize: %f\n\tWorkingSetSize: %f\n\tPagefileUsage: %f\n\tPeakPagefileUsage: %f\n";
-			wchar_t buf[4096];
 
-			swprintf(buf, sizeof(buf) / 2, format,
-				processID, pmc.PeakWorkingSetSize / MB, pmc.WorkingSetSize / MB, pmc.PagefileUsage / MB, pmc.PeakPagefileUsage / MB);
+			std::ostringstream strm;
+			strm << "Process ID: " << processID << "\n\tPeakWorkingSetSize: " << pmc.PeakWorkingSetSize / MB << "WorkingSetSize: " << pmc.WorkingSetSize / MB << "\n\tPagefileUsage: " << pmc.PagefileUsage / MB << "PeakPagefileUsage: " << pmc.PeakPagefileUsage / MB << std::ends;
+			const std::string str = strm.str();
 
-			AfxMessageBox(buf);
+			AfxMessageBox(CString(str.c_str()));
 		}
 
 		CloseHandle(hProcess);
