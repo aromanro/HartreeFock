@@ -554,7 +554,7 @@ namespace GaussianIntegrals {
 			static const wchar_t format[] = L"\nProcess ID: %u\n\tPeakWorkingSetSize: %f\n\tWorkingSetSize: %f\n\tPagefileUsage: %f\n\tPeakPagefileUsage: %f\n";
 			wchar_t buf[4096];
 
-			swprintf(buf, sizeof(buf), format,
+			swprintf(buf, sizeof(buf) / 2, format,
 				processID, pmc.PeakWorkingSetSize / MB, pmc.WorkingSetSize / MB, pmc.PagefileUsage / MB, pmc.PeakPagefileUsage / MB);
 
 			AfxMessageBox(buf);
