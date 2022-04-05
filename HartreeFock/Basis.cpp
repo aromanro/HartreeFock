@@ -26,8 +26,6 @@ namespace Chemistry {
 		std::regex ignore("^\\s*(#|BASIS|END).*$|^\\s*$");
 		std::regex number("[+-]?[0-9]*\\.?[0-9]+((E|D)[+-][0-9]+)?");
 
-		std::smatch match;
-
 		std::string shellName;
 
 		while (std::getline(file, line))
