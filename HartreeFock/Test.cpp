@@ -448,7 +448,7 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 		file << "\nRPA Excitation Energies (method 2): \n";
 
 		const Eigen::MatrixXd TDHFmr = restrictedCIS.getReducedTDHFMatrix();
-		const Eigen::EigenSolver<Eigen::MatrixXd> TDHFReducedSolver(TDHFmr, Eigen::DecompositionOptions::EigenvaluesOnly);
+		const Eigen::EigenSolver<Eigen::MatrixXd> TDHFReducedSolver(TDHFmr, false);
 
 		const Eigen::VectorXcd& eigenv2 = TDHFReducedSolver.eigenvalues();
 

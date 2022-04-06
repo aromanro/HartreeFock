@@ -149,12 +149,12 @@ namespace HartreeFock {
 
 						// sum5
 						int indf = 0;
-						for (int f = 0; f < numberOfSpinOrbitals; ++f)
+						for (int fi = 0; fi < numberOfSpinOrbitals; ++fi)
 						{
-							const int hf = f / 2;
+							const int hf = fi / 2;
 							if (hf < occupied.size() && occupied[hf]) continue; // only unoccupied
 												
-							sum5 += t4(indi, indm, inde, indf) * (*m_spinOrbitalBasisIntegrals)(m, a, e, f);
+							sum5 += t4(indi, indm, inde, indf) * (*m_spinOrbitalBasisIntegrals)(m, a, e, fi);
 
 							++indf;
 						}
@@ -176,12 +176,12 @@ namespace HartreeFock {
 
 					// sum4
 					int indf = 0;
-					for (int f = 0; f < numberOfSpinOrbitals; ++f)
+					for (int fi = 0; fi < numberOfSpinOrbitals; ++fi)
 					{
-						const int hf = f / 2;
+						const int hf = fi / 2;
 						if (hf < occupied.size() && occupied[hf]) continue; // only unoccupied
 											
-						sum4 += t2(indm, indf) * (*m_spinOrbitalBasisIntegrals)(m, a, i, f);
+						sum4 += t2(indm, indf) * (*m_spinOrbitalBasisIntegrals)(m, a, i, fi);
 
 						++indf;
 					}
@@ -271,9 +271,9 @@ namespace HartreeFock {
 							// sum4:
 						
 							int indf = 0;
-							for (int f = 0; f < numberOfSpinOrbitals; ++f)
+							for (int fi = 0; fi < numberOfSpinOrbitals; ++fi)
 							{
-								const int orbf = f / 2;
+								const int orbf = fi / 2;
 								if (orbf < occupied.size() && occupied[orbf]) continue; // only unoccupied
 							
 								sum4 += tau(indi, indj, inde, indf) * Wabef(inda, indb, inde, indf);

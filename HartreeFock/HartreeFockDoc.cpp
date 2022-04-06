@@ -588,73 +588,73 @@ void CHartreeFockDoc::SetChartTitle()
 	m_Chart.title = title;
 }
 
-Chemistry::Basis* CHartreeFockDoc::GetBasis(const Options& options)
+Chemistry::Basis* CHartreeFockDoc::GetBasis(const Options& opt)
 {
 	Chemistry::Basis* basisPtr = nullptr;
 
-	if (0 == options.basis)
+	if (0 == opt.basis)
 		basisPtr = &basisSTO3G;
-	else if (1 == options.basis)
+	else if (1 == opt.basis)
 		basisPtr = &basisSTO6G;
-	else if (2 == options.basis)
+	else if (2 == opt.basis)
 		basisPtr = &basis3_21G;
-	else if (3 == options.basis)
+	else if (3 == opt.basis)
 		basisPtr = &basis6_21G;
-	else if (21 == options.basis)
+	else if (21 == opt.basis)
 		basisPtr = &dz;
-	else if (22 == options.basis)
+	else if (22 == opt.basis)
 		basisPtr = &dzp;
-	else basisPtr = GetBasis6_31(options);
+	else basisPtr = GetBasis6_31(opt);
 
 	return basisPtr;
 }
 
-Chemistry::Basis* CHartreeFockDoc::GetBasis6_31(const Options& options)
+Chemistry::Basis* CHartreeFockDoc::GetBasis6_31(const Options& opt)
 {
 	Chemistry::Basis* basisPtr = nullptr;
 
-	if (4 == options.basis)
+	if (4 == opt.basis)
 		basisPtr = &basis6_31G;
-	else if (5 == options.basis)
+	else if (5 == opt.basis)
 		basisPtr = &basis6_31Gstar;
-	else if (6 == options.basis)
+	else if (6 == opt.basis)
 		basisPtr = &basis6_31plusGstarstar;
-	else if (7 == options.basis)
+	else if (7 == opt.basis)
 		basisPtr = &basis6_31plusG;
-	else if (8 == options.basis)
+	else if (8 == opt.basis)
 		basisPtr = &basis6_31plusGstar;
-	else if (9 == options.basis)
+	else if (9 == opt.basis)
 		basisPtr = &basis6_31plusplusG;
-	else if (10 == options.basis)
+	else if (10 == opt.basis)
 		basisPtr = &basis6_31plusplusGstar;
-	else if (11 == options.basis)
+	else if (11 == opt.basis)
 		basisPtr = &basis6_31plusplusGstarstar;
-	else basisPtr = GetBasis6_311(options);
+	else basisPtr = GetBasis6_311(opt);
 
 	return basisPtr;
 }
 
-Chemistry::Basis* CHartreeFockDoc::GetBasis6_311(const Options& options)
+Chemistry::Basis* CHartreeFockDoc::GetBasis6_311(const Options& opt)
 {
 	Chemistry::Basis* basisPtr = nullptr;
 
-	if (12 == options.basis)
+	if (12 == opt.basis)
 		basisPtr = &basis6_311G;
-	else if (13 == options.basis)
+	else if (13 == opt.basis)
 		basisPtr = &basis6_311Gstar;
-	else if (14 == options.basis)
+	else if (14 == opt.basis)
 		basisPtr = &basis6_311Gstarstar;
-	else if (15 == options.basis)
+	else if (15 == opt.basis)
 		basisPtr = &basis6_311plusG;
-	else if (16 == options.basis)
+	else if (16 == opt.basis)
 		basisPtr = &basis6_311plusGstar;
-	else if (17 == options.basis)
+	else if (17 == opt.basis)
 		basisPtr = &basis6_311plusGstarstar;
-	else if (18 == options.basis)
+	else if (18 == opt.basis)
 		basisPtr = &basis6_311plusplusG;
-	else if (19 == options.basis)
+	else if (19 == opt.basis)
 		basisPtr = &basis6_311plusplusGstar;
-	else if (20 == options.basis)
+	else if (20 == opt.basis)
 		basisPtr = &basis6_311plusplusGstarstar;
 
 	return basisPtr;

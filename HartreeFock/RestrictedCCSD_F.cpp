@@ -34,12 +34,12 @@ namespace HartreeFock {
 					sum1 += f(m, e) * t2(indm, inda);
 
 					int indf = 0;
-					for (int f = 0; f < numberOfSpinOrbitals; ++f)
+					for (int fi = 0; fi < numberOfSpinOrbitals; ++fi)
 					{
-						const int hf = f / 2;
+						const int hf = fi / 2;
 						if (hf < occupied.size() && occupied[hf]) continue; // only unoccupied
 
-						sum2 += t2(indm, indf) * (*m_spinOrbitalBasisIntegrals)(m, a, f, e);
+						sum2 += t2(indm, indf) * (*m_spinOrbitalBasisIntegrals)(m, a, fi, e);
 
 						int indn = 0;
 						for (int n = 0; n < numberOfSpinOrbitals; ++n)
@@ -47,7 +47,7 @@ namespace HartreeFock {
 							const int hn = n / 2;
 							if (hn >= occupied.size() || !occupied[hn]) continue; // only occupied
 
-							sum3 += taut(indm, indn, inda, indf) * (*m_spinOrbitalBasisIntegrals)(m, n, e, f);
+							sum3 += taut(indm, indn, inda, indf) * (*m_spinOrbitalBasisIntegrals)(m, n, e, fi);
 
 							++indn;
 						}
@@ -102,12 +102,12 @@ namespace HartreeFock {
 						sum2 += t2(indn, inde) * (*m_spinOrbitalBasisIntegrals)(m, n, i, e);
 
 						int indf = 0;
-						for (int f = 0; f < numberOfSpinOrbitals; ++f)
+						for (int fi = 0; fi < numberOfSpinOrbitals; ++fi)
 						{
-							const int hf = f / 2;
+							const int hf = fi / 2;
 							if (hf < occupied.size() && occupied[hf]) continue; // only unoccupied
 
-							sum3 += taut(indi, indn, inde, indf) * (*m_spinOrbitalBasisIntegrals)(m, n, e, f);
+							sum3 += taut(indi, indn, inde, indf) * (*m_spinOrbitalBasisIntegrals)(m, n, e, fi);
 
 							++indf;
 						}
@@ -154,12 +154,12 @@ namespace HartreeFock {
 					if (hn >= occupied.size() || !occupied[hn]) continue; // only occupied
 
 					int indf = 0;
-					for (int f = 0; f < numberOfSpinOrbitals; ++f)
+					for (int fi = 0; fi < numberOfSpinOrbitals; ++fi)
 					{
-						const int hf = f / 2;
+						const int hf = fi / 2;
 						if (hf < occupied.size() && occupied[hf]) continue; // only unoccupied
 
-						nfSum += t2(indn, indf) * (*m_spinOrbitalBasisIntegrals)(m, n, e, f);
+						nfSum += t2(indn, indf) * (*m_spinOrbitalBasisIntegrals)(m, n, e, fi);
 
 						++indf;
 					}

@@ -212,7 +212,7 @@ namespace HartreeFock {
 
 	void HartreeFockAlgorithm::NormalizeC(Eigen::MatrixXd& C, const std::vector<bool>& occupied)
 	{
-		assert(occupied.size() <= C.cols());
+		assert(occupied.size() <= static_cast<size_t>(C.cols()));
 		assert(C.rows() == overlapMatrix.matrix.rows());
 
 		for(int vec = 0; vec < occupied.size(); ++vec) 
