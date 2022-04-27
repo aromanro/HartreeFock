@@ -3,6 +3,10 @@
 #include "ChemUtils.h"
 #include "Basis.h"
 
+namespace HartreeFock {
+	class HartreeFockAlgorithm;
+}
+
 
 class Test
 {
@@ -20,6 +24,9 @@ public:
 
 protected:
 	static void OutputMatrix(const Eigen::MatrixXd& matrix, std::ofstream& file);
+
+	static void TestIterationsAndPostHF(Systems::Molecule& molecule, HartreeFock::HartreeFockAlgorithm* hartreeFock, const Eigen::MatrixXd& h, Eigen::MatrixXd& FockMatrix, Eigen::MatrixXd& FockTransformed, Eigen::MatrixXd& C, Eigen::MatrixXd& DensityMatrix, std::ofstream& file, bool useDIIS);
+
 
 	Chemistry::Basis basis;
 };

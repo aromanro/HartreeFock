@@ -247,223 +247,228 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 		((HartreeFock::RestrictedHartreeFock*)hartreeFock)->DensityMatrix = DensityMatrix;
 
 
-		double rmsD = 0;
-		double deltaE = 0;
-		for (int step = 1; step < 100; ++step)
-		{
-			((HartreeFock::RestrictedHartreeFock*)hartreeFock)->InitFockMatrix(step, FockMatrix);
-
-			if (1 == step)
-			{
-				file.precision(5);
-				file << "\nThe first iteration Fock matrix in the AO basis: \n";
-
-				OutputMatrix(FockMatrix, file);
-			}
-
-			// just copy/paste of the code from Restricted Hartree Fock class, with slight changes to work here, too:
-
-			bool usedDiis = false;
-			if (useDIIS) usedDiis = ((HartreeFock::RestrictedHartreeFock*)hartreeFock)->DIISStep(step, FockMatrix);
-
-			FockTransformed = hartreeFock->Vt * FockMatrix * hartreeFock->V; // orthogonalize
-			const Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> esl(FockTransformed);
-			const Eigen::MatrixXd& Cprime = esl.eigenvectors();
-			C = hartreeFock->V * Cprime; // transform back the eigenvectors into the original non-orthogonalized AO basis
-			((HartreeFock::RestrictedHartreeFock*)hartreeFock)->C = C;
-
-			DensityMatrix = Eigen::MatrixXd::Zero(h.rows(), h.cols());
-
-			for (int i = 0; i < h.rows(); ++i)
-				for (int j = 0; j < h.cols(); ++j)
-					for (unsigned int vec = 0; vec < ((HartreeFock::RestrictedHartreeFock*)hartreeFock)->occupied.size(); ++vec) // only eigenstates that are occupied 
-						if (((HartreeFock::RestrictedHartreeFock*)hartreeFock)->occupied[vec]) DensityMatrix(i, j) += 2. * C(i, vec) * C(j, vec); // 2 is for the number of electrons in the eigenstate, it's the restricted Hartree-Fock
-
-
-			//**************************************************************************************************************
-
-			((HartreeFock::RestrictedHartreeFock*)hartreeFock)->eigenvals = esl.eigenvalues();
-
-			const double oldEnergy = hartreeFock->GetTotalEnergy();
-
-			((HartreeFock::RestrictedHartreeFock*)hartreeFock)->CalculateEnergy(((HartreeFock::RestrictedHartreeFock*)hartreeFock)->eigenvals, DensityMatrix/*, FockMatrix*/);
-
-			const double totalEnergy = hartreeFock->GetTotalEnergy();
-			deltaE = totalEnergy - oldEnergy;
-
-			// calculate rms for differences between new and old density matrices, it can be used to check for convergence, too
-			Eigen::MatrixXd rmsDensityMatricesDif = DensityMatrix - ((HartreeFock::RestrictedHartreeFock*)hartreeFock)->DensityMatrix;
-
-			rmsDensityMatricesDif *= 0.5; // there is a difference compared with the one from the reference, they don't multiply it with 2 as I do, so this is done for comparison purposes
-
-			rmsD = sqrt(rmsDensityMatricesDif.cwiseProduct(rmsDensityMatricesDif).sum());
-
-			file.precision(12);
-			file << step << "\t" << totalEnergy - hartreeFock->nuclearRepulsionEnergy << "\t" << totalEnergy << "\t" << deltaE << "\t" << rmsD;
-			if (useDIIS) file << "\t" << hartreeFock->lastErrorEst;
-			file << std::endl;
-
-
-			if (rmsD < rmsDConvergence && (abs(deltaE) < (useDIIS ? energyConvergenceDIIS : energyConvergence)) && (!useDIIS || hartreeFock->lastErrorEst < diisConvergence)) break;
-
-			//if (step == 36) break;
-			// ***************************************************************************************************
-			// go to the next density matrix
-
-			((HartreeFock::RestrictedHartreeFock*)hartreeFock)->DensityMatrix = DensityMatrix;
-		}
-
-		file << std::endl;
-
-		for (int atom = 0; atom < molecule.atoms.size(); ++atom)
-			file << "Atom " << atom << " charge: " << hartreeFock->CalculateAtomicCharge(atom) << std::endl;
-
-		file << std::endl;
-
-		const double Emp2 = hartreeFock->CalculateMp2Energy();
-
-		file << "Emp2: " << Emp2 << std::endl;
-		file << "Total: " << hartreeFock->GetTotalEnergy() + Emp2 << std::endl;
-
-		((HartreeFock::RestrictedCCSD*)hartreeFock)->InitCC();
-		const double CCMP2 = ((HartreeFock::RestrictedCCSD*)hartreeFock)->MP2EnergyFromt4();
-		file << "Emp2 from CC: " << CCMP2 << std::endl << std::endl;
-
-		//file << "Emp2 from CC with general formula: " << ((HartreeFock::RestrictedCCSD*)hartreeFock)->CorrelationEnergy() << std::endl; 
-
-		for (int i = 0; i < 100; ++i)
-		{
-			const double oldCCEnergy = ((HartreeFock::RestrictedCCSD*)hartreeFock)->CCEnergy;
-			rmsD = ((HartreeFock::RestrictedCCSD*)hartreeFock)->StepCC(i);
-			const double newCCEnergy = ((HartreeFock::RestrictedCCSD*)hartreeFock)->CCEnergy;
-
-			file.precision(12);
-			file << "Iter: " << i + 1 << "\tEcc = " << newCCEnergy << std::endl;
-
-
-			deltaE = oldCCEnergy - newCCEnergy;
-
-			if (rmsD < rmsDConvergence && (abs(deltaE) < (useDIIS ? CCenergyConvergenceDIIS : energyConvergence)) && (!useDIIS || hartreeFock->lastErrorEst < CCdiisConvergence)) break;
-		}
-
-		file << "Total CC: " << hartreeFock->GetTotalEnergy() + ((HartreeFock::RestrictedCCSD*)hartreeFock)->CCEnergy << std::endl;
-
-		const double Te = ((HartreeFock::RestrictedCCSD*)hartreeFock)->TEnergy();
-
-		file << "E(T): " << Te << std::endl;
-
-		file << "Total ECCSD(T): " << hartreeFock->GetTotalEnergy() + ((HartreeFock::RestrictedCCSD*)hartreeFock)->CCEnergy + Te << std::endl;
-
-		Vector3D<double> moment = hartreeFock->GetMoment(); // multiply with 2.541746473 for Debye
-
-		file << std::endl;
-		file << "Mu-x: " << moment.X << " au, " << moment.X * 2.541746473 << " D" << std::endl;
-		file << "Mu-y: " << moment.Y << " au, " << moment.Y * 2.541746473 << " D" << std::endl;
-		file << "Mu-z: " << moment.Z << " au, " << moment.Z * 2.541746473 << " D" << std::endl;
-
-		const double total = moment.Length();
-		file << "Total dipole moment: " << total << " au, " << total * 2.541746473 << " D" << std::endl;
-
-
-		// test CIS
-
-		HartreeFock::RestrictedConfigurationIInteractionSingles restrictedCIS((HartreeFock::RestrictedHartreeFock*)hartreeFock);
-
-		restrictedCIS.Init();
-
-		Eigen::MatrixXd CISH = restrictedCIS.getSpinOrbitalCISMatrix();
-
-		file.precision(5);
-		file << "\nCIS Hamiltonian Matrix: \n";
-
-		OutputMatrix(CISH, file);
-
-
-		const Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> escis(CISH, Eigen::DecompositionOptions::EigenvaluesOnly);
-
-		Eigen::VectorXd eigenvals = escis.eigenvalues();
-
-		file << "\nCIS Eigenvalues: \n";
-
-		for (int i = 0; i < eigenvals.rows(); ++i)
-			file << eigenvals(i) << std::endl;
-
-
-		file.precision(5);
-		file << "\nSpin-adapted CIS singlet Hamiltonian Matrix: \n";
-
-		CISH = restrictedCIS.getSpinAdaptedCISSinglet();
-
-		OutputMatrix(CISH, file);
-
-
-		file << "\nCIS Singlet Eigenvalues: \n";
-
-		const Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> escisSinglet(CISH, Eigen::DecompositionOptions::EigenvaluesOnly);
-
-		eigenvals = escisSinglet.eigenvalues();
-		
-		for (int i = 0; i < eigenvals.rows(); ++i)
-			file << eigenvals(i) << std::endl;
-
-
-
-		file.precision(5);
-		file << "\nSpin-adapted CIS triplet Hamiltonian Matrix: \n";
-
-		CISH = restrictedCIS.getSpinAdaptedCISTriplet();
-
-		OutputMatrix(CISH, file);
-
-
-		file << "\nCIS Triplet Eigenvalues: \n";
-
-		const Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> escisTriplet(CISH, Eigen::DecompositionOptions::EigenvaluesOnly);
-
-		eigenvals = escisTriplet.eigenvalues();
-
-		for (int i = 0; i < eigenvals.rows(); ++i)
-			file << eigenvals(i) << std::endl;
-
-		const Eigen::MatrixXd TDHFm = restrictedCIS.getTDHFMatrix();
-
-		file << "\nTDHF / RPA Hamiltonian: \n";
-		OutputMatrix(TDHFm, file);
-
-		const Eigen::EigenSolver<Eigen::MatrixXd> TDHFSolver(TDHFm, false);
-		
-		const Eigen::VectorXcd& eigenv = TDHFSolver.eigenvalues();
-		std::vector<double> vals;
-		for (int i = 0; i < eigenv.rows(); ++i)
-			vals.push_back(eigenv(i).real());
-
-		std::sort(vals.begin(), vals.end());
-
-		file << "\nRPA Excitation Energies: \n";
-
-		for (int i = 0; i < vals.size(); ++i)
-			file << vals[i] << std::endl;
-
-
-		file << "\nRPA Excitation Energies (method 2): \n";
-
-		const Eigen::MatrixXd TDHFmr = restrictedCIS.getReducedTDHFMatrix();
-		const Eigen::EigenSolver<Eigen::MatrixXd> TDHFReducedSolver(TDHFmr, false);
-
-		const Eigen::VectorXcd& eigenv2 = TDHFReducedSolver.eigenvalues();
-
-		vals.clear();
-		for (int i = 0; i < eigenv2.rows(); ++i)
-			vals.push_back(sqrt(eigenv2(i).real()));
-		std::sort(vals.begin(), vals.end());
-
-		for (int i = 0; i < vals.size(); ++i)
-			file << vals[i] << std::endl;
+		TestIterationsAndPostHF(molecule, hartreeFock, h, FockMatrix, FockTransformed, C, DensityMatrix, file, useDIIS);
 	}
 
 	delete hartreeFock;
 }
 
+
+void Test::TestIterationsAndPostHF(Systems::Molecule& molecule, HartreeFock::HartreeFockAlgorithm* hartreeFock, const Eigen::MatrixXd& h, Eigen::MatrixXd& FockMatrix, Eigen::MatrixXd& FockTransformed, Eigen::MatrixXd& C, Eigen::MatrixXd& DensityMatrix, std::ofstream& file, bool useDIIS)
+{
+	double rmsD = 0;
+	double deltaE = 0;
+	for (int step = 1; step < 100; ++step)
+	{
+		((HartreeFock::RestrictedHartreeFock*)hartreeFock)->InitFockMatrix(step, FockMatrix);
+
+		if (1 == step)
+		{
+			file.precision(5);
+			file << "\nThe first iteration Fock matrix in the AO basis: \n";
+
+			OutputMatrix(FockMatrix, file);
+		}
+
+		// just copy/paste of the code from Restricted Hartree Fock class, with slight changes to work here, too:
+
+		bool usedDiis = false;
+		if (useDIIS) usedDiis = ((HartreeFock::RestrictedHartreeFock*)hartreeFock)->DIISStep(step, FockMatrix);
+
+		FockTransformed = hartreeFock->Vt * FockMatrix * hartreeFock->V; // orthogonalize
+		const Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> esl(FockTransformed);
+		const Eigen::MatrixXd& Cprime = esl.eigenvectors();
+		C = hartreeFock->V * Cprime; // transform back the eigenvectors into the original non-orthogonalized AO basis
+		((HartreeFock::RestrictedHartreeFock*)hartreeFock)->C = C;
+
+		DensityMatrix = Eigen::MatrixXd::Zero(h.rows(), h.cols());
+
+		for (int i = 0; i < h.rows(); ++i)
+			for (int j = 0; j < h.cols(); ++j)
+				for (unsigned int vec = 0; vec < ((HartreeFock::RestrictedHartreeFock*)hartreeFock)->occupied.size(); ++vec) // only eigenstates that are occupied 
+					if (((HartreeFock::RestrictedHartreeFock*)hartreeFock)->occupied[vec]) DensityMatrix(i, j) += 2. * C(i, vec) * C(j, vec); // 2 is for the number of electrons in the eigenstate, it's the restricted Hartree-Fock
+
+
+		//**************************************************************************************************************
+
+		((HartreeFock::RestrictedHartreeFock*)hartreeFock)->eigenvals = esl.eigenvalues();
+
+		const double oldEnergy = hartreeFock->GetTotalEnergy();
+
+		((HartreeFock::RestrictedHartreeFock*)hartreeFock)->CalculateEnergy(((HartreeFock::RestrictedHartreeFock*)hartreeFock)->eigenvals, DensityMatrix/*, FockMatrix*/);
+
+		const double totalEnergy = hartreeFock->GetTotalEnergy();
+		deltaE = totalEnergy - oldEnergy;
+
+		// calculate rms for differences between new and old density matrices, it can be used to check for convergence, too
+		Eigen::MatrixXd rmsDensityMatricesDif = DensityMatrix - ((HartreeFock::RestrictedHartreeFock*)hartreeFock)->DensityMatrix;
+
+		rmsDensityMatricesDif *= 0.5; // there is a difference compared with the one from the reference, they don't multiply it with 2 as I do, so this is done for comparison purposes
+
+		rmsD = sqrt(rmsDensityMatricesDif.cwiseProduct(rmsDensityMatricesDif).sum());
+
+		file.precision(12);
+		file << step << "\t" << totalEnergy - hartreeFock->nuclearRepulsionEnergy << "\t" << totalEnergy << "\t" << deltaE << "\t" << rmsD;
+		if (useDIIS) file << "\t" << hartreeFock->lastErrorEst;
+		file << std::endl;
+
+
+		if (rmsD < rmsDConvergence && (abs(deltaE) < (useDIIS ? energyConvergenceDIIS : energyConvergence)) && (!useDIIS || hartreeFock->lastErrorEst < diisConvergence)) break;
+
+		//if (step == 36) break;
+		// ***************************************************************************************************
+		// go to the next density matrix
+
+		((HartreeFock::RestrictedHartreeFock*)hartreeFock)->DensityMatrix = DensityMatrix;
+	}
+
+	file << std::endl;
+
+	for (int atom = 0; atom < molecule.atoms.size(); ++atom)
+		file << "Atom " << atom << " charge: " << hartreeFock->CalculateAtomicCharge(atom) << std::endl;
+
+	file << std::endl;
+
+	const double Emp2 = hartreeFock->CalculateMp2Energy();
+
+	file << "Emp2: " << Emp2 << std::endl;
+	file << "Total: " << hartreeFock->GetTotalEnergy() + Emp2 << std::endl;
+
+	((HartreeFock::RestrictedCCSD*)hartreeFock)->InitCC();
+	const double CCMP2 = ((HartreeFock::RestrictedCCSD*)hartreeFock)->MP2EnergyFromt4();
+	file << "Emp2 from CC: " << CCMP2 << std::endl << std::endl;
+
+	//file << "Emp2 from CC with general formula: " << ((HartreeFock::RestrictedCCSD*)hartreeFock)->CorrelationEnergy() << std::endl; 
+
+	for (int i = 0; i < 100; ++i)
+	{
+		const double oldCCEnergy = ((HartreeFock::RestrictedCCSD*)hartreeFock)->CCEnergy;
+		rmsD = ((HartreeFock::RestrictedCCSD*)hartreeFock)->StepCC(i);
+		const double newCCEnergy = ((HartreeFock::RestrictedCCSD*)hartreeFock)->CCEnergy;
+
+		file.precision(12);
+		file << "Iter: " << i + 1 << "\tEcc = " << newCCEnergy << std::endl;
+
+
+		deltaE = oldCCEnergy - newCCEnergy;
+
+		if (rmsD < rmsDConvergence && (abs(deltaE) < (useDIIS ? CCenergyConvergenceDIIS : energyConvergence)) && (!useDIIS || hartreeFock->lastErrorEst < CCdiisConvergence)) break;
+	}
+
+	file << "Total CC: " << hartreeFock->GetTotalEnergy() + ((HartreeFock::RestrictedCCSD*)hartreeFock)->CCEnergy << std::endl;
+
+	const double Te = ((HartreeFock::RestrictedCCSD*)hartreeFock)->TEnergy();
+
+	file << "E(T): " << Te << std::endl;
+
+	file << "Total ECCSD(T): " << hartreeFock->GetTotalEnergy() + ((HartreeFock::RestrictedCCSD*)hartreeFock)->CCEnergy + Te << std::endl;
+
+	Vector3D<double> moment = hartreeFock->GetMoment(); // multiply with 2.541746473 for Debye
+
+	file << std::endl;
+	file << "Mu-x: " << moment.X << " au, " << moment.X * 2.541746473 << " D" << std::endl;
+	file << "Mu-y: " << moment.Y << " au, " << moment.Y * 2.541746473 << " D" << std::endl;
+	file << "Mu-z: " << moment.Z << " au, " << moment.Z * 2.541746473 << " D" << std::endl;
+
+	const double total = moment.Length();
+	file << "Total dipole moment: " << total << " au, " << total * 2.541746473 << " D" << std::endl;
+
+
+	// test CIS
+
+	HartreeFock::RestrictedConfigurationIInteractionSingles restrictedCIS((HartreeFock::RestrictedHartreeFock*)hartreeFock);
+
+	restrictedCIS.Init();
+
+	Eigen::MatrixXd CISH = restrictedCIS.getSpinOrbitalCISMatrix();
+
+	file.precision(5);
+	file << "\nCIS Hamiltonian Matrix: \n";
+
+	OutputMatrix(CISH, file);
+
+
+	const Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> escis(CISH, Eigen::DecompositionOptions::EigenvaluesOnly);
+
+	Eigen::VectorXd eigenvals = escis.eigenvalues();
+
+	file << "\nCIS Eigenvalues: \n";
+
+	for (int i = 0; i < eigenvals.rows(); ++i)
+		file << eigenvals(i) << std::endl;
+
+
+	file.precision(5);
+	file << "\nSpin-adapted CIS singlet Hamiltonian Matrix: \n";
+
+	CISH = restrictedCIS.getSpinAdaptedCISSinglet();
+
+	OutputMatrix(CISH, file);
+
+
+	file << "\nCIS Singlet Eigenvalues: \n";
+
+	const Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> escisSinglet(CISH, Eigen::DecompositionOptions::EigenvaluesOnly);
+
+	eigenvals = escisSinglet.eigenvalues();
+
+	for (int i = 0; i < eigenvals.rows(); ++i)
+		file << eigenvals(i) << std::endl;
+
+
+
+	file.precision(5);
+	file << "\nSpin-adapted CIS triplet Hamiltonian Matrix: \n";
+
+	CISH = restrictedCIS.getSpinAdaptedCISTriplet();
+
+	OutputMatrix(CISH, file);
+
+
+	file << "\nCIS Triplet Eigenvalues: \n";
+
+	const Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> escisTriplet(CISH, Eigen::DecompositionOptions::EigenvaluesOnly);
+
+	eigenvals = escisTriplet.eigenvalues();
+
+	for (int i = 0; i < eigenvals.rows(); ++i)
+		file << eigenvals(i) << std::endl;
+
+	const Eigen::MatrixXd TDHFm = restrictedCIS.getTDHFMatrix();
+
+	file << "\nTDHF / RPA Hamiltonian: \n";
+	OutputMatrix(TDHFm, file);
+
+	const Eigen::EigenSolver<Eigen::MatrixXd> TDHFSolver(TDHFm, false);
+
+	const Eigen::VectorXcd& eigenv = TDHFSolver.eigenvalues();
+	std::vector<double> vals;
+	for (int i = 0; i < eigenv.rows(); ++i)
+		vals.push_back(eigenv(i).real());
+
+	std::sort(vals.begin(), vals.end());
+
+	file << "\nRPA Excitation Energies: \n";
+
+	for (int i = 0; i < vals.size(); ++i)
+		file << vals[i] << std::endl;
+
+
+	file << "\nRPA Excitation Energies (method 2): \n";
+
+	const Eigen::MatrixXd TDHFmr = restrictedCIS.getReducedTDHFMatrix();
+	const Eigen::EigenSolver<Eigen::MatrixXd> TDHFReducedSolver(TDHFmr, false);
+
+	const Eigen::VectorXcd& eigenv2 = TDHFReducedSolver.eigenvalues();
+
+	vals.clear();
+	for (int i = 0; i < eigenv2.rows(); ++i)
+		vals.push_back(sqrt(eigenv2(i).real()));
+	std::sort(vals.begin(), vals.end());
+
+	for (int i = 0; i < vals.size(); ++i)
+		file << vals[i] << std::endl;
+}
 
 
 void Test::CheckDifferences(const Eigen::MatrixXd& matrix, const std::string& matrixFileName, std::ofstream& file)
