@@ -123,7 +123,11 @@ namespace HartreeFock {
 
         // 3 - 5
         void CalculateFae();
+        void CalculateFaeSums(double& sum1, double& sum2, double& sum3, int inda, int a, int e);
+
         void CalculateFmi();
+        void CalculateFmiSums(double& sum1, double& sum2, double& sum3, int indi, int m, int i);
+
         void CalculateFme();
 
         // 6 - 8
