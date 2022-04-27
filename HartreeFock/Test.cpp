@@ -254,10 +254,8 @@ void Test::OutputMatrices(Systems::Molecule& molecule, std::ofstream& file, cons
 }
 
 
-void Test::TestIterationsAndPostHF(Systems::Molecule& molecule, HartreeFock::HartreeFockAlgorithm* hartreeFock, const Eigen::MatrixXd& h, Eigen::MatrixXd& FockMatrix, Eigen::MatrixXd& FockTransformed, Eigen::MatrixXd& C, Eigen::MatrixXd& DensityMatrix, std::ofstream& file, bool useDIIS)
+void Test::Iterate(double& rmsD, double& deltaE, Systems::Molecule& molecule, HartreeFock::HartreeFockAlgorithm* hartreeFock, const Eigen::MatrixXd& h, Eigen::MatrixXd& FockMatrix, Eigen::MatrixXd& FockTransformed, Eigen::MatrixXd& C, Eigen::MatrixXd& DensityMatrix, std::ofstream& file, bool useDIIS)
 {
-	double rmsD = 0;
-	double deltaE = 0;
 	for (int step = 1; step < 100; ++step)
 	{
 		((HartreeFock::RestrictedHartreeFock*)hartreeFock)->InitFockMatrix(step, FockMatrix);
@@ -323,6 +321,16 @@ void Test::TestIterationsAndPostHF(Systems::Molecule& molecule, HartreeFock::Har
 	}
 
 	file << std::endl;
+}
+
+
+void Test::TestIterationsAndPostHF(Systems::Molecule& molecule, HartreeFock::HartreeFockAlgorithm* hartreeFock, const Eigen::MatrixXd& h, Eigen::MatrixXd& FockMatrix, Eigen::MatrixXd& FockTransformed, Eigen::MatrixXd& C, Eigen::MatrixXd& DensityMatrix, std::ofstream& file, bool useDIIS)
+{
+	double rmsD = 0;
+	double deltaE = 0;
+
+	Iterate(rmsD, deltaE, molecule, hartreeFock, h, FockMatrix, FockTransformed, C, DensityMatrix, file, useDIIS);
+
 
 	for (int atom = 0; atom < molecule.atoms.size(); ++atom)
 		file << "Atom " << atom << " charge: " << hartreeFock->CalculateAtomicCharge(atom) << std::endl;
