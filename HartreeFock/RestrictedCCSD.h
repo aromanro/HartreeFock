@@ -234,6 +234,10 @@ namespace HartreeFock {
         // triples correction
         double TEnergy() const;
 
+    private:
+        double TEnergyInner(double& sum, int inda, int indi, int indj, int indk, int a, int i, int j, int k) const;
+
+    public:
         double StepCC(int iter);
 
         bool DIISStep(int iter, Eigen::MatrixXd& newt2, Eigen::Tensor<double, 4>& newt4);
