@@ -154,6 +154,8 @@ namespace HartreeFock {
         Eigen::MatrixXd ComputeNewt2() const;
         void ComputeNewt2Sum1(double& sum1, int indi, int inda) const;
         void ComputeNewt2Sum26(double& sum2, double& sum3, double& sum4, double& sum5, double& sum6, int indi, int inda, int i, int a) const;
+        void ComputeNewt2Sum4(double& sum4, int indm, int m, int i, int a) const;
+        void ComputeNewt2Sum56(double& sum5, double& sum6, int inda, int inde, int indi, int indm, int a, int e, int i, int m) const;
 
         Eigen::Tensor<double, 4> ComputeNewt4() const;
 
