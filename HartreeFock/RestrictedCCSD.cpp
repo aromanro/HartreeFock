@@ -259,126 +259,8 @@ namespace HartreeFock {
 						double sum6 = 0;
 						double sum7 = 0;
 
-						// sum1 is a sum over e: can be used also for sum4 (e and f) and sum6 (also over e)
-
-						int inde = 0;
-						for (int e = 0; e < numberOfSpinOrbitals; ++e)
-						{
-							const int orbe = e / 2;
-							if (orbe < occupied.size() && occupied[orbe]) continue; // only unoccupied
-						
-						
-							// sum1 also has a sum over m inside:
-
-							double psum1 = 0;
-							double psum2 = 0;
-
-							int indm = 0;
-							for (int m = 0; m < numberOfSpinOrbitals; ++m)
-							{
-								const int orbm = m / 2;
-								if (orbm >= occupied.size() || !occupied[orbm]) continue; // only occupied
-
-								const double F = Fme(indm, inde);
-
-								psum1 += t2(indm, indb) * F;
-								psum2 += t2(indm, inda) * F;
-
-								++indm;
-							}
-
-							sum1 += t4(indi, indj, inda, inde) * (Fae(indb, inde) - 0.5 * psum1) - t4(indi, indj, indb, inde) * (Fae(inda, inde) - 0.5 * psum2);
-
-							// sum4:
-						
-							int indf = 0;
-							for (int fi = 0; fi < numberOfSpinOrbitals; ++fi)
-							{
-								const int orbf = fi / 2;
-								if (orbf < occupied.size() && occupied[orbf]) continue; // only unoccupied
-							
-								sum4 += tau(indi, indj, inde, indf) * Wabef(inda, indb, inde, indf);
-							
-								++indf;
-							}
-
-							// sum6:
-
-							sum6 += t2(indi, inde) * (*m_spinOrbitalBasisIntegrals)(a, b, e, j) - t2(indj, inde) * (*m_spinOrbitalBasisIntegrals)(a, b, e, i);
-
-							++inde;
-						}
-
-
-						
-
-						// sum2 is a sum over m: can be used also for sum3 (over m and n), sum5 (over m and e), sum7 (over m)
-
-						int indm = 0;
-						for (int m = 0; m < numberOfSpinOrbitals; ++m)
-						{
-							const int orbm = m / 2;
-							if (orbm >= occupied.size() || !occupied[orbm]) continue; // only occupied
-
-							// sum2 also has a sum over e inside:
-
-							double psum1 = 0;
-							double psum2 = 0;
-
-							inde = 0;
-							for (int e = 0; e < numberOfSpinOrbitals; ++e)
-							{
-								const int orbe = e / 2;
-								if (orbe < occupied.size() && occupied[orbe]) continue; // only unoccupied
-
-								const double F = Fme(indm, inde);
-
-								psum1 += t2(indj, inde) * F;
-								psum2 += t2(indi, inde) * F;
-
-								++inde;
-							}
-
-							sum2 += t4(indi, indm, inda, indb) * (Fmi(indm, indj) + 0.5 * psum1) - t4(indj, indm, inda, indb) * (Fmi(indm, indi) + 0.5 * psum2);
-
-							// sum3:
-
-							int indn = 0;
-							for (int n = 0; n < numberOfSpinOrbitals; ++n)
-							{
-								const int orbn = n / 2;
-								if (orbn >= occupied.size() || !occupied[orbn]) continue; // only occupied
-							
-								sum3 += tau(indm, indn, inda, indb) * Wmnij(indm, indn, indi, indj);
-
-								++indn;
-							}
-
-							// sum5:
-
-							// this sum has permutation for both i, j and a, b
-
-							inde = 0;
-							for (int e = 0; e < numberOfSpinOrbitals; ++e)
-							{
-								const int orbe = e / 2;
-								if (orbe < occupied.size() && occupied[orbe]) continue; // only unoccupied
-							
-								sum5 += t4(indi, indm, inda, inde) * Wmbej(indm, indb, inde, indj) - t2(indi, inde) * t2(indm, inda) * (*m_spinOrbitalBasisIntegrals)(m, b, e, j)
-									 - (t4(indi, indm, indb, inde) * Wmbej(indm, inda, inde, indj) - t2(indi, inde) * t2(indm, indb) * (*m_spinOrbitalBasisIntegrals)(m, a, e, j))
-									 - (t4(indj, indm, inda, inde) * Wmbej(indm, indb, inde, indi) - t2(indj, inde) * t2(indm, inda) * (*m_spinOrbitalBasisIntegrals)(m, b, e, i))
-									 + (t4(indj, indm, indb, inde) * Wmbej(indm, inda, inde, indi) - t2(indj, inde) * t2(indm, indb) * (*m_spinOrbitalBasisIntegrals)(m, a, e, i));
-
-								++inde;
-							}
-
-							// sum7:
-
-							sum7 += t2(indm, inda) * (*m_spinOrbitalBasisIntegrals)(m, b, i, j) - t2(indm, indb) * (*m_spinOrbitalBasisIntegrals)(m, a, i, j);
-
-							++indm;
-						}
-
+						ComputeNewt4Sum146(sum1, sum4, sum6, inda, indb, indi, indj, a, b, i, j);					
+						ComputeNewt4Sum2357(sum2, sum3, sum5, sum7, inda, indb, indi, indj, a, b, i, j);
 
 						newt4(indi, indj, inda, indb) = ((*m_spinOrbitalBasisIntegrals)(i, j, a, b) + sum1 - sum2 + 0.5 * (sum3 + sum4) + sum5 + sum6 - sum7) / D(i, j, a, b);
 					
@@ -395,6 +277,126 @@ namespace HartreeFock {
 	}
 
 
+	void RestrictedCCSD::ComputeNewt4Sum146(double& sum1, double& sum4, double& sum6, int inda, int indb, int indi, int indj, int a, int b, int i, int j) const
+	{
+		// sum1 is a sum over e: can be used also for sum4 (e and f) and sum6 (also over e)
+		int inde = 0;
+		for (int e = 0; e < numberOfSpinOrbitals; ++e)
+		{
+			const int orbe = e / 2;
+			if (orbe < occupied.size() && occupied[orbe]) continue; // only unoccupied
+
+
+			// sum1 also has a sum over m inside:
+
+			double psum1 = 0;
+			double psum2 = 0;
+
+			int indm = 0;
+			for (int m = 0; m < numberOfSpinOrbitals; ++m)
+			{
+				const int orbm = m / 2;
+				if (orbm >= occupied.size() || !occupied[orbm]) continue; // only occupied
+
+				const double F = Fme(indm, inde);
+
+				psum1 += t2(indm, indb) * F;
+				psum2 += t2(indm, inda) * F;
+
+				++indm;
+			}
+
+			sum1 += t4(indi, indj, inda, inde) * (Fae(indb, inde) - 0.5 * psum1) - t4(indi, indj, indb, inde) * (Fae(inda, inde) - 0.5 * psum2);
+
+			// sum4:
+
+			int indf = 0;
+			for (int fi = 0; fi < numberOfSpinOrbitals; ++fi)
+			{
+				const int orbf = fi / 2;
+				if (orbf < occupied.size() && occupied[orbf]) continue; // only unoccupied
+
+				sum4 += tau(indi, indj, inde, indf) * Wabef(inda, indb, inde, indf);
+
+				++indf;
+			}
+
+			// sum6:
+
+			sum6 += t2(indi, inde) * (*m_spinOrbitalBasisIntegrals)(a, b, e, j) - t2(indj, inde) * (*m_spinOrbitalBasisIntegrals)(a, b, e, i);
+
+			++inde;
+		}
+	}
+
+	void RestrictedCCSD::ComputeNewt4Sum2357(double& sum2, double& sum3, double& sum5, double& sum7, int inda, int indb, int indi, int indj, int a, int b, int i, int j) const
+	{
+		// sum2 is a sum over m: can be used also for sum3 (over m and n), sum5 (over m and e), sum7 (over m)
+		int indm = 0;
+		for (int m = 0; m < numberOfSpinOrbitals; ++m)
+		{
+			const int orbm = m / 2;
+			if (orbm >= occupied.size() || !occupied[orbm]) continue; // only occupied
+
+			// sum2 also has a sum over e inside:
+
+			double psum1 = 0;
+			double psum2 = 0;
+
+			int inde = 0;
+			for (int e = 0; e < numberOfSpinOrbitals; ++e)
+			{
+				const int orbe = e / 2;
+				if (orbe < occupied.size() && occupied[orbe]) continue; // only unoccupied
+
+				const double F = Fme(indm, inde);
+
+				psum1 += t2(indj, inde) * F;
+				psum2 += t2(indi, inde) * F;
+
+				++inde;
+			}
+
+			sum2 += t4(indi, indm, inda, indb) * (Fmi(indm, indj) + 0.5 * psum1) - t4(indj, indm, inda, indb) * (Fmi(indm, indi) + 0.5 * psum2);
+
+			// sum3:
+
+			int indn = 0;
+			for (int n = 0; n < numberOfSpinOrbitals; ++n)
+			{
+				const int orbn = n / 2;
+				if (orbn >= occupied.size() || !occupied[orbn]) continue; // only occupied
+
+				sum3 += tau(indm, indn, inda, indb) * Wmnij(indm, indn, indi, indj);
+
+				++indn;
+			}
+
+			// sum5:
+
+			// this sum has permutation for both i, j and a, b
+
+			inde = 0;
+			for (int e = 0; e < numberOfSpinOrbitals; ++e)
+			{
+				const int orbe = e / 2;
+				if (orbe < occupied.size() && occupied[orbe]) continue; // only unoccupied
+
+				sum5 += t4(indi, indm, inda, inde) * Wmbej(indm, indb, inde, indj) - t2(indi, inde) * t2(indm, inda) * (*m_spinOrbitalBasisIntegrals)(m, b, e, j)
+					- (t4(indi, indm, indb, inde) * Wmbej(indm, inda, inde, indj) - t2(indi, inde) * t2(indm, indb) * (*m_spinOrbitalBasisIntegrals)(m, a, e, j))
+					- (t4(indj, indm, inda, inde) * Wmbej(indm, indb, inde, indi) - t2(indj, inde) * t2(indm, inda) * (*m_spinOrbitalBasisIntegrals)(m, b, e, i))
+					+ (t4(indj, indm, indb, inde) * Wmbej(indm, inda, inde, indi) - t2(indj, inde) * t2(indm, indb) * (*m_spinOrbitalBasisIntegrals)(m, a, e, i));
+
+				++inde;
+			}
+
+			// sum7:
+
+			sum7 += t2(indm, inda) * (*m_spinOrbitalBasisIntegrals)(m, b, i, j) - t2(indm, indb) * (*m_spinOrbitalBasisIntegrals)(m, a, i, j);
+
+			++indm;
+		}
+	}
 
 	double RestrictedCCSD::CorrelationEnergy() const
 	{

@@ -158,6 +158,8 @@ namespace HartreeFock {
         void ComputeNewt2Sum56(double& sum5, double& sum6, int inda, int inde, int indi, int indm, int a, int e, int i, int m) const;
 
         Eigen::Tensor<double, 4> ComputeNewt4() const;
+        void ComputeNewt4Sum146(double& sum1, double& sum4, double& sum6, int inda, int indb, int indi, int indj, int a, int b, int i, int j) const;
+        void ComputeNewt4Sum2357(double& sum2, double& sum3, double& sum5, double& sum7, int inda, int indb, int indi, int indj, int a, int b, int i, int j) const;
 
         // compute denominator arrays
 
