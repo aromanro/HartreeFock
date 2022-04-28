@@ -179,68 +179,80 @@ namespace HartreeFock {
 				const int hb = b / 2;
 				if (hb < occupied.size() && occupied[hb]) continue; // only unoccupied
 
-				int inde = 0;
-				for (int e = 0; e < numberOfSpinOrbitals; ++e)
-				{
-					const int he = e / 2;
-					if (he < occupied.size() && occupied[he]) continue; // only unoccupied
+				CalculateWmbejInner(indb, indm, b, m);
 
-					int indj = 0;
-					for (int j = 0; j < numberOfSpinOrbitals; ++j)
-					{
-						const int hj = j / 2;
-						if (hj >= occupied.size() || !occupied[hj]) continue; // only occupied
-
-						double sum1 = 0;
-						double sum2 = 0;
-						double sum3 = 0;
-
-						// sum 1 and sum 3
-						int indf = 0;
-						for (int fi = 0; fi < numberOfSpinOrbitals; ++fi)
-						{
-							const int hf = fi / 2;
-							if (hf < occupied.size() && occupied[hf]) continue; // only unoccupied
-
-							sum1 += t2(indj, indf) * (*m_spinOrbitalBasisIntegrals)(m, b, e, fi);
-
-							int indn = 0;
-							for (int n = 0; n < numberOfSpinOrbitals; ++n)
-							{
-								const int hn = n / 2;
-								if (hn >= occupied.size() || !occupied[hn]) continue; // only occupied
-
-								sum3 += (0.5 * t4(indj, indn, indf, indb) + t2(indj, indf) * t2(indn, indb)) * (*m_spinOrbitalBasisIntegrals)(m, n, e, fi);
-
-								++indn;
-							}
-
-							++indf;
-						}
-
-
-						// sum2
-						int indn = 0;
-						for (int n = 0; n < numberOfSpinOrbitals; ++n)
-						{
-							const int hn = n / 2;
-							if (hn >= occupied.size() || !occupied[hn]) continue; // only occupied
-
-							sum2 += t2(indn, indb) * (*m_spinOrbitalBasisIntegrals)(m, n, e, j);
-
-							++indn;
-						}
-
-						Wmbej(indm, indb, inde, indj) = (*m_spinOrbitalBasisIntegrals)(m, b, e, j) + sum1 - sum2 - sum3;
-
-						++indj;
-					}
-					++inde;
-				}
 				++indb;
 			}
 			++indm;
 		}
 	}
+
+	void RestrictedCCSD::CalculateWmbejInner(int indb, int indm, int b, int m)
+	{
+		int inde = 0;
+		for (int e = 0; e < numberOfSpinOrbitals; ++e)
+		{
+			const int he = e / 2;
+			if (he < occupied.size() && occupied[he]) continue; // only unoccupied
+
+			int indj = 0;
+			for (int j = 0; j < numberOfSpinOrbitals; ++j)
+			{
+				const int hj = j / 2;
+				if (hj >= occupied.size() || !occupied[hj]) continue; // only occupied
+
+				double sum1 = 0;
+				double sum2 = 0;
+				double sum3 = 0;
+
+				CalculateWmbejSums(sum1, sum2, sum3, indb, indj, b, e, m, j);
+
+				Wmbej(indm, indb, inde, indj) = (*m_spinOrbitalBasisIntegrals)(m, b, e, j) + sum1 - sum2 - sum3;
+
+				++indj;
+			}
+			++inde;
+		}
+	}
+
+
+	void RestrictedCCSD::CalculateWmbejSums(double& sum1, double& sum2, double& sum3, int indb, int indj, int b, int e, int m, int j)
+	{
+		// sum 1 and sum 3
+		int indf = 0;
+		for (int fi = 0; fi < numberOfSpinOrbitals; ++fi)
+		{
+			const int hf = fi / 2;
+			if (hf < occupied.size() && occupied[hf]) continue; // only unoccupied
+
+			sum1 += t2(indj, indf) * (*m_spinOrbitalBasisIntegrals)(m, b, e, fi);
+
+			int indn = 0;
+			for (int n = 0; n < numberOfSpinOrbitals; ++n)
+			{
+				const int hn = n / 2;
+				if (hn >= occupied.size() || !occupied[hn]) continue; // only occupied
+
+				sum3 += (0.5 * t4(indj, indn, indf, indb) + t2(indj, indf) * t2(indn, indb)) * (*m_spinOrbitalBasisIntegrals)(m, n, e, fi);
+
+				++indn;
+			}
+
+			++indf;
+		}
+
+		// sum2
+		int indn = 0;
+		for (int n = 0; n < numberOfSpinOrbitals; ++n)
+		{
+			const int hn = n / 2;
+			if (hn >= occupied.size() || !occupied[hn]) continue; // only occupied
+
+			sum2 += t2(indn, indb) * (*m_spinOrbitalBasisIntegrals)(m, n, e, j);
+
+			++indn;
+		}
+	}
+
 
 }

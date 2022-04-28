@@ -138,6 +138,8 @@ namespace HartreeFock {
         void CalculateWabefInner(int inda, int indb, int a, int b);
         void CalculateWabefSums(double& sum1, double& sum2, int inda, int indb, int inde, int indf, int a, int b, int e, int fi);
         void CalculateWmbej();
+        void CalculateWmbejInner(int indb, int indm, int b, int m);
+        void CalculateWmbejSums(double& sum1, double& sum2, double& sum3, int indb, int indj, int b, int e, int m, int j);
 
 
         void CalculateIntermediates();
