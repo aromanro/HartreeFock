@@ -111,82 +111,15 @@ namespace HartreeFock {
 				if (ha < occupied.size() && occupied[ha]) continue; // only unoccupied
 			
 				double sum1 = 0;
+				ComputeNewt2Sum1(sum1, indi, inda);
+
 				double sum2 = 0;
 				double sum3 = 0;
 				double sum4 = 0;
 				double sum5 = 0;
 				double sum6 = 0;
 			
-				// sum1
-				int inde = 0;
-				for (int e = 0; e < numberOfSpinOrbitals; ++e)
-				{
-					const int he = e / 2;
-					if (he < occupied.size() && occupied[he]) continue; // only unoccupied
-				
-					sum1 += t2(indi, inde) * Fae(inda, inde);
-
-					++inde;
-				}
-
-				int indm = 0;
-				for (int m = 0; m < numberOfSpinOrbitals; ++m)
-				{
-					const int hm = m / 2;
-					if (hm >= occupied.size() || !occupied[hm]) continue; // only occupied
-
-					// sum2
-					sum2 += t2(indm, inda) * Fmi(indm, indi);
-
-					// sum3
-					inde = 0;
-					for (int e = 0; e < numberOfSpinOrbitals; ++e)
-					{
-						const int he = e / 2;
-						if (he < occupied.size() && occupied[he]) continue; // only unoccupied
-					
-						sum3 += t4(indi, indm, inda, inde) * Fme(indm, inde);
-
-						// sum5
-						int indf = 0;
-						for (int fi = 0; fi < numberOfSpinOrbitals; ++fi)
-						{
-							const int hf = fi / 2;
-							if (hf < occupied.size() && occupied[hf]) continue; // only unoccupied
-												
-							sum5 += t4(indi, indm, inde, indf) * (*m_spinOrbitalBasisIntegrals)(m, a, e, fi);
-
-							++indf;
-						}
-
-						// sum6
-						int indn = 0;
-						for (int n = 0; n < numberOfSpinOrbitals; ++n)
-						{
-							const int hn = n / 2;
-							if (hn >= occupied.size() || !occupied[hn]) continue; // only occupied
-						
-							sum6 += t4(indm, indn, inda, inde) * (*m_spinOrbitalBasisIntegrals)(n, m, e, i);
-
-							++indn;
-						}
-						++inde;
-					}
-
-
-					// sum4
-					int indf = 0;
-					for (int fi = 0; fi < numberOfSpinOrbitals; ++fi)
-					{
-						const int hf = fi / 2;
-						if (hf < occupied.size() && occupied[hf]) continue; // only unoccupied
-											
-						sum4 += t2(indm, indf) * (*m_spinOrbitalBasisIntegrals)(m, a, i, fi);
-
-						++indf;
-					}
-					++indm;
-				}
+				ComputeNewt2Sum26(sum2, sum3, sum4, sum5, sum6, indi, inda, i, a);
 
 				newt2(indi, inda) = (f(i, a) + sum1 - sum2 + sum3 - sum4 - 0.5 * (sum5 + sum6)) / D(i, a);
 			
@@ -198,7 +131,85 @@ namespace HartreeFock {
 		return newt2;
 	}
 
+
+	void RestrictedCCSD::ComputeNewt2Sum1(double& sum1, int indi, int inda) const
+	{
+		// sum1
+		int inde = 0;
+		for (int e = 0; e < numberOfSpinOrbitals; ++e)
+		{
+			const int he = e / 2;
+			if (he < occupied.size() && occupied[he]) continue; // only unoccupied
+
+			sum1 += t2(indi, inde) * Fae(inda, inde);
+
+			++inde;
+		}
+	}
 	
+	void RestrictedCCSD::ComputeNewt2Sum26(double& sum2, double& sum3, double& sum4, double& sum5, double& sum6, int indi, int inda, int i, int a) const
+	{
+		int indm = 0;
+		for (int m = 0; m < numberOfSpinOrbitals; ++m)
+		{
+			const int hm = m / 2;
+			if (hm >= occupied.size() || !occupied[hm]) continue; // only occupied
+
+			// sum2
+			sum2 += t2(indm, inda) * Fmi(indm, indi);
+
+			// sum3
+			int inde = 0;
+			for (int e = 0; e < numberOfSpinOrbitals; ++e)
+			{
+				const int he = e / 2;
+				if (he < occupied.size() && occupied[he]) continue; // only unoccupied
+
+				sum3 += t4(indi, indm, inda, inde) * Fme(indm, inde);
+
+				// sum5
+				int indf = 0;
+				for (int fi = 0; fi < numberOfSpinOrbitals; ++fi)
+				{
+					const int hf = fi / 2;
+					if (hf < occupied.size() && occupied[hf]) continue; // only unoccupied
+
+					sum5 += t4(indi, indm, inde, indf) * (*m_spinOrbitalBasisIntegrals)(m, a, e, fi);
+
+					++indf;
+				}
+
+				// sum6
+				int indn = 0;
+				for (int n = 0; n < numberOfSpinOrbitals; ++n)
+				{
+					const int hn = n / 2;
+					if (hn >= occupied.size() || !occupied[hn]) continue; // only occupied
+
+					sum6 += t4(indm, indn, inda, inde) * (*m_spinOrbitalBasisIntegrals)(n, m, e, i);
+
+					++indn;
+				}
+				++inde;
+			}
+
+
+			// sum4
+			int indf = 0;
+			for (int fi = 0; fi < numberOfSpinOrbitals; ++fi)
+			{
+				const int hf = fi / 2;
+				if (hf < occupied.size() && occupied[hf]) continue; // only unoccupied
+
+				sum4 += t2(indm, indf) * (*m_spinOrbitalBasisIntegrals)(m, a, i, fi);
+
+				++indf;
+			}
+			++indm;
+		}
+	}
+
+
 	// formula 2
 	Eigen::Tensor<double, 4> RestrictedCCSD::ComputeNewt4() const
 	{
