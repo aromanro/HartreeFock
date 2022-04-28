@@ -132,7 +132,11 @@ namespace HartreeFock {
 
         // 6 - 8
         void CalculateWmnij();
+        void CalculateWmnijInner(int indm, int indn, int m, int n);
+        void CalculateWmnijSums(double& sum1, double& sum2, int indi, int indj, int m, int n, int i, int j);
         void CalculateWabef();
+        void CalculateWabefInner(int inda, int indb, int a, int b);
+        void CalculateWabefSums(double& sum1, double& sum2, int inda, int indb, int inde, int indf, int a, int b, int e, int fi);
         void CalculateWmbej();
 
 
