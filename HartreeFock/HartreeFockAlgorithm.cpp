@@ -35,7 +35,7 @@ namespace HartreeFock {
 
 		integralsRepository.ClearMatricesMaps();
 
-		h = kineticMatrix.matrix + nuclearMatrix.matrix;
+		h = kineticMatrix.matrix + nuclearMatrix.matrix + molecule->ElectricField.X * momentMatrix.matrix + molecule->ElectricField.Y * momentMatrix.matrixY + molecule->ElectricField.Z * momentMatrix.matrixZ;
 
 		nuclearRepulsionEnergy = molecule->NuclearRepulsionEnergy();
 

@@ -25,7 +25,7 @@ namespace HartreeFock {
 		Matrices::MomentMatrix momentMatrix;
 		Matrices::KineticMatrix kineticMatrix;
 		Matrices::NuclearMatrix nuclearMatrix;
-		
+
 	public:
 		Eigen::MatrixXd h;
 

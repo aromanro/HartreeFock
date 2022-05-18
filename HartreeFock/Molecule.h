@@ -16,6 +16,7 @@ namespace Systems {
 		unsigned int alphaElectrons;
 		unsigned int betaElectrons;
 
+		Vector3D<double> ElectricField;
 
 		Molecule();
 
