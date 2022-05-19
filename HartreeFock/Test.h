@@ -29,6 +29,9 @@ protected:
 
 	static void Iterate(double& rmsD, double& deltaE, Systems::Molecule& molecule, HartreeFock::HartreeFockAlgorithm* hartreeFock, const Eigen::MatrixXd& h, Eigen::MatrixXd& FockMatrix, Eigen::MatrixXd& FockTransformed, Eigen::MatrixXd& C, Eigen::MatrixXd& DensityMatrix, std::ofstream& file, bool useDIIS);
 
+	// it seems that I might need it for more tests
+	// for now, I intend to test the dipole moment computation (the newer method, see pages 376-378 in Szabo & Ostlund book)
+	void InitWaterMolecule(Systems::Molecule& molecule);
 
 	Chemistry::Basis basis;
 };

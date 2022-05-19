@@ -569,10 +569,7 @@ void Test::CheckDifferences(const GaussianIntegrals::IntegralsRepository& repo, 
 
 
 
-// TODO: try to load the provided file at https://github.com/CrawfordGroup/ProgrammingProjects/tree/master/Project%2303 and do comparisons in the code
-// even the geometry of the molecule could be loaded from the file
-
-void Test::TestWater(const std::string& fileName, const std::string& sfileName, const std::string& tfileName, const std::string& vfileName, const std::string& erifileName, bool useDIIS)
+void Test::InitWaterMolecule(Systems::Molecule& molecule)
 {
 	Systems::AtomWithShells H1, H2, O;
 
@@ -585,8 +582,6 @@ void Test::TestWater(const std::string& fileName, const std::string& sfileName, 
 		else if (8 == atom.Z)
 			O = atom;
 	}
-
-	Systems::Molecule molecule;
 
 	O.position.X = 0;
 	O.position.Y = -0.143225816552;
@@ -610,6 +605,18 @@ void Test::TestWater(const std::string& fileName, const std::string& sfileName, 
 	molecule.atoms.push_back(H1);
 	molecule.atoms.push_back(H2);
 	molecule.Init();
+}
+
+
+
+// TODO: try to load the provided file at https://github.com/CrawfordGroup/ProgrammingProjects/tree/master/Project%2303 and do comparisons in the code
+// even the geometry of the molecule could be loaded from the file
+
+void Test::TestWater(const std::string& fileName, const std::string& sfileName, const std::string& tfileName, const std::string& vfileName, const std::string& erifileName, bool useDIIS)
+{
+	Systems::Molecule molecule;
+
+	InitWaterMolecule(molecule);
 
 	std::ofstream file(fileName);
 
