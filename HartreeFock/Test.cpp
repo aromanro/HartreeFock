@@ -648,32 +648,61 @@ void Test::TestWaterDipoleMoment(const std::string& fileName)
 
 	hartreeFock->Init(&molecule);
 
-	double E = hartreeFock->Calculate();
+	const double deltaE = 0.001;
 
-	// TODO: check more, it's very sensitive to step size!
-	const double deltaE = 0.1;
+	const double deltaE2 = 2 * deltaE;
+
+	molecule.ElectricField.X = -deltaE;
+	hartreeFock->Init(&molecule);
+	double Ex1 = hartreeFock->Calculate();
+	Ex1 += hartreeFock->CalculateMp2Energy();
+
+	if (!hartreeFock->converged) file << "Not converged Ex1" << std::endl;
 
 	molecule.ElectricField.X = deltaE;
 	hartreeFock->Init(&molecule);
+	double Ex2 = hartreeFock->Calculate();
+	Ex2 += hartreeFock->CalculateMp2Energy();
 
-	double Ex = hartreeFock->Calculate();
+	if (!hartreeFock->converged) file << "Not converged Ex2" << std::endl;
 
 	molecule.ElectricField.X = 0;
+
+
+	molecule.ElectricField.Y = -deltaE;
+	hartreeFock->Init(&molecule);
+	double Ey1 = hartreeFock->Calculate();
+	Ey1 += hartreeFock->CalculateMp2Energy();
+
+	if (!hartreeFock->converged) file << "Not converged Ey1" << std::endl;
+
 	molecule.ElectricField.Y = deltaE;
 	hartreeFock->Init(&molecule);
+	double Ey2 = hartreeFock->Calculate();
+	Ey2 += hartreeFock->CalculateMp2Energy();
 
-	double Ey = hartreeFock->Calculate();
+	if (!hartreeFock->converged) file << "Not converged Ey2" << std::endl;
 
 	molecule.ElectricField.Y = 0;
+
+	molecule.ElectricField.Z = -deltaE;
+	hartreeFock->Init(&molecule);
+	double Ez1 = hartreeFock->Calculate();
+	Ez1 += hartreeFock->CalculateMp2Energy();
+
+	if (!hartreeFock->converged) file << "Not converged Ez1" << std::endl;
+
 	molecule.ElectricField.Z = deltaE;
 	hartreeFock->Init(&molecule);
+	double Ez2 = hartreeFock->Calculate();
+	Ez2 += hartreeFock->CalculateMp2Energy();
 
-	double Ez = hartreeFock->Calculate();
+	if (!hartreeFock->converged) file << "Not converged Ez2" << std::endl;
 
 	Vector3D<double> mu;
-	mu.X = (E - Ex) / deltaE;
-	mu.Y = (E - Ey) / deltaE;
-	mu.Z = (E - Ez) / deltaE;
+	mu.X = (Ex1 - Ex2) / deltaE2;
+	mu.Y = (Ey1 - Ey2) / deltaE2;
+	mu.Z = (Ez1 - Ez2) / deltaE2;
 
 	file << "Mu-x: " << mu.X << " au, " << mu.X * 2.541746473 << " D" << std::endl;
 	file << "Mu-y: " << mu.Y << " au, " << mu.Y * 2.541746473 << " D" << std::endl;
