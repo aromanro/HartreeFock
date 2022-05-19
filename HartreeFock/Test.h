@@ -22,6 +22,9 @@ public:
 	void TestWater(const std::string& fileName, const std::string& sfileName = "", const std::string& tfileName = "", const std::string& vfileName = "", const std::string& erifileName = "", bool useDIIS = false);
 	void TestMethane(const std::string& fileName, const std::string& sfileName = "", const std::string& tfileName = "", const std::string& vfileName = "", const std::string& erifileName = "", bool useDIIS = false);
 
+	// specifically for a single test now, maybe I'll generalize it later
+	void Test::TestWaterDipoleMoment(const std::string& fileName);
+
 protected:
 	static void OutputMatrix(const Eigen::MatrixXd& matrix, std::ofstream& file);
 

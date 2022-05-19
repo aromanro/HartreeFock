@@ -134,6 +134,11 @@ BOOL CHartreeFockDoc::OnNewDocument()
 	//	tests.Test(basisSTO3G);
 #endif
 
+	// TODO: It's odd, with this basis set I get quite close to the experimental value
+	// but it's very sensitive to delta E (for derivatives) so something seems to be wrong
+	//Test test("6-311++g_st__st_.0.nw");
+	//test.TestWaterDipoleMoment("c:\\temp\\water_dipole.txt");
+
 	//Test::OutputMatricesForAtom("Ti", "sto3g.txt", "c:\\temp\\matrices.txt");
 
 	//Test test;

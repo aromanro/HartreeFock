@@ -623,6 +623,68 @@ void Test::TestWater(const std::string& fileName, const std::string& sfileName, 
 	OutputMatrices(molecule, file, sfileName, tfileName, vfileName, erifileName, useDIIS, 8.002367061810450);
 }
 
+void Test::TestWaterDipoleMoment(const std::string& fileName)
+{
+	Systems::Molecule molecule;
+
+	InitWaterMolecule(molecule);
+
+	std::ofstream file(fileName);
+
+	HartreeFock::HartreeFockAlgorithm* hartreeFock;
+	const bool restricted = molecule.alphaElectrons == molecule.betaElectrons;
+	if (restricted)
+		hartreeFock = new HartreeFock::RestrictedHartreeFock();
+		//hartreeFock = new HartreeFock::RestrictedCCSD();
+	else
+	{
+		hartreeFock = new HartreeFock::UnrestrictedHartreeFock();
+		((HartreeFock::UnrestrictedHartreeFock*)hartreeFock)->addAsymmetry = false;
+	}
+
+	hartreeFock->UseDIIS = false;
+	hartreeFock->alpha = 0.5;
+	hartreeFock->initGuess = 0.7;
+
+	hartreeFock->Init(&molecule);
+
+	double E = hartreeFock->Calculate();
+
+	// TODO: check more, it's very sensitive to step size!
+	const double deltaE = 0.1;
+
+	molecule.ElectricField.X = deltaE;
+	hartreeFock->Init(&molecule);
+
+	double Ex = hartreeFock->Calculate();
+
+	molecule.ElectricField.X = 0;
+	molecule.ElectricField.Y = deltaE;
+	hartreeFock->Init(&molecule);
+
+	double Ey = hartreeFock->Calculate();
+
+	molecule.ElectricField.Y = 0;
+	molecule.ElectricField.Z = deltaE;
+	hartreeFock->Init(&molecule);
+
+	double Ez = hartreeFock->Calculate();
+
+	Vector3D<double> mu;
+	mu.X = (E - Ex) / deltaE;
+	mu.Y = (E - Ey) / deltaE;
+	mu.Z = (E - Ez) / deltaE;
+
+	file << "Mu-x: " << mu.X << " au, " << mu.X * 2.541746473 << " D" << std::endl;
+	file << "Mu-y: " << mu.Y << " au, " << mu.Y * 2.541746473 << " D" << std::endl;
+	file << "Mu-z: " << mu.Z << " au, " << mu.Z * 2.541746473 << " D" << std::endl;
+
+	const double total = mu.Length();
+	file << "Total dipole moment: " << total << " au, " << total * 2.541746473 << " D" << std::endl;
+
+	file << std::endl;
+}
+
 
 void Test::TestMethane(const std::string& fileName, const std::string& sfileName, const std::string& tfileName, const std::string& vfileName, const std::string& erifileName, bool useDIIS)
 {
