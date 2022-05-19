@@ -326,7 +326,7 @@ CAPTION "Post Hartree-Fock"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     CONTROL         "Compute post Hartree-Fock",IDC_CHECK1,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,18,105,10
-    LTEXT           "For now only Møller–Plesset perturbation theory (MP2)",IDC_STATIC,30,38,185,53
+    LTEXT           "For now only Møller–Plesset perturbation theory (MP2).\nOthers are available, but only programmatically.",IDC_STATIC,30,38,185,53
 END
 
 
