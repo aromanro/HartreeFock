@@ -648,7 +648,7 @@ void Test::TestWaterDipoleMoment(const std::string& fileName)
 
 	hartreeFock->Init(&molecule);
 
-	const double deltaE = 0.001;
+	const double deltaE = 0.01;
 
 	const double deltaE2 = 2 * deltaE;
 
@@ -702,12 +702,13 @@ void Test::TestWaterDipoleMoment(const std::string& fileName)
 
 	if (!hartreeFock->converged) file << "Not converged Ez2" << std::endl;
 
+	Vector3D<double> mu = hartreeFock->GetNuclearMoment();
+
 	delete hartreeFock;
 
-	Vector3D<double> mu;
-	mu.X = (Ex1 - Ex2) / deltaE2;
-	mu.Y = (Ey1 - Ey2) / deltaE2;
-	mu.Z = (Ez1 - Ez2) / deltaE2;
+	mu.X += (Ex1 - Ex2) / deltaE2;
+	mu.Y += (Ey1 - Ey2) / deltaE2;
+	mu.Z += (Ez1 - Ez2) / deltaE2;
 
 	file << "Mu-x: " << mu.X << " au, " << mu.X * 2.541746473 << " D" << std::endl;
 	file << "Mu-y: " << mu.Y << " au, " << mu.Y * 2.541746473 << " D" << std::endl;
