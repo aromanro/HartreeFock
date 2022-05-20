@@ -134,7 +134,8 @@ BOOL CHartreeFockDoc::OnNewDocument()
 	//	tests.Test(basisSTO3G);
 #endif
 
-	//Test test("sto3g.nw");
+	//Test test("sto3g.txt");
+	//Test test("6-31g_st_.1.nw");
 	//Test test("6-311++g_st__st_.0.nw");
 	//test.TestWaterDipoleMoment("c:\\temp\\water_dipole.txt");
 

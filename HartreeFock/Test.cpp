@@ -659,12 +659,14 @@ void Test::TestWaterDipoleMoment(const std::string& fileName)
 
 	if (!hartreeFock->converged) file << "Not converged Ex1" << std::endl;
 
+
 	molecule.ElectricField.X = deltaE;
 	hartreeFock->Init(&molecule);
 	double Ex2 = hartreeFock->Calculate();
 	Ex2 += hartreeFock->CalculateMp2Energy();
 
 	if (!hartreeFock->converged) file << "Not converged Ex2" << std::endl;
+
 
 	molecule.ElectricField.X = 0;
 
@@ -675,6 +677,7 @@ void Test::TestWaterDipoleMoment(const std::string& fileName)
 	Ey1 += hartreeFock->CalculateMp2Energy();
 
 	if (!hartreeFock->converged) file << "Not converged Ey1" << std::endl;
+
 
 	molecule.ElectricField.Y = deltaE;
 	hartreeFock->Init(&molecule);
@@ -698,6 +701,8 @@ void Test::TestWaterDipoleMoment(const std::string& fileName)
 	Ez2 += hartreeFock->CalculateMp2Energy();
 
 	if (!hartreeFock->converged) file << "Not converged Ez2" << std::endl;
+
+	delete hartreeFock;
 
 	Vector3D<double> mu;
 	mu.X = (Ex1 - Ex2) / deltaE2;
