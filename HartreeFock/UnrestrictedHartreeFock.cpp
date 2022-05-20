@@ -289,7 +289,7 @@ namespace HartreeFock {
 
 		totalEnergy /= 2.;
 
-		totalEnergy += nuclearRepulsionEnergy;
+		totalEnergy += nuclearRepulsionEnergy/* + nuclearElectricFieldEnergy*/;
 	}
 
 	double UnrestrictedHartreeFock::CalculateMp2Energy()

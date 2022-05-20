@@ -24,6 +24,7 @@ namespace Systems {
 		unsigned int CountNumberOfGaussians() const;
 		void SetIDs();
 		double NuclearRepulsionEnergy() const;
+		double NuclearElectricFieldEnergy() const;
 		unsigned int ElectronsNumber();
 		unsigned int GetMaxAngularMomentum();
 		void SetCenterForShells();

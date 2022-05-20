@@ -647,8 +647,20 @@ void Test::TestWaterDipoleMoment(const std::string& fileName)
 	hartreeFock->initGuess = 0.7;
 
 	hartreeFock->Init(&molecule);
+	double E = hartreeFock->Calculate();
+	Vector3D<double> scfMoment = hartreeFock->GetMoment();
 
-	const double deltaE = 0.01;
+	file << "Scf Mu-x: " << scfMoment.X << " au, " << scfMoment.X * 2.541746473 << " D" << std::endl;
+	file << "Scf Mu-y: " << scfMoment.Y << " au, " << scfMoment.Y * 2.541746473 << " D" << std::endl;
+	file << "Scf Mu-z: " << scfMoment.Z << " au, " << scfMoment.Z * 2.541746473 << " D" << std::endl;
+
+	double total = scfMoment.Length();
+	file << "Scf Total dipole moment: " << total << " au, " << total * 2.541746473 << " D" << std::endl << std::endl;
+
+	// the above method gives basically the same value as the following one (with numerical derivatives), if MP2 energy is not included
+	// that is, for STO3G basis and H2O molecule, the above gives 0.603521 au, the following gives 0.60352
+
+	const double deltaE = 0.001;
 
 	const double deltaE2 = 2 * deltaE;
 
@@ -675,7 +687,7 @@ void Test::TestWaterDipoleMoment(const std::string& fileName)
 	hartreeFock->Init(&molecule);
 	double Ey1 = hartreeFock->Calculate();
 	Ey1 += hartreeFock->CalculateMp2Energy();
-
+	
 	if (!hartreeFock->converged) file << "Not converged Ey1" << std::endl;
 
 
@@ -714,7 +726,7 @@ void Test::TestWaterDipoleMoment(const std::string& fileName)
 	file << "Mu-y: " << mu.Y << " au, " << mu.Y * 2.541746473 << " D" << std::endl;
 	file << "Mu-z: " << mu.Z << " au, " << mu.Z * 2.541746473 << " D" << std::endl;
 
-	const double total = mu.Length();
+	total = mu.Length();
 	file << "Total dipole moment: " << total << " au, " << total * 2.541746473 << " D" << std::endl;
 
 	file << std::endl;

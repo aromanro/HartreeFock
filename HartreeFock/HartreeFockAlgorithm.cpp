@@ -7,7 +7,7 @@
 namespace HartreeFock {
 
 	HartreeFockAlgorithm::HartreeFockAlgorithm(int iterations)
-		: totalEnergy(std::numeric_limits<double>::infinity()), mp2Energy(0), nuclearRepulsionEnergy(0), numberOfOrbitals(0),  maxIterations(iterations), inited(false), alpha(0.75), initGuess(0.75), terminate(false), converged(false),
+		: totalEnergy(std::numeric_limits<double>::infinity()), mp2Energy(0), nuclearRepulsionEnergy(0), nuclearElectricFieldEnergy(0), numberOfOrbitals(0),  maxIterations(iterations), inited(false), alpha(0.75), initGuess(0.75), terminate(false), converged(false),
 		HOMOEnergy(0), lastErrorEst(0), UseDIIS(true), maxDIISiterations(1000), normalIterAfterDIIS(500)
 	{
 	}
@@ -38,6 +38,7 @@ namespace HartreeFock {
 		h = kineticMatrix.matrix + nuclearMatrix.matrix + molecule->ElectricField.X * momentMatrix.matrix + molecule->ElectricField.Y * momentMatrix.matrixY + molecule->ElectricField.Z * momentMatrix.matrixZ;
 
 		nuclearRepulsionEnergy = molecule->NuclearRepulsionEnergy();
+		nuclearElectricFieldEnergy = molecule->NuclearElectricFieldEnergy();
 
 		numberOfOrbitals = molecule->CountNumberOfContractedGaussians();
 

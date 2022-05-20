@@ -89,6 +89,15 @@ double Systems::Molecule::NuclearRepulsionEnergy() const
 	return energy;
 }
 
+double Systems::Molecule::NuclearElectricFieldEnergy() const
+{
+	double energy = 0;
+
+	for (unsigned int atom = 0; atom < atoms.size(); ++atom)
+		energy -= static_cast<double>(atoms[atom].Z) * atoms[atom].position * ElectricField;
+
+	return energy;
+}
 
 unsigned int Systems::Molecule::ElectronsNumber()
 {

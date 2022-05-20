@@ -31,6 +31,12 @@ namespace HartreeFock {
 
 	protected:
 		double nuclearRepulsionEnergy;
+		// for external electric field
+		// it's not added up to total energy (for now, at least) because the derivative of energy with respect to the electric field is used to obtain the dipole moment
+		// there is a way to analytically compute the nuclear dipole moment instead of relying on numerical derivatives, so that's used instead
+		// if this energy is added up (and the analytically computed nuclear dipole moment is not), basically the result with numerical derivative is the same, so I prefer the analytic result
+		// see the Test class for details
+		double nuclearElectricFieldEnergy; 
 
 		Eigen::MatrixXd U;
 		Eigen::MatrixXd s;
@@ -76,6 +82,11 @@ namespace HartreeFock {
 		{
 			return totalEnergy;
 		};
+
+		double GetNuclearElectricFieldEnergy() const
+		{
+			return nuclearElectricFieldEnergy;			
+		}
 
 		virtual double GetMP2Energy() const
 		{
