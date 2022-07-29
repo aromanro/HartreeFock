@@ -1,6 +1,7 @@
 # HartreeFock
 A program implementing the Hartree–Fock/self-consistent field method (and more, see the README at the end)
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1c15e477f0f74dbfb479556bba9dd725)](https://app.codacy.com/gh/aromanro/HartreeFock?utm_source=github.com&utm_medium=referral&utm_content=aromanro/HartreeFock&utm_campaign=Badge_Grade_Settings)
 [![CodeFactor](https://www.codefactor.io/repository/github/aromanro/hartreefock/badge)](https://www.codefactor.io/repository/github/aromanro/hartreefock)
 
 Description is available here: http://compphys.go.ro/the-hartree-fock-program/
