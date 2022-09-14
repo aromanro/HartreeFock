@@ -50,7 +50,7 @@ BOOL ComputationPropertyPage::OnApply()
 void ComputationPropertyPage::ApplyValues()
 {
 	theApp.options.nrThreads = m_nrThreads;
-	theApp.options.useLotsOfMemory = (m_useLotsOfMemory == BST_CHECKED ? true : false);
+	theApp.options.useLotsOfMemory = m_useLotsOfMemory == BST_CHECKED;
 	theApp.options.numberOfPoints = m_nrPoints;
 
 	theApp.options.Save();

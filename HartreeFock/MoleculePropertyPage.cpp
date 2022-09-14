@@ -93,7 +93,7 @@ void MoleculePropertyPage::ApplyValues()
 {
 	theApp.options.m_atom1 = m_atom1;
 	theApp.options.m_atom2 = m_atom2;
-	theApp.options.twoAtom1 = (twoAtom1 == BST_CHECKED ? true : false);
+	theApp.options.twoAtom1 = twoAtom1 == BST_CHECKED;
 
 	theApp.options.basis = basis; // 0 - STO3G, 1 - STO6G, 2 - 3-21G, 3 - 6-21G, 4 - 6-31G, 5 - 6-31G*, 6 - 6-31+G**
 	theApp.options.bondAngle = bondAngle;

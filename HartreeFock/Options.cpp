@@ -61,7 +61,7 @@ void Options::Load()
 	// Molecule
 	m_atom1 = theApp.GetProfileString(L"options", L"Atom1", L"H");
 	m_atom2 = theApp.GetProfileString(L"options", L"Atom2", L"O");
-	twoAtom1 = (1 == theApp.GetProfileInt(L"options", L"TwoAtom1", 1) ? true : false);
+	twoAtom1 = 1 == theApp.GetProfileInt(L"options", L"TwoAtom1", 1);
 	basis = theApp.GetProfileInt(L"options", L"Basis", 1);
 	bondAngle = GetDouble(L"BondAngle", 104.474);
 	alphaElectrons = theApp.GetProfileInt(L"options", L"AlphaElectrons", 5);
@@ -71,16 +71,16 @@ void Options::Load()
 	XMinBondLength = GetDouble(L"XMinBondLength", 0.3);
 
 	// Hartree-Fock
-	restricted = (1 == theApp.GetProfileInt(L"options", L"Restricted", 1) ? true : false);
+	restricted = 1 == theApp.GetProfileInt(L"options", L"Restricted", 1);
 	alpha = GetDouble(L"Alpha", 0.3);
 	initialGuess = GetDouble(L"InitialGuess", 1.75);
 	iterations = theApp.GetProfileInt(L"options", L"MaxIterations", 3000);
 	asymmetry = GetDouble(L"Asymmetry", 0.1);
-	addAsymmetry = (1 == theApp.GetProfileInt(L"options", L"AddAsymmetry", 0) ? true : false);
+	addAsymmetry = 1 == theApp.GetProfileInt(L"options", L"AddAsymmetry", 0);
 
 	// computations
 	nrThreads = theApp.GetProfileInt(L"options", L"NrThreads", 4);
-	useLotsOfMemory = (1 == theApp.GetProfileInt(L"options", L"UseLotsOfMemory", 1) ? true : false);
+	useLotsOfMemory = 1 == theApp.GetProfileInt(L"options", L"UseLotsOfMemory", 1);
 	numberOfPoints = theApp.GetProfileInt(L"options", L"NrPoints", 80);
 
 	// charts
@@ -90,16 +90,16 @@ void Options::Load()
 	YSmallTicksEnergy = theApp.GetProfileInt(L"options", L"YSmallTicksEnergy", 2);
 	XBigTicksBondLength = theApp.GetProfileInt(L"options", L"XBigTicksBondLengths", 6);
 	XSmallTicksBondLength = theApp.GetProfileInt(L"options", L"XSmallTicksBondLength", 2);
-	useSplines = (1 == theApp.GetProfileInt(L"options", L"UseSplines", 1) ? true : false);
-	displayHartrees = (1 == theApp.GetProfileInt(L"options", L"DisplayHartrees", 0) ? true : false);
-	displayBohrs = (1 == theApp.GetProfileInt(L"options", L"DisplayBohrs", 0) ? true : false);
+	useSplines = 1 == theApp.GetProfileInt(L"options", L"UseSplines", 1);
+	displayHartrees = 1 == theApp.GetProfileInt(L"options", L"DisplayHartrees", 0);
+	displayBohrs = 1 == theApp.GetProfileInt(L"options", L"DisplayBohrs", 0);
 
 	DisplayHOMOEnergy = theApp.GetProfileInt(L"options", L"DisplayHOMOEnergy", 0);
 
-	useDIIS = (1 == theApp.GetProfileInt(L"options", L"UseDIIS", 1) ? true : false);
+	useDIIS = 1 == theApp.GetProfileInt(L"options", L"UseDIIS", 1);
 	maxDIISiterations = theApp.GetProfileInt(L"options", L"MaxDIISiterations", 1000);
 	normalIterAfterDIIS = theApp.GetProfileInt(L"options", L"NormalIterAfterDIIS", 0);
-	computePostHF = (1 == theApp.GetProfileInt(L"options", L"ComputePostHF", 0) ? true : false);
+	computePostHF = 1 == theApp.GetProfileInt(L"options", L"ComputePostHF", 0);
 	postHFmethod = theApp.GetProfileInt(L"options", L"PostHFmethod", 0);
 }
 

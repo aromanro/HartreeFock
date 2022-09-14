@@ -44,7 +44,7 @@ BOOL PostHFProperyPage::OnApply()
 
 void PostHFProperyPage::ApplyValues()
 {
-	theApp.options.computePostHF = (computePostHF == BST_CHECKED ? true : false);
+	theApp.options.computePostHF = computePostHF == BST_CHECKED;
 
 	theApp.options.Save();
 }

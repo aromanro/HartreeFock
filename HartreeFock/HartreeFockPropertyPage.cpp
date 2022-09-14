@@ -63,14 +63,14 @@ BOOL HartreeFockPropertyPage::OnApply()
 
 void HartreeFockPropertyPage::ApplyValues()
 {
-	theApp.options.restricted = (m_Method == 0 ? true : false);
+	theApp.options.restricted = m_Method == 0;
 	theApp.options.alpha = m_Alpha;
 	theApp.options.initialGuess = m_Guess;
 	theApp.options.iterations = iterations;
 	theApp.options.asymmetry = asymmetry;
-	theApp.options.addAsymmetry = (addAsymmetry == BST_CHECKED ? true : false);
+	theApp.options.addAsymmetry = addAsymmetry == BST_CHECKED;
 
-	theApp.options.useDIIS = (useDIIS == BST_CHECKED ? true : false);
+	theApp.options.useDIIS = useDIIS == BST_CHECKED;
 	theApp.options.maxDIISiterations = maxDIISiterations;
 	theApp.options.normalIterAfterDIIS = normalIterAfterDIIS;
 

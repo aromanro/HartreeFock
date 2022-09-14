@@ -76,9 +76,9 @@ void ChartPropertyPage::ApplyValues()
 	theApp.options.XBigTicksBondLength = XBigTicksBondLength;
 	theApp.options.XSmallTicksBondLength = XSmallTicksBondLength;
 
-	theApp.options.useSplines = (useSplines == BST_CHECKED ? true : false);
-	theApp.options.displayHartrees = (displayHartrees == BST_CHECKED ? true : false);
-	theApp.options.displayBohrs = (displayBohrs == BST_CHECKED ? true : false);
+	theApp.options.useSplines = useSplines == BST_CHECKED;
+	theApp.options.displayHartrees = displayHartrees == BST_CHECKED;
+	theApp.options.displayBohrs = displayBohrs == BST_CHECKED;
 
 	theApp.options.DisplayHOMOEnergy = DisplayHOMOEnergy;
 
