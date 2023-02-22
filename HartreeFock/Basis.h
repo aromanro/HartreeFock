@@ -13,7 +13,7 @@ namespace Chemistry {
 		std::vector<Systems::AtomWithShells> atoms;
 
 		void Load(const std::string& fileName);
-		void Save(const std::string& name);
+		void Save(const std::string& fileName);
 		void Normalize();
 
 	protected:

@@ -12,8 +12,6 @@
 
 namespace Chemistry {
 
-
-
 	void Basis::Load(const std::string& fileName)
 	{
 		std::ifstream file(fileName);
@@ -161,6 +159,20 @@ namespace Chemistry {
 
 
 	// just for tests
+	void Basis::Save(const std::string& fileName)
+	{
+		std::ofstream file(fileName);
+
+		if (!file) return;
+
+		file << "BASIS \"ao basis\" PRINT" << std::endl;
+
+		for (const Systems::AtomWithShells& atom : atoms)
+			SaveAtom(file, atom);
+
+		file << "END" << std::endl;
+	}
+
 	void Basis::SaveAtom(std::ofstream& file, const Systems::AtomWithShells& atom)
 	{
 		file << "#BASIS SET: (";
@@ -257,8 +269,6 @@ namespace Chemistry {
 			orbitalsStr << hNr << 'h';
 		}
 	}
-
-
 
 	void Basis::SaveShell(std::ofstream& file, const Orbitals::ContractedGaussianShell& shell)
 	{

@@ -39,8 +39,7 @@ namespace GaussianIntegrals {
 
 		inline static bool DecrementPrevAndPrevPrevAndSetN(unsigned int& prev, unsigned int& prevPrev, double& N)
 		{
-			--prev;
-			if (prev > 0) {
+			if (--prev > 0) {
 				N = prev;
 				prevPrev -= 2;
 
@@ -173,8 +172,7 @@ namespace GaussianIntegrals {
 		{
 			const unsigned int oldL = QN;
 
-			++QN;
-			if (QN != oldL) {
+			if (++QN != oldL) {
 				assert(limit > 0);
 				--limit;
 			}

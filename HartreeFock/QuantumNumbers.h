@@ -14,7 +14,7 @@ namespace Orbitals {
 			QuantumNumbers(unsigned int L, unsigned int M, unsigned int N);
 
 			char AtomicOrbital() const;
-			
+
 			inline unsigned int AngularMomentum() const
 			{
 				return l + m + n;
@@ -47,7 +47,7 @@ namespace Orbitals {
 			inline unsigned int GetTotalCanonicalIndex() const
 			{
 				const unsigned int L = AngularMomentum();
-				
+
 				const unsigned int val = L * (L * (L + 3) + 2) / 6;
 
 				return val + GetCanonicalIndex();
@@ -79,9 +79,9 @@ namespace Orbitals {
 			// don't confuse it with the usual 2L+1 number
 			static inline unsigned int NumOrbitals(unsigned int L)
 			{
-				return (L + 1) * (L + 2) / 2;				
+				return (L + 1) * (L + 2) / 2;
 			}
-			
+
 			inline operator unsigned int() const { return AngularMomentum(); }
 
 			inline QuantumNumbers& operator++()
@@ -94,9 +94,9 @@ namespace Orbitals {
 			inline QuantumNumbers operator++(int)
 			{
 				QuantumNumbers temp(*this);
-				
-				operator++(); 
-				
+
+				operator++();
+
 				return temp;
 			}
 		};
@@ -135,8 +135,8 @@ namespace Orbitals {
 			SQuantumNumbers() : QuantumNumbers(0, 0, 0) {};
 		};
 
-		
-		
+
+
 		class PxQuantumNumbers : public QuantumNumbers {
 		public:
 			PxQuantumNumbers() : QuantumNumbers(1, 0, 0) {};
@@ -151,8 +151,8 @@ namespace Orbitals {
 		public:
 			PzQuantumNumbers() : QuantumNumbers(0, 0, 1) {};
 		};
-		
-		
+
+
 
 
 
@@ -185,10 +185,10 @@ namespace Orbitals {
 		public:
 			DyzQuantumNumbers() : QuantumNumbers(0, 1, 1) {};
 		};
-		
 
 
-		
+
+
 		class Fx3QuantumNumbers : public QuantumNumbers {
 		public:
 			Fx3QuantumNumbers() : QuantumNumbers(3, 0, 0) {};
@@ -203,7 +203,7 @@ namespace Orbitals {
 		public:
 			Fz3QuantumNumbers() : QuantumNumbers(0, 0, 3) {};
 		};
-		
+
 		class FxyzQuantumNumbers : public QuantumNumbers {
 		public:
 			FxyzQuantumNumbers() : QuantumNumbers(1, 1, 1) {};
