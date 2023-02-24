@@ -19,6 +19,7 @@ namespace Orbitals {
 		unsigned int centerID;
 
 		Shell() : ID(0), centerID(0) {}
+		virtual ~Shell() {}
 
 		virtual Vector3D<double> getCenter() const = 0;
 		virtual double operator()(const Vector3D<double>& r) const = 0;
@@ -38,7 +39,7 @@ namespace Orbitals {
 		double getAlpha() const;
 
 		PrimitiveGaussianShell();
-		~PrimitiveGaussianShell();
+		virtual ~PrimitiveGaussianShell();
 
 		double operator()(const Vector3D<double>& r) const override;
 		Vector3D<double> getGradient(const Vector3D<double>& r) const override;
@@ -55,7 +56,7 @@ namespace Orbitals {
 		std::vector<ContractedGaussianOrbital> basisFunctions;
 		
 		ContractedGaussianShell();
-		~ContractedGaussianShell();
+		virtual ~ContractedGaussianShell();
 		
 		void AddOrbitals(char type);
 		void AddGaussians(double exponent);
@@ -73,12 +74,11 @@ namespace Orbitals {
 		Vector3D<double> getGradient(const Vector3D<double>& r) const override;
 		double getLaplacian(const Vector3D<double>& r) const override;
 
+		void SetCenters(const Vector3D<double>& center);
+		void Normalize();
+
 	protected:
 		static unsigned int AdjustOrbitalsCount(char orbital, unsigned int res);
 		void AddOrbitalsInCanonicalOrder(unsigned int L);
-	
-	public:
-		void SetCenters(const Vector3D<double>& center);
-		void Normalize();
 	};
 }

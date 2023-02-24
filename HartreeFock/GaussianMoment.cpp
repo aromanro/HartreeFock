@@ -79,7 +79,7 @@ namespace GaussianIntegrals {
 		{
 			const unsigned int jminus1 = j - 1ULL;
 			
-			// *** this is correct, is exactly as for overlap ********************************
+			// *** this is is exactly as for overlap ********************************
 
 			for (unsigned int i = 0; i <= limit; ++i)
 				matrix(i, j) = matrix(i + 1ULL, jminus1) + dif * matrix(i, jminus1);

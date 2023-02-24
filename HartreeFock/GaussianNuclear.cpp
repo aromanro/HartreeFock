@@ -30,7 +30,7 @@ namespace GaussianIntegrals {
 		// auxiliary integrals
 		const BoysFunctions& boys = repository->getBoysFunctions(maxL, alpha * (difN * difN));
 		
-		Orbitals::QuantumNumbers::QuantumNumbers maxQN(0, 0 , maxL);
+		const Orbitals::QuantumNumbers::QuantumNumbers maxQN(0, 0 , maxL);
 
 		const double factor = 2. * M_PI / alpha * exp(-alpha1 * alpha2 / alpha * dif * dif);
 		matrixCalc = Eigen::MatrixXd::Zero(maxQN.GetTotalCanonicalIndex() + 1ULL, size);
@@ -85,8 +85,8 @@ namespace GaussianIntegrals {
 	{
 		unsigned int maxL = maxL1 + maxL2;
 
-		Orbitals::QuantumNumbers::QuantumNumbers maxQN1(0, 0, maxL1);
-		Orbitals::QuantumNumbers::QuantumNumbers maxQN2(0, 0, maxL2);
+		const Orbitals::QuantumNumbers::QuantumNumbers maxQN1(0, 0, maxL1);
+		const Orbitals::QuantumNumbers::QuantumNumbers maxQN2(0, 0, maxL2);
 
 		const unsigned int limit = maxQN2.GetTotalCanonicalIndex() + 1;
 
