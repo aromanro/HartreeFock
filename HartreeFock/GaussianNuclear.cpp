@@ -55,6 +55,7 @@ namespace GaussianIntegrals {
 		double difScalar, difNScalar;
 		double N;
 
+		const double oneDiv2alpha = 1. / (2. * alpha);
 		const unsigned int size = maxL + 1;
 		const auto difRp = Rp - center1;
 		
@@ -75,7 +76,7 @@ namespace GaussianIntegrals {
 				if (addPrevPrev)
 				{
 					unsigned int prevPrevIndex = prevPrevQN.GetTotalCanonicalIndex();
-					matrixCalc(curIndex, m) += N / (2. * alpha) * (matrixCalc(prevPrevIndex, m) - matrixCalc(prevPrevIndex, m + 1ULL));
+					matrixCalc(curIndex, m) += N * oneDiv2alpha * (matrixCalc(prevPrevIndex, m) - matrixCalc(prevPrevIndex, m + 1ULL));
 				}
 			}			
 		}

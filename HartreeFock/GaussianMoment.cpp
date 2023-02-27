@@ -34,7 +34,8 @@ namespace GaussianIntegrals {
 		CalculateMoment(matrixZ, matrixZ1, alpha1, alpha2, center1.Z, center2.Z, center3.Z, maxQN1.n, maxQN2.n);
 
 		const Vector3D<double> dif = center1 - center2;
-		factor = exp(-alpha1 * alpha2 / (alpha1 + alpha2) * dif * dif) * pow(M_PI / (alpha1 + alpha2), 3. / 2.);
+		const double oneDivAlpha1PlusAlpha2 = 1. / (alpha1 + alpha2);
+		factor = exp(-alpha1 * alpha2 * oneDivAlpha1PlusAlpha2 * dif * dif) * pow(M_PI * oneDivAlpha1PlusAlpha2, 3. / 2.);
 	}
 
 	double GaussianMoment::getMoment(const Orbitals::QuantumNumbers::QuantumNumbers& QN1, const Orbitals::QuantumNumbers::QuantumNumbers& QN2, bool momentX, bool momentY, bool momentZ) const
@@ -54,6 +55,7 @@ namespace GaussianIntegrals {
 		const double dif = center1 - center2;
 		const double dif1 = center1 - center3;
 		const double difCenter = productCenter - center1;
+		const double oneDiv2alpha = 1. / (2. * alpha);
 
 		matrix(0, 0) = 1;
 		matrix(1, 0) = difCenter;
@@ -63,7 +65,7 @@ namespace GaussianIntegrals {
 
 		// vertical recurrence relation - the same as for overlap
 		for (unsigned int i = 2; i <= limit; ++i)
-			matrix(i, 0) = difCenter * matrix(i - 1, 0) + (i - 1.) / (2. * alpha) * matrix(i - 2, 0);
+			matrix(i, 0) = difCenter * matrix(i - 1, 0) + (i - 1.) * oneDiv2alpha * matrix(i - 2, 0);
 
 
 		--limit;

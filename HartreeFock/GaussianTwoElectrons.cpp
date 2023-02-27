@@ -110,6 +110,8 @@ namespace GaussianIntegrals {
 		double RpaScalar, RwpScalar;
 		double N;
 
+		const double oneDiv2alpha12 = 1. / (2. * alpha12);
+		const double alphaDivAlpha12 = alpha / alpha12;
 		const unsigned int size = maxL + 1;
 
 		for (auto currentQN = Orbitals::QuantumNumbers::QuantumNumbers(1, 0, 0); currentQN < size; ++currentQN) // for each 'column' starting from 1
@@ -132,7 +134,7 @@ namespace GaussianIntegrals {
 				if (addPrevPrev)
 				{
 					const unsigned int prevPrevIndex = prevPrevQN.GetTotalCanonicalIndex();
-					matrixCalc(curIndex, m) += N / (2. * alpha12) * (matrixCalc(prevPrevIndex, m) - alpha / alpha12 * matrixCalc(prevPrevIndex, m + 1ULL));
+					matrixCalc(curIndex, m) += N * oneDiv2alpha12 * (matrixCalc(prevPrevIndex, m) - alphaDivAlpha12 * matrixCalc(prevPrevIndex, m + 1ULL));
 				}
 
 				// ********************************************************************************************************************************
@@ -148,6 +150,8 @@ namespace GaussianIntegrals {
 		double deltaScalar;
 		double Nx = 0;
 		double Ny = 0; // assignment is just to keep the compiler happy
+		const double alpha12DivAlpha34 = alpha12 / alpha34;
+		const double oneDiv2alpha34 = 1. / (2. * alpha34);
 
 		for (auto currentQN2 = Orbitals::QuantumNumbers::QuantumNumbers(1, 0, 0); currentQN2 <= maxL34; ++currentQN2) // for each 'column' starting from 1
 		{
@@ -184,13 +188,13 @@ namespace GaussianIntegrals {
 				// ********************************************************************************************************************************
 				// Electron Transfer Relation
 
-				matrixCalc(curIndexQN1, curIndexQN2) = deltaScalar * matrixCalc(curIndexQN1, prevIndexQN2) - alpha12 / alpha34 * matrixCalc(nextQN1.GetTotalCanonicalIndex(), prevIndexQN2);
+				matrixCalc(curIndexQN1, curIndexQN2) = deltaScalar * matrixCalc(curIndexQN1, prevIndexQN2) - alpha12DivAlpha34 * matrixCalc(nextQN1.GetTotalCanonicalIndex(), prevIndexQN2);
 
 				if (addPrev)
-					matrixCalc(curIndexQN1, curIndexQN2) += Nx / (2. * alpha34) * matrixCalc(prevQN1.GetTotalCanonicalIndex(), prevIndexQN2);
+					matrixCalc(curIndexQN1, curIndexQN2) += Nx * oneDiv2alpha34 * matrixCalc(prevQN1.GetTotalCanonicalIndex(), prevIndexQN2);
 
 				if (addPrevPrev)
-					matrixCalc(curIndexQN1, curIndexQN2) += Ny / (2. * alpha34) * matrixCalc(curIndexQN1, prevPrevIndexQN2);
+					matrixCalc(curIndexQN1, curIndexQN2) += Ny * oneDiv2alpha34 * matrixCalc(curIndexQN1, prevPrevIndexQN2);
 
 				// ********************************************************************************************************************************					
 			}
@@ -364,6 +368,5 @@ namespace GaussianIntegrals {
 					for (unsigned int l = 0; l < tensor4Calc.GetDim(3); ++l)
 						tensor4Calc(i, j, k, l) = workTensor(i, j, k, QN4Base + l);
 	}
-
 
 }

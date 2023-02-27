@@ -74,10 +74,17 @@ namespace GaussianIntegrals {
 
 		for (int i = 1; i <= static_cast<int>(maxQN1); ++i)
 			for (int j = 1; j <= static_cast<int>(maxQN2); ++j)
-				matrix(i, j) = static_cast<double>(i) * j * overlap_matrix(i - 1ULL, j - 1ULL) / 2.
-					- j * alpha1 * overlap_matrix(i + 1ULL, j - 1ULL)
-					- i * alpha2 * overlap_matrix(i - 1ULL, j + 1ULL)
-					+ twoAlphaProd * overlap_matrix(i + 1ULL, j + 1ULL);
+			{
+				const int iMinusOne = i - 1ULL;
+				const int jMinusOne = j - 1ULL;
+				const int iPlusOne = i + 1ULL;
+				const int jPlusOne = j + 1ULL;
+
+				matrix(i, j) = static_cast<double>(i) * j * overlap_matrix(iMinusOne, jMinusOne) * 0.5
+					- j * alpha1 * overlap_matrix(iPlusOne, jMinusOne)
+					- i * alpha2 * overlap_matrix(iMinusOne, jPlusOne)
+					+ twoAlphaProd * overlap_matrix(iPlusOne, jPlusOne);
+			}
 	}
 
 }
