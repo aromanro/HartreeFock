@@ -9,6 +9,7 @@
 #include "BoysFunctions.h"
 
 #include <map>
+#include <unordered_map>
 #include <tuple>
 #include <valarray>
 
@@ -16,6 +17,26 @@
 #include "ContractedGaussianOrbital.h"
 
 namespace GaussianIntegrals {
+
+	// this one is here just to be able to use an unordered_map with a tuple of integers as a key
+	template <typename... Tp> class TupleHash {
+	public:
+		size_t operator()(const std::tuple<Tp...>& t) const
+		{
+			size_t res = 1;
+			std::apply([&res](auto&& ... args) {
+
+				auto compute = [&res](const auto& x) {
+					res = 31 * res + x;
+				};
+
+				(compute(args), ...);
+
+				}, t);
+
+			return res;
+		}
+	};
 
 	class IntegralsRepository
 	{
@@ -32,10 +53,10 @@ namespace GaussianIntegrals {
 		std::map < std::tuple<unsigned int, unsigned int, double, double >, GaussianKinetic> kineticIntegralsMap;
 
 		std::map < std::tuple<unsigned int, unsigned int, unsigned int, double, double >, GaussianNuclear > nuclearVerticalIntegralsMap;
-		std::map < std::tuple<unsigned int, unsigned int, unsigned int>, GaussianNuclear> nuclearIntegralsContractedMap;
+		std::unordered_map < std::tuple<unsigned int, unsigned int, unsigned int>, GaussianNuclear, TupleHash<unsigned int, unsigned int, unsigned int>> nuclearIntegralsContractedMap;
 		
 		std::map < std::tuple<unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, double, double, double, double>, GaussianTwoElectrons> electronElectronIntegralsVerticalAndTransferMap;
-		std::map < std::tuple<unsigned int, unsigned int, unsigned int, unsigned int>, GaussianTwoElectrons> electronElectronIntegralsContractedMap;
+		std::unordered_map < std::tuple<unsigned int, unsigned int, unsigned int, unsigned int>, GaussianTwoElectrons, TupleHash<unsigned int, unsigned int, unsigned int, unsigned int>> electronElectronIntegralsContractedMap;
 		std::valarray<double> electronElectronIntegrals;
 
 	public:
@@ -260,10 +281,10 @@ namespace GaussianIntegrals {
 		}
 
 		const IntegralsRepository& m_repo;
-		std::map<std::tuple<unsigned int, unsigned int, unsigned int, unsigned int>, double> m_firstLevelIntegrals;
-		std::map<std::tuple<unsigned int, unsigned int, unsigned int, unsigned int>, double> m_secondLevelIntegrals;
-		std::map<std::tuple<unsigned int, unsigned int, unsigned int, unsigned int>, double> m_thirdLevelIntegrals;
-		std::map<std::tuple<unsigned int, unsigned int, unsigned int, unsigned int>, double> m_fourthLevelIntegrals;
+		std::unordered_map<std::tuple<unsigned int, unsigned int, unsigned int, unsigned int>, double, TupleHash<unsigned int, unsigned int, unsigned int, unsigned int>> m_firstLevelIntegrals;
+		std::unordered_map<std::tuple<unsigned int, unsigned int, unsigned int, unsigned int>, double, TupleHash<unsigned int, unsigned int, unsigned int, unsigned int>> m_secondLevelIntegrals;
+		std::unordered_map<std::tuple<unsigned int, unsigned int, unsigned int, unsigned int>, double, TupleHash<unsigned int, unsigned int, unsigned int, unsigned int>> m_thirdLevelIntegrals;
+		std::unordered_map<std::tuple<unsigned int, unsigned int, unsigned int, unsigned int>, double, TupleHash<unsigned int, unsigned int, unsigned int, unsigned int>> m_fourthLevelIntegrals;
 	};
 
 }
