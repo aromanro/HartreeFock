@@ -210,6 +210,7 @@
     <ClInclude Include="ChartAxis.h" />
     <ClInclude Include="ChartPropertyPage.h" />
     <ClInclude Include="ChemUtils.h" />
+    <ClInclude Include="Coefficients.h" />
     <ClInclude Include="ComputationPropertyPage.h" />
     <ClInclude Include="ComputationThread.h" />
     <ClInclude Include="ContractedGaussianOrbital.h" />
@@ -265,6 +266,7 @@
     <ClCompile Include="ChartAxis.cpp" />
     <ClCompile Include="ChartPropertyPage.cpp" />
     <ClCompile Include="ChemUtils.cpp" />
+    <ClCompile Include="Coefficients.cpp" />
     <ClCompile Include="ComputationPropertyPage.cpp" />
     <ClCompile Include="ComputationThread.cpp" />
     <ClCompile Include="ContractedGaussianOrbital.cpp" />

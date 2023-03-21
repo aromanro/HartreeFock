@@ -15,25 +15,19 @@
 #include "QuantumNumbers.h"
 #include "Vector3D.h"
 
+#include "Coefficients.h"
+
 namespace GaussianIntegrals {
 
 	class MathUtils
 	{
 	private:
-		static std::array<unsigned long long int, 21> factorialsTable;
 		static std::array<unsigned long long int, 21> doubleFactorialsTable;
 
 	public:
-		static double Factorial(long int n)
+		inline static double Factorial(long int n)
 		{
-			if (n <= 1) return 1;
-			else if (n < 21) return static_cast<double>(factorialsTable[n]);
-
-			double val = static_cast<double>(factorialsTable[20]);
-			for (long int i = 21; i <= n; ++i)
-				val *= i;
-
-			return val;
+			return CG::Coefficients::Factorial(n);
 		}
 
 		static double DoubleFactorial(long int n)
