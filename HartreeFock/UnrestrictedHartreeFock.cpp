@@ -377,15 +377,15 @@ namespace HartreeFock {
 
 	double UnrestrictedHartreeFock::CalculateAtomicCharge(int atom) const
 	{
-		if (!integralsRepository.m_Molecule || integralsRepository.m_Molecule->atoms.size() <= atom) return 0;
+		if (!integralsRepository.getMolecule() || integralsRepository.getMolecule()->atoms.size() <= atom) return 0;
 
-		double result = integralsRepository.m_Molecule->atoms[atom].Z;
+		double result = integralsRepository.getMolecule()->atoms[atom].Z;
 
 		int orbLowLimit = 0;
 		int orbHighLimit = 0;
-		for (int i = 0; i < integralsRepository.m_Molecule->atoms.size(); ++i)
+		for (int i = 0; i < integralsRepository.getMolecule()->atoms.size(); ++i)
 		{
-			const int numBasisFunctions = integralsRepository.m_Molecule->atoms[i].CountNumberOfContractedGaussians();
+			const int numBasisFunctions = integralsRepository.getMolecule()->atoms[i].CountNumberOfContractedGaussians();
 			if (i == atom)
 			{
 				orbHighLimit = orbLowLimit + numBasisFunctions;

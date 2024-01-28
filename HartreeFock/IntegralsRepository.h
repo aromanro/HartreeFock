@@ -36,27 +36,14 @@ namespace GaussianIntegrals {
 		}
 	};
 
+	typedef std::tuple<unsigned int, unsigned int, unsigned int> ThreeOrbitalIndicesTuple;
+	typedef TupleHash<unsigned int, unsigned int, unsigned int> ThreeOrbitalIndicesTupleHash;
+	typedef std::tuple<unsigned int, unsigned int, unsigned int, unsigned int> FourOrbitalIndicesTuple;
+	typedef TupleHash<unsigned int, unsigned int, unsigned int, unsigned int> FourOrbitalIndicesTupleHash;
+
+
 	class IntegralsRepository
 	{
-	public:
-		Systems::Molecule* m_Molecule;
-	protected:
-		std::map< double, BoysFunctions > boysFunctions;
-
-
-		// the momentIntegralsMap replaces this, as it also computes overlap
-		//std::map < std::tuple<unsigned int, unsigned int, double, double>, GaussianOverlap> overlapIntegralsMap;
-		std::map < std::tuple<unsigned int, unsigned int, double, double>, GaussianMoment> momentIntegralsMap; // also contains the overlap, might replace the overlap map as well
-
-		std::map < std::tuple<unsigned int, unsigned int, double, double >, GaussianKinetic> kineticIntegralsMap;
-
-		std::map < std::tuple<unsigned int, unsigned int, unsigned int, double, double >, GaussianNuclear > nuclearVerticalIntegralsMap;
-		std::unordered_map < std::tuple<unsigned int, unsigned int, unsigned int>, GaussianNuclear, TupleHash<unsigned int, unsigned int, unsigned int>> nuclearIntegralsContractedMap;
-		
-		std::map < std::tuple<unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, double, double, double, double>, GaussianTwoElectrons> electronElectronIntegralsVerticalAndTransferMap;
-		std::unordered_map < std::tuple<unsigned int, unsigned int, unsigned int, unsigned int>, GaussianTwoElectrons, TupleHash<unsigned int, unsigned int, unsigned int, unsigned int>> electronElectronIntegralsContractedMap;
-		std::valarray<double> electronElectronIntegrals;
-
 	public:
 		bool useLotsOfMemory;
 
@@ -116,7 +103,6 @@ namespace GaussianIntegrals {
 		const GaussianTwoElectrons& getElectronElectronVerticalAndTransfer(const Orbitals::GaussianOrbital* orbital1, const Orbitals::GaussianOrbital* orbital2, const Orbitals::GaussianOrbital* orbital3, const Orbitals::GaussianOrbital* orbital4, bool& swapped);
 
 
-
 		Systems::Molecule* getMolecule() const { return m_Molecule; }
 
 
@@ -149,17 +135,24 @@ namespace GaussianIntegrals {
 			boysFunctions.clear();
 		}
 
+		void CalculateElectronElectronIntegrals();
+
+		inline double getElectronElectron(int orbital1, int orbital2, int orbital3, int orbital4) const
+		{
+			return electronElectronIntegrals[GetElectronElectronIndex(orbital1, orbital2, orbital3, orbital4)];
+		}
+
 	protected:
 		const GaussianNuclear& getNuclearVertical(const Systems::Atom& atom, const Orbitals::GaussianOrbital& gaussian1, const Orbitals::GaussianOrbital& gaussian2);
 
 		inline void CalculateElectronElectronIntegrals23(int i, const Orbitals::ContractedGaussianOrbital& orb1);
 		inline void CalculateElectronElectronIntegrals4(int i, int j, int k, long long int ij, const Orbitals::ContractedGaussianOrbital& orb1, const Orbitals::ContractedGaussianOrbital& orb2, const Orbitals::ContractedGaussianOrbital& orb3);
-	
+
 		inline static long long int GetTwoIndex(long long int i, long long int j)
 		{
 			return i < j ? j * (j + 1ULL) / 2 + i : i * (i + 1ULL) / 2 + j;
 		}
-	
+
 		inline static long long int GetElectronElectronIndex(unsigned int ind1, unsigned int ind2, unsigned int ind3, unsigned int ind4)
 		{
 			long long int ind12 = GetTwoIndex(ind1, ind2);
@@ -168,15 +161,25 @@ namespace GaussianIntegrals {
 			return GetTwoIndex(ind12, ind34);
 		}
 
-		template<class Orb> static void SwapOrbitals(Orb **orb1, Orb **orb2, Orb **orb3, Orb **orb4);
+		template<class Orb> static void SwapOrbitals(Orb** orb1, Orb** orb2, Orb** orb3, Orb** orb4);
 
-	public:
-		void CalculateElectronElectronIntegrals();
+		Systems::Molecule* m_Molecule;
 
-		inline double getElectronElectron(int orbital1, int orbital2, int orbital3, int orbital4) const
-		{
-			return electronElectronIntegrals[GetElectronElectronIndex(orbital1, orbital2, orbital3, orbital4)];
-		}
+		std::map<double, BoysFunctions> boysFunctions;
+
+
+		// the momentIntegralsMap replaces this, as it also computes overlap
+		//std::map < std::tuple<unsigned int, unsigned int, double, double>, GaussianOverlap> overlapIntegralsMap;
+		std::map<std::tuple<unsigned int, unsigned int, double, double>, GaussianMoment> momentIntegralsMap; // also contains the overlap, might replace the overlap map as well
+
+		std::map<std::tuple<unsigned int, unsigned int, double, double>, GaussianKinetic> kineticIntegralsMap;
+
+		std::map<std::tuple<unsigned int, unsigned int, unsigned int, double, double>, GaussianNuclear> nuclearVerticalIntegralsMap;
+		std::unordered_map<ThreeOrbitalIndicesTuple, GaussianNuclear, ThreeOrbitalIndicesTupleHash> nuclearIntegralsContractedMap;
+
+		std::map<std::tuple<unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, double, double, double, double>, GaussianTwoElectrons> electronElectronIntegralsVerticalAndTransferMap;
+		std::unordered_map<FourOrbitalIndicesTuple, GaussianTwoElectrons, FourOrbitalIndicesTupleHash> electronElectronIntegralsContractedMap;
+		std::valarray<double> electronElectronIntegrals;
 	};
 
 
@@ -192,7 +195,7 @@ namespace GaussianIntegrals {
 
 		inline double getElectronElectron(unsigned int orbital1, unsigned int orbital2, unsigned int orbital3, unsigned int orbital4, const Eigen::MatrixXd& C)
 		{
-			const std::tuple<unsigned int, unsigned int, unsigned int, unsigned int> indTuple = std::make_tuple(orbital1, orbital2, orbital3, orbital4);
+			const FourOrbitalIndicesTuple indTuple = std::make_tuple(orbital1, orbital2, orbital3, orbital4);
 			if (m_fourthLevelIntegrals.find(indTuple) != m_fourthLevelIntegrals.end())
 				return m_fourthLevelIntegrals.at(indTuple);
 
@@ -231,7 +234,7 @@ namespace GaussianIntegrals {
 	protected:
 		inline double getElectronElectronFirstLevel(unsigned int orbital1, unsigned int orbital2, unsigned int orbital3, unsigned int orbital4, const Eigen::MatrixXd& C)
 		{
-			const std::tuple<unsigned int, unsigned int, unsigned int, unsigned int> indTuple = std::make_tuple(orbital1, orbital2, orbital3, orbital4);
+			const FourOrbitalIndicesTuple indTuple = std::make_tuple(orbital1, orbital2, orbital3, orbital4);
 			if (m_firstLevelIntegrals.find(indTuple) != m_firstLevelIntegrals.end())
 				return m_firstLevelIntegrals.at(indTuple);
 
@@ -247,7 +250,7 @@ namespace GaussianIntegrals {
 
 		inline double getElectronElectronSecondLevel(unsigned int orbital1, unsigned int orbital2, unsigned int orbital3, unsigned int orbital4, const Eigen::MatrixXd& C)
 		{
-			const std::tuple<unsigned int, unsigned int, unsigned int, unsigned int> indTuple = std::make_tuple(orbital1, orbital2, orbital3, orbital4);
+			const FourOrbitalIndicesTuple indTuple = std::make_tuple(orbital1, orbital2, orbital3, orbital4);
 			if (m_secondLevelIntegrals.find(indTuple) != m_secondLevelIntegrals.end())
 				return m_secondLevelIntegrals.at(indTuple);
 
@@ -264,7 +267,7 @@ namespace GaussianIntegrals {
 
 		inline double getElectronElectronThirdLevel(unsigned int orbital1, unsigned int orbital2, unsigned int orbital3, unsigned int orbital4, const Eigen::MatrixXd& C)
 		{
-			const std::tuple<unsigned int, unsigned int, unsigned int, unsigned int> indTuple = std::make_tuple(orbital1, orbital2, orbital3, orbital4);
+			const FourOrbitalIndicesTuple indTuple = std::make_tuple(orbital1, orbital2, orbital3, orbital4);
 			if (m_thirdLevelIntegrals.find(indTuple) != m_thirdLevelIntegrals.end())
 				return m_thirdLevelIntegrals.at(indTuple);
 
@@ -279,10 +282,10 @@ namespace GaussianIntegrals {
 		}
 
 		const IntegralsRepository& m_repo;
-		std::unordered_map<std::tuple<unsigned int, unsigned int, unsigned int, unsigned int>, double, TupleHash<unsigned int, unsigned int, unsigned int, unsigned int>> m_firstLevelIntegrals;
-		std::unordered_map<std::tuple<unsigned int, unsigned int, unsigned int, unsigned int>, double, TupleHash<unsigned int, unsigned int, unsigned int, unsigned int>> m_secondLevelIntegrals;
-		std::unordered_map<std::tuple<unsigned int, unsigned int, unsigned int, unsigned int>, double, TupleHash<unsigned int, unsigned int, unsigned int, unsigned int>> m_thirdLevelIntegrals;
-		std::unordered_map<std::tuple<unsigned int, unsigned int, unsigned int, unsigned int>, double, TupleHash<unsigned int, unsigned int, unsigned int, unsigned int>> m_fourthLevelIntegrals;
+		std::unordered_map<FourOrbitalIndicesTuple, double, FourOrbitalIndicesTupleHash> m_firstLevelIntegrals;
+		std::unordered_map<FourOrbitalIndicesTuple, double, FourOrbitalIndicesTupleHash> m_secondLevelIntegrals;
+		std::unordered_map<FourOrbitalIndicesTuple, double, FourOrbitalIndicesTupleHash> m_thirdLevelIntegrals;
+		std::unordered_map<FourOrbitalIndicesTuple, double, FourOrbitalIndicesTupleHash> m_fourthLevelIntegrals;
 	};
 
 }

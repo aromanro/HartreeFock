@@ -40,7 +40,7 @@ namespace GaussianIntegrals {
 	{
 		assert(m_Molecule);
 		
-		const std::tuple<unsigned int, unsigned int, double, double > params(gaussian1.shellID, gaussian2.shellID, gaussian1.alpha, gaussian2.alpha);
+		const std::tuple<unsigned int, unsigned int, double, double> params(gaussian1.shellID, gaussian2.shellID, gaussian1.alpha, gaussian2.alpha);
 
 		//auto it = overlapIntegralsMap.find(params);
 		//if (overlapIntegralsMap.end() != it) return it->second.getOverlap(gaussian1.angularMomentum, gaussian2.angularMomentum);
@@ -121,7 +121,7 @@ namespace GaussianIntegrals {
 	{
 		assert(m_Molecule);
 
-		const std::tuple<unsigned int, unsigned int, double, double > params(gaussian1.shellID, gaussian2.shellID, gaussian1.alpha, gaussian2.alpha);
+		const std::tuple<unsigned int, unsigned int, double, double> params(gaussian1.shellID, gaussian2.shellID, gaussian1.alpha, gaussian2.alpha);
 
 		auto it = momentIntegralsMap.find(params);
 		if (momentIntegralsMap.end() != it) return it->second.getMoment(gaussian1.angularMomentum, gaussian2.angularMomentum, momentX, momentY, momentZ);
@@ -196,7 +196,7 @@ namespace GaussianIntegrals {
 	{
 		assert(m_Molecule);
 
-		const std::tuple<unsigned int, unsigned int, double, double > params(gaussian1.shellID, gaussian2.shellID, gaussian1.alpha, gaussian2.alpha);
+		const std::tuple<unsigned int, unsigned int, double, double> params(gaussian1.shellID, gaussian2.shellID, gaussian1.alpha, gaussian2.alpha);
 
 		auto it = kineticIntegralsMap.find(params);
 		if (kineticIntegralsMap.end() != it) return it->second.getKinetic(gaussian1.angularMomentum, gaussian2.angularMomentum);
@@ -252,7 +252,7 @@ namespace GaussianIntegrals {
 			(orbital1->angularMomentum == orbital2->angularMomentum && orbital1->ID > orbital2->ID)) std::swap(orbital1, orbital2);
 
 		
-		const std::tuple<unsigned int, unsigned int, unsigned int> params(nucleus.ID, orbital1->ID, orbital2->ID);
+		const ThreeOrbitalIndicesTuple params(nucleus.ID, orbital1->ID, orbital2->ID);
 		auto it = nuclearIntegralsContractedMap.find(params);
 		if (nuclearIntegralsContractedMap.end() != it) return it->second.getNuclear(orbital1->angularMomentum, orbital2->angularMomentum);
 		
@@ -287,7 +287,7 @@ namespace GaussianIntegrals {
 	{
 		assert(m_Molecule);
 
-		const std::tuple<unsigned int, unsigned int, unsigned int, double, double > params(nucleus.ID, gaussian1.shellID, gaussian2.shellID, gaussian1.alpha, gaussian2.alpha);
+		const std::tuple<unsigned int, unsigned int, unsigned int, double, double> params(nucleus.ID, gaussian1.shellID, gaussian2.shellID, gaussian1.alpha, gaussian2.alpha);
 		auto it = nuclearVerticalIntegralsMap.find(params);
 		if (nuclearVerticalIntegralsMap.end() != it) return it->second;
 
@@ -383,7 +383,7 @@ namespace GaussianIntegrals {
 		assert(orbital3->angularMomentum >= orbital4->angularMomentum);
 		assert(orbital1->angularMomentum + orbital2->angularMomentum >= orbital3->angularMomentum + orbital4->angularMomentum);
 		
-		const std::tuple<unsigned int, unsigned int, unsigned int, unsigned int> params(orbital1->ID, orbital2->ID, orbital3->ID, orbital4->ID);
+		const FourOrbitalIndicesTuple params(orbital1->ID, orbital2->ID, orbital3->ID, orbital4->ID);
 		auto it = electronElectronIntegralsContractedMap.find(params);
 		if (electronElectronIntegralsContractedMap.end() != it) return it->second.getValue(orbital1->angularMomentum, orbital2->angularMomentum, orbital3->angularMomentum, orbital4->angularMomentum);
 
