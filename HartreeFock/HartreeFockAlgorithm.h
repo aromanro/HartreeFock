@@ -26,10 +26,6 @@ namespace HartreeFock {
 		Matrices::KineticMatrix kineticMatrix;
 		Matrices::NuclearMatrix nuclearMatrix;
 
-	public:
-		Eigen::MatrixXd h;
-
-	protected:
 		double nuclearRepulsionEnergy;
 		// for external electric field
 		// it's not added up to total energy (for now, at least) because the derivative of energy with respect to the electric field is used to obtain the dipole moment
@@ -48,6 +44,8 @@ namespace HartreeFock {
 		bool inited;
 
 	public:
+		Eigen::MatrixXd h;
+
 		int numberOfOrbitals;
 
 		GaussianIntegrals::IntegralsRepository integralsRepository;

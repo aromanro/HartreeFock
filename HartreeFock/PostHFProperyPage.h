@@ -9,19 +9,19 @@ class PostHFProperyPage : public CMFCPropertyPage
 
 public:
 	PostHFProperyPage();
-	virtual ~PostHFProperyPage();
+	~PostHFProperyPage() override;
 
 	// Dialog Data
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_POSTHFPROPERTYPAGE };
 #endif
-protected:
+private:
 	DECLARE_MESSAGE_MAP()
 
-	virtual BOOL OnApply();
+	BOOL OnApply() override;
 	void ApplyValues();
-	virtual BOOL OnInitDialog();
-	virtual void DoDataExchange(CDataExchange* pDX);
+	BOOL OnInitDialog() override;
+	void DoDataExchange(CDataExchange* pDX) override;
 	afx_msg void OnBnClickedCheck1();
 
 	int computePostHF;

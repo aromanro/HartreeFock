@@ -5,7 +5,19 @@
 class Chart;
 
 class Axis {
-protected:
+public:
+	Axis(Chart* parent, bool isX);
+
+	int GetNumBigTicks() const;
+
+	void Draw(Gdiplus::Graphics& g, Gdiplus::Point& start, int length, int length2, float fontSize = 0);
+	void SetNumTicks(int ticks) { numTicks = ticks; }
+	void SetNumBigTicks(int ticks) { numBigTicks = ticks; }
+
+	void SetLabels(const std::list<CString>& l) { labels = l; }
+	std::list<CString> GetLabels() const;
+
+private:
 	Chart* parent;
 	bool isX;
 
@@ -22,17 +34,5 @@ protected:
 	void DrawGrid(Gdiplus::Graphics& g, Gdiplus::Point& start, int length, int length2);
 	void DrawLabels(Gdiplus::Graphics& g, Gdiplus::Point& start, int length, float fontSize = 0);
 	void DrawTip(Gdiplus::Graphics& g, const Gdiplus::Point& end);
-
-public:
-	Axis(Chart* parent, bool isX);
-
-	int GetNumBigTicks() const;
-
-	void Draw(Gdiplus::Graphics& g, Gdiplus::Point& start, int length, int length2, float fontSize = 0);
-	void SetNumTicks(int ticks) { numTicks = ticks; }
-	void SetNumBigTicks(int ticks) { numBigTicks = ticks; }
-
-	void SetLabels(const std::list<CString>& l) { labels = l; }
-	std::list<CString> GetLabels() const;
 };
 

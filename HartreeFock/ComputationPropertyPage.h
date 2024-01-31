@@ -9,7 +9,7 @@ class ComputationPropertyPage : public CMFCPropertyPage
 
 public:
 	ComputationPropertyPage();
-	virtual ~ComputationPropertyPage();
+	~ComputationPropertyPage() override;
 
 
 	// Dialog Data
@@ -17,13 +17,13 @@ public:
 	enum { IDD = IDD_COMPUTATIONPROPERTYPAGE };
 #endif
 
-protected:
+private:
 	DECLARE_MESSAGE_MAP()
 
-	virtual BOOL OnApply();
+	BOOL OnApply() override;
 	void ApplyValues();
-	virtual BOOL OnInitDialog();
-	virtual void DoDataExchange(CDataExchange* pDX);
+	BOOL OnInitDialog() override;
+	void DoDataExchange(CDataExchange* pDX) override;
 	afx_msg void OnEnChangeEdit1();
 	afx_msg void OnBnClickedCheck1();
 	afx_msg void OnEnChangeEdit3();

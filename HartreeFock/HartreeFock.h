@@ -28,8 +28,7 @@ public:
 
 
 // Overrides
-public:
-	virtual BOOL InitInstance();
+	BOOL InitInstance() override;
 
 // Implementation
 
@@ -41,14 +40,13 @@ public:
 private:
 	ULONG_PTR gdiplusToken;
 
-	virtual void PreLoadState();
-	virtual void LoadCustomState();
-	virtual void SaveCustomState();
+	void PreLoadState() override;
+	void LoadCustomState() override;
+	void SaveCustomState() override;
+	int ExitInstance() override;
 
 	afx_msg void OnAppAbout();
 	DECLARE_MESSAGE_MAP()
-public:
-	virtual int ExitInstance();
 };
 
 extern CHartreeFockApp theApp;

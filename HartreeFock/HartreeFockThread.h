@@ -38,11 +38,11 @@ protected:
 
 public:
 	HartreeFockThread(const Options& options, CHartreeFockDoc* doc, const double start, const double end, const double step);
-	virtual ~HartreeFockThread();
+	~HartreeFockThread() override;
 
 	std::vector<std::tuple<double, double, double>> results;
 
-	virtual void Calculate();
+	void Calculate() override;
 	void Terminate();
 	bool Converged() const;
 

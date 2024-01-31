@@ -13,44 +13,42 @@ protected: // create from serialization only
 
 // Attributes
 public:
+	~CHartreeFockView() override;
+
 	CHartreeFockDoc* GetDocument() const;
 
-// Operations
-// Overrides
-	virtual void OnDraw(CDC* pDC);  // overridden to draw this view
-	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
+// Operations   
+	void StartTimer();
+	void StopTimer();
 
-protected:
-	virtual BOOL OnPreparePrinting(CPrintInfo* pInfo);
-	virtual void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo);
-	virtual void OnEndPrinting(CDC* pDC, CPrintInfo* pInfo);
 
+private:
 // Implementation
 	UINT_PTR timer;
-public:
-	virtual ~CHartreeFockView();
 #ifdef _DEBUG
-	virtual void AssertValid() const;
-	virtual void Dump(CDumpContext& dc) const;
+	void AssertValid() const override;
+	void Dump(CDumpContext& dc) const override;
 #endif
 
-protected:
-// Generated message map functions
+	// Overrides
+	void OnDraw(CDC* pDC) override;  // overridden to draw this view
+	BOOL PreCreateWindow(CREATESTRUCT& cs) override;
+	void OnPrepareDC(CDC* pDC, CPrintInfo* pInfo = NULL) override;
+	BOOL OnPreparePrinting(CPrintInfo* pInfo) override;
+	void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo) override;
+	void OnEndPrinting(CDC* pDC, CPrintInfo* pInfo) override;
+
+	// Generated message map functions
 	afx_msg void OnFilePrintPreview();
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	DECLARE_MESSAGE_MAP()
 
-public:
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg void OnDestroy();
 	void StartWatching();
 	afx_msg BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
-
-	void StartTimer();
-	void StopTimer();
-	virtual void OnPrepareDC(CDC* pDC, CPrintInfo* pInfo = NULL);
 };
 
 #ifndef _DEBUG  // debug version in HartreeFockView.cpp

@@ -11,19 +11,19 @@ class ChartPropertyPage : public CMFCPropertyPage
 
 public:
 	ChartPropertyPage();
-	virtual ~ChartPropertyPage();
+	~ChartPropertyPage() override;
 
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_CHARTPROPERTYPAGE };
 #endif
 
-protected:
+private:
 	DECLARE_MESSAGE_MAP()
 
 	virtual BOOL OnApply();
 	void ApplyValues();
-	virtual BOOL OnInitDialog();
-	virtual void DoDataExchange(CDataExchange* pDX);
+	BOOL OnInitDialog() override;
+	void DoDataExchange(CDataExchange* pDX) override;
 
 	afx_msg void OnEnChangeEdit1();
 	afx_msg void OnEnChangeEdit2();
@@ -32,6 +32,11 @@ protected:
 	afx_msg void OnEnChangeEdit5();
 	afx_msg void OnEnChangeEdit6();	
 	afx_msg void OnBnClickedCheck2();
+	afx_msg void OnBnClickedRadio1();
+	afx_msg void OnBnClickedRadio2();
+	afx_msg void OnBnClickedRadio3();
+	afx_msg void OnBnClickedCheck3();
+	afx_msg void OnBnClickedCheck4();
 
 	CNumberEdit m_minEnergy;
 	CNumberEdit m_maxEnergy;
@@ -48,12 +53,6 @@ protected:
 	int displayBohrs;
 
 	int DisplayHOMOEnergy;
-public:
-	afx_msg void OnBnClickedRadio1();
-	afx_msg void OnBnClickedRadio2();
-	afx_msg void OnBnClickedRadio3();
-	afx_msg void OnBnClickedCheck3();
-	afx_msg void OnBnClickedCheck4();
 };
 
 

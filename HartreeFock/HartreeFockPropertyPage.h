@@ -11,18 +11,18 @@ class HartreeFockPropertyPage : public CMFCPropertyPage
 
 public:
 	HartreeFockPropertyPage();
-	virtual ~HartreeFockPropertyPage();
+	~HartreeFockPropertyPage() override;
 
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_HARTREEFOCKPROPERTYPAGE };
 #endif
 
-protected:
+private:
 	DECLARE_MESSAGE_MAP()
 
-	virtual BOOL OnApply();
+	BOOL OnApply() override;
 	void ApplyValues();
-	virtual BOOL OnInitDialog();
+	BOOL OnInitDialog() override;
 	afx_msg void OnBnClickedRadio1();
 	afx_msg void OnBnClickedRadio2();
 	afx_msg void OnEnChangeEdit1();
@@ -30,8 +30,11 @@ protected:
 	afx_msg void OnEnChangeEdit3();
 	afx_msg void OnBnClickedCheck2();
 	afx_msg void OnEnChangeEdit4();
+	afx_msg void OnBnClickedCheck5();
+	afx_msg void OnEnChangeEdit5();
+	afx_msg void OnEnChangeEdit6();
 
-	virtual void DoDataExchange(CDataExchange* pDX);
+	void DoDataExchange(CDataExchange* pDX) override;
 
 	CNumberEdit m_AlphaEdit;
 	CNumberEdit m_GuessEdit;
@@ -46,10 +49,6 @@ protected:
 	int useDIIS;
 	int maxDIISiterations;
 	int normalIterAfterDIIS;
-public:
-	afx_msg void OnBnClickedCheck5();
-	afx_msg void OnEnChangeEdit5();
-	afx_msg void OnEnChangeEdit6();
 };
 
 

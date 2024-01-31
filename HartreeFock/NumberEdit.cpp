@@ -10,16 +10,6 @@
 
 IMPLEMENT_DYNAMIC(CNumberEdit, CEdit)
 
-CNumberEdit::CNumberEdit()
-	: m_GoodSel(0), m_Cancelling(false), allowNegative(true)
-{
-}
-
-CNumberEdit::~CNumberEdit()
-{
-}
-
-
 BEGIN_MESSAGE_MAP(CNumberEdit, CEdit)
 	ON_WM_CHAR()
 	ON_CONTROL_REFLECT(EN_UPDATE, &CNumberEdit::OnEnUpdate)

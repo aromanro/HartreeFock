@@ -15,9 +15,9 @@ class COptionsPropertySheet : public CMFCPropertySheet
 public:
 	COptionsPropertySheet(UINT nIDCaption, CWnd* pParentWnd = NULL, UINT iSelectPage = 0);
 	COptionsPropertySheet(LPCTSTR pszCaption, CWnd* pParentWnd = NULL, UINT iSelectPage = 0);
-	virtual ~COptionsPropertySheet();
+	~COptionsPropertySheet() override;
 
-protected:
+private:
 	HICON hIcon;
 
 	MoleculePropertyPage page1;
@@ -28,7 +28,7 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 
-	virtual BOOL OnInitDialog();
+	BOOL OnInitDialog() override;
 	void AddPages();
 };
 
