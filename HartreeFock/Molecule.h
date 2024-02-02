@@ -25,8 +25,8 @@ namespace Systems {
 		void SetIDs();
 		double NuclearRepulsionEnergy() const;
 		double NuclearElectricFieldEnergy() const;
-		unsigned int ElectronsNumber();
-		unsigned int GetMaxAngularMomentum();
+		unsigned int ElectronsNumber() const;
+		unsigned int GetMaxAngularMomentum() const;
 		void SetCenterForShells();
 		void Normalize();
 		void Init();

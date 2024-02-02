@@ -9,11 +9,6 @@ namespace Matrices {
 		Setup();
 	}
 
-
-	QuantumMatrix::~QuantumMatrix()
-	{
-	}
-
 	void QuantumMatrix::SetRepository(GaussianIntegrals::IntegralsRepository* repository)
 	{
 		integralsRepository = repository;

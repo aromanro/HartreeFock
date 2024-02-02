@@ -99,7 +99,7 @@ double Systems::Molecule::NuclearElectricFieldEnergy() const
 	return energy;
 }
 
-unsigned int Systems::Molecule::ElectronsNumber()
+unsigned int Systems::Molecule::ElectronsNumber() const
 {
 	if (alphaElectrons > 0 || betaElectrons > 0) return alphaElectrons + betaElectrons;
 
@@ -107,7 +107,7 @@ unsigned int Systems::Molecule::ElectronsNumber()
 }
 
 
-unsigned int Systems::Molecule::GetMaxAngularMomentum()
+unsigned int Systems::Molecule::GetMaxAngularMomentum() const
 {
 	unsigned int L = 0;
 

@@ -11,7 +11,7 @@ namespace Orbitals {
 		public:
 			unsigned int l, m, n;
 
-			QuantumNumbers(unsigned int L, unsigned int M, unsigned int N);
+			QuantumNumbers(unsigned int L = 0, unsigned int M = 0, unsigned int N = 0);
 
 			char AtomicOrbital() const;
 

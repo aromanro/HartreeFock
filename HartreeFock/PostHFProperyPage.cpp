@@ -16,21 +16,11 @@ PostHFProperyPage::PostHFProperyPage()
 	computePostHF = (theApp.options.computePostHF ? BST_CHECKED : BST_UNCHECKED);
 }
 
-PostHFProperyPage::~PostHFProperyPage()
-{
-}
-
-
 BEGIN_MESSAGE_MAP(PostHFProperyPage, CMFCPropertyPage)
 	ON_BN_CLICKED(IDC_CHECK1, &PostHFProperyPage::OnBnClickedCheck1)
 END_MESSAGE_MAP()
 
-
-
 // PostHFProperyPage message handlers
-
-
-
 
 BOOL PostHFProperyPage::OnApply()
 {

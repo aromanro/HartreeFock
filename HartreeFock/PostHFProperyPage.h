@@ -9,7 +9,6 @@ class PostHFProperyPage : public CMFCPropertyPage
 
 public:
 	PostHFProperyPage();
-	~PostHFProperyPage() override;
 
 	// Dialog Data
 #ifdef AFX_DESIGN_TIME

@@ -9,8 +9,6 @@ class ComputationPropertyPage : public CMFCPropertyPage
 
 public:
 	ComputationPropertyPage();
-	~ComputationPropertyPage() override;
-
 
 	// Dialog Data
 #ifdef AFX_DESIGN_TIME

@@ -256,8 +256,8 @@ namespace GaussianIntegrals {
 		auto it = nuclearIntegralsContractedMap.find(params);
 		if (nuclearIntegralsContractedMap.end() != it) return it->second.getNuclear(orbital1->angularMomentum, orbital2->angularMomentum);
 		
-		const auto center1 = orbital1->getCenter();
-		const auto center2 = orbital2->getCenter();
+		const auto& center1 = orbital1->getCenter();
+		const auto& center2 = orbital2->getCenter();
 
 		Orbitals::QuantumNumbers::QuantumNumbers maxQN(0, 0, orbital1->angularMomentum + orbital2->angularMomentum);
 	

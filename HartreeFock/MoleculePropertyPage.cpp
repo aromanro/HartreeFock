@@ -33,11 +33,6 @@ MoleculePropertyPage::MoleculePropertyPage()
 	XMinBondLength = theApp.options.XMinBondLength; // not really for chart, but for calculations
 }
 
-MoleculePropertyPage::~MoleculePropertyPage()
-{
-}
-
-
 BEGIN_MESSAGE_MAP(MoleculePropertyPage, CMFCPropertyPage)
 	ON_CBN_SELCHANGE(IDC_COMBO1, &MoleculePropertyPage::OnCbnSelchangeCombo1)
 	ON_CBN_SELCHANGE(IDC_COMBO2, &MoleculePropertyPage::OnCbnSelchangeCombo2)

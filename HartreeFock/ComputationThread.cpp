@@ -2,11 +2,6 @@
 #include "ComputationThread.h"
 
 
-ComputationThread::~ComputationThread()
-{
-}
-
-
 void ComputationThread::Start()
 {
 	mThread = std::thread([this]() {

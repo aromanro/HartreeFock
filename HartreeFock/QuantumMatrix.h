@@ -12,7 +12,7 @@ namespace Matrices {
 		Eigen::MatrixXd matrix;
 
 		QuantumMatrix(GaussianIntegrals::IntegralsRepository* repository = nullptr);
-		virtual ~QuantumMatrix();
+		virtual ~QuantumMatrix() = default;
 
 		virtual void Calculate() = 0;
 
@@ -23,6 +23,7 @@ namespace Matrices {
 
 		GaussianIntegrals::IntegralsRepository* integralsRepository;
 		unsigned int nrBasis;
+
 	public:
 		void clear();
 	};

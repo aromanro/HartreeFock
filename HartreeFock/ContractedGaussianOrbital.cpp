@@ -3,15 +3,6 @@
 
 namespace Orbitals {
 
-	ContractedGaussianOrbital::ContractedGaussianOrbital()
-	{
-	}
-
-
-	ContractedGaussianOrbital::~ContractedGaussianOrbital()
-	{
-	}
-
 	double ContractedGaussianOrbital::operator()(const Vector3D<double>& r) const
 	{
 		double res = 0;

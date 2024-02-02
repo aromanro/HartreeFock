@@ -11,7 +11,6 @@ class HartreeFockPropertyPage : public CMFCPropertyPage
 
 public:
 	HartreeFockPropertyPage();
-	~HartreeFockPropertyPage() override;
 
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_HARTREEFOCKPROPERTYPAGE };

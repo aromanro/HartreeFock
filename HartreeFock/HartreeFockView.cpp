@@ -34,18 +34,6 @@ BEGIN_MESSAGE_MAP(CHartreeFockView, CView)
 	ON_WM_ERASEBKGND()
 END_MESSAGE_MAP()
 
-// CHartreeFockView construction/destruction
-
-CHartreeFockView::CHartreeFockView()
-	: timer(NULL)
-{
-	// TODO: add construction code here
-}
-
-CHartreeFockView::~CHartreeFockView()
-{
-}
-
 BOOL CHartreeFockView::PreCreateWindow(CREATESTRUCT& cs)
 {
 	// TODO: Modify the Window class or styles here by modifying

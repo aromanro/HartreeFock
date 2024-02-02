@@ -11,8 +11,6 @@ class MoleculePropertyPage : public CMFCPropertyPage
 
 public:
 	MoleculePropertyPage();
-	~MoleculePropertyPage() override;
-
 
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_MOLECULEPROPERTYPAGE };

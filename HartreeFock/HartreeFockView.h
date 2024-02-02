@@ -8,13 +8,11 @@
 class CHartreeFockView : public CView
 {
 protected: // create from serialization only
-	CHartreeFockView();
+	CHartreeFockView() = default;
 	DECLARE_DYNCREATE(CHartreeFockView)
 
 // Attributes
 public:
-	~CHartreeFockView() override;
-
 	CHartreeFockDoc* GetDocument() const;
 
 // Operations   
@@ -24,7 +22,7 @@ public:
 
 private:
 // Implementation
-	UINT_PTR timer;
+	UINT_PTR timer = 0;
 #ifdef _DEBUG
 	void AssertValid() const override;
 	void Dump(CDumpContext& dc) const override;

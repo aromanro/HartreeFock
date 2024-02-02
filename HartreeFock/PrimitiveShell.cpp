@@ -4,16 +4,8 @@
 
 namespace Orbitals {
 
-	PrimitiveGaussianShell::PrimitiveGaussianShell()
-	{
-	}
 
-
-	PrimitiveGaussianShell::~PrimitiveGaussianShell()
-	{
-	}
-
-	Vector3D<double> PrimitiveGaussianShell::getCenter() const {
+	const Vector3D<double>& PrimitiveGaussianShell::getCenter() const {
 		assert(basisFunctions.size());
 
 		return basisFunctions.front().center;
@@ -60,15 +52,7 @@ namespace Orbitals {
 		for (auto& orb : basisFunctions) orb.Normalize();
 	}
 
-	ContractedGaussianShell::ContractedGaussianShell()
-	{
-	}
-
-	ContractedGaussianShell::~ContractedGaussianShell()
-	{
-	}
-
-	Vector3D<double> ContractedGaussianShell::getCenter() const {
+	const Vector3D<double>& ContractedGaussianShell::getCenter() const {
 		assert(basisFunctions.size());
 
 		return basisFunctions.front().center;

@@ -38,6 +38,8 @@ namespace Tensors {
 			m_sz = other.m_sz;
 		}
 
+		virtual ~Tensor() = default;
+
 		Tensor& operator=(const Tensor& other)
 		{
 			Tensor temp(other);

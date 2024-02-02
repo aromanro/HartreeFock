@@ -19,11 +19,6 @@ ComputationPropertyPage::ComputationPropertyPage()
 	m_nrPoints = theApp.options.numberOfPoints;
 }
 
-ComputationPropertyPage::~ComputationPropertyPage()
-{
-}
-
-
 BEGIN_MESSAGE_MAP(ComputationPropertyPage, CMFCPropertyPage)
 	ON_EN_CHANGE(IDC_EDIT1, &ComputationPropertyPage::OnEnChangeEdit1)
 	ON_BN_CLICKED(IDC_CHECK1, &ComputationPropertyPage::OnBnClickedCheck1)

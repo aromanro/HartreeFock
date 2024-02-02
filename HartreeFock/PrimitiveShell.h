@@ -15,13 +15,12 @@ namespace Orbitals {
 	class Shell
 	{
 	public:
-		unsigned int ID;
-		unsigned int centerID;
+		unsigned int ID = 0;
+		unsigned int centerID = 0;
 
-		Shell() : ID(0), centerID(0) {}
-		virtual ~Shell() {}
+		virtual ~Shell() = default;
 
-		virtual Vector3D<double> getCenter() const = 0;
+		virtual const Vector3D<double>& getCenter() const = 0;
 		virtual double operator()(const Vector3D<double>& r) const = 0;
 		virtual Vector3D<double> getGradient(const Vector3D<double>& r) const = 0;
 		virtual double getLaplacian(const Vector3D<double>& r) const = 0;
@@ -34,12 +33,9 @@ namespace Orbitals {
 	public:
 		std::vector<GaussianOrbital> basisFunctions;
 		
-		Vector3D<double> getCenter() const override;
+		const Vector3D<double>& getCenter() const override;
 
 		double getAlpha() const;
-
-		PrimitiveGaussianShell();
-		virtual ~PrimitiveGaussianShell();
 
 		double operator()(const Vector3D<double>& r) const override;
 		Vector3D<double> getGradient(const Vector3D<double>& r) const override;
@@ -55,13 +51,10 @@ namespace Orbitals {
 	public:
 		std::vector<ContractedGaussianOrbital> basisFunctions;
 		
-		ContractedGaussianShell();
-		virtual ~ContractedGaussianShell();
-		
 		void AddOrbitals(char type);
 		void AddGaussians(double exponent);
 
-		Vector3D<double> getCenter() const override;
+		const Vector3D<double>& getCenter() const override;
 		std::string GetShellString() const;
 
 		unsigned int CountOrbitals(char orbital) const;

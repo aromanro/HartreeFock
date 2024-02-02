@@ -29,11 +29,6 @@ ChartPropertyPage::ChartPropertyPage()
 	DisplayHOMOEnergy = theApp.options.DisplayHOMOEnergy;
 }
 
-ChartPropertyPage::~ChartPropertyPage()
-{
-}
-
-
 BEGIN_MESSAGE_MAP(ChartPropertyPage, CMFCPropertyPage)
 	ON_EN_CHANGE(IDC_EDIT1, &ChartPropertyPage::OnEnChangeEdit1)
 	ON_EN_CHANGE(IDC_EDIT2, &ChartPropertyPage::OnEnChangeEdit2)

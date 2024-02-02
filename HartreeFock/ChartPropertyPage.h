@@ -11,7 +11,6 @@ class ChartPropertyPage : public CMFCPropertyPage
 
 public:
 	ChartPropertyPage();
-	~ChartPropertyPage() override;
 
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_CHARTPROPERTYPAGE };

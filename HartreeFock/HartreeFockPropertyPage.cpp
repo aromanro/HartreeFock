@@ -26,11 +26,6 @@ HartreeFockPropertyPage::HartreeFockPropertyPage()
 	normalIterAfterDIIS = theApp.options.normalIterAfterDIIS;
 }
 
-HartreeFockPropertyPage::~HartreeFockPropertyPage()
-{
-}
-
-
 BEGIN_MESSAGE_MAP(HartreeFockPropertyPage, CMFCPropertyPage)
 	ON_BN_CLICKED(IDC_RADIO1, &HartreeFockPropertyPage::OnBnClickedRadio1)
 	ON_BN_CLICKED(IDC_RADIO2, &HartreeFockPropertyPage::OnBnClickedRadio2)
@@ -44,12 +39,7 @@ BEGIN_MESSAGE_MAP(HartreeFockPropertyPage, CMFCPropertyPage)
 	ON_EN_CHANGE(IDC_EDIT6, &HartreeFockPropertyPage::OnEnChangeEdit6)
 END_MESSAGE_MAP()
 
-
-
 // HartreeFockPropertyPage message handlers
-
-
-
 
 BOOL HartreeFockPropertyPage::OnApply()
 {
