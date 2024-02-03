@@ -152,7 +152,7 @@ void CHartreeFockView::OnDestroy()
 
 void CHartreeFockView::StartWatching()
 {
-	if (!timer) timer = SetTimer(1, 1000, NULL);
+	if (!timer) timer = SetTimer(1, 1000, nullptr);
 	BeginWaitCursor();
 }
 
@@ -180,7 +180,7 @@ BOOL CHartreeFockView::OnEraseBkgnd(CDC* /*pDC*/)
 
 void CHartreeFockView::StartTimer()
 {
-	if (!timer) timer = SetTimer(1, 100, NULL);
+	if (!timer) timer = SetTimer(1, 100, nullptr);
 
 	CHartreeFockDoc* pDoc = GetDocument();
 	if (pDoc && !pDoc->isFinished()) BeginWaitCursor();

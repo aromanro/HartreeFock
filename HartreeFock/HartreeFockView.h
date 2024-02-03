@@ -31,7 +31,7 @@ private:
 	// Overrides
 	void OnDraw(CDC* pDC) override;  // overridden to draw this view
 	BOOL PreCreateWindow(CREATESTRUCT& cs) override;
-	void OnPrepareDC(CDC* pDC, CPrintInfo* pInfo = NULL) override;
+	void OnPrepareDC(CDC* pDC, CPrintInfo* pInfo = nullptr) override;
 	BOOL OnPreparePrinting(CPrintInfo* pInfo) override;
 	void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo) override;
 	void OnEndPrinting(CDC* pDC, CPrintInfo* pInfo) override;

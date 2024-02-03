@@ -547,7 +547,7 @@ namespace GaussianIntegrals {
 		hProcess = OpenProcess(PROCESS_QUERY_INFORMATION |
 			PROCESS_VM_READ,
 			FALSE, processID);
-		if (NULL == hProcess)
+		if (nullptr == hProcess)
 			return;
 
 		if (GetProcessMemoryInfo(hProcess, &pmc, sizeof(pmc)))
