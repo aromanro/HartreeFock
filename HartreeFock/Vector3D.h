@@ -2,7 +2,7 @@
 
 #include <tuple>
 
-template<typename T> class Vector3D
+template<typename T = double> class Vector3D
 {
 public:
 	Vector3D();
