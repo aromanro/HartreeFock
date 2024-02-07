@@ -6,14 +6,7 @@
 
 namespace GaussianIntegrals {
 
-
-	GaussianMoment::GaussianMoment()
-		: factor(0)
-	{
-	}
-
 	GaussianMoment::GaussianMoment(double alpha1, double alpha2, const Vector3D<double>& center1, const Vector3D<double>& center2, const Vector3D<double>& center3, const Orbitals::QuantumNumbers::QuantumNumbers& maxQN1, const Orbitals::QuantumNumbers::QuantumNumbers& maxQN2)
-		: factor(0)
 	{
 		Reset(alpha1, alpha2, center1, center2, center3, maxQN1, maxQN2);
 	}
@@ -33,7 +26,7 @@ namespace GaussianIntegrals {
 		CalculateMoment(matrixY, matrixY1, alpha1, alpha2, center1.Y, center2.Y, center3.Y, maxQN1.m, maxQN2.m);
 		CalculateMoment(matrixZ, matrixZ1, alpha1, alpha2, center1.Z, center2.Z, center3.Z, maxQN1.n, maxQN2.n);
 
-		const Vector3D<double> dif = center1 - center2;
+		const Vector3D dif(center1 - center2);
 		const double oneDivAlpha1PlusAlpha2 = 1. / (alpha1 + alpha2);
 		factor = exp(-alpha1 * alpha2 * oneDivAlpha1PlusAlpha2 * dif * dif) * pow(M_PI * oneDivAlpha1PlusAlpha2, 3. / 2.);
 	}

@@ -25,6 +25,66 @@ namespace HartreeFock {
             f = getSpinOrbitalFockMatrix();
         }
 
+        // just for checking against the MP2 energy
+        double MP2EnergyFromt4() const
+        {
+            double result = 0;
+
+            int indi = 0;
+            for (int i = 0; i < numberOfSpinOrbitals; ++i)
+            {
+                const int orbi = i / 2;
+                if (orbi >= occupied.size() || !occupied[orbi]) continue; // only occupied
+
+                int indj = 0;
+                for (int j = 0; j < numberOfSpinOrbitals; ++j)
+                {
+                    const int orbj = j / 2;
+                    if (orbj >= occupied.size() || !occupied[orbj]) continue; // only occupied
+
+                    int inda = 0;
+                    for (int a = 0; a < numberOfSpinOrbitals; ++a)
+                    {
+                        const int orba = a / 2;
+                        if (orba < occupied.size() && occupied[orba]) continue; // only unoccupied
+
+                        int indb = 0;
+                        for (int b = 0; b < numberOfSpinOrbitals; ++b)
+                        {
+                            const int orbb = b / 2;
+                            if (orbb < occupied.size() && occupied[orbb]) continue;  // only unoccupied
+
+                            result += (*m_spinOrbitalBasisIntegrals)(i, j, a, b) * t4(indi, indj, inda, indb);
+
+                            ++indb;
+                        }
+                        ++inda;
+                    }
+                    ++indj;
+                }
+                ++indi;
+            }
+
+            return 0.25 * result;
+        }
+        
+
+        // Step #5: Check for Convergence and Iterate
+
+        // current CC correlation energy (CCSD):
+
+        double CorrelationEnergy() const;
+
+        // triples correction
+        double TEnergy() const;
+
+        double StepCC(int iter);
+
+        bool DIISStep(int iter, Eigen::MatrixXd& newt2, Eigen::Tensor<double, 4>& newt4);
+
+
+        double CCEnergy;
+
     private:
         static inline int delta(int i, int j)
         {
@@ -103,7 +163,7 @@ namespace HartreeFock {
                             ++indb;
                         }
                         ++inda;
-                    }                
+                    }
                     ++indj;
                 }
                 ++indi;
@@ -112,7 +172,7 @@ namespace HartreeFock {
 
 
         // Step #3: Calculate the CC Intermediates
-        
+
         // for the formulae, see J.F. Stanton, J. Gauss, J.D. Watts, and R.J. Bartlett, J. Chem. Phys. volume 94, pp. 4334-4345 (1991)
         // "A direct product decomposition approach for symmetry exploitation in many-body methods. I. Energy calculations"
 
@@ -182,72 +242,8 @@ namespace HartreeFock {
             return  f(i, i) + f(j, j) + f(k, k) - f(a, a) - f(b, b) - f(c, c);
         }
 
-    public:
-        // just for checking against the MP2 energy
-        double MP2EnergyFromt4() const
-        {
-            double result = 0;
-
-            int indi = 0;
-            for (int i = 0; i < numberOfSpinOrbitals; ++i)
-            {
-                const int orbi = i / 2;
-                if (orbi >= occupied.size() || !occupied[orbi]) continue; // only occupied
-
-                int indj = 0;
-                for (int j = 0; j < numberOfSpinOrbitals; ++j)
-                {
-                    const int orbj = j / 2;
-                    if (orbj >= occupied.size() || !occupied[orbj]) continue; // only occupied
-
-                    int inda = 0;
-                    for (int a = 0; a < numberOfSpinOrbitals; ++a)
-                    {
-                        const int orba = a / 2;
-                        if (orba < occupied.size() && occupied[orba]) continue; // only unoccupied
-
-                        int indb = 0;
-                        for (int b = 0; b < numberOfSpinOrbitals; ++b)
-                        {
-                            const int orbb = b / 2;
-                            if (orbb < occupied.size() && occupied[orbb]) continue;  // only unoccupied
-
-                            result += (*m_spinOrbitalBasisIntegrals)(i, j, a, b) * t4(indi, indj, inda, indb);
-
-                            ++indb;
-                        }
-                        ++inda;
-                    }
-                    ++indj;
-                }
-                ++indi;
-            }
-
-            return 0.25 * result;
-        }
-        
-
-        // Step #5: Check for Convergence and Iterate
-
-        // current CC correlation energy (CCSD):
-
-        double CorrelationEnergy() const;
-
-        // triples correction
-        double TEnergy() const;
-
-    private:
         double TEnergyInner(double& sum, int inda, int indi, int indj, int indk, int a, int i, int j, int k) const;
 
-    public:
-        double StepCC(int iter);
-
-        bool DIISStep(int iter, Eigen::MatrixXd& newt2, Eigen::Tensor<double, 4>& newt4);
-
-
-        double CCEnergy;
-
-    private:
         int numberOfSpinOrbitals;
         int numberOfOccupiedSpinOrbitals;
 

@@ -170,7 +170,7 @@ namespace CG
 			return res->second;
 		}
 
-	protected:
+	private:
 		static std::array<unsigned long long int, 21> factorialsTable;
 
 		std::unordered_map<std::tuple<int, int, int, int, int>, double, TupleHash<int, int, int, int, int>> coefficients;

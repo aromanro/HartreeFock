@@ -26,9 +26,6 @@ namespace GaussianIntegrals {
 	public:
 		Eigen::MatrixXd matrixCalc;
 
-		GaussianNuclear();
-		~GaussianNuclear();
-
 		void Reset(IntegralsRepository* repository, double alpha1, double alpha2, const Vector3D<double>& nucleus, const Vector3D<double>& center1, const Vector3D<double>& center2, unsigned int maxL1, unsigned int maxL2, bool calculateHorizontal = true);
 
 		double operator()(const Orbitals::QuantumNumbers::QuantumNumbers& QN1, const Orbitals::QuantumNumbers::QuantumNumbers& QN2) const { return getNuclear(QN1, QN2); }

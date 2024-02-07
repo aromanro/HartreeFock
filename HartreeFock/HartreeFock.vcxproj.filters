@@ -263,9 +263,6 @@
     <ClCompile Include="GaussianTwoElectrons.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GaussianIntegral.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="RestrictedHartreeFock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

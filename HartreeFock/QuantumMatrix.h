@@ -17,15 +17,13 @@ namespace Matrices {
 		virtual void Calculate() = 0;
 
 		void SetRepository(GaussianIntegrals::IntegralsRepository* repository);
+		void clear();
 
 	protected:
 		void Setup();
 
 		GaussianIntegrals::IntegralsRepository* integralsRepository;
 		unsigned int nrBasis;
-
-	public:
-		void clear();
 	};
 
 
@@ -34,7 +32,7 @@ namespace Matrices {
 	public:
 		OverlapMatrix(GaussianIntegrals::IntegralsRepository* repository = nullptr) : QuantumMatrix(repository) { if (integralsRepository) Calculate(); }
 
-		virtual void Calculate();
+		void Calculate() override;
 	};
 
 
@@ -46,7 +44,7 @@ namespace Matrices {
 
 		MomentMatrix(GaussianIntegrals::IntegralsRepository* repository = nullptr) : QuantumMatrix(repository) { if (integralsRepository) Calculate(); }
 
-		virtual void Calculate();
+		void Calculate() override;
 	};
 
 
@@ -55,7 +53,7 @@ namespace Matrices {
 	public:
 		KineticMatrix(GaussianIntegrals::IntegralsRepository* repository = nullptr) : QuantumMatrix(repository) { if (integralsRepository) Calculate(); }
 
-		virtual void Calculate();
+		void Calculate() override;
 	};
 
 	class NuclearMatrix : public QuantumMatrix
@@ -63,7 +61,7 @@ namespace Matrices {
 	public:
 		NuclearMatrix(GaussianIntegrals::IntegralsRepository* repository = nullptr) : QuantumMatrix(repository) { if (integralsRepository) Calculate(); }
 
-		virtual void Calculate();
+		void Calculate() override;
 	};
 
 }

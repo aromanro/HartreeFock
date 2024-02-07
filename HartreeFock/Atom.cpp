@@ -10,12 +10,6 @@ namespace Systems {
 		else electronsNumber = nrElectrons;
 	}
 
-
-	Atom::~Atom()
-	{
-	}
-
-
 	unsigned int AtomWithShells::CountNumberOfContractedGaussians() const
 	{
 		unsigned int res = 0;

@@ -142,7 +142,7 @@ namespace GaussianIntegrals {
 			return electronElectronIntegrals[GetElectronElectronIndex(orbital1, orbital2, orbital3, orbital4)];
 		}
 
-	protected:
+	private:
 		const GaussianNuclear& getNuclearVertical(const Systems::Atom& atom, const Orbitals::GaussianOrbital& gaussian1, const Orbitals::GaussianOrbital& gaussian2);
 
 		inline void CalculateElectronElectronIntegrals23(int i, const Orbitals::ContractedGaussianOrbital& orb1);
@@ -231,7 +231,7 @@ namespace GaussianIntegrals {
 			return result;
 		}
 
-	protected:
+	private:
 		inline double getElectronElectronFirstLevel(unsigned int orbital1, unsigned int orbital2, unsigned int orbital3, unsigned int orbital4, const Eigen::MatrixXd& C)
 		{
 			const FourOrbitalIndicesTuple indTuple = std::make_tuple(orbital1, orbital2, orbital3, orbital4);

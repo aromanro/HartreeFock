@@ -9,12 +9,6 @@ Chart::Chart()
 {
 }
 
-
-Chart::~Chart()
-{
-}
-
-
 // will calculate from data if called
 int Chart::GetNumTicks() const
 {

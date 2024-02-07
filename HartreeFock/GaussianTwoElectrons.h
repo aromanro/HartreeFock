@@ -24,8 +24,6 @@ namespace GaussianIntegrals {
 		Tensors::TensorOrder3<double> tensor3Calc;
 		Tensors::TensorOrder4<double> tensor4Calc;
 
-		GaussianTwoElectrons();
-		~GaussianTwoElectrons();
 
 		double getValue(const Orbitals::QuantumNumbers::QuantumNumbers& QN1, const Orbitals::QuantumNumbers::QuantumNumbers& QN2, const Orbitals::QuantumNumbers::QuantumNumbers& QN3, const Orbitals::QuantumNumbers::QuantumNumbers& QN4);
 
@@ -33,7 +31,7 @@ namespace GaussianIntegrals {
 			const Vector3D<double>& center1, const Vector3D<double>& center2, const Vector3D<double>& center3, const Vector3D<double>& center4, 			
 			unsigned int maxL1, unsigned int maxL2, unsigned int maxL3, unsigned int maxL4);
 
-	protected:
+	private:
 		void VerticalRecursion(double alpha, double alpha12, const Vector3D<double>& Rpa, const Vector3D<double>& Rwp, unsigned int maxL);
 		void ElectronTransfer(double alpha12, double alpha34, const Vector3D<double>& delta, unsigned int maxL, unsigned int maxL2);
 

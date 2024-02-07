@@ -29,9 +29,9 @@ namespace GaussianIntegrals {
         Eigen::MatrixXd matrixY1;
         Eigen::MatrixXd matrixZ1;
 
-        double factor;
+        double factor = 0;
 
-        GaussianMoment();
+        GaussianMoment() = default;
 
         GaussianMoment(double alpha1, double alpha2, const Vector3D<double>& center1, const Vector3D<double>& center2, const Orbitals::QuantumNumbers::QuantumNumbers& maxQN1, const Orbitals::QuantumNumbers::QuantumNumbers& maxQN2)
             : GaussianMoment(alpha1, alpha2, center1, center2, Vector3D<double>(0, 0, 0), maxQN1, maxQN2)
@@ -68,7 +68,7 @@ namespace GaussianIntegrals {
 
         double getOverlap(const Orbitals::QuantumNumbers::QuantumNumbers& QN1, const Orbitals::QuantumNumbers::QuantumNumbers& QN2) const;
 
-    protected:
+    private:
         void CalculateMoment(Eigen::MatrixXd& matrix, Eigen::MatrixXd& matrix1, double alpha1, double alpha2, double center1, double center2, double center3, unsigned int maxQN1, unsigned int maxQN2);
     };
 

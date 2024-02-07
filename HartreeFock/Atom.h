@@ -18,7 +18,7 @@ namespace Systems {
 		unsigned int ID;
 
 		Atom(unsigned int nrZ = 0, int nrElectrons = -1);
-		virtual ~Atom();
+		virtual ~Atom() = default;
 	};
 
 	class AtomWithShells : public Atom

@@ -8,21 +8,12 @@
 
 namespace GaussianIntegrals {
 
-	GaussianNuclear::GaussianNuclear()
-	{
-	}
-
-
-	GaussianNuclear::~GaussianNuclear()
-	{
-	}
-
 	void GaussianNuclear::Reset(IntegralsRepository* repository, double alpha1, double alpha2, const Vector3D<double>& nucleus, const Vector3D<double>& center1, const Vector3D<double>& center2, unsigned int maxL1, unsigned int maxL2, bool calculateHorizontal)
 	{
 		const double alpha = alpha1 + alpha2;
-		const Vector3D<double> Rp = (alpha1 * center1 + alpha2 * center2) / alpha;
-		const Vector3D<double> difN = nucleus - Rp;		
-		const Vector3D<double> dif = center1 - center2; 
+		const Vector3D Rp((alpha1 * center1 + alpha2 * center2) / alpha);
+		const Vector3D difN(nucleus - Rp);		
+		const Vector3D dif(center1 - center2); 
 
 		const unsigned int maxL = maxL1 + maxL2;
 		const unsigned int size = maxL + 1;

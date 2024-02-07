@@ -22,9 +22,8 @@ namespace GaussianIntegrals {
 		Eigen::MatrixXd matrixY;
 		Eigen::MatrixXd matrixZ;
 
-		double factor;
+		double factor = 0;
 
-		GaussianOverlap();
 		GaussianOverlap(double alpha1, double alpha2, const Vector3D<double>& center1, const Vector3D<double>& center2, const Orbitals::QuantumNumbers::QuantumNumbers& maxQN1, const Orbitals::QuantumNumbers::QuantumNumbers& maxQN2);
 
 		void Reset(double alpha1, double alpha2, const Vector3D<double>& center1, const Vector3D<double>& center2, const Orbitals::QuantumNumbers::QuantumNumbers& maxQN1, const Orbitals::QuantumNumbers::QuantumNumbers& maxQN2);

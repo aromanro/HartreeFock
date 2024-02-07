@@ -4,7 +4,7 @@
 
 namespace Tensors {
 
-	template <class T> class TensorOrder4 : public Tensor<T, 4>
+	template <class T = double> class TensorOrder4 : public Tensor<T, 4>
 	{
 	public:
 		TensorOrder4(unsigned int dim1 = 1, unsigned int dim2 = 1, unsigned int dim3 = 1, unsigned int dim4 = 1)

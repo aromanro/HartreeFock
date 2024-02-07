@@ -278,7 +278,6 @@
     <ClCompile Include="RestrictedCCSD_W.cpp" />
     <ClCompile Include="RestrictedConfigurationIInteractionSingles.cpp" />
     <ClCompile Include="SpinOrbitalsElectronElectronIntegralsRepository.cpp" />
-    <ClCompile Include="GaussianIntegral.cpp" />
     <ClCompile Include="GaussianKinetic.cpp" />
     <ClCompile Include="GaussianMoment.cpp" />
     <ClCompile Include="GaussianNuclear.cpp" />

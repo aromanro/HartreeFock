@@ -8,7 +8,6 @@ class Chart
 	friend class Axis;
 public:
 	Chart();
-	~Chart();
 
 	DataSets dataSets;
 

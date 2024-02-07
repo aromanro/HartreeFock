@@ -7,13 +7,10 @@ namespace Orbitals {
 	class GaussianOrbital : public Orbital
 	{
 	public:
-		double coefficient;
-		double alpha;
+		double coefficient = 1;
+		double alpha = 1;
 
-		double normalizationFactor;
-
-		GaussianOrbital();
-		virtual ~GaussianOrbital();
+		double normalizationFactor = 1;
 
 		virtual double getCoefficient() const;
 		virtual double getAlpha() const;
@@ -24,13 +21,12 @@ namespace Orbitals {
 
 		Vector3D<double> ProductCenter(const GaussianOrbital& other) const;
 
+		void Normalize();
+
 	protected:
 		double getNormalizationFactor() const;
 
-		double coeffProdNorm;
-
-	public:
-		void Normalize();
+		double coeffProdNorm = 0;
 	};
 }
 

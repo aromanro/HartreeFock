@@ -12,17 +12,6 @@
 
 namespace Orbitals {
 
-	GaussianOrbital::GaussianOrbital()
-		: coefficient(1), alpha(1), normalizationFactor(1), coeffProdNorm(0)
-	{
-	}
-
-
-	GaussianOrbital::~GaussianOrbital()
-	{
-	}
-
-
 	double GaussianOrbital::getCoefficient() const
 	{
 		return coefficient;
@@ -49,7 +38,7 @@ namespace Orbitals {
 
 	Vector3D<double> GaussianOrbital::getGradient(const Vector3D<double>& r) const
 	{
-		const Vector3D<double> R = r - center;
+		const Vector3D R(r - center);
 
 		const double pRX = pow(R.X, angularMomentum.l);
 		const double pRY = pow(R.Y, angularMomentum.m);
@@ -57,7 +46,7 @@ namespace Orbitals {
 		const double powProd = pRX * pRY * pRZ;
 		const double expaR2 = exp(-alpha * R * R);
 
-		const Vector3D<double> eD = -alpha * 2. * R;
+		const Vector3D eD(-alpha * 2. * R);
 
 		double valX = eD.X;
 		if (angularMomentum.l > 0)
@@ -89,7 +78,7 @@ namespace Orbitals {
 
 	double GaussianOrbital::getLaplacian(const Vector3D<double>& r) const
 	{
-		const Vector3D<double> R = r - center;
+		const Vector3D R(r - center);
 
 		const double pRX = pow(R.X, angularMomentum.l);
 		const double pRY = pow(R.Y, angularMomentum.m);

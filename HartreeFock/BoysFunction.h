@@ -9,9 +9,6 @@ namespace GaussianIntegrals {
 	public:
 		class BoysFunctor : public MathUtils::FunctionFunctor
 		{
-		protected:
-			double m_m;
-			double m_x;
 		public:
 			BoysFunctor(double m, double x) : m_m(m), m_x(x) {}
 
@@ -21,6 +18,10 @@ namespace GaussianIntegrals {
 
 				return res;  
 			}
+
+		private:
+			double m_m;
+			double m_x;
 		};
 
 		double operator()(double m, double x) const;

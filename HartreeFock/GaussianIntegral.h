@@ -8,8 +8,7 @@ namespace GaussianIntegrals {
 	class GaussianIntegral
 	{
 	public:
-		GaussianIntegral();
-		virtual ~GaussianIntegral();
+		virtual ~GaussianIntegral() = default;
 
 		static Vector3D<double> ProductCenter(const Orbitals::GaussianOrbital& orbital1, const Orbitals::GaussianOrbital& orbital2)
 		{

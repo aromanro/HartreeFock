@@ -6,20 +6,10 @@
 namespace GaussianIntegrals {
 
 
-	GaussianTwoElectrons::GaussianTwoElectrons()
-	{
-	}
-
-
-	GaussianTwoElectrons::~GaussianTwoElectrons()
-	{
-	}
-
 	double GaussianTwoElectrons::getValue(const Orbitals::QuantumNumbers::QuantumNumbers& QN1, const Orbitals::QuantumNumbers::QuantumNumbers& QN2, const Orbitals::QuantumNumbers::QuantumNumbers& QN3, const Orbitals::QuantumNumbers::QuantumNumbers& QN4)
 	{
 		return tensor4Calc(QN1.GetCanonicalIndex(), QN2.GetCanonicalIndex(), QN3.GetCanonicalIndex(), QN4.GetCanonicalIndex());
 	}
-
 
 
 	void GaussianTwoElectrons::Reset(IntegralsRepository* repository, double alpha1, double alpha2, double alpha3, double alpha4, 
@@ -42,12 +32,12 @@ namespace GaussianIntegrals {
 		const Orbitals::QuantumNumbers::QuantumNumbers maxQN(0, 0, maxL);
 		const unsigned int maxIndex = maxQN.GetTotalCanonicalIndex();
 
-		const Vector3D<double> R12 = center1 - center2;
-		const Vector3D<double> R34 = center3 - center4;
+		const Vector3D R12(center1 - center2);
+		const Vector3D R34(center3 - center4);
 
-		const Vector3D<double> Rp = (alpha1 * center1 + alpha2 * center2) / alpha12;
-		const Vector3D<double> Rq = (alpha3 * center3 + alpha4 * center4) / alpha34;
-		const Vector3D<double> Rpq = Rp - Rq;
+		const Vector3D Rp((alpha1 * center1 + alpha2 * center2) / alpha12);
+		const Vector3D Rq((alpha3 * center3 + alpha4 * center4) / alpha34);
+		const Vector3D Rpq(Rp - Rq);
 
 		// auxiliary integrals
 
@@ -90,7 +80,7 @@ namespace GaussianIntegrals {
 		electronTransfer.col(0) = matrixCalc.col(0);  // copy the 0 column into the new matrixCalc
 		matrixCalc = electronTransfer;
 
-		const Vector3D<double> Delta = -(alpha2 * R12 + alpha4 * R34) / alpha34;
+		const Vector3D Delta(-(alpha2 * R12 + alpha4 * R34) / alpha34);
 
 		// ***************************************************************************************************************************
 
