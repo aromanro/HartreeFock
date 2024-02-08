@@ -43,7 +43,7 @@ namespace GaussianIntegrals {
 
         void Reset(double alpha1, double alpha2, const Vector3D<double>& center1, const Vector3D<double>& center2, const Orbitals::QuantumNumbers::QuantumNumbers& maxQN1, const Orbitals::QuantumNumbers::QuantumNumbers& maxQN2)
         {
-            static const Vector3D<double> zeroV(0, 0, 0);
+            static const Vector3D zeroV(0., 0., 0.);
             Reset(alpha1, alpha2, center1, center2, zeroV, maxQN1, maxQN2);
         }
 

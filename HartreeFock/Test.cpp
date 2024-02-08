@@ -371,7 +371,7 @@ void Test::TestIterationsAndPostHF(Systems::Molecule& molecule, HartreeFock::Har
 
 	file << "Total ECCSD(T): " << hartreeFock->GetTotalEnergy() + ((HartreeFock::RestrictedCCSD*)hartreeFock)->CCEnergy + Te << std::endl;
 
-	Vector3D<double> moment = hartreeFock->GetMoment(); // multiply with 2.541746473 for Debye
+	Vector3D moment(hartreeFock->GetMoment()); // multiply with 2.541746473 for Debye
 
 	file << std::endl;
 	file << "Mu-x: " << moment.X << " au, " << moment.X * 2.541746473 << " D" << std::endl;
@@ -648,7 +648,7 @@ void Test::TestWaterDipoleMoment(const std::string& fileName)
 
 	hartreeFock->Init(&molecule);
 	double E = hartreeFock->Calculate();
-	Vector3D<double> scfMoment = hartreeFock->GetMoment();
+	Vector3D scfMoment(hartreeFock->GetMoment());
 
 	file << "Scf Mu-x: " << scfMoment.X << " au, " << scfMoment.X * 2.541746473 << " D" << std::endl;
 	file << "Scf Mu-y: " << scfMoment.Y << " au, " << scfMoment.Y * 2.541746473 << " D" << std::endl;
@@ -714,7 +714,7 @@ void Test::TestWaterDipoleMoment(const std::string& fileName)
 
 	if (!hartreeFock->converged) file << "Not converged Ez2" << std::endl;
 
-	Vector3D<double> mu = hartreeFock->GetNuclearMoment();
+	Vector3D mu(hartreeFock->GetNuclearMoment());
 
 	delete hartreeFock;
 

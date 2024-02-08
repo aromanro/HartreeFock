@@ -407,7 +407,7 @@ namespace HartreeFock {
 
 	Vector3D<double> UnrestrictedHartreeFock::GetMoment() const
 	{
-		Vector3D<double> moment = GetNuclearMoment();
+		Vector3D moment(GetNuclearMoment());
 
 		const unsigned long long int sz = DensityMatrixPlus.cols();
 
