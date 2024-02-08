@@ -20,10 +20,6 @@ namespace GaussianIntegrals {
 	{
 	}
 
-	GaussianKinetic::~GaussianKinetic()
-	{
-	}
-
 	void GaussianKinetic::Reset(double alpha1, double alpha2, const Orbitals::QuantumNumbers::QuantumNumbers& maxQN1, const Orbitals::QuantumNumbers::QuantumNumbers& maxQN2)
 	{
 		matrixX = Eigen::MatrixXd::Zero(maxQN1.l + 1ULL, maxQN2.l + 1ULL);

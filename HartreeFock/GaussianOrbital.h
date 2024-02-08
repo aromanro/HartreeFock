@@ -21,7 +21,7 @@ namespace Orbitals {
 
 		Vector3D<double> ProductCenter(const GaussianOrbital& other) const;
 
-		void Normalize();
+		void Normalize() override;
 
 	protected:
 		double getNormalizationFactor() const;

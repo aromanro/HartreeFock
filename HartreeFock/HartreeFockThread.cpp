@@ -28,7 +28,7 @@ HartreeFockThread::HartreeFockThread(const Options& options, CHartreeFockDoc* do
 	algorithm->alpha = options.alpha;
 	algorithm->initGuess = options.initialGuess;
 
-	algorithm->integralsRepository.useLotsOfMemory = options.useLotsOfMemory;
+	algorithm->integralsRepository.SetUseLotsOfMemory(options.useLotsOfMemory);
 
 	algorithm->maxDIISiterations = options.maxDIISiterations;
 	algorithm->UseDIIS = options.useDIIS;
@@ -162,7 +162,7 @@ double HartreeFockThread::ComputeAtom(const Systems::AtomWithShells& atom)
 
 	algorithm->alpha = opt.alpha;
 	algorithm->initGuess = opt.initialGuess;
-	algorithm->integralsRepository.useLotsOfMemory = opt.useLotsOfMemory;
+	algorithm->integralsRepository.SetUseLotsOfMemory(opt.useLotsOfMemory);
 
 	algorithm->maxDIISiterations = opt.maxDIISiterations;
 	algorithm->UseDIIS = opt.useDIIS;

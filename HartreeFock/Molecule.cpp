@@ -16,12 +16,6 @@
 namespace Systems {
 
 
-	Molecule::Molecule()
-		: alphaElectrons(0), betaElectrons(0)
-	{
-	}
-
-
 	unsigned int Molecule::CountNumberOfContractedGaussians() const
 	{
 		unsigned int res = 0;

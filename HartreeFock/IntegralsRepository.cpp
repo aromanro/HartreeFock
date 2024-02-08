@@ -12,12 +12,7 @@ namespace GaussianIntegrals {
 
 
 	IntegralsRepository::IntegralsRepository(Systems::Molecule *molecule)
-		: m_Molecule(molecule), useLotsOfMemory(true)
-	{
-	}
-
-
-	IntegralsRepository::~IntegralsRepository()
+		: m_Molecule(molecule)
 	{
 	}
 
@@ -131,9 +126,8 @@ namespace GaussianIntegrals {
 		GaussianMoment moment;
 		auto result = momentIntegralsMap.insert(std::make_pair(params, moment));
 
-
-
-		Orbitals::QuantumNumbers::QuantumNumbers maxQN1(0, 0, 0), maxQN2(0, 0, 0);
+		Orbitals::QuantumNumbers::QuantumNumbers maxQN1(0, 0, 0);
+		Orbitals::QuantumNumbers::QuantumNumbers maxQN2(0, 0, 0);
 
 		// now find out the maximum quantum numbers
 

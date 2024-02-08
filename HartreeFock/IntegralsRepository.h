@@ -45,10 +45,7 @@ namespace GaussianIntegrals {
 	class IntegralsRepository
 	{
 	public:
-		bool useLotsOfMemory;
-
 		IntegralsRepository(Systems::Molecule *molecule = nullptr);
-		~IntegralsRepository();
 
 		void Reset(Systems::Molecule* molecule = nullptr);
 
@@ -142,6 +139,8 @@ namespace GaussianIntegrals {
 			return electronElectronIntegrals[GetElectronElectronIndex(orbital1, orbital2, orbital3, orbital4)];
 		}
 
+		void SetUseLotsOfMemory(bool useLots) { useLotsOfMemory = useLots; }
+
 	private:
 		const GaussianNuclear& getNuclearVertical(const Systems::Atom& atom, const Orbitals::GaussianOrbital& gaussian1, const Orbitals::GaussianOrbital& gaussian2);
 
@@ -180,6 +179,8 @@ namespace GaussianIntegrals {
 		std::map<std::tuple<unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, double, double, double, double>, GaussianTwoElectrons> electronElectronIntegralsVerticalAndTransferMap;
 		std::unordered_map<FourOrbitalIndicesTuple, GaussianTwoElectrons, FourOrbitalIndicesTupleHash> electronElectronIntegralsContractedMap;
 		std::valarray<double> electronElectronIntegrals;
+
+		bool useLotsOfMemory = true;
 	};
 
 

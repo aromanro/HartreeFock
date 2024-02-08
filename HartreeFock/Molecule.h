@@ -13,12 +13,10 @@ namespace Systems {
 	public:
 		std::vector<AtomWithShells> atoms;
 
-		unsigned int alphaElectrons;
-		unsigned int betaElectrons;
+		unsigned int alphaElectrons = 0;
+		unsigned int betaElectrons = 0;
 
 		Vector3D<double> ElectricField;
-
-		Molecule();
 
 		unsigned int CountNumberOfContractedGaussians() const;
 		unsigned int CountNumberOfGaussians() const;

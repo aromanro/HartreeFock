@@ -15,6 +15,7 @@ namespace Orbitals {
 
 		virtual Vector3D<double> getGradient(const Vector3D<double>& r) const = 0;
 		virtual double getLaplacian(const Vector3D<double>& r) const = 0;
+		virtual void Normalize() = 0;
 	};
 
 	class Orbital : public OrbitalBase

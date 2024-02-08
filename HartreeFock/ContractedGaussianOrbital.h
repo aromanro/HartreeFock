@@ -17,7 +17,7 @@ namespace Orbitals {
 		Vector3D<double> getGradient(const Vector3D<double>& r) const override;
 		double getLaplacian(const Vector3D<double>& r) const override;
 
-		void Normalize();
+		void Normalize() override;
 
 		void AddGaussian(double exponent)
 		{

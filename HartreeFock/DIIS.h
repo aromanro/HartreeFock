@@ -34,15 +34,18 @@ public:
 	double Estimate(ValueType &value) const
 	{
 		const size_t nrMatrices = errors.size();
-		Eigen::MatrixXd B = Eigen::MatrixXd::Zero(nrMatrices + 1, nrMatrices + 1);
+		const size_t nrMatricesPlus1 = nrMatrices + 1;
+	
+		Eigen::MatrixXd B(Eigen::MatrixXd::Zero(nrMatricesPlus1, nrMatricesPlus1));
 
 		double lastErrorEst = 0;
 
+		const size_t nrMatricesMinus1 = nrMatrices - 1;
+		const size_t nrMatricesMinus2 = nrMatricesMinus1 - 1;
 		auto errorIter1 = errors.cbegin();
 		for (size_t i = 0; i < nrMatrices; ++i)
 		{
 			auto errorIter2 = errors.cbegin();
-
 			for (size_t j = 0; j < i; ++j)
 			{
 				B(i, j) = B(j, i) = (*errorIter1).cwiseProduct(*errorIter2).sum();
@@ -52,7 +55,7 @@ public:
 
 			B(i, i) = (*errorIter1).cwiseProduct(*errorIter1).sum();
 
-			if (i == nrMatrices - 1 || i == nrMatrices - 2) lastErrorEst += B(i, i);
+			if (i == nrMatricesMinus1 || i == nrMatricesMinus2) lastErrorEst += B(i, i);
 
 			B(nrMatrices, i) = B(i, nrMatrices) = 1;
 
@@ -63,7 +66,7 @@ public:
 
 		// Solve the system of linear equations
 
-		Eigen::VectorXd CDIIS = Eigen::VectorXd::Zero(nrMatrices + 1);
+		Eigen::VectorXd CDIIS(Eigen::VectorXd::Zero(nrMatricesPlus1));
 		CDIIS(nrMatrices) = 1;
 
 		CDIIS = B.colPivHouseholderQr().solve(CDIIS);
@@ -99,10 +102,12 @@ public:
 	double Estimate(Eigen::Tensor<double, 4>& value) const
 	{
 		const size_t nrMatrices = errors.size();
-		Eigen::MatrixXd B = Eigen::MatrixXd::Zero(nrMatrices + 1, nrMatrices + 1);
+		const size_t nrMatricesPlus1 = nrMatrices + 1;
+		Eigen::MatrixXd B(Eigen::MatrixXd::Zero(nrMatricesPlus1, nrMatricesPlus1));
 
 		double lastErrorEst = 0;
-
+		const size_t nrMatricesMinus1 = nrMatrices - 1;
+		const size_t nrMatricesMinus2 = nrMatricesMinus1 - 1;
 		auto errorIter1 = errors.cbegin();
 		for (size_t i = 0; i < nrMatrices; ++i)
 		{
@@ -110,18 +115,14 @@ public:
 
 			for (size_t j = 0; j < i; ++j)
 			{
-				const Eigen::Tensor<double, 0> val = (*errorIter1 * *errorIter2).sum();
-				const double dval = val();
-				B(i, j) = B(j, i) = dval;
+				B(i, j) = B(j, i) = (*errorIter1 * *errorIter2).sum();
 
 				++errorIter2;
 			}
 
-			const Eigen::Tensor<double, 0> diagVal = (*errorIter1 * *errorIter1).sum();
-			const double ddiagVal = diagVal();
-			B(i, i) = ddiagVal;
+			B(i, i) = (*errorIter1 * *errorIter1).sum();
 
-			if (i == nrMatrices - 1 || i == nrMatrices - 2) lastErrorEst += B(i, i);
+			if (i == nrMatricesMinus1 || i == nrMatricesMinus2) lastErrorEst += B(i, i);
 
 			B(nrMatrices, i) = B(i, nrMatrices) = 1;
 
@@ -132,7 +133,7 @@ public:
 
 		// Solve the system of linear equations
 
-		Eigen::VectorXd CDIIS = Eigen::VectorXd::Zero(nrMatrices + 1);
+		Eigen::VectorXd CDIIS(Eigen::VectorXd::Zero(nrMatricesPlus1));
 		CDIIS(nrMatrices) = 1;
 
 		CDIIS = B.colPivHouseholderQr().solve(CDIIS);
@@ -147,8 +148,7 @@ public:
 			for (size_t i = 0; i < nrMatrices; ++i, ++iterErr)
 				errorVectorExtrapolated += CDIIS(i) * *iterErr;
 
-			const Eigen::Tensor<double, 0> errorExtrNorm = (errorVectorExtrapolated * errorVectorExtrapolated).sum();
-			const double derrorExtrNorm = errorExtrNorm();
+			const double derrorExtrNorm = (errorVectorExtrapolated * errorVectorExtrapolated).sum();
 			if (derrorExtrNorm > 1E-5)
 				return lastErrorEst;
 		}
