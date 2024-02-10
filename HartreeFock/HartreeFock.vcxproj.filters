@@ -227,9 +227,6 @@
     <ClCompile Include="PrimitiveShell.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Orbital.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="MathUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

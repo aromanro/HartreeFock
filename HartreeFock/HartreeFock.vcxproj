@@ -298,7 +298,6 @@
     <ClCompile Include="NumberEdit.cpp" />
     <ClCompile Include="Options.cpp" />
     <ClCompile Include="OptionsPropertySheet.cpp" />
-    <ClCompile Include="Orbital.cpp" />
     <ClCompile Include="PostHFProperyPage.cpp" />
     <ClCompile Include="PrimitiveShell.cpp" />
     <ClCompile Include="QuantumMatrix.cpp" />

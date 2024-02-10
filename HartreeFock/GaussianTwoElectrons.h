@@ -31,72 +31,10 @@ namespace GaussianIntegrals {
 			const Vector3D<double>& center1, const Vector3D<double>& center2, const Vector3D<double>& center3, const Vector3D<double>& center4, 			
 			unsigned int maxL1, unsigned int maxL2, unsigned int maxL3, unsigned int maxL4);
 
-	private:
-		void VerticalRecursion(double alpha, double alpha12, const Vector3D<double>& Rpa, const Vector3D<double>& Rwp, unsigned int maxL);
-		void ElectronTransfer(double alpha12, double alpha34, const Vector3D<double>& delta, unsigned int maxL, unsigned int maxL2);
-
-		inline static bool DecrementPrevAndPrevPrevAndSetN(unsigned int& prev, unsigned int& prevPrev, double& N)
-		{
-			if (--prev > 0) {
-				N = prev;
-				prevPrev -= 2;
-
-				return true;
-			}
-			
-			return false;			
-		}
-
-		inline static bool IncNextDecPrevSetN(unsigned int& next, unsigned int& prev, double& N)
-		{
-			++next;
-			if (prev > 0) {
-				N = prev;
-				--prev;
-				
-				return true;
-			}
-
-			return false;
-		}
-
-		inline static bool GetPrevAndPrevPrevAndScalarForElectronTransfer(const Orbitals::QuantumNumbers::QuantumNumbers& currentQN, const Vector3D<double>& delta, Orbitals::QuantumNumbers::QuantumNumbers &prevQN, Orbitals::QuantumNumbers::QuantumNumbers &prevPrevQN, double &deltaScalar, double& N, unsigned int& maxIndex)
-		{
-			prevPrevQN = prevQN = currentQN;
-
-			maxIndex = currentQN.MaxComponentVal();
-
-			N = 0;
-
-			bool addPrevPrev;
-
-			if (currentQN.l == maxIndex)
-			{
-				addPrevPrev = DecrementPrevAndPrevPrevAndSetN(prevQN.l, prevPrevQN.l, N);
-
-				deltaScalar = delta.X;
-			}
-			else if (currentQN.m == maxIndex)
-			{
-				addPrevPrev = DecrementPrevAndPrevPrevAndSetN(prevQN.m, prevPrevQN.m, N);
-
-				deltaScalar = delta.Y;
-			}
-			else
-			{
-				addPrevPrev = DecrementPrevAndPrevPrevAndSetN(prevQN.n, prevPrevQN.n, N);
-
-				deltaScalar = delta.Z;
-			}
-
-			return addPrevPrev;
-		}
-	public:
 		void HorizontalRecursion1(const Vector3D<double>& dif, unsigned int L1, unsigned int L2, unsigned int L3, unsigned int L4);
 
 		void HorizontalRecursion2(const Vector3D<double>& dif, unsigned int L1, unsigned int L2, unsigned int L3, unsigned int L4);
 
-		
 		inline static bool GetPrevAndPrevPrevAndScalarsForVerticalRecursion(const Orbitals::QuantumNumbers::QuantumNumbers& currentQN, const Vector3D<double>& Rpa, const Vector3D<double>& Rwp, Orbitals::QuantumNumbers::QuantumNumbers& prevQN, Orbitals::QuantumNumbers::QuantumNumbers& prevPrevQN, double& RpaScalar, double& RwpScalar, double& N)
 		{
 			prevPrevQN = prevQN = currentQN;
@@ -174,6 +112,67 @@ namespace GaussianIntegrals {
 				assert(limit > 0);
 				--limit;
 			}
+		}
+
+	private:
+		void VerticalRecursion(double alpha, double alpha12, const Vector3D<double>& Rpa, const Vector3D<double>& Rwp, unsigned int maxL);
+		void ElectronTransfer(double alpha12, double alpha34, const Vector3D<double>& delta, unsigned int maxL, unsigned int maxL2);
+
+		inline static bool DecrementPrevAndPrevPrevAndSetN(unsigned int& prev, unsigned int& prevPrev, double& N)
+		{
+			if (--prev > 0) {
+				N = prev;
+				prevPrev -= 2;
+
+				return true;
+			}
+			
+			return false;			
+		}
+
+		inline static bool IncNextDecPrevSetN(unsigned int& next, unsigned int& prev, double& N)
+		{
+			++next;
+			if (prev > 0) {
+				N = prev;
+				--prev;
+				
+				return true;
+			}
+
+			return false;
+		}
+
+		inline static bool GetPrevAndPrevPrevAndScalarForElectronTransfer(const Orbitals::QuantumNumbers::QuantumNumbers& currentQN, const Vector3D<double>& delta, Orbitals::QuantumNumbers::QuantumNumbers &prevQN, Orbitals::QuantumNumbers::QuantumNumbers &prevPrevQN, double &deltaScalar, double& N, unsigned int& maxIndex)
+		{
+			prevPrevQN = prevQN = currentQN;
+
+			maxIndex = currentQN.MaxComponentVal();
+
+			N = 0;
+
+			bool addPrevPrev;
+
+			if (currentQN.l == maxIndex)
+			{
+				addPrevPrev = DecrementPrevAndPrevPrevAndSetN(prevQN.l, prevPrevQN.l, N);
+
+				deltaScalar = delta.X;
+			}
+			else if (currentQN.m == maxIndex)
+			{
+				addPrevPrev = DecrementPrevAndPrevPrevAndSetN(prevQN.m, prevPrevQN.m, N);
+
+				deltaScalar = delta.Y;
+			}
+			else
+			{
+				addPrevPrev = DecrementPrevAndPrevPrevAndSetN(prevQN.n, prevPrevQN.n, N);
+
+				deltaScalar = delta.Z;
+			}
+
+			return addPrevPrev;
 		}
 	};
 

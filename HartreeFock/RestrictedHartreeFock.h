@@ -11,12 +11,6 @@ namespace HartreeFock {
 		public HartreeFockAlgorithm
 	{
 		friend class Test;
-	protected:
-		DIIS<Eigen::MatrixXd> diis;
-
-		void CalculateEnergy(const Eigen::VectorXd& eigenvals, const Eigen::MatrixXd& calcDensityMatrix/*, Eigen::MatrixXd& F*/);
-		void InitFockMatrix(int iter, Eigen::MatrixXd& FockMatrix) const;
-
 	public:
 		Eigen::MatrixXd DensityMatrix;
 
@@ -45,6 +39,12 @@ namespace HartreeFock {
 		double CalculateMp2Energy() override;
 		double CalculateAtomicCharge(int atom) const override;
 		Vector3D<double> GetMoment() const override;
+
+	private:
+		DIIS<Eigen::MatrixXd> diis;
+
+		void CalculateEnergy(const Eigen::VectorXd& eigenvals, const Eigen::MatrixXd& calcDensityMatrix/*, Eigen::MatrixXd& F*/);
+		void InitFockMatrix(int iter, Eigen::MatrixXd& FockMatrix) const;
 	};
 
 }
