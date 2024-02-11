@@ -26,27 +26,26 @@ public:
 	void AddDataSlice(double X, const double *slice, unsigned int len);
 	void clear();
 
-
 	CString title;
 	CString XAxisLabel;
 	CString YAxisLabel;
-	bool XAxisGrid;
-	bool YAxisGrid;
+	bool XAxisGrid = true;
+	bool YAxisGrid = true;
 
-	bool useSpline;
-	bool antialias;
+	bool useSpline = true;
+	bool antialias = false;
 
-	double XAxisMin;
-	double XAxisMax;
-	double YAxisMin;
-	double YAxisMax;
+	double XAxisMin = DBL_MIN;
+	double XAxisMax = DBL_MAX;
+	double YAxisMin = DBL_MIN;
+	double YAxisMax = DBL_MAX;
 
-	bool drawStartTickX;
-	bool drawStartTickY;
+	bool drawStartTickX = true;
+	bool drawStartTickY = true;
 
-	int maxTitleHeight;
-	int maxAxisLabelHeight;
-	int maxLabelHeight;
+	int maxTitleHeight = 36;
+	int maxAxisLabelHeight = 18;
+	int maxLabelHeight = 28;
 
 private:
 	Axis X;

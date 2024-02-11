@@ -2,10 +2,7 @@
 #include "Chart.h"
 
 Chart::Chart()
-	: X(this, true), Y(this, false), XAxisGrid(true), YAxisGrid(true),
-	XAxisMin(DBL_MIN), XAxisMax(DBL_MAX), YAxisMin(DBL_MIN), YAxisMax(DBL_MAX),
-	useSpline(true), antialias(false), drawStartTickX(true), drawStartTickY(true),
-	maxTitleHeight(36), maxAxisLabelHeight(28), maxLabelHeight(18)
+	: X(this, true), Y(this, false)
 {
 }
 
