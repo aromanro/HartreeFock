@@ -12,6 +12,7 @@
 #include <unordered_map>
 #include <tuple>
 #include <valarray>
+#include <utility>
 
 #include "Molecule.h"
 #include "ContractedGaussianOrbital.h"
@@ -29,17 +30,17 @@ namespace GaussianIntegrals {
 					res = 31 * res + x;
 				};
 
-				(compute(args), ...);
+				(compute(std::forward<decltype(args)>(args)), ...);
 				}, t);
 
 			return res;
 		}
 	};
 
-	typedef std::tuple<unsigned int, unsigned int, unsigned int> ThreeOrbitalIndicesTuple;
-	typedef TupleHash<unsigned int, unsigned int, unsigned int> ThreeOrbitalIndicesTupleHash;
-	typedef std::tuple<unsigned int, unsigned int, unsigned int, unsigned int> FourOrbitalIndicesTuple;
-	typedef TupleHash<unsigned int, unsigned int, unsigned int, unsigned int> FourOrbitalIndicesTupleHash;
+	using ThreeOrbitalIndicesTuple = std::tuple<unsigned int, unsigned int, unsigned int>;
+	using ThreeOrbitalIndicesTupleHash = TupleHash<unsigned int, unsigned int, unsigned int>;
+	using FourOrbitalIndicesTuple = std::tuple<unsigned int, unsigned int, unsigned int, unsigned int>;
+	using FourOrbitalIndicesTupleHash = TupleHash<unsigned int, unsigned int, unsigned int, unsigned int>;
 
 
 	class IntegralsRepository
