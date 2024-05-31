@@ -8,7 +8,7 @@
 namespace Orbitals {
 	namespace QuantumNumbers {
 
-		QuantumNumbers::QuantumNumbers(unsigned int L, unsigned int M, unsigned int N)
+		QuantumNumbers::QuantumNumbers(unsigned int L, unsigned int M, unsigned int N) noexcept
 			: l(L), m(M), n(N)
 		{
 		}
@@ -16,7 +16,7 @@ namespace Orbitals {
 	}
 }
 
-char Orbitals::QuantumNumbers::QuantumNumbers::AtomicOrbital() const
+char Orbitals::QuantumNumbers::QuantumNumbers::AtomicOrbital() const noexcept
 {
 	switch (AngularMomentum())
 	{

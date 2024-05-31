@@ -19,7 +19,7 @@ namespace CG
 	// this one is here just to be able to use an unordered_map with a tuple of integers as a key
 	template <typename... Tp> class TupleHash {
 	public:
-		size_t operator()(const std::tuple<Tp...>& t) const
+		size_t operator()(const std::tuple<Tp...>& t) const noexcept
 		{
 			size_t res = 1;
 			std::apply([&res](auto&& ... args) { 
@@ -39,7 +39,7 @@ namespace CG
 	class Coefficients
 	{
 	public:
-		static double Factorial(long long int n)
+		static double Factorial(long long int n) noexcept
 		{
 			if (n <= 1) return 1;
 			else if (n < 21) return static_cast<double>(factorialsTable[n]);
@@ -51,7 +51,7 @@ namespace CG
 			return val;
 		}
 
-		double TriangleCoefficient(long long int a, long long int b, long long int c) const
+		double TriangleCoefficient(long long int a, long long int b, long long int c) const noexcept
 		{
 			if (a + b < c || a + c < b || b + c < a) return 0;
 
@@ -94,7 +94,7 @@ namespace CG
 					 Factorial(static_cast<unsigned long long int>(j3 + m3)) * Factorial(static_cast<unsigned long long int>(j3 - m3)));
 		}
 
-		double CalculateWigner3j(double j1, double j2, double j3, double m1, double m2, double m3) const
+		double CalculateWigner3j(double j1, double j2, double j3, double m1, double m2, double m3) const noexcept
 		{
 			static const double eps = 1E-15;
 
@@ -114,7 +114,7 @@ namespace CG
 			return pow(-1., j2 - j1 - m3) / sqrt(2. * j3 + 1.) * CalculateClebschGordan(j1, j2, j3, m1, m2, -m3);
 		}
 
-		double CalculateGaunt(double j1, double j2, double j3, double m1, double m2) const
+		double CalculateGaunt(double j1, double j2, double j3, double m1, double m2) const noexcept
 		{
 			int intSum = static_cast<int>(j1 + j2 + j3);
 			// the sum must be an even integer (otherwise the first Wigner 3j term is zero)
@@ -160,7 +160,7 @@ namespace CG
 					}
 		}
 
-		double getCoefficient(double j1, double j2, double j3, double m1, double m2) const
+		double getCoefficient(double j1, double j2, double j3, double m1, double m2) const noexcept
 		{
 			const auto ind = std::make_tuple(static_cast<int>(2. * j1), static_cast<int>(2. * j2), static_cast<int>(2. * j3), static_cast<int>(2. * m1), static_cast<int>(2. * m2));
 			const auto res = coefficients.find(ind);

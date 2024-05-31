@@ -4,7 +4,7 @@
 
 namespace GaussianIntegrals {
 
-	double BoysFunction::operator()(double m, double x) const
+	double BoysFunction::operator()(double m, double x) const noexcept
 	{
 		if (0. == m && 0. == x) return 1.;
 

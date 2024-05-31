@@ -5,19 +5,19 @@
 namespace Orbitals {
 
 
-	const Vector3D<double>& PrimitiveGaussianShell::getCenter() const {
+	const Vector3D<double>& PrimitiveGaussianShell::getCenter() const noexcept {
 		assert(basisFunctions.size());
 
 		return basisFunctions.front().center;
 	}
 
-	double PrimitiveGaussianShell::getAlpha() const {
+	double PrimitiveGaussianShell::getAlpha() const noexcept {
 		assert(basisFunctions.size());
 
 		return basisFunctions.front().alpha;
 	}
 
-	double PrimitiveGaussianShell::operator()(const Vector3D<double>& r) const
+	double PrimitiveGaussianShell::operator()(const Vector3D<double>& r) const noexcept
 	{
 		double res = 0;
 
@@ -27,7 +27,7 @@ namespace Orbitals {
 		return res;
 	}
 
-	Vector3D<double> PrimitiveGaussianShell::getGradient(const Vector3D<double>& r) const
+	Vector3D<double> PrimitiveGaussianShell::getGradient(const Vector3D<double>& r) const noexcept
 	{
 		Vector3D<double> res;
 
@@ -37,7 +37,7 @@ namespace Orbitals {
 		return res;
 	}
 
-	double PrimitiveGaussianShell::getLaplacian(const Vector3D<double>& r) const
+	double PrimitiveGaussianShell::getLaplacian(const Vector3D<double>& r) const noexcept
 	{
 		double res = 0;
 
@@ -47,18 +47,18 @@ namespace Orbitals {
 		return res;
 	}
 
-	void PrimitiveGaussianShell::Normalize()
+	void PrimitiveGaussianShell::Normalize() noexcept
 	{
 		for (auto& orb : basisFunctions) orb.Normalize();
 	}
 
-	const Vector3D<double>& ContractedGaussianShell::getCenter() const {
+	const Vector3D<double>& ContractedGaussianShell::getCenter() const noexcept {
 		assert(basisFunctions.size());
 
 		return basisFunctions.front().center;
 	}
 
-	std::string ContractedGaussianShell::GetShellString() const
+	std::string ContractedGaussianShell::GetShellString() const noexcept
 	{
 		assert(basisFunctions.size());
 
@@ -77,7 +77,7 @@ namespace Orbitals {
 		return res;
 	}
 
-	unsigned int ContractedGaussianShell::AdjustOrbitalsCount(char orbital, unsigned int res)
+	unsigned int ContractedGaussianShell::AdjustOrbitalsCount(char orbital, unsigned int res) noexcept
 	{
 		switch (tolower(orbital))
 		{
@@ -104,7 +104,7 @@ namespace Orbitals {
 		return res;
 	}
 
-	unsigned int ContractedGaussianShell::CountOrbitals(char orbitalChar) const
+	unsigned int ContractedGaussianShell::CountOrbitals(char orbitalChar) const noexcept
 	{
 		unsigned int res = 0;
 
@@ -118,7 +118,7 @@ namespace Orbitals {
 		return AdjustOrbitalsCount(orbitalChar, res);
 	}
 
-	unsigned int ContractedGaussianShell::CountContractedOrbitals(char orbitalChar) const
+	unsigned int ContractedGaussianShell::CountContractedOrbitals(char orbitalChar) const noexcept
 	{
 		unsigned int res = 0;
 
@@ -131,12 +131,12 @@ namespace Orbitals {
 		return AdjustOrbitalsCount(orbitalChar, res);
 	}
 
-	unsigned int ContractedGaussianShell::CountNumberOfContractedGaussians() const
+	unsigned int ContractedGaussianShell::CountNumberOfContractedGaussians() const noexcept
 	{		
 		return static_cast<unsigned int>(basisFunctions.size());
 	}
 
-	unsigned int ContractedGaussianShell::CountNumberOfGaussians() const
+	unsigned int ContractedGaussianShell::CountNumberOfGaussians() const noexcept
 	{
 		unsigned int res = 0;
 
@@ -146,7 +146,7 @@ namespace Orbitals {
 		return res;
 	}
 
-	double ContractedGaussianShell::operator()(const Vector3D<double>& r) const
+	double ContractedGaussianShell::operator()(const Vector3D<double>& r) const noexcept
 	{
 		double res = 0;
 
@@ -157,7 +157,7 @@ namespace Orbitals {
 	}
 
 
-	Vector3D<double> ContractedGaussianShell::getGradient(const Vector3D<double>& r) const
+	Vector3D<double> ContractedGaussianShell::getGradient(const Vector3D<double>& r) const noexcept
 	{
 		Vector3D<double> res;
 
@@ -168,7 +168,7 @@ namespace Orbitals {
 	}
 
 
-	double ContractedGaussianShell::getLaplacian(const Vector3D<double>& r) const
+	double ContractedGaussianShell::getLaplacian(const Vector3D<double>& r) const noexcept
 	{
 		double res = 0;
 
@@ -217,7 +217,7 @@ namespace Orbitals {
 			orbital.AddGaussian(exponent);
 	}
 
-	void ContractedGaussianShell::SetCenters(const Vector3D<double>& center)
+	void ContractedGaussianShell::SetCenters(const Vector3D<double>& center) noexcept
 	{
 		for (ContractedGaussianOrbital& orbital : basisFunctions)
 		{
@@ -229,7 +229,7 @@ namespace Orbitals {
 	}
 
 
-	void ContractedGaussianShell::AddOrbitalsInCanonicalOrder(unsigned int L)
+	void ContractedGaussianShell::AddOrbitalsInCanonicalOrder(unsigned int L) noexcept
 	{
 		ContractedGaussianOrbital orbital;
 
@@ -245,7 +245,7 @@ namespace Orbitals {
 	}
 
 
-	void ContractedGaussianShell::Normalize()
+	void ContractedGaussianShell::Normalize() noexcept
 	{
 		for (ContractedGaussianOrbital& orb : basisFunctions) orb.Normalize();
 	}

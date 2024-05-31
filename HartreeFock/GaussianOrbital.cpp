@@ -12,31 +12,31 @@
 
 namespace Orbitals {
 
-	double GaussianOrbital::getCoefficient() const
+	double GaussianOrbital::getCoefficient() const noexcept
 	{
 		return coefficient;
 	}
 
-	double GaussianOrbital::getAlpha() const
+	double GaussianOrbital::getAlpha() const noexcept
 	{
 		return alpha;
 	}
 
-	double GaussianOrbital::getNormalizationFactor() const
+	double GaussianOrbital::getNormalizationFactor() const noexcept
 	{
 		return pow(2. * alpha / M_PI, 3. / 4.) *
 			pow (4. * alpha, angularMomentum.AngularMomentum() / 2.) /
 			sqrt(GaussianIntegrals::MathUtils::DoubleFactorial(2 * angularMomentum.l - 1) * GaussianIntegrals::MathUtils::DoubleFactorial(2 * angularMomentum.m - 1) * GaussianIntegrals::MathUtils::DoubleFactorial(2 * angularMomentum.n - 1));
 	}
 
-	double GaussianOrbital::operator()(const Vector3D<double>& r) const
+	double GaussianOrbital::operator()(const Vector3D<double>& r) const noexcept
 	{
 		const Vector3D R(r - center);
 
 		return coeffProdNorm * pow(R.X, angularMomentum.l) * pow(R.Y, angularMomentum.m) *  pow(R.Z, angularMomentum.n) * exp(-alpha * R * R);
 	}
 
-	Vector3D<double> GaussianOrbital::getGradient(const Vector3D<double>& r) const
+	Vector3D<double> GaussianOrbital::getGradient(const Vector3D<double>& r) const noexcept
 	{
 		const Vector3D R(r - center);
 
@@ -76,7 +76,7 @@ namespace Orbitals {
 		*/
 	}
 
-	double GaussianOrbital::getLaplacian(const Vector3D<double>& r) const
+	double GaussianOrbital::getLaplacian(const Vector3D<double>& r) const noexcept
 	{
 		const Vector3D R(r - center);
 
@@ -140,13 +140,13 @@ namespace Orbitals {
 		*/
 	}
 
-	Vector3D<double> GaussianOrbital::ProductCenter(const GaussianOrbital& other) const
+	Vector3D<double> GaussianOrbital::ProductCenter(const GaussianOrbital& other) const noexcept
 	{
 		return (alpha * center + other.alpha * other.center) / (alpha + other.alpha);
 	}
 
 
-	void GaussianOrbital::Normalize()
+	void GaussianOrbital::Normalize() noexcept
 	{
 		normalizationFactor = getNormalizationFactor();
 		coeffProdNorm = coefficient * normalizationFactor;

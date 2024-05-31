@@ -12,19 +12,19 @@ namespace Orbitals {
 
 		double normalizationFactor = 1;
 
-		virtual double getCoefficient() const;
-		virtual double getAlpha() const;
+		virtual double getCoefficient() const noexcept;
+		virtual double getAlpha() const noexcept;
 
-		double operator()(const Vector3D<double>& r) const override;
-		Vector3D<double> getGradient(const Vector3D<double>& r) const override;
-		double getLaplacian(const Vector3D<double>& r) const override;
+		double operator()(const Vector3D<double>& r) const noexcept override;
+		Vector3D<double> getGradient(const Vector3D<double>& r) const noexcept override;
+		double getLaplacian(const Vector3D<double>& r) const noexcept override;
 
-		Vector3D<double> ProductCenter(const GaussianOrbital& other) const;
+		Vector3D<double> ProductCenter(const GaussianOrbital& other) const noexcept;
 
-		void Normalize() override;
+		void Normalize() noexcept override;
 
 	protected:
-		double getNormalizationFactor() const;
+		double getNormalizationFactor() const noexcept;
 
 		double coeffProdNorm = 0;
 	};

@@ -25,12 +25,12 @@ namespace GaussianIntegrals {
 		static std::array<unsigned long long int, 21> doubleFactorialsTable;
 
 	public:
-		inline static double Factorial(long int n)
+		inline static double Factorial(long int n) noexcept
 		{
 			return CG::Coefficients::Factorial(n);
 		}
 
-		static double DoubleFactorial(long int n)
+		static double DoubleFactorial(long int n) noexcept
 		{
 			if (n <= 1) return 1;
 			else if (n < 21) return static_cast<double>(doubleFactorialsTable[n]);
@@ -42,7 +42,7 @@ namespace GaussianIntegrals {
 			return res * static_cast<double>(doubleFactorialsTable[n]);
 		}
 
-		static unsigned int BinomialCoefficient(unsigned int n, unsigned int k)
+		static unsigned int BinomialCoefficient(unsigned int n, unsigned int k) noexcept
 		{
 			//return Factorial(n) / (Factorial(k) * Factorial(n-k));
 
@@ -60,7 +60,7 @@ namespace GaussianIntegrals {
 
 
 	private:
-		static double Abscissa(int n, int i) 
+		static double Abscissa(int n, int i) noexcept
 		{
 			const double val = i * M_PI / (1. + n);
 			const double sinVal = sin(val);
@@ -71,7 +71,7 @@ namespace GaussianIntegrals {
 		}
 
 
-		static double Omega(int n, int i)
+		static double Omega(int n, int i) noexcept
 		{
 			const double sinVal = sin(i * M_PI / (n + 1.));
 
@@ -81,7 +81,7 @@ namespace GaussianIntegrals {
 	public:
 		class FunctionFunctor {
 		public:
-			virtual double operator()(double x) const = 0;
+			virtual double operator()(double x) const noexcept = 0;
 		};
 
 
@@ -92,7 +92,7 @@ namespace GaussianIntegrals {
 		// there is a Fortran implementation in there
 		// it is not used by the current code but I leave it here just in case
 
-		static double ChebyshevIntegral(double eps, int M, const FunctionFunctor& F)
+		static double ChebyshevIntegral(double eps, int M, const FunctionFunctor& F) noexcept
 		{
 			double c0 = cos(M_PI / 6.);
 			double s0 = 0.5;
@@ -158,7 +158,7 @@ namespace GaussianIntegrals {
 		// As an important note, Boys functions are the start for integrals calculations, so if this has numerical errors,
 		// they propagate and amplify, so for a serious program more care should be given
 
-		static bool IncompleteGamma(double a, double x, double &gin)
+		static bool IncompleteGamma(double a, double x, double &gin) noexcept
 		{
 			double xam, r, sum, ga, t0;
 			int k;

@@ -3,7 +3,7 @@
 
 namespace Orbitals {
 
-	double ContractedGaussianOrbital::operator()(const Vector3D<double>& r) const
+	double ContractedGaussianOrbital::operator()(const Vector3D<double>& r) const noexcept
 	{
 		double res = 0;
 
@@ -13,7 +13,7 @@ namespace Orbitals {
 		return res;
 	}
 
-	Vector3D<double> ContractedGaussianOrbital::getGradient(const Vector3D<double>& r) const
+	Vector3D<double> ContractedGaussianOrbital::getGradient(const Vector3D<double>& r) const noexcept
 	{
 		Vector3D<double> res;
 
@@ -23,7 +23,7 @@ namespace Orbitals {
 		return res;
 	}
 
-	double ContractedGaussianOrbital::getLaplacian(const Vector3D<double>& r) const
+	double ContractedGaussianOrbital::getLaplacian(const Vector3D<double>& r) const noexcept
 	{
 		double res = 0;
 
@@ -33,7 +33,7 @@ namespace Orbitals {
 		return res;
 	}
 
-	void ContractedGaussianOrbital::Normalize()
+	void ContractedGaussianOrbital::Normalize() noexcept
 	{
 		for (auto& orb : gaussianOrbitals) orb.Normalize();
 	}

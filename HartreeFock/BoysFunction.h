@@ -12,7 +12,7 @@ namespace GaussianIntegrals {
 		public:
 			BoysFunctor(double m, double x) : m_m(m), m_x(x) {}
 
-			virtual double operator()(double t) const 
+			double operator()(double t) const noexcept override
 			{ 
 				const double res = pow(t, 2. * m_m) * exp(-m_x * t * t);
 
@@ -24,7 +24,7 @@ namespace GaussianIntegrals {
 			double m_x;
 		};
 
-		double operator()(double m, double x) const;
+		double operator()(double m, double x) const noexcept;
 	};
 
 }
