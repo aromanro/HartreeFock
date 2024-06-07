@@ -350,9 +350,9 @@ void Test::TestIterationsAndPostHF(Systems::Molecule& molecule, HartreeFock::Har
 
 	for (int i = 0; i < 100; ++i)
 	{
-		const double oldCCEnergy = ((HartreeFock::RestrictedCCSD*)hartreeFock)->CCEnergy;
+		const double oldCCEnergy = ((HartreeFock::RestrictedCCSD*)hartreeFock)->GetCCEnergy();
 		rmsD = ((HartreeFock::RestrictedCCSD*)hartreeFock)->StepCC(i);
-		const double newCCEnergy = ((HartreeFock::RestrictedCCSD*)hartreeFock)->CCEnergy;
+		const double newCCEnergy = ((HartreeFock::RestrictedCCSD*)hartreeFock)->GetCCEnergy();
 
 		file.precision(12);
 		file << "Iter: " << i + 1 << "\tEcc = " << newCCEnergy << std::endl;
@@ -363,13 +363,13 @@ void Test::TestIterationsAndPostHF(Systems::Molecule& molecule, HartreeFock::Har
 		if (rmsD < rmsDConvergence && (abs(deltaE) < (useDIIS ? CCenergyConvergenceDIIS : energyConvergence)) && (!useDIIS || hartreeFock->lastErrorEst < CCdiisConvergence)) break;
 	}
 
-	file << "Total CC: " << hartreeFock->GetTotalEnergy() + ((HartreeFock::RestrictedCCSD*)hartreeFock)->CCEnergy << std::endl;
+	file << "Total CC: " << hartreeFock->GetTotalEnergy() + ((HartreeFock::RestrictedCCSD*)hartreeFock)->GetCCEnergy() << std::endl;
 
 	const double Te = ((HartreeFock::RestrictedCCSD*)hartreeFock)->TEnergy();
 
 	file << "E(T): " << Te << std::endl;
 
-	file << "Total ECCSD(T): " << hartreeFock->GetTotalEnergy() + ((HartreeFock::RestrictedCCSD*)hartreeFock)->CCEnergy + Te << std::endl;
+	file << "Total ECCSD(T): " << hartreeFock->GetTotalEnergy() + ((HartreeFock::RestrictedCCSD*)hartreeFock)->GetCCEnergy() + Te << std::endl;
 
 	Vector3D moment(hartreeFock->GetMoment()); // multiply with 2.541746473 for Debye
 
