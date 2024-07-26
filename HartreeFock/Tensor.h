@@ -8,24 +8,24 @@
 
 namespace Tensors {
 
-	template<class T, unsigned int O> class Tensor
+	template<class T, size_t O> class Tensor
 	{
 	protected:
 		std::vector<T> m_values;
-		std::array<unsigned int, O> m_dims;
-		unsigned int m_sz;
+		std::array<size_t, O> m_dims;
+		size_t m_sz;
 
-		unsigned int GetOffset(const std::array<unsigned int, O>& indices) const {
-			unsigned int result = 0;
+		size_t GetOffset(const std::array<size_t, O>& indices) const {
+			size_t result = 0;
 
-			for (unsigned int i = 0; i < m_dims.size(); ++i)
+			for (size_t i = 0; i < m_dims.size(); ++i)
 				result = result * m_dims[i] + indices[i];
 
 			return result;
 		}
 
 	public:
-		Tensor(const std::array<unsigned int, O>& dims) : m_dims(dims), m_sz(0)
+		Tensor(const std::array<size_t, O>& dims) : m_dims(dims), m_sz(0)
 		{
 			m_values.resize(GetSize());
 		}
@@ -57,18 +57,18 @@ namespace Tensors {
 			return *this;
 		}
 		
-		unsigned int GetSize()
+		size_t GetSize()
 		{
-			if (!m_sz) m_sz = std::accumulate(m_dims.begin(), m_dims.end(), 1, std::multiplies<unsigned int>());
+			if (!m_sz) m_sz = std::accumulate(m_dims.begin(), m_dims.end(), 1, std::multiplies<size_t>());
 
 			return m_sz;
 		}
 
-		unsigned int GetDim(unsigned int index) const { assert(index < m_dims.size());  return m_dims[index]; }
+		size_t GetDim(size_t index) const { assert(index < m_dims.size());  return m_dims[index]; }
 
 		void Clear()
 		{
-			for (unsigned int i = 0; i < m_dims.size(); ++i) m_dims[i] = 1;
+			for (size_t i = 0; i < m_dims.size(); ++i) m_dims[i] = 1;
 			m_sz = 0;
 			m_values.resize(GetSize());
 		}
