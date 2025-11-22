@@ -2,6 +2,10 @@
 
 #include <cassert>
 
+#undef min
+#undef max
+#include <algorithm>
+
 namespace Orbitals {
 
 	namespace QuantumNumbers {
@@ -30,9 +34,9 @@ namespace Orbitals {
 				return n;
 			}
 
-			inline unsigned int MaxComponentVal() const noexcept { return max(max(l, m), n); }
+			inline unsigned int MaxComponentVal() const noexcept { return std::max(std::max(l, m), n); }
 
-			inline unsigned int MinComponentVal() const noexcept { return min(min(l, m), n); }
+			inline unsigned int MinComponentVal() const noexcept { return std::min(std::min(l, m), n); }
 
 			inline unsigned int NumOrbitals() const noexcept
 			{

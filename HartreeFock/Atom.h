@@ -60,9 +60,9 @@ namespace Systems {
 					for (const auto &gaussian : orbital.gaussianOrbitals)
 						if (alpha == gaussian.alpha)
 						{
-							maxQN.l = max(maxQN.l, orbital.angularMomentum.l);
-							maxQN.m = max(maxQN.m, orbital.angularMomentum.m);
-							maxQN.n = max(maxQN.m, orbital.angularMomentum.n);
+							maxQN.l = std::max(maxQN.l, orbital.angularMomentum.l);
+							maxQN.m = std::max(maxQN.m, orbital.angularMomentum.m);
+							maxQN.n = std::max(maxQN.m, orbital.angularMomentum.n);
 						}
 		}
 
@@ -72,7 +72,7 @@ namespace Systems {
 
 			for (const auto &shell : shells)
 				for (const auto &orbital : shell.basisFunctions)
-					L = max(L, orbital.angularMomentum);
+					L = std::max(L, (unsigned int)orbital.angularMomentum);
 
 			return L;
 		}
@@ -85,7 +85,7 @@ namespace Systems {
 				for (const auto &orbital : shell.basisFunctions)
 					for (const auto &gaussian : orbital.gaussianOrbitals)
 						if (alpha == gaussian.alpha)
-					         L = max(L, orbital.angularMomentum);
+					         L = std::max(L, (unsigned int)orbital.angularMomentum);
 
 			return L;
 		}

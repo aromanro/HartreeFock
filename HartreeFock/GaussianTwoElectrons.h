@@ -1,5 +1,7 @@
 #pragma once
 
+#undef min
+#undef max
 #include <Eigen\eigen>
 
 #include "GaussianIntegral.h"

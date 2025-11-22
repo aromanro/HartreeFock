@@ -106,7 +106,7 @@ unsigned int Systems::Molecule::GetMaxAngularMomentum() const
 	unsigned int L = 0;
 
 	for (const auto &atom : atoms)
-			L = max(L, atom.GetMaxAngularMomentum());
+			L = std::max(L, atom.GetMaxAngularMomentum());
 
 	return L;
 }

@@ -1,6 +1,8 @@
 #pragma once
 
 
+#undef min
+#undef max
 #include <Eigen\eigen>
 
 #include "QuantumNumbers.h"

@@ -270,7 +270,7 @@ namespace HartreeFock {
 			if (occupiedMinus[level]) totalEnergy += eigenvalsMinus(level);
 
 
-		HOMOEnergy = max(nrOccupiedLevelsPlus ? eigenvalsPlus(nrOccupiedLevelsPlus - 1) : 0, nrOccupiedLevelsMinus ? eigenvalsMinus(nrOccupiedLevelsMinus - 1) : 0);
+		HOMOEnergy = std::max(nrOccupiedLevelsPlus ? eigenvalsPlus(nrOccupiedLevelsPlus - 1) : 0, nrOccupiedLevelsMinus ? eigenvalsMinus(nrOccupiedLevelsMinus - 1) : 0);
 
 		// ***************************************************************************************
 

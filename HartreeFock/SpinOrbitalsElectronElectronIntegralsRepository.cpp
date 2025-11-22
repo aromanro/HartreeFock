@@ -29,20 +29,20 @@ namespace GaussianIntegrals {
 
 	void SpinOrbitalsElectronElectronIntegralsRepository::Compute(MolecularOrbitalsIntegralsRepository& repository, const Eigen::MatrixXd& C)
 	{
-		const unsigned int numberSpinOrbitals = m_integralsTensor.GetDim(0);
+		const size_t numberSpinOrbitals = m_integralsTensor.GetDim(0);
 
-		for (unsigned int p = 0; p < numberSpinOrbitals; ++p)
+		for (size_t p = 0; p < numberSpinOrbitals; ++p)
 		{
-			const unsigned int hp = p / 2;
-			for (unsigned int q = 0; q < numberSpinOrbitals; ++q)
+			const unsigned int hp = static_cast<unsigned int>(p / 2);
+			for (size_t q = 0; q < numberSpinOrbitals; ++q)
 			{
-				const unsigned int hq = q / 2;
-				for (unsigned int r = 0; r < numberSpinOrbitals; ++r)
+				const unsigned int hq = static_cast<unsigned int>(q / 2);
+				for (size_t r = 0; r < numberSpinOrbitals; ++r)
 				{
-					const unsigned int hr = r / 2;
-					for (unsigned int s = 0; s < numberSpinOrbitals; ++s)
+					const unsigned int hr = static_cast<unsigned int>(r / 2);
+					for (size_t s = 0; s < numberSpinOrbitals; ++s)
 					{
-						const unsigned int hs = s / 2;
+						const unsigned int hs = static_cast<unsigned int>(s / 2);
 
 						m_integralsTensor(p, q, r, s) = ((p % 2 == r % 2 && q % 2 == s % 2) ? repository.getElectronElectron(hp, hr, hq, hs, C) : 0) 
 							- ((p % 2 == s % 2 && q % 2 == r % 2) ? repository.getElectronElectron(hp, hs, hq, hr, C) : 0);
