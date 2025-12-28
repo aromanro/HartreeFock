@@ -59,7 +59,7 @@ namespace Tensors {
 		
 		size_t GetSize()
 		{
-			if (!m_sz) m_sz = std::accumulate(m_dims.begin(), m_dims.end(), 1, std::multiplies<size_t>());
+			if (!m_sz) m_sz = std::accumulate(m_dims.begin(), m_dims.end(), 1ULL, std::multiplies<size_t>());
 
 			return m_sz;
 		}
