@@ -17,6 +17,7 @@ The project compiles on Windows with Visual Studio 2026 (the code can be compile
 ### LIBRARIES
 
 Besides mfc and other typical VC++ runtime libraries, the program uses GDI+ for drawing.
+Eigen 5 is also used. It worked with an older version as well, but I recommend using ver 5 because it has some fixed issues. 
 
 ### PROGRAM IN ACTION
 
