@@ -10,6 +10,14 @@ Some Hartree-Fock theory here: http://compphys.go.ro/the-hartree-fock-method/
 
 Some things more general (Schrödinger equation, Born-Oppenheimer approximation, variational principle), here: http://compphys.go.ro/how-to-solve-a-quantum-many-body-problem/
 
+### TOOLS
+
+The project compiles on Windows with Visual Studio 2026 (the code can be compiled with older versions starting with VS 2015, but it's currently maintained with VS 2026 and C++ 17 or higher).
+
+### LIBRARIES
+
+Besides mfc and other typical VC++ runtime libraries, the program uses GDI+ for drawing.
+
 ### PROGRAM IN ACTION
 
 [![Program video](https://img.youtube.com/vi/tmCRJxOAIH8/0.jpg)](https://youtu.be/tmCRJxOAIH8)

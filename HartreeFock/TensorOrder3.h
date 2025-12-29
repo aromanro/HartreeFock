@@ -9,7 +9,7 @@ namespace Tensors {
 	{
 	public:
 		TensorOrder3(size_t dim1 = 1, size_t dim2 = 1, size_t dim3 = 1)
-			: Tensor(std::array<size_t, 3>{ dim1, dim2, dim3 })
+			: Tensor<T, 3>(std::array<size_t, 3>{ dim1, dim2, dim3 })
 		{
 			assert(dim1);
 			assert(dim2);
@@ -19,13 +19,13 @@ namespace Tensors {
 		T& operator()(size_t index1, size_t index2, size_t index3) {
 			const std::array<size_t, 3> indices{ index1, index2, index3 };
 
-			return m_values[GetOffset(indices)];
+			return Tensor<T, 3>::m_values[Tensor<T, 3>::GetOffset(indices)];
 		}
 
 		const T& operator()(size_t index1, size_t index2, size_t index3) const {
 			std::array<size_t, 3> indices{ index1, index2, index3 };
 
-			return m_values[GetOffset(indices)];
+			return Tensor<T, 3>::m_values[Tensor<T, 3>::GetOffset(indices)];
 		}
 	};
 

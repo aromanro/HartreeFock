@@ -33,7 +33,7 @@ template <typename ValueType, int maxRetained = 6, int firstEstimate = 5, bool l
 public:
 	double Estimate(ValueType &value) const
 	{
-		const size_t nrMatrices = errors.size();
+		const size_t nrMatrices = DIISStorage<ValueType, maxRetained, firstEstimate>::errors.size();
 		const size_t nrMatricesPlus1 = nrMatrices + 1;
 	
 		Eigen::MatrixXd B(Eigen::MatrixXd::Zero(nrMatricesPlus1, nrMatricesPlus1));
@@ -42,10 +42,10 @@ public:
 
 		const size_t nrMatricesMinus1 = nrMatrices - 1;
 		const size_t nrMatricesMinus2 = nrMatricesMinus1 - 1;
-		auto errorIter1 = errors.cbegin();
+		auto errorIter1 = DIISStorage<ValueType, maxRetained, firstEstimate>::errors.cbegin();
 		for (size_t i = 0; i < nrMatrices; ++i)
 		{
-			auto errorIter2 = errors.cbegin();
+			auto errorIter2 = DIISStorage<ValueType, maxRetained, firstEstimate>::errors.cbegin();
 			for (size_t j = 0; j < i; ++j)
 			{
 				B(i, j) = B(j, i) = (*errorIter1).cwiseProduct(*errorIter2).sum();
@@ -75,8 +75,8 @@ public:
 		{
 			// see the referred article for this: "Accelerating the convergence of the coupled-cluster approach: The use of the DIIS method" Gustavo E.Scuseria, Timothy J.Lee, Henry F.Schaefer
 
-			ValueType errorVectorExtrapolated = ValueType::Zero(errors.back().rows(), errors.back().cols());
-			auto iterErr = errors.cbegin();
+			ValueType errorVectorExtrapolated = ValueType::Zero(DIISStorage<ValueType, maxRetained, firstEstimate>::errors.back().rows(), DIISStorage<ValueType, maxRetained, firstEstimate>::errors.back().cols());
+			auto iterErr = DIISStorage<ValueType, maxRetained, firstEstimate>::errors.cbegin();
 			for (size_t i = 0; i < nrMatrices; ++i, ++iterErr)
 				errorVectorExtrapolated += CDIIS(i) * *iterErr;
 
@@ -88,7 +88,7 @@ public:
 		// compute the new value
 		value = ValueType::Zero(value.rows(), value.cols());
 
-		auto iter = values.cbegin();
+		auto iter = DIISStorage<ValueType, maxRetained, firstEstimate>::values.cbegin();
 		for (size_t i = 0; i < nrMatrices; ++i, ++iter)
 			value += CDIIS(i) * *iter;
 
@@ -101,17 +101,17 @@ template<int maxRetained, int firstEstimate, bool limitExtrapolation> class DIIS
 public:
 	double Estimate(Eigen::Tensor<double, 4>& value) const
 	{
-		const size_t nrMatrices = errors.size();
+		const size_t nrMatrices = DIISStorage<Eigen::Tensor<double, 4>, maxRetained, firstEstimate>::errors.size();
 		const size_t nrMatricesPlus1 = nrMatrices + 1;
 		Eigen::MatrixXd B(Eigen::MatrixXd::Zero(nrMatricesPlus1, nrMatricesPlus1));
 
 		double lastErrorEst = 0;
 		const size_t nrMatricesMinus1 = nrMatrices - 1;
 		const size_t nrMatricesMinus2 = nrMatricesMinus1 - 1;
-		auto errorIter1 = errors.cbegin();
+		auto errorIter1 = DIISStorage<Eigen::Tensor<double, 4>, maxRetained, firstEstimate>::errors.cbegin();
 		for (size_t i = 0; i < nrMatrices; ++i)
 		{
-			auto errorIter2 = errors.cbegin();
+			auto errorIter2 = DIISStorage<Eigen::Tensor<double, 4>, maxRetained, firstEstimate>::errors.cbegin();
 
 			for (size_t j = 0; j < i; ++j)
 			{
@@ -142,9 +142,9 @@ public:
 		{
 			// see the referred article for this: "Accelerating the convergence of the coupled-cluster approach: The use of the DIIS method" Gustavo E.Scuseria, Timothy J.Lee, Henry F.Schaefer
 
-			Eigen::Tensor<double, 4> errorVectorExtrapolated(errors.back().dimensions());
+			Eigen::Tensor<double, 4> errorVectorExtrapolated(DIISStorage<Eigen::Tensor<double, 4>, maxRetained, firstEstimate>::errors.back().dimensions());
 			errorVectorExtrapolated.setZero();
-			std::list<Eigen::Tensor<double, 4>>::const_iterator iterErr = errors.cbegin();
+			std::list<Eigen::Tensor<double, 4>>::const_iterator iterErr = DIISStorage<Eigen::Tensor<double, 4>, maxRetained, firstEstimate>::errors.cbegin();
 			for (size_t i = 0; i < nrMatrices; ++i, ++iterErr)
 				errorVectorExtrapolated += CDIIS(i) * *iterErr;
 
@@ -157,7 +157,7 @@ public:
 
 		value.setZero();
 
-		auto iter = values.cbegin();
+		auto iter = DIISStorage<Eigen::Tensor<double, 4>, maxRetained, firstEstimate>::values.cbegin();
 		for (size_t i = 0; i < nrMatrices; ++i, ++iter)
 			value += CDIIS(i) * *iter;
 
