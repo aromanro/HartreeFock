@@ -3,6 +3,7 @@
 #undef min
 #undef max
 #include <Eigen\eigen>
+#include "HartreeFockEigenABI.h"
 
 
 #define _USE_MATH_DEFINES // for C++  

@@ -5,6 +5,10 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HartreeFock", "HartreeFock\HartreeFock.vcxproj", "{1451406D-08FA-40B7-89DE-B4C1BC198598}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HartreeFockNumerics", "HartreeFock\HartreeFockNumerics.vcxproj", "{BFFDA8B9-7786-4CA2-B01F-E26113F63388}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HartreeFockNumericsTests", "HartreeFock\HartreeFockNumericsTests.vcxproj", "{73A1853A-B7C0-4D43-8E8F-8AC434FE6C9F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -13,6 +17,22 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{73A1853A-B7C0-4D43-8E8F-8AC434FE6C9F}.Debug|x64.ActiveCfg = Debug|x64
+		{73A1853A-B7C0-4D43-8E8F-8AC434FE6C9F}.Debug|x64.Build.0 = Debug|x64
+		{73A1853A-B7C0-4D43-8E8F-8AC434FE6C9F}.Debug|x86.ActiveCfg = Debug|Win32
+		{73A1853A-B7C0-4D43-8E8F-8AC434FE6C9F}.Debug|x86.Build.0 = Debug|Win32
+		{73A1853A-B7C0-4D43-8E8F-8AC434FE6C9F}.Release|x64.ActiveCfg = Release|x64
+		{73A1853A-B7C0-4D43-8E8F-8AC434FE6C9F}.Release|x64.Build.0 = Release|x64
+		{73A1853A-B7C0-4D43-8E8F-8AC434FE6C9F}.Release|x86.ActiveCfg = Release|Win32
+		{73A1853A-B7C0-4D43-8E8F-8AC434FE6C9F}.Release|x86.Build.0 = Release|Win32
+		{BFFDA8B9-7786-4CA2-B01F-E26113F63388}.Debug|x64.ActiveCfg = Debug|x64
+		{BFFDA8B9-7786-4CA2-B01F-E26113F63388}.Debug|x64.Build.0 = Debug|x64
+		{BFFDA8B9-7786-4CA2-B01F-E26113F63388}.Debug|x86.ActiveCfg = Debug|Win32
+		{BFFDA8B9-7786-4CA2-B01F-E26113F63388}.Debug|x86.Build.0 = Debug|Win32
+		{BFFDA8B9-7786-4CA2-B01F-E26113F63388}.Release|x64.ActiveCfg = Release|x64
+		{BFFDA8B9-7786-4CA2-B01F-E26113F63388}.Release|x64.Build.0 = Release|x64
+		{BFFDA8B9-7786-4CA2-B01F-E26113F63388}.Release|x86.ActiveCfg = Release|Win32
+		{BFFDA8B9-7786-4CA2-B01F-E26113F63388}.Release|x86.Build.0 = Release|Win32
 		{1451406D-08FA-40B7-89DE-B4C1BC198598}.Debug|x64.ActiveCfg = Debug|x64
 		{1451406D-08FA-40B7-89DE-B4C1BC198598}.Debug|x64.Build.0 = Debug|x64
 		{1451406D-08FA-40B7-89DE-B4C1BC198598}.Debug|x86.ActiveCfg = Debug|Win32

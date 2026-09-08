@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{BFFDA8B9-7786-4CA2-B01F-E26113F63388}</ProjectGuid>
+    <RootNamespace>HartreeFockNumerics</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v145</PlatformToolset>
+    <UseDebugLibraries Condition="'$(Configuration)'=='Debug'">true</UseDebugLibraries>
+    <UseDebugLibraries Condition="'$(Configuration)'!='Debug'">false</UseDebugLibraries>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <PropertyGroup>
+    <EigenIncludeDir Condition="'$(EigenIncludeDir)'=='' and '$(EIGEN3_INCLUDE_DIR)'!=''">$(EIGEN3_INCLUDE_DIR)</EigenIncludeDir>
+    <EigenIncludeDir Condition="'$(EigenIncludeDir)'==''">C:\LIBs\eigen</EigenIncludeDir>
+    <IncludePath>$(EigenIncludeDir);$(IncludePath)</IncludePath>
+    <OutDir>$(MSBuildThisFileDirectory)..\lib\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(MSBuildThisFileDirectory)..\obj\HartreeFockNumerics\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ConformanceMode>true</ConformanceMode>
+      <WarningLevel>Level3</WarningLevel>
+      <AdditionalOptions>/bigobj /FC %(AdditionalOptions)</AdditionalOptions>
+      <Optimization Condition="'$(Configuration)'=='Release'">MaxSpeed</Optimization>
+      <PreprocessorDefinitions Condition="'$(Configuration)'=='Release'">NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Atom.cpp" />
+    <ClCompile Include="Basis.cpp" />
+    <ClCompile Include="BoysFunction.cpp" />
+    <ClCompile Include="BoysFunctions.cpp" />
+    <ClCompile Include="ChemUtils.cpp" />
+    <ClCompile Include="Coefficients.cpp" />
+    <ClCompile Include="ContractedGaussianOrbital.cpp" />
+    <ClCompile Include="GaussianKinetic.cpp" />
+    <ClCompile Include="GaussianMoment.cpp" />
+    <ClCompile Include="GaussianNuclear.cpp" />
+    <ClCompile Include="GaussianOrbital.cpp" />
+    <ClCompile Include="GaussianOverlap.cpp" />
+    <ClCompile Include="GaussianTwoElectrons.cpp" />
+    <ClCompile Include="HartreeFockAlgorithm.cpp" />
+    <ClCompile Include="IntegralsRepository.cpp" />
+    <ClCompile Include="MathUtils.cpp" />
+    <ClCompile Include="Molecule.cpp" />
+    <ClCompile Include="PrimitiveShell.cpp" />
+    <ClCompile Include="QuantumMatrix.cpp" />
+    <ClCompile Include="QuantumNumbers.cpp" />
+    <ClCompile Include="RestrictedCCSD.cpp" />
+    <ClCompile Include="RestrictedCCSDTriples.cpp" />
+    <ClCompile Include="RestrictedCCSD_F.cpp" />
+    <ClCompile Include="RestrictedCCSD_W.cpp" />
+    <ClCompile Include="RestrictedConfigurationIInteractionSingles.cpp" />
+    <ClCompile Include="RestrictedHartreeFock.cpp" />
+    <ClCompile Include="SpinOrbitalsElectronElectronIntegralsRepository.cpp" />
+    <ClCompile Include="UnrestrictedHartreeFock.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="HartreeFockEigenABI.h" />
+    <None Include="HartreeFockBuild.props" />
+  </ItemGroup>
+  <Import Project="HartreeFockBuild.props" />
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>

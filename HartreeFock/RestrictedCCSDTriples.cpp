@@ -48,7 +48,7 @@ namespace HartreeFock {
 	}
 
 
-	double RestrictedCCSD::TEnergyInner(double& sum, int inda, int indi, int indj, int indk, int a, int i, int j, int k) const
+	void RestrictedCCSD::TEnergyInner(double& sum, int inda, int indi, int indj, int indk, int a, int i, int j, int k) const
 	{
 		int indb = 0;
 		for (int b = 0; b < numberOfSpinOrbitals; ++b)

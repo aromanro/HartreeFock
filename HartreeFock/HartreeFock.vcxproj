@@ -73,28 +73,32 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <EigenIncludeDir Condition="'$(EigenIncludeDir)'=='' and '$(EIGEN3_INCLUDE_DIR)'!=''">$(EIGEN3_INCLUDE_DIR)</EigenIncludeDir>
+    <EigenIncludeDir Condition="'$(EigenIncludeDir)'==''">C:\LIBs\eigen</EigenIncludeDir>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(VC_IncludePath);$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath)include;$(FrameworkSDKDir)include;C:\Program Files %28x86%29\Windows Kits\10\Include\10.0.10240.0\ucrt;C:\LIBs\eigen;$(IncludePath)</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath)include;$(FrameworkSDKDir)include;C:\Program Files %28x86%29\Windows Kits\10\Include\10.0.10240.0\ucrt;$(EigenIncludeDir);$(IncludePath)</IncludePath>
     <CodeAnalysisRuleSet>C:\Program Files (x86)\Microsoft Visual Studio 14.0\Team Tools\Static Analysis Tools\Rule Sets\NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <EnableCppCoreCheck>true</EnableCppCoreCheck>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(VCInstallDir)PlatformSDK\include;C:\LIBs\eigen;$(IncludePath)</IncludePath>
+    <IncludePath>$(VCInstallDir)PlatformSDK\include;$(EigenIncludeDir);$(IncludePath)</IncludePath>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <EnableCppCoreCheck>true</EnableCppCoreCheck>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(VC_IncludePath);$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath)include;$(FrameworkSDKDir)include;C:\Program Files %28x86%29\Windows Kits\10\Include\10.0.10240.0\ucrt;C:\LIBs\eigen;$(IncludePath)</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath)include;$(FrameworkSDKDir)include;C:\Program Files %28x86%29\Windows Kits\10\Include\10.0.10240.0\ucrt;$(EigenIncludeDir);$(IncludePath)</IncludePath>
     <CodeAnalysisRuleSet>C:\Program Files (x86)\Microsoft Visual Studio 14.0\Team Tools\Static Analysis Tools\Rule Sets\NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(VCInstallDir)PlatformSDK\include;C:\LIBs\eigen;$(IncludePath)</IncludePath>
+    <IncludePath>$(VCInstallDir)PlatformSDK\include;$(EigenIncludeDir);$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -181,7 +185,6 @@
       <PreprocessorDefinitions>_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <OpenMPSupport>true</OpenMPSupport>
-      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -260,50 +263,23 @@
     <ClInclude Include="Vector3D.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Atom.cpp" />
-    <ClCompile Include="Basis.cpp" />
-    <ClCompile Include="BoysFunction.cpp" />
-    <ClCompile Include="BoysFunctions.cpp" />
     <ClCompile Include="Chart.cpp" />
     <ClCompile Include="ChartAxis.cpp" />
     <ClCompile Include="ChartPropertyPage.cpp" />
-    <ClCompile Include="ChemUtils.cpp" />
-    <ClCompile Include="Coefficients.cpp" />
     <ClCompile Include="ComputationPropertyPage.cpp" />
     <ClCompile Include="ComputationThread.cpp" />
-    <ClCompile Include="ContractedGaussianOrbital.cpp" />
     <ClCompile Include="DataSets.cpp" />
-    <ClCompile Include="RestrictedCCSDTriples.cpp" />
-    <ClCompile Include="RestrictedCCSD_F.cpp" />
-    <ClCompile Include="RestrictedCCSD_W.cpp" />
-    <ClCompile Include="RestrictedConfigurationIInteractionSingles.cpp" />
-    <ClCompile Include="SpinOrbitalsElectronElectronIntegralsRepository.cpp" />
-    <ClCompile Include="GaussianKinetic.cpp" />
-    <ClCompile Include="GaussianMoment.cpp" />
-    <ClCompile Include="GaussianNuclear.cpp" />
-    <ClCompile Include="GaussianOrbital.cpp" />
-    <ClCompile Include="GaussianOverlap.cpp" />
-    <ClCompile Include="GaussianTwoElectrons.cpp" />
     <ClCompile Include="HartreeFock.cpp" />
-    <ClCompile Include="HartreeFockAlgorithm.cpp" />
     <ClCompile Include="HartreeFockDoc.cpp" />
     <ClCompile Include="HartreeFockPropertyPage.cpp" />
     <ClCompile Include="HartreeFockThread.cpp" />
     <ClCompile Include="HartreeFockView.cpp" />
-    <ClCompile Include="IntegralsRepository.cpp" />
     <ClCompile Include="MainFrm.cpp" />
-    <ClCompile Include="MathUtils.cpp" />
-    <ClCompile Include="Molecule.cpp" />
     <ClCompile Include="MoleculePropertyPage.cpp" />
     <ClCompile Include="NumberEdit.cpp" />
     <ClCompile Include="Options.cpp" />
     <ClCompile Include="OptionsPropertySheet.cpp" />
     <ClCompile Include="PostHFProperyPage.cpp" />
-    <ClCompile Include="PrimitiveShell.cpp" />
-    <ClCompile Include="QuantumMatrix.cpp" />
-    <ClCompile Include="QuantumNumbers.cpp" />
-    <ClCompile Include="RestrictedCCSD.cpp" />
-    <ClCompile Include="RestrictedHartreeFock.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -311,7 +287,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Test.cpp" />
-    <ClCompile Include="UnrestrictedHartreeFock.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="HartreeFock.rc" />
@@ -329,6 +304,16 @@
     <None Include="res\HartreeFock.rc2" />
     <None Include="Vector3D.inl" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="HartreeFockNumerics.vcxproj">
+      <Project>{BFFDA8B9-7786-4CA2-B01F-E26113F63388}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="HartreeFockEigenABI.h" />
+    <None Include="HartreeFockBuild.props" />
+  </ItemGroup>
+  <Import Project="HartreeFockBuild.props" />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

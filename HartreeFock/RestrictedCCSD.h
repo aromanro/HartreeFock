@@ -244,7 +244,7 @@ namespace HartreeFock {
 			return  f(i, i) + f(j, j) + f(k, k) - f(a, a) - f(b, b) - f(c, c);
 		}
 
-		double TEnergyInner(double& sum, int inda, int indi, int indj, int indk, int a, int i, int j, int k) const;
+		void TEnergyInner(double& sum, int inda, int indi, int indj, int indk, int a, int i, int j, int k) const;
 
 		int numberOfSpinOrbitals;
 		int numberOfOccupiedSpinOrbitals;
