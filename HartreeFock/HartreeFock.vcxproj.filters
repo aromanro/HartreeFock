@@ -180,6 +180,9 @@
     <ClInclude Include="Coefficients.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="HartreeFockEigenABI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HartreeFock.cpp">
@@ -275,5 +278,6 @@
     <None Include="Vector3D.inl">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="HartreeFockBuild.props" />
   </ItemGroup>
 </Project>
