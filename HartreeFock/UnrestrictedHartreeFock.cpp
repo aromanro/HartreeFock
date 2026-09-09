@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "UnrestrictedHartreeFock.h"
+#include <cmath>
+#include <stdexcept>
 
 
 namespace HartreeFock {
@@ -292,87 +294,53 @@ namespace HartreeFock {
 		totalEnergy += nuclearRepulsionEnergy/* + nuclearElectricFieldEnergy*/;
 	}
 
-	double UnrestrictedHartreeFock::CalculateMp2Energy()
-	{
-		GaussianIntegrals::MolecularOrbitalsIntegralsRepository MP2repo(integralsRepository);
+    double UnrestrictedHartreeFock::CalculateMp2Energy()
+    {
+        return VisitMp2Amplitudes({});
+    }
 
-		mp2Energy = CalculateMp2EnergyPlus(MP2repo);
-		mp2Energy += CalculateMp2EnergyMinus(MP2repo);
-
-		mp2Energy *= 0.25;
-
-		return mp2Energy;
-	}
-
-	double UnrestrictedHartreeFock::CalculateMp2EnergyPlus(GaussianIntegrals::MolecularOrbitalsIntegralsRepository& MP2repo) const
-	{
-		double mp2Energyt = 0;
-
-		for (int i = 0; i < numberOfOrbitals; ++i)
-		{
-			if (i >= occupiedPlus.size() || !occupiedPlus[i]) continue; // only occupied
-
-			for (int j = 0; j < numberOfOrbitals; ++j)
-			{
-				if (j >= occupiedPlus.size() || !occupiedPlus[j]) continue; // only occupied
-
-				for (int a = 0; a < numberOfOrbitals; ++a)
-				{
-					if (a < occupiedPlus.size() && occupiedPlus[a]) continue; // only unoccupied
-
-					for (int b = 0; b < numberOfOrbitals; ++b)
-					{
-						if (b < occupiedPlus.size() && occupiedPlus[b]) continue;  // only unoccupied
-
-						const double Esumdif = eigenvalsplus(i) + eigenvalsplus(j) - eigenvalsplus(a) - eigenvalsplus(b);
-
-						const double eeiajb = MP2repo.getElectronElectron(i, a, j, b, Cplus);
-
-						const double partE = eeiajb * eeiajb / Esumdif;
-
-						mp2Energyt += partE;
-					}
-				}
-			}
-		}
-
-		return mp2Energyt;
-	}
-
-	double UnrestrictedHartreeFock::CalculateMp2EnergyMinus(GaussianIntegrals::MolecularOrbitalsIntegralsRepository& MP2repo) const
-	{
-		double mp2Energyt = 0;
-
-		for (int i = 0; i < numberOfOrbitals; ++i)
-		{
-			if (i >= occupiedMinus.size() || !occupiedMinus[i]) continue; // only occupied
-
-			for (int j = 0; j < numberOfOrbitals; ++j)
-			{
-				if (j >= occupiedMinus.size() || !occupiedMinus[j]) continue; // only occupied
-
-				for (int a = 0; a < numberOfOrbitals; ++a)
-				{
-					if (a < occupiedMinus.size() && occupiedMinus[a]) continue; // only unoccupied
-
-					for (int b = 0; b < numberOfOrbitals; ++b)
-					{
-						if (b < occupiedMinus.size() && occupiedMinus[b]) continue;  // only unoccupied
-
-						const double Esumdif = eigenvalsminus(i) + eigenvalsminus(j) - eigenvalsminus(a) - eigenvalsminus(b);
-
-						const double eeiajb = MP2repo.getElectronElectron(i, a, j, b, Cminus);
-
-						const double partE = eeiajb * eeiajb / Esumdif;
-
-						mp2Energyt += partE;
-					}
-				}
-			}
-		}
-
-		return mp2Energyt;
-	}
+    double UnrestrictedHartreeFock::VisitMp2Amplitudes(
+        const std::function<void(bool,bool,int,int,int,int,double)>& emit, double minimumGap,
+        const std::function<double(bool,int,int,bool,int,int)>& moIntegrals)
+    {
+        if (!std::isfinite(minimumGap) || minimumGap < 0.)
+            throw std::invalid_argument("Invalid MP2 minimum denominator");
+        // Separate caches are essential: their keys contain orbital indices,
+        // not coefficients. Reusing an alpha cache for beta integrals is wrong.
+        GaussianIntegrals::MolecularOrbitalsIntegralsRepository aa(integralsRepository),
+            bb(integralsRepository), ab(integralsRepository, Cminus);
+        auto integral = [&](bool up, int p, int q, bool tau, int r, int s) {
+            if (moIntegrals) return moIntegrals(up,p,q,tau,r,s);
+            if (up && tau) return aa.getElectronElectron(p,q,r,s,Cplus);
+            if (!up && !tau) return bb.getElectronElectron(p,q,r,s,Cminus);
+            return ab.getElectronElectron(p,q,r,s,Cplus); // only alpha/beta is emitted
+        };
+        double energy = 0.;
+        for (int block=0; block<3; ++block) {
+            const bool up=block!=1, tau=block==0;
+            const auto& occ1=up?occupiedPlus:occupiedMinus;
+            const auto& occ2=tau?occupiedPlus:occupiedMinus;
+            const auto& eps1=up?eigenvalsplus:eigenvalsminus;
+            const auto& eps2=tau?eigenvalsplus:eigenvalsminus;
+            const auto occupied=[](const auto& occ,int i) { return i<int(occ.size()) && occ[i]; };
+            for (int i=0;i<numberOfOrbitals;++i) if (occupied(occ1,i))
+                for (int j=0;j<numberOfOrbitals;++j) if (occupied(occ2,j) && (up!=tau || i<j))
+                    for (int a=0;a<numberOfOrbitals;++a) if (!occupied(occ1,a))
+                        for (int b=0;b<numberOfOrbitals;++b) if (!occupied(occ2,b) && (up!=tau || a<b)) {
+                            const double denominator=eps1(i)+eps2(j)-eps1(a)-eps2(b);
+                            if (!std::isfinite(denominator) || denominator>=-minimumGap)
+                                throw std::runtime_error("UHF MP2 occupied-virtual denominator is too small or inverted");
+                            double coupling=integral(up,i,a,tau,j,b);
+                            if (up==tau) coupling-=integral(up,i,b,tau,j,a);
+                            const double amplitude=coupling/denominator;
+                            if (!std::isfinite(amplitude)) throw std::runtime_error("Non-finite UHF MP2 amplitude");
+                            energy+=coupling*amplitude;
+                            if (emit) emit(up,tau,i,j,a,b,amplitude);
+                        }
+        }
+        if (!std::isfinite(energy)) throw std::runtime_error("Non-finite UHF MP2 energy");
+        return mp2Energy=energy;
+    }
 
 
 	double UnrestrictedHartreeFock::CalculateAtomicCharge(int atom) const

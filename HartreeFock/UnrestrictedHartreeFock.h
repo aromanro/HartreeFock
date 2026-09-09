@@ -2,6 +2,7 @@
 #include "HartreeFockAlgorithm.h"
 
 #include "DIIS.h"
+#include <functional>
 
 namespace HartreeFock {
 
@@ -40,6 +41,12 @@ namespace HartreeFock {
 		double Step(int iter) override;
 
 		double CalculateMp2Energy() override;
+        // Unique doubles: i<j and a<b for equal spins, all alpha/beta pairs
+        // otherwise. Emits the coefficient of a†_a,s a†_b,t a_j,t a_i,s.
+        double VisitMp2Amplitudes(
+            const std::function<void(bool,bool,int,int,int,int,double)>& emit,
+            double minimumGap = 1e-8,
+            const std::function<double(bool,int,int,bool,int,int)>& moIntegrals = {});
 		double CalculateAtomicCharge(int atom) const override;
 		Vector3D<double> GetMoment() const override;
 
@@ -50,8 +57,6 @@ namespace HartreeFock {
 		void CalculateEnergy(const Eigen::VectorXd& eigenvalsplus, const Eigen::VectorXd& eigenvalsminus, const Eigen::MatrixXd& calcDensityMatrixPlus, const Eigen::MatrixXd& calcDensityMatrixMinus/*, const Eigen::MatrixXd& Fplus, const Eigen::MatrixXd& Fminus*/);
 		void InitFockMatrices(int iter, Eigen::MatrixXd& FockMatrixPlus, Eigen::MatrixXd& FockMatrixMinus) const;
 
-		double CalculateMp2EnergyPlus(GaussianIntegrals::MolecularOrbitalsIntegralsRepository& MP2repo) const;
-		double CalculateMp2EnergyMinus(GaussianIntegrals::MolecularOrbitalsIntegralsRepository& MP2repo) const;
 	};
 
 }

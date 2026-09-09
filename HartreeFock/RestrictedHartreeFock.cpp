@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "RestrictedHartreeFock.h"
+#include <cmath>
+#include <stdexcept>
 
 namespace HartreeFock {
 
@@ -249,8 +251,17 @@ namespace HartreeFock {
 	}
 
 	double RestrictedHartreeFock::CalculateMp2Energy()
-	{
-		mp2Energy = 0;
+    {
+        return VisitMp2Amplitudes({}, 0.);
+    }
+
+    double RestrictedHartreeFock::VisitMp2Amplitudes(
+        const std::function<void(int,int,int,int,double)>& emit, double minimumGap,
+        const std::function<double(int,int,int,int)>& moIntegrals)
+    {
+        if (!std::isfinite(minimumGap) || minimumGap < 0.)
+            throw std::invalid_argument("Invalid MP2 minimum denominator");
+        mp2Energy = 0;
 
 		GaussianIntegrals::MolecularOrbitalsIntegralsRepository MP2repo(integralsRepository);
 
@@ -272,8 +283,11 @@ namespace HartreeFock {
 
 						const double Esumdif = eigenvals(i) + eigenvals(j) - eigenvals(a) - eigenvals(b);
 						
-						const double eeiajb = MP2repo.getElectronElectron(i, a, j, b, C);
-						const double eeibja = MP2repo.getElectronElectron(i, b, j, a, C);
+						if (minimumGap > 0. && (!std::isfinite(Esumdif) || Esumdif >= -minimumGap))
+                            throw std::runtime_error("RHF MP2 occupied-virtual denominator is too small or inverted");
+                        const double eeiajb = moIntegrals ? moIntegrals(i,a,j,b) : MP2repo.getElectronElectron(i, a, j, b, C);
+                        const double eeibja = moIntegrals ? moIntegrals(i,b,j,a) : MP2repo.getElectronElectron(i, b, j, a, C);
+                        if (emit) emit(i,j,a,b,eeiajb / Esumdif);
 						
 						const double partE = eeiajb * (2. * eeiajb - eeibja) / Esumdif;
 

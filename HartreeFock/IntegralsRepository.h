@@ -195,6 +195,13 @@ namespace GaussianIntegrals {
 		{
 		}
 
+        // Optional coefficients for the second Coulomb pair, (pq|rs).
+        // Each instance caches one fixed pair of orbital sets; the referenced
+        // matrix must outlive this repository and remain unchanged.
+        MolecularOrbitalsIntegralsRepository(const IntegralsRepository& repository,
+            const Eigen::MatrixXd& rightCoefficients)
+            : m_repo(repository), m_rightCoefficients(&rightCoefficients) {}
+
 		inline double getElectronElectron(unsigned int orbital1, unsigned int orbital2, unsigned int orbital3, unsigned int orbital4, const Eigen::MatrixXd& C)
 		{
 			const FourOrbitalIndicesTuple indTuple = std::make_tuple(orbital1, orbital2, orbital3, orbital4);
@@ -243,7 +250,7 @@ namespace GaussianIntegrals {
 			// don't have it yet, compute it
 			double result = 0;
 			for (unsigned int s = 0; s < C.cols(); ++s)
-				result += C(s, orbital4) * m_repo.getElectronElectron(orbital1, orbital2, orbital3, s);
+				result += (m_rightCoefficients ? *m_rightCoefficients : C)(s, orbital4) * m_repo.getElectronElectron(orbital1, orbital2, orbital3, s);
 			
 			m_firstLevelIntegrals[indTuple] = result;
 			
@@ -260,7 +267,7 @@ namespace GaussianIntegrals {
 			double result = 0;
 
 			for (unsigned int l = 0; l < C.cols(); ++l)
-				result += C(l, orbital3) * getElectronElectronFirstLevel(orbital1, orbital2, l, orbital4, C);
+				result += (m_rightCoefficients ? *m_rightCoefficients : C)(l, orbital3) * getElectronElectronFirstLevel(orbital1, orbital2, l, orbital4, C);
 			
 			m_secondLevelIntegrals[indTuple] = result;
 
@@ -284,6 +291,7 @@ namespace GaussianIntegrals {
 		}
 
 		const IntegralsRepository& m_repo;
+        const Eigen::MatrixXd* m_rightCoefficients = nullptr;
 		std::unordered_map<FourOrbitalIndicesTuple, double, FourOrbitalIndicesTupleHash> m_firstLevelIntegrals;
 		std::unordered_map<FourOrbitalIndicesTuple, double, FourOrbitalIndicesTupleHash> m_secondLevelIntegrals;
 		std::unordered_map<FourOrbitalIndicesTuple, double, FourOrbitalIndicesTupleHash> m_thirdLevelIntegrals;

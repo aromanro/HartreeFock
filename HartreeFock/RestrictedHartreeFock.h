@@ -3,6 +3,7 @@
 #include "DIIS.h"
 
 #include <list>
+#include <functional>
 
 namespace HartreeFock {
 
@@ -36,7 +37,13 @@ namespace HartreeFock {
 		bool DIISStep(int iter, Eigen::MatrixXd& FockMatrix);
 		double Step(int iter) override;
 
-		double CalculateMp2Energy() override;
+        double CalculateMp2Energy() override;
+        // Same RHF MP2 contraction as CalculateMp2Energy, optionally exposing
+        // t(i,j,a,b)=(ia|jb)/(eps_i+eps_j-eps_a-eps_b) to correlated clients.
+        // A supplied integral accessor can reuse an already transformed MO array.
+        double VisitMp2Amplitudes(const std::function<void(int,int,int,int,double)>& emit,
+            double minimumGap = 1e-8,
+            const std::function<double(int,int,int,int)>& moIntegrals = {});
 		double CalculateAtomicCharge(int atom) const override;
 		Vector3D<double> GetMoment() const override;
 
